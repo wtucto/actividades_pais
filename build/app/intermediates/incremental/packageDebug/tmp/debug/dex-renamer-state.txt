@@ -1,0 +1,4 @@
+#Tue Sep 27 21:03:30 PET 2022
+base.0=/Users/egarciti/Documents/Projects/App/Git/actividades_pais/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
