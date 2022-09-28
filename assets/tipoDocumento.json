@@ -1,0 +1,20 @@
+[{
+        "id": 4,
+        "descripcion": "PASAPORTE"
+    },
+    {
+        "id": 3,
+        "descripcion": "RUC"
+    },{
+        "id": 2,
+        "descripcion": "CARNET EXT."
+        
+    },
+    {
+        "id": 1,
+        "descripcion": "DNI"
+        
+    }
+]
+
+ 
