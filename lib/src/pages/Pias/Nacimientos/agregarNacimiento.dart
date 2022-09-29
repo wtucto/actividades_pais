@@ -32,8 +32,9 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    listArchivo=[];
+    listArchivo = [];
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,15 +50,14 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-
                 SizedBox(
                   height: 10,
                 ),
 
                 SizedBox(
                   width: 350,
-                  child: FlatButton(
-                    color: Colors.indigo,
+                  child: TextButton(
+                    //color: Colors.indigo,
                     child: Text(
                       'Guardar',
                       style: TextStyle(color: Colors.white),
@@ -70,12 +70,11 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
                         });
                       } else {
                         nacimiento.idUnicoReporte = widget.idUnicoReporte;
-                     //   nacimiento.imagen2 = listArchivo[0].toString();
+                        //   nacimiento.imagen2 = listArchivo[0].toString();
                         var aed =
-                        await DatabasePias.db.insertNacimiento(nacimiento);
+                            await DatabasePias.db.insertNacimiento(nacimiento);
                         if (aed > 0) {
                           for (var i = 0; i < listArchivo.length; i++) {
-
                             ar.file = listArchivo[i].toString();
                             ar.idNacimiento = aed;
                             ar.idUnicoReporte = widget.idUnicoReporte;
@@ -111,14 +110,17 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
                   height: 10,
                 ),
                 SizedBox(
-                  width: 350,
-                  child: FlatButton(
-                    color: Colors.indigo,
-                    onPressed: () {     selectCamera(); },
-                    child: Text(
-                      'Agregar Imagen',
-                      style: TextStyle(color: Colors.white),
-                    ),)),
+                    width: 350,
+                    child: TextButton(
+                      //color: Colors.indigo,
+                      onPressed: () {
+                        selectCamera();
+                      },
+                      child: Text(
+                        'Agregar Imagen',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )),
                 SizedBox(
                   height: 10,
                 ),
@@ -127,11 +129,10 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
                 SizedBox(
                   height: 10,
                 ),
-               // _tomarImagen2(),
+                // _tomarImagen2(),
                 SizedBox(
                   height: 10,
                 ),
-
               ],
             ),
           ),
@@ -141,13 +142,11 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
   }
 
   _tomarImagen(i) {
-    var i2=i ;
+    var i2 = i;
     i = File.fromUri(Uri.parse(i));
     return Container(
       child: Center(
-
         child: Stack(
-
           alignment: Alignment(0.9, 1.1),
           children: <Widget>[
             Positioned(
@@ -156,35 +155,35 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
               child: Container(
                 color: Colors.black87,
                 child: GestureDetector(
-
-                  onTap: (){
+                  onTap: () {
                     listArchivo.remove(i2);
 
-                    print('delete image from List ${listArchivo.length } $i2');
-                    setState((){
+                    print('delete image from List ${listArchivo.length} $i2');
+                    setState(() {
                       print('set new state of images');
                     });
                   },
                   child: Icon(
-                    Icons.delete,color: Colors.red,
+                    Icons.delete,
+                    color: Colors.red,
                   ),
                 ),
               ),
             ),
-             Container(
+            Container(
               height: 300,
               width: 300,
-              margin: EdgeInsets.only(right: 10.0,top: 30, left: 10.2),
+              margin: EdgeInsets.only(right: 10.0, top: 30, left: 10.2),
               child: Material(
                 elevation: 4.0,
-                 borderRadius: BorderRadius.circular(100.0),
+                borderRadius: BorderRadius.circular(100.0),
                 // ignore: unnecessary_new
                 child: new ClipRRect(
-                   //  borderRadius: new BorderRadius.circular(100.0),
+                    //  borderRadius: new BorderRadius.circular(100.0),
                     child: i == null
                         ? new GestureDetector(
                             onTap: () {
-                            //  selectCamera();
+                              //  selectCamera();
                             },
                             child: new Container(
                                 height: 80.0,
@@ -200,7 +199,7 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
                                     image: '')))
                         : new GestureDetector(
                             onTap: () {
-                            //  selectCamera();
+                              //  selectCamera();
                             },
                             child: new Container(
                               height: 80.0,
@@ -254,7 +253,6 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
     );
   }
 
-
   void showDemoActionSheet({BuildContext? context, Widget? child}) {
     showCupertinoModalPopup<String>(
       context: context!,
@@ -269,23 +267,21 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
   }
 
   Future cameraImage() async {
-    final image =
-        await ImagePicker().pickImage(source: ImageSource.camera, maxWidth: 700);
+    final image = await ImagePicker()
+        .pickImage(source: ImageSource.camera, maxWidth: 700);
     setState(() {
       _image = File(image!.path);
       listArchivo.add(image.path);
     });
-   // List<int> bytes = File(image.path).readAsBytesSync();
-
-
+    // List<int> bytes = File(image.path).readAsBytesSync();
   }
 
   Future getImageLibrary() async {
-    var gallery =
-        await ImagePicker().pickImage(source: ImageSource.gallery, maxWidth: 700);
+    var gallery = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, maxWidth: 700);
     setState(() {
       _image = gallery!.path;
-     // nacimiento.imagen1 = _image;
+      // nacimiento.imagen1 = _image;
     });
     List<int> bytes = await new File(gallery!.path).readAsBytesSync();
     listArchivo.add(_image);

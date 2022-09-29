@@ -95,8 +95,8 @@ class _ParteState extends State<Parte> {
         children: [
           SizedBox(
             width: 350,
-            child: FlatButton(
-              color: Colors.transparent,
+            child: TextButton(
+              //color: Colors.transparent,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -253,8 +253,8 @@ class _ParteState extends State<Parte> {
                         onChanged: (value) {
                           reportePias.detallePuntoAtencion = value;
                         },
-                      //  onChanged: (value) {
-                     /*     reportePias.detallePuntoAtencion = value;
+                        //  onChanged: (value) {
+                        /*     reportePias.detallePuntoAtencion = value;
                           print(value.length);
                           setState(() {
                             contadorTextDetalle = value.length;
@@ -264,7 +264,7 @@ class _ParteState extends State<Parte> {
                               colorTextDetalle = Colors.black;
                             }
                           });*/
-                      //  },
+                        //  },
                         maxLength: 200,
                         maxLines: 5,
                         //or null
@@ -273,7 +273,7 @@ class _ParteState extends State<Parte> {
                       ),
                     )),
               ),
-       /*       Row(
+              /*       Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(

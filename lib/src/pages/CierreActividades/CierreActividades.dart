@@ -121,8 +121,8 @@ class _CierreActividadesPageState extends State<CierreActividadesPage> {
                     height: 50,
                     width: MediaQuery.of(context).size.width,
                     // ignore: deprecated_member_use
-                    child: RaisedButton(
-                        color: Color(0xFF3949AB),
+                    child: ElevatedButton(
+                        //color: Color(0xFF3949AB),
                         child: Text(
                           "REGISTRAR",
                           textAlign: TextAlign.center,
@@ -291,8 +291,8 @@ class _CierreActividadesPageState extends State<CierreActividadesPage> {
   }
 
   Future getImageLibrary() async {
-    var gallery =
-        await ImagePicker().pickImage(source: ImageSource.gallery, maxWidth: 700);
+    var gallery = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, maxWidth: 700);
     setState(() {
       _imageby = File(gallery!.path);
       _image = gallery;
@@ -302,8 +302,8 @@ class _CierreActividadesPageState extends State<CierreActividadesPage> {
   }
 
   Future cameraImage() async {
-    final image =
-        await ImagePicker().pickImage(source: ImageSource.camera, maxWidth: 700);
+    final image = await ImagePicker()
+        .pickImage(source: ImageSource.camera, maxWidth: 700);
     setState(() {
       _imageby = File(image!.path);
 

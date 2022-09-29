@@ -42,6 +42,7 @@ class _HomePagePais extends State<HomePagePais> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     ///ProviderDatos().   verificacionpesmiso();
     mostrarTmbo();
     traerdato();
@@ -53,16 +54,16 @@ class _HomePagePais extends State<HomePagePais> {
 
     if (servicestatus) {
       print("GPS service is enabled");
-
     } else {
       print("GPS service is disabled.");
     }
   }
-  traerdato()async{
+
+  traerdato() async {
     await ProviderDatos().verificacionpesmiso();
   }
-  mostrarTmbo() async {
 
+  mostrarTmbo() async {
     DatabasePr.db.initDB();
     var abc = await DatabasePr.db.getAllTasksConfigInicio();
     if (abc.length > 0) {
@@ -245,16 +246,17 @@ class _HomePagePais extends State<HomePagePais> {
       floatingActionButton: new Visibility(
         visible: _isVisible,
         child: new FloatingActionButton(
-            focusColor: Colors.amber,
-            backgroundColor: Colors.orange,
-            child: const Icon(Icons.manage_accounts),
-            onPressed: () async {
-              await Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => PantallaInicio(),
-                ),
-              );
-            }),
+          focusColor: Colors.amber,
+          backgroundColor: Colors.orange,
+          child: const Icon(Icons.manage_accounts),
+          onPressed: () async {
+            await Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => PantallaInicio(),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

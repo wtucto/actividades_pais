@@ -131,7 +131,6 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                               if (snapshot.hasData) {
                                 return Container(
                                     child: DropdownButton<Paises>(
-
                                   underline: SizedBox(),
                                   isExpanded: true,
                                   items: snapshot.data
@@ -220,9 +219,9 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                   ),
                   SizedBox(
                     width: 350,
-                    child: FlatButton(
-                      color: Colors.blue[800],
-                      textColor: Colors.white,
+                    child: TextButton(
+                      //color: Colors.blue[800],
+                      //textColor: Colors.white,
                       child: Text("Validar"),
                       onPressed: () async {
                         setborrar();
@@ -412,7 +411,8 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                   SizedBox(
                     width: 350,
                     child: new FutureBuilder<List<ListarEntidadFuncionario>>(
-                      future: DatabasePr.db.listarEntidadFuncionario(widget.idProgramacion),
+                      future: DatabasePr.db
+                          .listarEntidadFuncionario(widget.idProgramacion),
                       builder: (BuildContext context,
                           AsyncSnapshot<List<ListarEntidadFuncionario>>
                               snapshot) {
@@ -492,9 +492,9 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                   SizedBox(
                     width: 350,
                     // ignore: deprecated_member_use
-                    child: FlatButton(
-                      color: Colors.blue[800],
-                      textColor: Colors.white,
+                    child: TextButton(
+                      //color: Colors.blue[800],
+                      //textColor: Colors.white,
                       child: Text("Agregar "),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
@@ -548,14 +548,15 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
       ),
     );
   }
+
   setborrar() async {
-   // controllerNumeroDoc.text = "";
+    // controllerNumeroDoc.text = "";
     controllerPrimerNombre.text = "";
     controllerSegundoNombre.text = "";
     controllerApellidoPaterno.text = "";
     controllerApellidoMaterno.text = "";
     controllerSexo.text = "";
-    controllerfechaNacimiento.text="";
+    controllerfechaNacimiento.text = "";
     controllerEdad.text = "";
     controllerCelular.text = "";
   }

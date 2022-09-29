@@ -244,8 +244,13 @@ class _ConfiguracionInicial extends State<ConfiguracionInicial> {
                                       }
                                     });
                                   },
-                                  hint:Row(children: [SizedBox(width: 10,), Text("$seleccionarUnidOrganicas",
-                                      style: TextStyle(color: Colors.black))]),
+                                  hint: Row(children: [
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text("$seleccionarUnidOrganicas",
+                                        style: TextStyle(color: Colors.black))
+                                  ]),
                                 ));
                           }
                         },
@@ -277,42 +282,50 @@ class _ConfiguracionInicial extends State<ConfiguracionInicial> {
                             return Container(
                                 decoration: servicios.myBoxDecoration(),
                                 child: DropdownButton<UnidadesTerritoriales>(
-                                  underline: SizedBox(),
-                                  isExpanded: true,
+                                    underline: SizedBox(),
+                                    isExpanded: true,
+                                    items: snapshot.data
+                                        ?.map((user) => DropdownMenuItem<
+                                                UnidadesTerritoriales>(
+                                              child:
+                                                  Text(user.unidadTerritorial),
+                                              value: user,
+                                            ))
+                                        .toList(),
+                                    onChanged: (UnidadesTerritoriales? newVal) {
+                                      setState(() {
+                                        nombreUnidTerritoriales =
+                                            newVal!.unidadTerritorial;
+                                        depatalits = newVal;
+                                        seleccionarUnidTerritoriales =
+                                            newVal.unidadTerritorial;
+                                        tablaid =
+                                            newVal.id_UnidadesTerritoriales;
+                                        idUnidTerritoriales =
+                                            newVal.id_UnidadesTerritoriales;
+                                        DatabasePr.db
+                                            .getporidUnidadTeritoria(tablaid);
 
-                                  items: snapshot.data
-                                      ?.map((user) => DropdownMenuItem<
-                                              UnidadesTerritoriales>(
-                                            child: Text(user.unidadTerritorial),
-                                            value: user,
-                                          ))
-                                      .toList(),
-                                  onChanged: (UnidadesTerritoriales? newVal) {
-                                    setState(() {
-                                      nombreUnidTerritoriales =
-                                          newVal!.unidadTerritorial;
-                                      depatalits = newVal;
-                                      seleccionarUnidTerritoriales =
-                                          newVal.unidadTerritorial;
-                                      tablaid = newVal.id_UnidadesTerritoriales;
-                                      idUnidTerritoriales =
-                                          newVal.id_UnidadesTerritoriales;
-                                      DatabasePr.db
-                                          .getporidUnidadTeritoria(tablaid);
-
-                                      if (newVal.id_UnidadesTerritoriales >=
-                                          1) {
-                                        tamanio3 = 50.0;
-                                      } else {
-                                        tamanioboton = 0;
-                                      }
-                                    });
-                                  },
-
-                                  hint: Row(children: [SizedBox(width: 10,),Text("$seleccionarUnidTerritoriales",
-                                      style: TextStyle(color: Colors.black)),],)
-                                  //     hint: Text("   $data_depara"),
-                                ));
+                                        if (newVal.id_UnidadesTerritoriales >=
+                                            1) {
+                                          tamanio3 = 50.0;
+                                        } else {
+                                          tamanioboton = 0;
+                                        }
+                                      });
+                                    },
+                                    hint: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text("$seleccionarUnidTerritoriales",
+                                            style:
+                                                TextStyle(color: Colors.black)),
+                                      ],
+                                    )
+                                    //     hint: Text("   $data_depara"),
+                                    ));
                           }
                         },
                       ),
@@ -557,13 +570,13 @@ class _ConfiguracionInicial extends State<ConfiguracionInicial> {
                     height: 20.0,
                   ),
                   Container(
-                 decoration: servicios.myBoxDecoration(),
+                    decoration: servicios.myBoxDecoration(),
                     margin: EdgeInsets.only(right: 0, left: 0),
                     height: tamanioboton,
                     width: MediaQuery.of(context).size.width,
-                    child: RaisedButton(
+                    child: ElevatedButton(
 
-                        color: Colors.blue[800],
+                        //color: Colors.blue[800],
 
                         child: _isloading
                             ? Row(
@@ -660,9 +673,8 @@ class _ConfiguracionInicial extends State<ConfiguracionInicial> {
                                   _isloading = false;
                                 });
                               }
-                            }
-                            else if (seleccionarTpPla == "TAMBO") {
-   if (seleccionarUnidTerritoriales !=
+                            } else if (seleccionarTpPla == "TAMBO") {
+                              if (seleccionarUnidTerritoriales !=
                                   "SELECCIONAR UNIDADES TERRITORIALES") {
                                 print("dsadsadas");
                                 await ProviderDatos()
@@ -693,7 +705,7 @@ class _ConfiguracionInicial extends State<ConfiguracionInicial> {
                                   MaterialPageRoute(
                                       builder: (_) => ConfiguracionPersonal()));
                             } else {
-                            var r = ConfigInicio(
+                              var r = ConfigInicio(
                                   idLugarPrestacion: idLugarPrestacion,
                                   idPuesto: idPuesto,
                                   idTambo: idTambo,

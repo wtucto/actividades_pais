@@ -111,8 +111,8 @@ class _CrearAtencionesState extends State<CrearAtenciones> {
               height: 15,
             ),
             SizedBox(
-              child: FlatButton(
-                color: Colors.blue[800],
+              child: TextButton(
+                //color: Colors.blue[800],
                 child: Text(
                   'Guardar',
                   style: TextStyle(color: Colors.white),
@@ -138,13 +138,14 @@ class _CrearAtencionesState extends State<CrearAtenciones> {
                         //   Navigator.of(context).pop();
                         //traerUltimo();
                       }
-                    }else {
-                      Util().showAlertDialog('Atenciones Realizadas',
-                          'Atencion ingresada con anterioridad, por favor seleccionar otro servicio.', context, () {
-                            Navigator.pop(context);
-                          });
+                    } else {
+                      Util().showAlertDialog(
+                          'Atenciones Realizadas',
+                          'Atencion ingresada con anterioridad, por favor seleccionar otro servicio.',
+                          context, () {
+                        Navigator.pop(context);
+                      });
                     }
-
                   }
 
                   /* if(atencion.atenciones==0){

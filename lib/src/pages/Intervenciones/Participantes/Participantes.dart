@@ -192,24 +192,30 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 visibilityTag
                     ? SizedBox(
                         width: 350,
-                        child: FlatButton(
-                          color: Colors.blue[800],
-                          textColor: Colors.white,
-                          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                            closeTraerDni?Image.asset(
-                            "assets/loaderios.gif",
-                            height: 40.0,
-                            width: 50.0,
-                            //color: Colors.transparent,
-                          ): new Container(),
-                            Text(nombreBoton),],),
+                        child: TextButton(
+                          //color: Colors.blue[800],
+                          //textColor: Colors.white,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              closeTraerDni
+                                  ? Image.asset(
+                                      "assets/loaderios.gif",
+                                      height: 40.0,
+                                      width: 50.0,
+                                      //color: Colors.transparent,
+                                    )
+                                  : new Container(),
+                              Text(nombreBoton),
+                            ],
+                          ),
 
                           onPressed: () async {
                             setborrar();
                             closeTraerDni = true;
                             setState(() {});
 
-                           // _fetchData(context);
+                            // _fetchData(context);
                             var usuario =
                                 await provider.getUsuarioParticipanteDni(
                                     controllerNumeroDoc.text);
@@ -272,10 +278,9 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                                     .year
                                     .toString();
                               }
-
                             }
 
-                         //   setState(() {});
+                            //   setState(() {});
                           },
                         ),
                       )
@@ -726,9 +731,9 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 SizedBox(
                   width: 350,
                   // ignore: deprecated_member_use
-                  child: FlatButton(
-                    color: Colors.blue[800],
-                    textColor: Colors.white,
+                  child: TextButton(
+                    //color: Colors.blue[800],
+                    //textColor: Colors.white,
                     child: Text("Agregar "),
                     onPressed: () async {
                       var cantd = await DatabasePr.db.buscarDni(
@@ -777,7 +782,6 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                               widget.idProgramacion;
                           participanteSr.tipo = 'participantes';
                           await DatabasePr.db.insertServicio(participanteSr);
-
                         }
                         setState(() {
                           Navigator.pop(context, 'participantes');

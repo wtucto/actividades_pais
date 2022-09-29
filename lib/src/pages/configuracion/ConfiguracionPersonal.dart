@@ -26,7 +26,7 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
 
   @override
   void initState() {
-     setState(() {});
+    setState(() {});
     super.initState();
   }
 
@@ -37,7 +37,7 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
     setState(() {});
     return Scaffold(
         appBar: AppBar(
-          elevation: 0,
+            elevation: 0,
             backgroundColor: Colors.blue[800],
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -82,9 +82,9 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                     decoration: servicios.myBoxDecoration(),
                     height: 50,
                     width: MediaQuery.of(context).size.width,
-                    child: RaisedButton(
+                    child: ElevatedButton(
 
-                        color: Colors.blue[800],
+                        //color: Colors.blue[800],
                         child: _isloading
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

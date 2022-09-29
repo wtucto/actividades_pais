@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/Login/Login.dart';
 
-
 void main() {
   runApp(MyApp());
 }
@@ -17,9 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Registo',
       theme: ThemeData(
-
         primarySwatch: Colors.blue,
-
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: LoadingScreen(),
@@ -49,8 +46,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
       /*  Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (_) => Home_Asis()));*/
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => Home_Asis()));
-
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => Home_Asis()));
     }
   }
 
