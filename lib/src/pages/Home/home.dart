@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:actividades_pais/src/pages/Monitor/main/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
@@ -154,6 +155,22 @@ class _HomePagePais extends State<HomePagePais> {
               gravity: ToastGravity.BOTTOM,
             );
           }
+
+          switch (nombre) {
+            case 'MONITOR PROY. TAMPO':
+              var rspt = await Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => MainPage()));
+
+              /*Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => MainPage()),
+                  (route) => false,
+                );*/
+
+              if (rspt == 'ok') {}
+              print(rspt);
+              break;
+          }
         },
         child: Card(
           elevation: 5,
@@ -211,6 +228,7 @@ class _HomePagePais extends State<HomePagePais> {
                     crossAxisAlignment: CrossAxisAlignment.center,*/
                     children: [
                       botones("REGISTAR BITACORA", Icons.app_registration),
+                      botones("MONITOR PROY. TAMPO", Icons.monitor),
                       if (tipoPlataforma == 'TAMBO') ...[
                         botones(
                             "INTERVENCIONES", Icons.assignment_late_outlined)

@@ -1,0 +1,32 @@
+{
+    "jobs": [
+        {
+            "title": "ENTREGA TOTAL - LIQUIDADO",
+            "company": "CHICOTAÑA",
+            "code": "2191033",
+            "type": "Edit",
+            "isSelect": false
+        },
+        {
+            "title": "ENTREGA TOTAL - LIQUIDADO",
+            "company": "LAGO DEL COLA (CHICHAS)",
+            "code": "2191038",
+            "type": "Edit",
+            "isSelect": false
+        },
+        {
+            "title": "ENTREGA TOTAL - LIQUIDADO",
+            "company": "PAMPACHACRA",
+            "code": "2193114",
+            "type": "Edit",
+            "isSelect": false
+        },
+        {
+            "title": "ENTREGA TOTAL - LIQUIDADO",
+            "company": "COSMIRHUA",
+            "code": "2193117",
+            "type": "Edit",
+            "isSelect": false
+        }
+    ]
+}

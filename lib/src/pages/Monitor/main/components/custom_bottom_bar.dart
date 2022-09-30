@@ -1,0 +1,59 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+const iconColor = Color.fromARGB(255, 12, 124, 205);
+
+class CustomBottomBar extends StatelessWidget {
+  final TabController controller;
+
+  const CustomBottomBar({
+    required this.controller,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.home,
+              color: iconColor,
+            ),
+            onPressed: () {
+              controller.animateTo(0);
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.folder_rounded,
+              color: iconColor,
+            ),
+            iconSize: 30,
+            onPressed: () {
+              controller.animateTo(1);
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.manage_accounts,
+              color: iconColor,
+            ),
+            onPressed: () {
+              controller.animateTo(2);
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.image,
+              color: iconColor,
+            ),
+            onPressed: () {
+              controller.animateTo(3);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -37,6 +37,7 @@ dependencies:
   flutter_3des: ^0.0.3
   provider: ^6.0.3
   image_picker:
+  video_player: ^2.4.7
   sqflite:
   connectivity: ^3.0.6
   #geolocator: ^9.0.2
@@ -49,9 +50,16 @@ dependencies:
   photo_view: ^0.14.0
   path_provider: ^2.0.11
   logger: ^1.1.0
+  animated_snack_bar: ^0.3.0
+  flutter_svg: ^1.1.5
+  internet_connection_checker: ^1.0.0+1
+  overlay_support: ^2.0.1
+  pin_code_text_field: ^1.8.0
+  country_code_picker: ^2.0.2
   # Http client.
   dio: ^4.0.6
   get_it: ^7.2.0
+  get: ^4.6.5
 
   ## Secure storage
   #flutter_secure_storage: ^6.0.0
@@ -114,6 +122,8 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
+    - assets/Monitor/
+    - assets/icons/
     #- assets/reloj.png
     - assets/paislogo.png
     #- assets/paisimg.jpeg
@@ -143,6 +153,12 @@ flutter:
       - family: Add_home
         fonts:
           - asset: fonts/Add_home.ttf
+      - family: Montserrat
+        fonts:
+        - asset: fonts/Montserrat-Regular.ttf
+      - family: NunitoSans
+        fonts:
+        - asset: fonts/NunitoSans-Regular.ttf
 
 flutter_intl:
   enabled: true
