@@ -2,12 +2,15 @@
 
 import 'dart:async';
 
+import 'package:actividades_pais/api/pnpais_api.dart';
+import 'package:actividades_pais/util/log.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/Login/widgets/botonLog.dart';
 import 'package:actividades_pais/src/pages/Login/customImput.dart';
 import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/src/pages/Login/widgets/logo.dart';
+import 'package:get_it/get_it.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -42,13 +45,15 @@ class _Form extends StatefulWidget {
 }
 
 class __FormState extends State<_Form> {
+  final pnPaisApi = GetIt.instance<PnPaisApi>();
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     Future LoginUser(usn, psw) async {
-        if (usn == 'PAIS' && psw == 'PAIS') {
+      //final listarTramaproyecto = await pnPaisApi.listarTramaproyecto();
+      if (usn == 'PAIS' && psw == 'PAIS') {
         Navigator.of(context)
             .pushReplacement(MaterialPageRoute(builder: (_) => HomePagePais()));
       } else {

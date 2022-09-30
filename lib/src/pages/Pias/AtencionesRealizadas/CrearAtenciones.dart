@@ -112,7 +112,9 @@ class _CrearAtencionesState extends State<CrearAtenciones> {
             ),
             SizedBox(
               child: TextButton(
-                //color: Colors.blue[800],
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.blue[800]),
+                ),
                 child: Text(
                   'Guardar',
                   style: TextStyle(color: Colors.white),

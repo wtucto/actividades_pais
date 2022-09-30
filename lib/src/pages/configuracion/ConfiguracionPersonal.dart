@@ -83,8 +83,9 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                     height: 50,
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
-
-                        //color: Colors.blue[800],
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.blue[800],
+                        ),
                         child: _isloading
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

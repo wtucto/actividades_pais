@@ -193,8 +193,10 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                     ? SizedBox(
                         width: 350,
                         child: TextButton(
-                          //color: Colors.blue[800],
-                          //textColor: Colors.white,
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.blue[800]),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -206,10 +208,15 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                                       //color: Colors.transparent,
                                     )
                                   : new Container(),
-                              Text(nombreBoton),
+                              Text(
+                                nombreBoton,
+                                style: TextStyle(
+                                  color: Colors
+                                      .white, // this is for your text colour
+                                ),
+                              ),
                             ],
                           ),
-
                           onPressed: () async {
                             setborrar();
                             closeTraerDni = true;
@@ -732,9 +739,16 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                   width: 350,
                   // ignore: deprecated_member_use
                   child: TextButton(
-                    //color: Colors.blue[800],
-                    //textColor: Colors.white,
-                    child: Text("Agregar "),
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.blue[800]),
+                    ),
+                    child: Text(
+                      "Agregar ",
+                      style: TextStyle(
+                        color: Colors.white, // this is for your text colour
+                      ),
+                    ),
                     onPressed: () async {
                       var cantd = await DatabasePr.db.buscarDni(
                           controllerNumeroDoc.text, widget.idProgramacion);

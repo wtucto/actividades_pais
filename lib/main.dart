@@ -1,4 +1,5 @@
 // @dart=2.9
+import 'package:actividades_pais/helpers/dependecy_injection.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/Login/Login.dart';
 
 void main() {
+  DependencyInjection.initialize();
   runApp(MyApp());
 }
 

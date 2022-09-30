@@ -194,7 +194,10 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                   SizedBox(
                     width: 350,
                     child: TextButton(
-                      //color: Colors.blue[800],
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.blue[800]),
+                      ),
                       child: Text(
                         'Validar ' + nombreBoton,
                         style: TextStyle(color: Colors.white),
@@ -392,7 +395,10 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                   SizedBox(
                     width: 350,
                     child: TextButton(
-                      //color: Colors.blue[800],
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.blue[800]),
+                      ),
                       child: Text(
                         "Agregar " + nombreBoton,
                         style: TextStyle(color: Colors.white),

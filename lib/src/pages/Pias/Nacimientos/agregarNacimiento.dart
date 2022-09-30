@@ -57,7 +57,9 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
                 SizedBox(
                   width: 350,
                   child: TextButton(
-                    //color: Colors.indigo,
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.indigo),
+                    ),
                     child: Text(
                       'Guardar',
                       style: TextStyle(color: Colors.white),
@@ -112,7 +114,10 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
                 SizedBox(
                     width: 350,
                     child: TextButton(
-                      //color: Colors.indigo,
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.indigo),
+                      ),
                       onPressed: () {
                         selectCamera();
                       },

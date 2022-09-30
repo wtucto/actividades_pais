@@ -575,9 +575,9 @@ class _ConfiguracionInicial extends State<ConfiguracionInicial> {
                     height: tamanioboton,
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
-
-                        //color: Colors.blue[800],
-
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.blue[800],
+                        ),
                         child: _isloading
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

@@ -122,7 +122,9 @@ class _CierreActividadesPageState extends State<CierreActividadesPage> {
                     width: MediaQuery.of(context).size.width,
                     // ignore: deprecated_member_use
                     child: ElevatedButton(
-                        //color: Color(0xFF3949AB),
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF3949AB),
+                        ),
                         child: Text(
                           "REGISTRAR",
                           textAlign: TextAlign.center,

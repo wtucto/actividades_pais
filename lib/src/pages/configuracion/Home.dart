@@ -222,7 +222,7 @@ class _HomeState extends State<Home> {
                   height: 20,
                 ),
                 ElevatedButton(
-                    //color: Color(0xFF3949AB),
+                    style: ElevatedButton.styleFrom(primary: Color(0xFF3949AB)),
                     child: Text(
                       "Registrar",
                       textAlign: TextAlign.center,

@@ -220,9 +220,16 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                   SizedBox(
                     width: 350,
                     child: TextButton(
-                      //color: Colors.blue[800],
-                      //textColor: Colors.white,
-                      child: Text("Validar"),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.blue[800]),
+                      ),
+                      child: Text(
+                        "Validar",
+                        style: TextStyle(
+                          color: Colors.white, // this is for your text colour
+                        ),
+                      ),
                       onPressed: () async {
                         setborrar();
                         var usuario = await provider
@@ -493,9 +500,16 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                     width: 350,
                     // ignore: deprecated_member_use
                     child: TextButton(
-                      //color: Colors.blue[800],
-                      //textColor: Colors.white,
-                      child: Text("Agregar "),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.blue[800]),
+                      ),
+                      child: Text(
+                        "Agregar ",
+                        style: TextStyle(
+                          color: Colors.white, // this is for your text colour
+                        ),
+                      ),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           participantes.primerNombre =

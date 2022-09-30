@@ -96,7 +96,9 @@ class _ParteState extends State<Parte> {
           SizedBox(
             width: 350,
             child: TextButton(
-              //color: Colors.transparent,
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.transparent),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
