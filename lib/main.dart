@@ -1,11 +1,15 @@
 // @dart=2.9
 import 'package:actividades_pais/helpers/dependecy_injection.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
+import 'package:actividades_pais/src/pages/Monitor/intro/splash_intro_page.dart';
+import 'package:actividades_pais/util/Localizations.dart';
 
 import 'package:flutter/material.dart';
 
 import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/Login/Login.dart';
+import 'package:get/route_manager.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 void main() {
   DependencyInjection.initialize();
@@ -15,14 +19,18 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Registo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return OverlaySupport.global(
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Registo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: SplashPage(),
+        locale: const Locale('es', 'ES'),
+        translations: MyTraslation(),
       ),
-      home: LoadingScreen(),
     );
   }
 }

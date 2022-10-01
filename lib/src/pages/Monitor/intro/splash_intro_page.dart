@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
+import 'package:actividades_pais/src/pages/Home/home.dart';
+import 'package:actividades_pais/src/pages/Login/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 import 'package:actividades_pais/app_properties.dart';
-import 'package:actividades_pais/src/pages/Monitor/auth/login_page.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -49,9 +51,24 @@ class _SplashPageState extends State<SplashPage>
     super.dispose();
   }
 
-  void navigationPage() {
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (_) => LoginScreen()));
+  var cantidad = 0;
+  void navigationPage() async {
+    await DatabasePr.db.initDB();
+    var abc = await DatabasePr.db.getAllConfigPersonal();
+    cantidad = abc.length;
+
+    if (cantidad == 0) {
+      // providerServicios.requestSqlData();
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+      //PantallaInicio
+    } else {
+      /*  Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (_) => Home_Asis()));*/
+
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => Home_Asis()));
+    }
   }
 
   Widget build(BuildContext context) {
@@ -92,5 +109,12 @@ class _SplashPageState extends State<SplashPage>
         ),
       ),
     );
+  }
+}
+
+class Home_Asis extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return HomePagePais();
   }
 }

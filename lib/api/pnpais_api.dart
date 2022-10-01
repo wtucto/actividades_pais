@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:actividades_pais/dto/trama_proyecto_dto.dart';
+import 'package:actividades_pais/dto/listar_trama_monitoreo_dto.dart';
+import 'package:actividades_pais/dto/listar_trama_proyecto_dto.dart';
+import 'package:actividades_pais/dto/listar_usuarios_app_dto.dart';
 import 'package:actividades_pais/helpers/http.dart';
 import 'package:actividades_pais/helpers/http_responce.dart';
 import 'package:actividades_pais/util/log.dart';
@@ -24,8 +26,19 @@ class PnPaisApi {
 
   PnPaisApi(this._http);
 
+  Future<HttpResponse<List<UsuariosApp>>> listarUsuariosApp() async {
+    return await _http.request<List<UsuariosApp>>(
+      '/api-pnpais/app/listarUsuariosApp',
+      method: "GET",
+      //headers: headers,
+      parser: (data) {
+        return (data as List).map((e) => UsuariosApp.fromJson(e)).toList();
+      },
+    );
+  }
+
   Future<HttpResponse<List<TramaProyecto>>> listarTramaproyecto() async {
-    final oResp = await _http.request<List<TramaProyecto>>(
+    return await _http.request<List<TramaProyecto>>(
       '/api-pnpais/app/listarTramaproyecto',
       method: "GET",
       //headers: headers,
@@ -33,24 +46,32 @@ class PnPaisApi {
         return (data as List).map((e) => TramaProyecto.fromJson(e)).toList();
       },
     );
-    return oResp;
   }
 
-  Future<HttpResponse<TramaProyecto>> register({
-    required String username,
-    required String email,
-    required String password,
+  Future<HttpResponse<List<TramaMonitoreo>>> listarTramaMonitoreo() async {
+    return await _http.request<List<TramaMonitoreo>>(
+      '/api-pnpais/app/listarTramaproyecto',
+      method: "GET",
+      //headers: headers,
+      parser: (data) {
+        return (data as List).map((e) => TramaMonitoreo.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<TramaMonitoreo>> insertarMonitoreo({
+    required TramaMonitoreo oBody,
   }) {
-    return _http.request<TramaProyecto>(
-      '/api/v1/register',
+    return _http.request<TramaMonitoreo>(
+      '/api-pnpais/app/insertarMonitoreo',
       method: "POST",
       data: {
-        "username": username,
-        "email": email,
-        "password": password,
+        "snip": "",
+        "cui": "",
+        "latitud": "",
       },
       parser: (data) {
-        return TramaProyecto.fromJson(data);
+        return TramaMonitoreo.fromJson(data);
       },
     );
   }

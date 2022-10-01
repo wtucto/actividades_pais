@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:actividades_pais/src/pages/Monitor/main/main_page.dart';
+import 'package:actividades_pais/util/log.dart';
+import 'package:actividades_pais/util/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
@@ -204,6 +206,15 @@ class _HomePagePais extends State<HomePagePais> {
       );
     }
 
+    final Responsive responsive = Responsive.of(context);
+    double wp = responsive.wp(14);
+    double hp65 = responsive.hp(35);
+
+    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    if (!isPortrait) {
+      wp = responsive.wp(20);
+      hp65 = responsive.wp(15);
+    }
     List listPages = [
       Container(
           child: Column(
@@ -211,13 +222,13 @@ class _HomePagePais extends State<HomePagePais> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(
-            height: 220,
+            height: hp65,
           ),
           Expanded(
               flex: 1,
               child: Container(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 55, right: 55),
+                  padding: EdgeInsets.only(left: wp, right: wp),
                   child: GridView.count(
                     padding: EdgeInsets.zero,
                     crossAxisCount: 2,
@@ -228,7 +239,7 @@ class _HomePagePais extends State<HomePagePais> {
                     crossAxisAlignment: CrossAxisAlignment.center,*/
                     children: [
                       botones("REGISTAR BITACORA", Icons.app_registration),
-                      botones("MONITOR PROY. TAMPO", Icons.monitor),
+                      botones("MONITOR PROY. TAMBO", Icons.monitor),
                       if (tipoPlataforma == 'TAMBO') ...[
                         botones(
                             "INTERVENCIONES", Icons.assignment_late_outlined)
