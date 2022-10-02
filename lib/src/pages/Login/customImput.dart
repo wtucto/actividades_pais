@@ -24,11 +24,11 @@ class CustomInput extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(10),
           boxShadow: <BoxShadow>[
             BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                offset: Offset(0, 5),
+                color: Colors.black.withOpacity(0.2),
+                offset: Offset(0, 1),
                 blurRadius: 5)
           ]),
       child: TextField(
