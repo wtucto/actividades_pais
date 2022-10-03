@@ -1,5 +1,7 @@
 import 'package:actividades_pais/app_properties.dart';
+import 'package:actividades_pais/resource/Internationalization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ChangeLanguagePage extends StatefulWidget {
   @override
@@ -7,18 +9,7 @@ class ChangeLanguagePage extends StatefulWidget {
 }
 
 class _ChangeCountryPageState extends State<ChangeLanguagePage> {
-  List<String> languages = [
-    'Chinesse',
-    'Spanish',
-    'English',
-    'Romanian',
-    'German',
-    'Portuguese',
-    'Bengali',
-    'Russian',
-    'Japanese',
-    'French',
-  ];
+  List<String> languages = MyTraslation.Langs;
 
   String currentLanguage = '';
 
@@ -33,7 +24,7 @@ class _ChangeCountryPageState extends State<ChangeLanguagePage> {
         ),
         backgroundColor: Colors.transparent,
         title: Text(
-          'Settings',
+          'Settings'.tr,
           style: TextStyle(color: darkGrey),
         ),
         elevation: 0,
@@ -48,7 +39,7 @@ class _ChangeCountryPageState extends State<ChangeLanguagePage> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
-                  'Language A / का',
+                  'Language'.tr,
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -62,6 +53,8 @@ class _ChangeCountryPageState extends State<ChangeLanguagePage> {
                             onTap: () {
                               setState(() {
                                 currentLanguage = l;
+                                MyTraslation().changeLocale(currentLanguage);
+                                setState(() {});
                               });
                             },
                             title: Text(

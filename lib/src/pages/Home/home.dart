@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/main_page.dart';
 import 'package:actividades_pais/util/log.dart';
 import 'package:actividades_pais/util/responsive.dart';
@@ -11,6 +12,7 @@ import 'package:actividades_pais/src/pages/Intervenciones/Intervenciones.dart';
 import 'package:actividades_pais/src/pages/Pias/ListaReportesPias.dart';
 import 'package:actividades_pais/src/pages/configuracion/Asistencia.dart';
 import 'package:actividades_pais/src/pages/configuracion/pantallainicio.dart';
+import 'package:get/instance_manager.dart';
 
 import 'appbar/AppBar.dart';
 
@@ -115,6 +117,8 @@ class _HomePagePais extends State<HomePagePais> {
 
   @override
   Widget build(BuildContext context) {
+    //final controller = Get.put(MainController()); // Se ejecuta loadInitialData();
+
     botones(nombre, icono) {
       return InkWell(
         onTap: () async {
@@ -159,7 +163,7 @@ class _HomePagePais extends State<HomePagePais> {
           }
 
           switch (nombre) {
-            case 'MONITOR PROY. TAMPO':
+            case 'MONITOR PROY. TAMBO':
               var rspt = await Navigator.of(context)
                   .push(MaterialPageRoute(builder: (_) => MainPage()));
 

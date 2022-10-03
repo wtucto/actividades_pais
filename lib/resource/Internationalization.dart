@@ -1,16 +1,32 @@
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
 class MyTraslation extends Translations {
+  static final locale = Locale('es', 'ES');
+  static final fallbackLocale = Locale('en', 'US');
+
+  static final Langs = ['Español', 'English'];
+  static final locales = [
+    Locale('es', 'ES'),
+    Locale('en', 'US'),
+  ];
+
   @override
   // TODO: implement keys
   Map<String, Map<String, String>> get keys => {
-        'en': {
+        //'es_ES': es,
+        //'en_US': en,
+        'en_US': {
           'AppName': "MOPROT",
           'AppDescrip': "Tambos project monitoring",
           'welcome': 'Welcome Back!',
           "RememberMe": "Remember me",
+          "Language": "Language",
+          'Settings': "Settings",
         },
-        'es': {
+        'es_ES': {
+          "Language": "Idioma",
+          'Settings': "Configuración",
           'AppName': "MOPROT",
           'AppDescrip': "Monitoreo de proyectos Tambos",
           'welcome': "Bienvenido!",
@@ -43,6 +59,27 @@ class MyTraslation extends Translations {
           "EnterNewPassword": "Ingresar nueva contraseña",
           "RepetNewPassword": "Repetir nueva contraseña",
           "ConfirmChangePassword": "Confirmar",
+          'LoggedIn': 'iniciado sesión como @name con e-mail @email',
         },
       };
+
+  void changeLocale(String lang) {
+    final locale = _getLocateFromLanguages(lang);
+    Get.updateLocale(locale!);
+  }
+
+  Locale? _getLocateFromLanguages(String lang) {
+    for (int i = 0; i < Langs.length; i++) {
+      if (lang == Langs[i]) return locales[i];
+    }
+    return Get.locale!;
+  }
 }
+
+/**
+ * 
+ Text('logged_in'.trParams({
+  'name': 'Jhon',
+  'email': 'jhon@example.com'
+  }));
+ */

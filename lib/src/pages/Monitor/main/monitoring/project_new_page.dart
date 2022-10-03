@@ -503,6 +503,7 @@ class _ProjectNewPageState extends State<ProjectNewPage> {
                     _question['value'] = _questionCtrl.text;
                     _question['options'] = _optionCtrls.asMap().entries.map(
                       (entry) {
+                        _confirmDialog("SAVE");
                         return {
                           'index': options[entry.key],
                           'value': entry.value.text
@@ -543,6 +544,41 @@ class _ProjectNewPageState extends State<ProjectNewPage> {
           const SizedBox(height: 32),
         ]),
       ),
+    );
+  }
+
+  Future<void> _confirmDialog(String sAction) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Warning!'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('¿Estás seguro de realizar la operación?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Si'),
+              onPressed: () {
+                if (sAction == 'SAVE') {}
+                Navigator.popUntil(
+                    context, ModalRoute.withName(Navigator.defaultRouteName));
+              },
+            ),
+            TextButton(
+              child: const Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

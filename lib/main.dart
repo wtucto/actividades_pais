@@ -2,7 +2,7 @@
 import 'package:actividades_pais/helpers/dependecy_injection.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Monitor/intro/splash_intro_page.dart';
-import 'package:actividades_pais/util/Localizations.dart';
+import 'package:actividades_pais/resource/Internationalization.dart';
 
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,7 @@ import 'package:get/route_manager.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 void main() {
-  DependencyInjection.initialize();
+  DependencyInjection.initialize("DEV");
   runApp(MyApp());
 }
 
@@ -28,7 +28,8 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: SplashPage(),
-        locale: const Locale('es', 'ES'),
+        locale: MyTraslation.locale,
+        fallbackLocale: MyTraslation.fallbackLocale,
         translations: MyTraslation(),
       ),
     );
@@ -61,6 +62,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
           MaterialPageRoute(builder: (BuildContext context) => Home_Asis()));
     }
   }
+
+  //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("No internet Connection:")));
 
   @override
   void initState() {

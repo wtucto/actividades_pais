@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:actividades_pais/dto/listar_trama_monitoreo_dto.dart';
-import 'package:actividades_pais/dto/listar_trama_proyecto_dto.dart';
-import 'package:actividades_pais/dto/listar_usuarios_app_dto.dart';
+import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
+import 'package:actividades_pais/backend/model/dto/listar_trama_proyecto_dto.dart';
+import 'package:actividades_pais/backend/model/dto/listar_usuarios_app_dto.dart';
 import 'package:actividades_pais/helpers/http.dart';
 import 'package:actividades_pais/helpers/http_responce.dart';
-import 'package:actividades_pais/util/log.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:logger/logger.dart';
 
 class PnPaisApi {
@@ -25,6 +23,17 @@ class PnPaisApi {
   };
 
   PnPaisApi(this._http);
+
+  Future<HttpResponse<List<UserModel>>> listarUsuarios() async {
+    return await _http.request<List<UserModel>>(
+      '/api-pnpais/app/listarUsuariosApp',
+      method: "GET",
+      //headers: headers,
+      parser: (data) {
+        return (data as List).map((e) => UserModel.fromJson(e)).toList();
+      },
+    );
+  }
 
   Future<HttpResponse<List<UsuariosApp>>> listarUsuariosApp() async {
     return await _http.request<List<UsuariosApp>>(
@@ -48,30 +57,41 @@ class PnPaisApi {
     );
   }
 
-  Future<HttpResponse<List<TramaMonitoreo>>> listarTramaMonitoreo() async {
-    return await _http.request<List<TramaMonitoreo>>(
+  Future<HttpResponse<List<TramaMonitoreoModel>>> listarTramaMonitoreo() async {
+    return await _http.request<List<TramaMonitoreoModel>>(
       '/api-pnpais/app/listarTramaproyecto',
       method: "GET",
       //headers: headers,
       parser: (data) {
-        return (data as List).map((e) => TramaMonitoreo.fromJson(e)).toList();
+        return (data as List)
+            .map((e) => TramaMonitoreoModel.fromJson(e))
+            .toList();
       },
     );
   }
 
-  Future<HttpResponse<TramaMonitoreo>> insertarMonitoreo({
-    required TramaMonitoreo oBody,
+  Future<HttpResponse<TramaMonitoreoModel>> insertarMonitoreo({
+    required TramaMonitoreoModel oBody,
   }) {
-    return _http.request<TramaMonitoreo>(
+    return _http.request<TramaMonitoreoModel>(
       '/api-pnpais/app/insertarMonitoreo',
       method: "POST",
-      data: {
-        "snip": "",
-        "cui": "",
-        "latitud": "",
-      },
+      data: TramaMonitoreoModel.toJsonObject(oBody),
       parser: (data) {
-        return TramaMonitoreo.fromJson(data);
+        return TramaMonitoreoModel.fromJson(data);
+      },
+    );
+  }
+
+  Future<HttpResponse<UserModel>> insertarUsuario({
+    required UserModel oBody,
+  }) {
+    return _http.request<UserModel>(
+      '/api-pnpais/app/insertarMonitoreo',
+      method: "POST",
+      data: UserModel.toJsonObject(oBody),
+      parser: (data) {
+        return UserModel.fromJson(data);
       },
     );
   }

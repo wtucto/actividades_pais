@@ -2,7 +2,7 @@
 
 import 'dart:async';
 
-import 'package:actividades_pais/api/pnpais_api.dart';
+import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/util/log.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/pages/Home/home.dart';
