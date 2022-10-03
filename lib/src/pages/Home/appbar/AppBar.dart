@@ -5,7 +5,11 @@ import 'package:decorative_app_bar/decorative_app_bar.dart';
 class AppBarPegaso extends StatefulWidget {
   String datoUt = "", nombre = "", plataforma;
   int snip;
-  AppBarPegaso({this.datoUt = "", this.nombre = "", this.snip = 0, this.plataforma = ''});
+  AppBarPegaso(
+      {this.datoUt = "",
+      this.nombre = "",
+      this.snip = 0,
+      this.plataforma = ''});
   @override
   _AppBarPegasoState createState() => _AppBarPegasoState();
 }
