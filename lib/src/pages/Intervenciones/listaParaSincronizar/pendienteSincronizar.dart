@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -28,32 +27,31 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
   bool _isOnline = true;
   final Connectivity _connectivity = Connectivity();
   Listas listas = Listas();
-   @override
+  @override
   void initState() {
     super.initState();
-     _checkInternetConnection();
+    _checkInternetConnection();
     fToast = FToast();
     fToast.init(context);
   }
 
   @override
   void dispose() {
-     super.dispose();
+    super.dispose();
   }
-
 
   Future<void> _checkInternetConnection() async {
     try {
       await Future.delayed(Duration(seconds: 1));
       setState(() {});
 
-       final result = await InternetAddress.lookup('www.google.com');
+      final result = await InternetAddress.lookup('www.google.com');
 
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         _isOnline = true;
-       } else {
+      } else {
         _isOnline = false;
-       }
+      }
     } on SocketException catch (_) {
       _isOnline = false;
     }
@@ -67,7 +65,7 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
   @override
   Widget build(BuildContext context) {
     setState(() {
-     // _checkInternetConnection();
+      // _checkInternetConnection();
     });
 
     return WillPopScope(
@@ -76,11 +74,10 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
         appBar: AppBar(
           backgroundColor: Colors.blue[800],
           title: Text("Pendientes Envio"),
-          leading: Util().iconbuton(() =>       Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-                builder: (context) => Intervenciones(widget.snip, '')),
-
-          )),
+          leading: Util().iconbuton(() => Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                    builder: (context) => Intervenciones(widget.snip, '')),
+              )),
           actions: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               if (_isOnline == true) ...[
@@ -91,7 +88,10 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
               ] else ...[
                 (Icon(Icons.wifi_off, color: Colors.red[900]))
               ]
-            ]), SizedBox(width: 15,)
+            ]),
+            SizedBox(
+              width: 15,
+            )
           ],
         ),
         body: FutureBuilder<List<TramaIntervencion>>(
@@ -143,11 +143,10 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
                                                   .toString())),
                                     );
                                     if (respt == 'ok') {
-                                       refreshList();
+                                      refreshList();
                                     }
                                   }
                                 },
-
                               ),
                               background: buildSwipeActionLeft(),
                               secondaryBackground: buildSwipeActionRigth(),
@@ -257,13 +256,13 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
           ),
           gravity: ToastGravity.CENTER,
         );
-
       },
     );
   }
+
   Future<bool> systemBackButtonPressed() async {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => Intervenciones(widget.snip, '')));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => Intervenciones(widget.snip, '')));
     return true;
   }
 }

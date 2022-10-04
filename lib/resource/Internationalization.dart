@@ -60,6 +60,11 @@ class MyTraslation extends Translations {
           "RepetNewPassword": "Repetir nueva contraseña",
           "ConfirmChangePassword": "Confirmar",
           'LoggedIn': 'iniciado sesión como @name con e-mail @email',
+          "TileAppRegister": "REGISTRARSE EN LA APP",
+          "TileBitacoraRegister": "REGISTAR BITACORA",
+          "TileIntervencion": "INTERVENCIONES",
+          "TilePias": "PIAS",
+          "TileProyectTambo": "MONITOR PROY. TAMBO",
         },
       };
 

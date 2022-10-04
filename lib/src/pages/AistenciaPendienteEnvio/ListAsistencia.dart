@@ -6,7 +6,7 @@ import 'package:actividades_pais/src/datamodels/Provider/Provider.dart';
 import 'package:actividades_pais/src/datamodels/Provider/connection_status_model.dart';
 
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_3des/flutter_3des.dart';
 import 'package:flutter/cupertino.dart';
@@ -515,7 +515,8 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
         await DatabasePr.db.eliminarPorid(id);
       } else if (_isOnline == true) {
         http.Response response = await http.post(
-            Uri.parse('https://www.pais.gob.pe/backendsismonitor/public/gestionempleado/guardarasistencia'),
+            Uri.parse(
+                'https://www.pais.gob.pe/backendsismonitor/public/gestionempleado/guardarasistencia'),
             headers: headers,
             body: '{  "snip" : $snip,'
                 '"tipo_trabajo" : "$tipoTrabajo",'
@@ -570,7 +571,8 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
       print(a[i].snip);
       // ignore: unused_local_variable
       http.Response response = await http.post(
-          Uri.parse( 'https://www.pais.gob.pe/backendsismonitor/public/gestionempleado/guardarasistencia'),
+          Uri.parse(
+              'https://www.pais.gob.pe/backendsismonitor/public/gestionempleado/guardarasistencia'),
           headers: headers,
           body: '{  "snip" : ${a[i].snip},'
               '"tipo_trabajo" : "${a[i].tipoTrabajo}",'

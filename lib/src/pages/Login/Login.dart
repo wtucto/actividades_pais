@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/pages/Home/home.dart';
@@ -30,12 +31,7 @@ class _LoginPageState extends State<LoginPage> {
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: h / 12),
               decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color.fromARGB(255, 43, 162, 114),
-                    Color.fromARGB(255, 30, 143, 70),
-                  ],
-                ),
+                gradient: mainButton5,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

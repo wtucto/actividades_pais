@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:actividades_pais/app_properties.dart';
+import 'package:actividades_pais/util/Constants.dart';
 
 class LegalAboutPage extends StatefulWidget {
   @override

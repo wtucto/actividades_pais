@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:actividades_pais/helpers/dependecy_injection.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Monitor/intro/splash_intro_page.dart';

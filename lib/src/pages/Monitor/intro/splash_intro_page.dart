@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-import 'package:actividades_pais/app_properties.dart';
+import 'package:actividades_pais/util/Constants.dart';
 
 class SplashPage extends StatefulWidget {
   @override

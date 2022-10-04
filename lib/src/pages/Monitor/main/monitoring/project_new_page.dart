@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 
-import 'package:actividades_pais/app_properties.dart';
+import 'package:actividades_pais/util/Constants.dart';
 
 const options = ['BAJO', 'MEDIO', 'ALTO'];
 

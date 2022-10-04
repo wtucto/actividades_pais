@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/components/card.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/main_page.dart';
+import 'package:actividades_pais/util/Colors.dart';
+import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/log.dart';
 import 'package:actividades_pais/util/responsive.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +16,7 @@ import 'package:actividades_pais/src/pages/Pias/ListaReportesPias.dart';
 import 'package:actividades_pais/src/pages/configuracion/Asistencia.dart';
 import 'package:actividades_pais/src/pages/configuracion/pantallainicio.dart';
 import 'package:get/instance_manager.dart';
+import 'package:get/get.dart';
 
 import 'appbar/AppBar.dart';
 
@@ -219,6 +223,69 @@ class _HomePagePais extends State<HomePagePais> {
       wp = responsive.wp(20);
       hp65 = responsive.wp(15);
     }
+
+    String icon0 = "assets/icons/icon_user_setting.png";
+    String icon1 = "assets/icons/icon_account_balance.png";
+    String icon2 = "assets/icons/icon_boat.png";
+    String icon3 = "assets/icons/icon_fligth.png";
+    String icon4 = "assets/icons/icon_intervencion.png";
+    String icon5 = "assets/icons/icon_monitoring.png";
+    String icon6 = "assets/icons/icon_registration.png";
+
+    List<HomeOptions> aHomeOptions = [];
+
+    if (cantidadDB < 1) {
+      aHomeOptions.add(HomeOptions(
+        code: "OPT1000",
+        name: "TileAppRegister".tr,
+        types: const ["Usuario"],
+        image: icon0,
+        color: LightColors.lightTeal,
+      ));
+    } else {
+      aHomeOptions.add(HomeOptions(
+        code: "OPT1001",
+        name: "TileBitacoraRegister".tr,
+        types: const ["Ver"],
+        image: icon6,
+        color: LightColors.lightBlue,
+      ));
+
+      if (tipoPlataforma == 'TAMBO') {
+        aHomeOptions.add(HomeOptions(
+          code: "OPT1003",
+          name: "TileIntervencion".tr,
+          types: const ["Ver"],
+          image: icon4,
+          color: LightColors.lightBlue,
+        ));
+      } else {
+        if (tipoPlataforma == 'PIAS' &&
+            (modalidad == '1' || modalidad == '2' || modalidad == '3')) {
+          String sImagePias = modalidad == "1"
+              ? icon2
+              : modalidad == "2"
+                  ? icon3
+                  : icon1;
+          aHomeOptions.add(HomeOptions(
+            code: "OPT1004",
+            name: "TilePias".tr,
+            types: const ["Ver"],
+            image: sImagePias,
+            color: LightColors.lightBlue,
+          ));
+        }
+      }
+    }
+
+    aHomeOptions.add(HomeOptions(
+      code: "OPT1005",
+      name: "TileProyectTambo".tr,
+      types: const ["Ver"],
+      image: icon5,
+      color: LightColors.lightBlue,
+    ));
+
     List listPages = [
       Container(
           child: Column(
@@ -229,6 +296,82 @@ class _HomePagePais extends State<HomePagePais> {
             height: hp65,
           ),
           Expanded(
+            child: GridView.builder(
+              physics: BouncingScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1.4,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              padding: EdgeInsets.only(left: 28, right: 28, bottom: 58),
+              itemCount: aHomeOptions.length,
+              itemBuilder: (context, index) => TiteCard(
+                aHomeOptions[index],
+                index: index,
+                onPress: () async {
+                  var oHomeOptionSelect = aHomeOptions[index];
+
+                  if (cantidadDB < 1) {
+                    if (oHomeOptionSelect.code == "OPT1000") {
+                      await Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => PantallaInicio(),
+                        ),
+                      );
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: 'Registrarse en el App',
+                        gravity: ToastGravity.BOTTOM,
+                      );
+                    }
+                    return;
+                  }
+
+                  switch (oHomeOptionSelect.code) {
+                    case 'OPT1001':
+                      var rspt = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                Asistencia(long: long, lat: lat)),
+                      );
+                      break;
+                    case 'OPT1003':
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                Intervenciones(snip, unidadTerritorial)),
+                      );
+                      break;
+                    case 'OPT1004':
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ListaReportesPias(
+                                unidadTeritorial: unidadTerritorial,
+                                plataforma: variable,
+                                idPlataforma: idPlataforma,
+                                long: long,
+                                lat: lat,
+                                campaniaCod: campaniaCod)),
+                      );
+                      break;
+                    case "OPT1005":
+                      var rspt = await Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (_) => MainPage()),
+                        (route) => false,
+                      );
+                      break;
+                    default:
+                  }
+                },
+              ),
+            ),
+          ),
+          /*Expanded(
               flex: 1,
               child: Container(
                 child: Padding(
@@ -239,8 +382,6 @@ class _HomePagePais extends State<HomePagePais> {
                     mainAxisSpacing: 10.0,
                     crossAxisSpacing: 10.0,
                     shrinkWrap: false,
-                    /*  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,*/
                     children: [
                       botones("REGISTAR BITACORA", Icons.app_registration),
                       botones("MONITOR PROY. TAMBO", Icons.monitor),
@@ -260,7 +401,7 @@ class _HomePagePais extends State<HomePagePais> {
                     ],
                   ),
                 ),
-              )),
+              )),*/
         ],
       )),
     ];

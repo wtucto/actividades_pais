@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 
-import 'package:actividades_pais/app_properties.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/src/pages/Monitor/auth/confirm_otp_page.dart';
 
 class ForgotPasswordPage extends StatefulWidget {

@@ -1,5 +1,5 @@
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
-import 'package:actividades_pais/app_properties.dart';
 
 class MainBackground extends CustomPainter {
   MainBackground();

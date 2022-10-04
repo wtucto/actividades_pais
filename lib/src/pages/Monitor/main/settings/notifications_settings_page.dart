@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:actividades_pais/app_properties.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

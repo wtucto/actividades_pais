@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:actividades_pais/app_properties.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/src/pages/Monitor/intro/register_intro_page.dart';
 
 class RegisterPage extends StatefulWidget {

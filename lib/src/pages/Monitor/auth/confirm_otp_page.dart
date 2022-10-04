@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 
-import 'package:actividades_pais/app_properties.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/src/pages/Monitor/auth/change_password_page.dart';
 
 class ConfirmOtpPage extends StatefulWidget {

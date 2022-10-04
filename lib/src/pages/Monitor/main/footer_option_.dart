@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:actividades_pais/app_properties.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/src/pages/Monitor/faq_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/settings/settings_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/settings/legal_about_page.dart';

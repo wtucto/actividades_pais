@@ -1,4 +1,4 @@
-import 'package:actividades_pais/app_properties.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/resource/Internationalization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

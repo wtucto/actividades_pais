@@ -1,4 +1,4 @@
-import 'package:actividades_pais/app_properties.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/custom_background.dart';
 import 'package:flutter/material.dart';
 

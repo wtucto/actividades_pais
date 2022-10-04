@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:actividades_pais/app_properties.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/main_page.dart';
 
 class IntroPage extends StatefulWidget {
