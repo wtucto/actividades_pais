@@ -8,6 +8,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:get/get.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _SplashPageState extends State<SplashPage>
     InternetConnectionChecker().onStatusChange.listen((status) {
       final connected = status == InternetConnectionStatus.connected;
       showSimpleNotification(
-          Text(connected ? "Connected Online" : "Conneted Offline"));
+          Text(connected ? 'ConnectOnline'.tr : 'ConnectOffline'.tr));
     });
 
     controller = AnimationController(
@@ -96,9 +97,9 @@ class _SplashPageState extends State<SplashPage>
                     text: TextSpan(
                         style: TextStyle(color: Colors.black),
                         children: [
-                          TextSpan(text: 'Desarrollado por '),
+                          TextSpan(text: 'DevelopByText'.tr),
                           TextSpan(
-                              text: '@PAIS',
+                              text: 'CompanyTag'.tr,
                               style: TextStyle(fontWeight: FontWeight.bold))
                         ]),
                   ),

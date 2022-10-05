@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/main_page.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/main_footer_all_option.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   @override
@@ -19,7 +19,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       onTap: () {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (_) => MainPage()),
+          MaterialPageRoute(builder: (_) => MainFooterAllOptionPage()),
           (route) => false,
         );
       },
@@ -39,7 +39,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         ),
         child: Center(
           child: Text(
-            "ConfirmChangePassword".tr,
+            'ConfirmChangePassword'.tr,
             style: const TextStyle(
               color: const Color(0xfffefefe),
               fontWeight: FontWeight.w600,

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:get/get.dart';
 
 const options = ['BAJO', 'MEDIO', 'ALTO'];
 
@@ -86,7 +87,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
           ),
           child: Center(
             child: Text(
-              "DETALLE DEL PROYECTO",
+              'ProjectDetailTitle'.tr,
               style: const TextStyle(
                 color: const Color(0xfffefefe),
                 fontWeight: FontWeight.w600,
@@ -104,73 +105,73 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
           TextFormField(
             controller: _CODIGO_SNIP,
             decoration: const InputDecoration(labelText: 'CODIGO SNIP'),
-            validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
           ),
           TextFormField(
               controller: _CUI,
               decoration: const InputDecoration(labelText: 'CUI'),
-              validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false),
           TextFormField(
               controller: _LONG,
               decoration: const InputDecoration(labelText: 'LONG'),
-              validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false),
           TextFormField(
               controller: _LAT,
               decoration: const InputDecoration(labelText: 'LAT'),
-              validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false),
           TextFormField(
               controller: _DEPARTAMENTO,
               decoration: const InputDecoration(labelText: 'DEPARTAMENTO'),
-              validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false),
           TextFormField(
               controller: _PROVINCIA,
               decoration: const InputDecoration(labelText: 'PROVINCIA'),
-              validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false),
           TextFormField(
               controller: _TAMBO,
               decoration: const InputDecoration(labelText: 'TAMBO'),
-              validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false),
           TextFormField(
               controller: _CENTRO,
               decoration: const InputDecoration(labelText: 'CENTRO'),
-              validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false),
           TextFormField(
               controller: _POBLADO,
               decoration: const InputDecoration(labelText: 'POBLADO'),
-              validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false),
           TextFormField(
               controller: _COD_RESIDENTE,
               decoration: const InputDecoration(labelText: 'COD RESIDENTE'),
-              validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false),
           TextFormField(
               controller: _RESIDENTE,
               decoration: const InputDecoration(labelText: 'RESIDENTE'),
-              validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false),
           TextFormField(
               controller: _COD_SUPERVISOR,
               decoration: const InputDecoration(labelText: 'COD SUPERVISOR'),
-              validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false),
           TextFormField(
               controller: _SUPERVISOR,
               decoration: const InputDecoration(labelText: 'SUPERVISOR'),
-              validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false),
           TextFormField(
               controller: _COD_CRP,
               decoration: const InputDecoration(labelText: 'COD CRP'),
-              validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false),
           const SizedBox(height: 32),
         ]),

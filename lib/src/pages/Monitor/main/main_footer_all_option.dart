@@ -1,21 +1,22 @@
 import 'package:actividades_pais/src/pages/Monitor/main/components/fab.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/monitoring/monitor_list.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_list_page.dart';
 import 'package:flutter/material.dart';
 import 'components/custom_bottom_bar.dart';
 
 import 'package:actividades_pais/custom_background.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/monitoring/project_list_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/monitoring/project_new_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/footer_option_.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/Project/main_footer_project_list_page.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/settings/main_footer_setting_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/gallery/gallery_page.dart';
 
-class MainPage extends StatefulWidget {
+class MainFooterAllOptionPage extends StatefulWidget {
   @override
-  _MainPageState createState() => _MainPageState();
+  _MainFooterAllOptionPageState createState() =>
+      _MainFooterAllOptionPageState();
 }
 
-class _MainPageState extends State<MainPage>
-    with TickerProviderStateMixin<MainPage> {
+class _MainFooterAllOptionPageState extends State<MainFooterAllOptionPage>
+    with TickerProviderStateMixin<MainFooterAllOptionPage> {
   late TabController bottomTabController;
 
   Animation<double>? _animation;
@@ -45,10 +46,9 @@ class _MainPageState extends State<MainPage>
           controller: bottomTabController,
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
-            ProjectPage(),
-            // ProjectNewPage(),
+            MainFooterProjectPage(),
             MonitorList(),
-            ProfilePage(),
+            MainFooterSettingPage(),
             GalleryPage(),
           ],
         ),

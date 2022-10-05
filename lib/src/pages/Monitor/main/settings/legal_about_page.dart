@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:get/get.dart';
 
 class LegalAboutPage extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _LegalAboutPageState extends State<LegalAboutPage> {
         brightness: Brightness.light,
         backgroundColor: Colors.transparent,
         title: Text(
-          'Settings',
+          'Settings'.tr,
           style: TextStyle(color: darkGrey),
         ),
         elevation: 0,
@@ -34,7 +35,7 @@ class _LegalAboutPageState extends State<LegalAboutPage> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
-                  'Legal',
+                  'Legal'.tr,
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -45,15 +46,15 @@ class _LegalAboutPageState extends State<LegalAboutPage> {
                 child: ListView(
                   children: <Widget>[
                     ListTile(
-                      title: Text('Terminos de Uso'),
+                      title: Text('TermsOfUse'.tr),
                       trailing: Icon(Icons.chevron_right),
                     ),
                     ListTile(
-                      title: Text('Política de Privacidad'),
+                      title: Text('PrivacyPolicy'.tr),
                       trailing: Icon(Icons.chevron_right),
                     ),
                     ListTile(
-                      title: Text('Penalidades'),
+                      title: Text('Penalties'.tr),
                       trailing: Icon(Icons.chevron_right),
                     ),
                   ],

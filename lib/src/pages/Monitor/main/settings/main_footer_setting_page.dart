@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
-import 'package:actividades_pais/src/pages/Monitor/faq_page.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/settings/faq_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/settings/settings_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/settings/legal_about_page.dart';
+import 'package:get/get.dart';
 
-class ProfilePage extends StatelessWidget {
+class MainFooterSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,51 +51,6 @@ class ProfilePage extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        /*Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Image.asset('assets/icons/wallet.png'),
-                              onPressed: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) => WalletPage())),
-                            ),
-                            Text(
-                              'Wallet',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Image.asset('assets/icons/truck.png'),
-                              onPressed: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) => TrackingPage())),
-                            ),
-                            Text(
-                              'Shipped',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Image.asset('assets/icons/card.png'),
-                              onPressed: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) => PaymentPage())),
-                            ),
-                            Text(
-                              'Payment',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),*/
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -103,7 +59,7 @@ class ProfilePage extends StatelessWidget {
                               onPressed: () {},
                             ),
                             Text(
-                              'Soporte',
+                              'Suport'.tr,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             )
                           ],
@@ -113,8 +69,8 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  title: Text('Ajustes'),
-                  subtitle: Text('General y Usuario'),
+                  title: Text('Settings'.tr),
+                  subtitle: Text('UserConfig'.tr),
                   leading: Image.asset(
                     'assets/icons/settings_icon.png',
                     fit: BoxFit.scaleDown,
@@ -127,8 +83,8 @@ class ProfilePage extends StatelessWidget {
                 ),
                 Divider(),
                 ListTile(
-                  title: Text('Política de Privacidad'),
-                  subtitle: Text('Legal'),
+                  title: Text('PrivacyPolicy'.tr),
+                  subtitle: Text('Legal'.tr),
                   leading: Image.asset('assets/icons/support.png'),
                   trailing: Icon(
                     Icons.chevron_right,
@@ -139,8 +95,8 @@ class ProfilePage extends StatelessWidget {
                 ),
                 Divider(),
                 ListTile(
-                  title: Text('FAQ'),
-                  subtitle: Text('Preguntas Frecuentes y Respuestas'),
+                  title: Text('FrequentlyAskedQuestions'.tr),
+                  subtitle: Text('FrequentlyAskedQuestionsResp'.tr),
                   leading: Image.asset('assets/icons/faq.png'),
                   trailing: Icon(Icons.chevron_right, color: yellow),
                   onTap: () => Navigator.of(context)

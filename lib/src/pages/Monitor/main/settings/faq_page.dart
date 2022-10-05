@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:get/get.dart';
 
 class FaqPage extends StatefulWidget {
   @override
@@ -25,7 +26,7 @@ class _FaqPageState extends State<FaqPage> {
         brightness: Brightness.light,
         backgroundColor: Colors.transparent,
         title: Text(
-          'Settings',
+          'Settings'.tr,
           style: TextStyle(color: darkGrey),
         ),
         elevation: 0,
@@ -40,7 +41,7 @@ class _FaqPageState extends State<FaqPage> {
                 padding: const EdgeInsets.only(
                     left: 24.0, right: 24.0, bottom: 16.0),
                 child: Text(
-                  'Preguntas Frecuentes',
+                  'FrequentlyAskedQuestions'.tr,
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,

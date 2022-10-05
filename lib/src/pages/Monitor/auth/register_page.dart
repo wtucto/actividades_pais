@@ -1,8 +1,8 @@
+import 'package:actividades_pais/src/pages/Monitor/main/main_footer_all_option.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
-import 'package:actividades_pais/src/pages/Monitor/intro/register_intro_page.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -49,14 +49,14 @@ class _RegisterPageState extends State<RegisterPage> {
       bottom: 40,
       child: InkWell(
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => IntroPage()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => MainFooterAllOptionPage()));
         },
         child: Container(
           width: MediaQuery.of(context).size.width / 2,
           height: 80,
           child: Center(
-              child: new Text("SignIn".tr,
+              child: new Text('SignIn'.tr,
                   style: const TextStyle(
                       color: const Color(0xfffefefe),
                       fontWeight: FontWeight.w600,

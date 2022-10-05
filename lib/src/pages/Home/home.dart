@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/components/card.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/main_page.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/main_footer_all_option.dart';
 import 'package:actividades_pais/util/Colors.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/log.dart';
@@ -168,12 +168,12 @@ class _HomePagePais extends State<HomePagePais> {
 
           switch (nombre) {
             case 'MONITOR PROY. TAMBO':
-              var rspt = await Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => MainPage()));
+              var rspt = await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => MainFooterAllOptionPage()));
 
               /*Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (_) => MainPage()),
+                  MaterialPageRoute(builder: (_) => MainFooterAllOptionPage()),
                   (route) => false,
                 );*/
 
@@ -363,12 +363,13 @@ class _HomePagePais extends State<HomePagePais> {
 
                   switch (oHomeOptionSelect.code) {
                     case "OPT1005":
-                      var rspt = await Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) => MainPage()));
+                      var rspt = await Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (_) => MainFooterAllOptionPage()));
 
                       /*await Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (_) => MainPage()),
+                        MaterialPageRoute(builder: (_) => MainFooterAllOptionPage()),
                         (route) => false,
                       ); */
                       break;

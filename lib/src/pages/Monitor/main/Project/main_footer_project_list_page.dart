@@ -1,20 +1,21 @@
 import 'dart:convert';
-import 'package:actividades_pais/src/pages/Monitor/main/monitoring/monitor_list.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/monitoring/project_detail_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/monitoring/project_new_page.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_list_page.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/Project/project_detail_page.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:get/get.dart';
 
-class ProjectPage extends StatefulWidget {
-  const ProjectPage({Key? key}) : super(key: key);
+class MainFooterProjectPage extends StatefulWidget {
+  const MainFooterProjectPage({Key? key}) : super(key: key);
 
   @override
-  _ProjectPageState createState() => _ProjectPageState();
+  _MainFooterProjectPageState createState() => _MainFooterProjectPageState();
 }
 
-class _ProjectPageState extends State<ProjectPage> {
+class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
   List<dynamic> jobList = [];
 
   Future<void> readJson() async {
@@ -23,7 +24,7 @@ class _ProjectPageState extends State<ProjectPage> {
     final data = await json.decode(response);
 
     setState(() {
-      jobList = data['jobs'].map((data) => Job.fromJson(data)).toList();
+      jobList = data['jobs'].map((data) => ProjectInfo.fromJson(data)).toList();
     });
   }
 
@@ -68,7 +69,7 @@ class _ProjectPageState extends State<ProjectPage> {
         ],
         title: Center(
           child: Text(
-            "Lista de Proyectos",
+            'ProjectListTitle'.tr,
             style: const TextStyle(
               color: const Color(0xfffefefe),
               fontWeight: FontWeight.w600,
@@ -100,14 +101,14 @@ class _ProjectPageState extends State<ProjectPage> {
           padding: EdgeInsets.all(10),
           itemCount: jobList.length,
           itemBuilder: (context, index) {
-            return jobComponent(job: jobList[index]);
+            return jobComponent(oProjectInfo: jobList[index]);
           },
         ),
       ),
     );
   }
 
-  jobComponent({required Job job}) {
+  jobComponent({required ProjectInfo oProjectInfo}) {
     String experienceLevelColor = "4495FF";
     return Container(
       padding: EdgeInsets.all(10),
@@ -130,20 +131,24 @@ class _ProjectPageState extends State<ProjectPage> {
             children: [
               Expanded(
                 child: Row(children: [
-                  /*Container(
-                      width: 60,
-                      height: 60,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: job.companyLogo == "" ? Image.asset(job.companyLogo): null,
+                  Container(
+                    width: 60,
+                    height: 60,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Icon(
+                        Icons.monitor_sharp,
+                        size: 20.0,
+                        color: Colors.brown[900],
                       ),
-                      ),*/
+                    ),
+                  ),
                   SizedBox(width: 10),
                   Flexible(
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(job.title,
+                          Text(oProjectInfo.title,
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 15,
@@ -151,7 +156,7 @@ class _ProjectPageState extends State<ProjectPage> {
                           SizedBox(
                             height: 5,
                           ),
-                          Text(job.company,
+                          Text(oProjectInfo.subTitle,
                               style: TextStyle(color: Colors.grey[500])),
                         ]),
                   )
@@ -171,6 +176,10 @@ class _ProjectPageState extends State<ProjectPage> {
                   padding: EdgeInsets.all(5),
                   duration: Duration(milliseconds: 300),
                   decoration: BoxDecoration(
+                      border: new Border.all(
+                          color: Color.fromARGB(255, 179, 177, 177),
+                          width: 1.0,
+                          style: BorderStyle.solid),
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.grey.shade200),
                   child: Center(
@@ -192,21 +201,29 @@ class _ProjectPageState extends State<ProjectPage> {
               children: [
                 Row(
                   children: [
-                    OutlinedButton(
-                      onPressed: () {
+                    GestureDetector(
+                      onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ProjectNewPage(),
+                          builder: (context) => MonitoringDetailNewEditPage(),
                         ));
                       },
-                      child: Container(
+                      child: AnimatedContainer(
+                        height: 35,
                         padding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                            EdgeInsets.symmetric(vertical: 3, horizontal: 15),
+                        duration: Duration(milliseconds: 300),
                         decoration: BoxDecoration(
+                            border: new Border.all(
+                                color: Color.fromARGB(255, 179, 177, 177),
+                                width: 1.0,
+                                style: BorderStyle.solid),
                             borderRadius: BorderRadius.circular(12),
-                            color: Colors.grey.shade200),
+                            color:
+                                Color(int.parse("0xff${experienceLevelColor}"))
+                                    .withAlpha(20)),
                         child: Center(
                           child: Icon(
-                            Icons.new_label,
+                            Icons.add_box,
                             color: Color.fromARGB(255, 56, 54, 54),
                           ),
                         ),
@@ -215,16 +232,22 @@ class _ProjectPageState extends State<ProjectPage> {
                     SizedBox(
                       width: 10,
                     ),
-                    OutlinedButton(
-                      onPressed: () {
+                    GestureDetector(
+                      onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ProjectDetailPage(),
                         ));
                       },
-                      child: Container(
+                      child: AnimatedContainer(
+                        height: 35,
                         padding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                            EdgeInsets.symmetric(vertical: 3, horizontal: 15),
+                        duration: Duration(milliseconds: 300),
                         decoration: BoxDecoration(
+                            border: new Border.all(
+                                color: Color.fromARGB(255, 179, 177, 177),
+                                width: 1.0,
+                                style: BorderStyle.solid),
                             borderRadius: BorderRadius.circular(12),
                             color:
                                 Color(int.parse("0xff${experienceLevelColor}"))
@@ -240,27 +263,37 @@ class _ProjectPageState extends State<ProjectPage> {
                     SizedBox(
                       width: 10,
                     ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Color(int.parse("0xff${experienceLevelColor}"))
-                              .withAlpha(20)),
-                      child: Center(
-                        child: Icon(
-                          Icons.upload,
-                          color: Color.fromARGB(255, 38, 173, 108),
+                    GestureDetector(
+                      onTap: () {},
+                      child: AnimatedContainer(
+                        height: 35,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 3, horizontal: 15),
+                        duration: Duration(milliseconds: 300),
+                        decoration: BoxDecoration(
+                            border: new Border.all(
+                                color: Color.fromARGB(255, 179, 177, 177),
+                                width: 1.0,
+                                style: BorderStyle.solid),
+                            borderRadius: BorderRadius.circular(12),
+                            color:
+                                Color(int.parse("0xff${experienceLevelColor}"))
+                                    .withAlpha(20)),
+                        child: Center(
+                          child: Icon(
+                            Icons.upload,
+                            color: Color.fromARGB(255, 38, 173, 108),
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
                 Text(
-                  job.code,
+                  oProjectInfo.code,
                   style: TextStyle(
                     color: Color.fromARGB(255, 13, 0, 255),
-                    fontSize: 12,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
                 )
@@ -273,31 +306,32 @@ class _ProjectPageState extends State<ProjectPage> {
   }
 }
 
-class Job {
+class ProjectInfo {
   final String title;
-  final String company;
-  //final String? companyLogo;
+  final String subTitle;
+  final String? imageIcon;
   final String code;
   final String? type;
 
   bool isSelect;
 
-  Job(
+  ProjectInfo(
     this.title,
-    this.company,
+    this.subTitle,
     this.code,
-    //this.companyLogo,
+    this.imageIcon,
     this.type,
     this.isSelect,
   );
 
-  factory Job.fromJson(Map<String, dynamic> json) {
-    return new Job(
-        json['title'],
-        json['company'],
-        json['code'],
-        //json['companyLogo'],
-        json['type'],
-        json['isSelect']);
+  factory ProjectInfo.fromJson(Map<String, dynamic> oProjectInfo) {
+    return new ProjectInfo(
+      oProjectInfo['title'],
+      oProjectInfo['subTitle'],
+      oProjectInfo['code'],
+      oProjectInfo['imageIcon'],
+      oProjectInfo['type'],
+      oProjectInfo['isSelect'],
+    );
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/settings/change_language_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/auth/login_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/auth/change_password_page.dart';
+import 'package:get/get.dart';
 
 class SettingsPage extends StatelessWidget {
   @override
@@ -19,7 +20,7 @@ class SettingsPage extends StatelessWidget {
           brightness: Brightness.light,
           backgroundColor: Colors.transparent,
           title: Text(
-            'Settings',
+            'Settings'.tr,
             style: TextStyle(color: darkGrey),
           ),
           elevation: 0,
@@ -40,7 +41,7 @@ class SettingsPage extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
                               child: Text(
-                                'General',
+                                'General'.tr,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -48,7 +49,7 @@ class SettingsPage extends StatelessWidget {
                               ),
                             ),
                             ListTile(
-                              title: Text('Idioma'),
+                              title: Text('Language'.tr),
                               leading: Image.asset('assets/icons/language.png'),
                               onTap: () => Navigator.of(context).push(
                                   MaterialPageRoute(
@@ -58,7 +59,7 @@ class SettingsPage extends StatelessWidget {
                               padding:
                                   const EdgeInsets.only(top: 8.0, bottom: 8.0),
                               child: Text(
-                                'Account',
+                                'Account'.tr,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -66,7 +67,7 @@ class SettingsPage extends StatelessWidget {
                               ),
                             ),
                             ListTile(
-                              title: Text('Cambio de contraseña'),
+                              title: Text('ChangePassword'.tr),
                               leading:
                                   Image.asset('assets/icons/change_pass.png'),
                               onTap: () => Navigator.of(context).push(
@@ -76,7 +77,7 @@ class SettingsPage extends StatelessWidget {
                               ),
                             ),
                             ListTile(
-                              title: Text('Salir'),
+                              title: Text('LogOut'.tr),
                               leading: Image.asset('assets/icons/sign_out.png'),
                               onTap: () => Navigator.pushAndRemoveUntil(
                                 context,

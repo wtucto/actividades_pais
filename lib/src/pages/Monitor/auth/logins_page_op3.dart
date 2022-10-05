@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoginsPage extends StatelessWidget {
   const LoginsPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login',
+      title: 'LogIn'.tr,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -42,7 +43,7 @@ class LoginsPage extends StatelessWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.all(10),
-                        child: const Text('MOPROP',
+                        child: Text('AppName'.tr,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 25,
@@ -50,20 +51,20 @@ class LoginsPage extends StatelessWidget {
                       ),
                       Container(
                         padding: const EdgeInsets.all(5),
-                        child: const Text(
-                          'Monitoreo de Proyectos Tambos',
+                        child: Text(
+                          'MonitorinProyTambo'.tr,
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
                       const SizedBox(height: 30),
-                      const Padding(
+                      Padding(
                         padding:
                             EdgeInsets.symmetric(vertical: 0, horizontal: 30),
                         child: TextField(
                           autofocus: false,
                           decoration: InputDecoration(
-                              hintText: 'User',
+                              hintText: 'User'.tr,
                               prefixIcon: Icon(Icons.person),
                               contentPadding: EdgeInsets.all(10),
                               hintStyle:
@@ -74,13 +75,13 @@ class LoginsPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 40),
-                      const Padding(
+                      Padding(
                         padding:
                             EdgeInsets.symmetric(vertical: 0, horizontal: 30),
                         child: TextField(
                           autofocus: false,
                           decoration: InputDecoration(
-                              hintText: 'Password',
+                              hintText: 'Password'.tr,
                               prefixIcon: Icon(Icons.security),
                               contentPadding: EdgeInsets.all(10),
                               hintStyle:
@@ -101,10 +102,10 @@ class LoginsPage extends StatelessWidget {
                                     bottomRight: Radius.circular(20))),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Padding(
                                   padding: EdgeInsets.all(20),
-                                  child: Text('Iniciar Sesión',
+                                  child: Text('SignIn'.tr,
                                       style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,

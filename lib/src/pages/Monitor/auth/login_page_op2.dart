@@ -2,7 +2,7 @@ import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:actividades_pais/src/pages/Monitor/auth/forgot_password_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/main_page.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/main_footer_all_option.dart';
 
 import 'register_page.dart';
 
@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     Widget welcomeBack = Text(
-      "AppName".tr,
+      'AppName'.tr,
       style: TextStyle(
           color: black,
           fontSize: 34.0,
@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
         onTap: () {
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (_) => MainPage()),
+            MaterialPageRoute(builder: (_) => MainFooterAllOptionPage()),
             (route) => false,
           );
         },
@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
           height: 80,
           child: Center(
             child: new Text(
-              "LogIn".tr,
+              'LogIn'.tr,
               style: const TextStyle(
                 color: wite,
                 fontWeight: FontWeight.w600,

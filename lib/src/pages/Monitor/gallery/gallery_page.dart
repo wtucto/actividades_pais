@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
+import 'package:get/get.dart';
 
 class GalleryPage extends StatelessWidget {
   const GalleryPage({Key? key}) : super(key: key);
@@ -384,13 +385,13 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             actions: <Widget>[
               TextButton(
-                child: const Text('Cancelar'),
+                child: Text('Cancel'.tr),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               TextButton(
-                  child: const Text('Elegir'),
+                  child: Text('ToChoose'.tr),
                   onPressed: () {
                     final double? width = maxWidthController.text.isNotEmpty
                         ? double.parse(maxWidthController.text)

@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/src/pages/Monitor/auth/forgot_password_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/auth/register_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/main_page.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/main_footer_all_option.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
         onPressed: () => {
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (_) => MainPage()),
+            MaterialPageRoute(builder: (_) => MainFooterAllOptionPage()),
             (route) => false,
           )
         },

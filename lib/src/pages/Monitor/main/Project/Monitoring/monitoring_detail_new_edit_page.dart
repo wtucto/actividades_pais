@@ -3,16 +3,19 @@ import 'package:intl/intl.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:get/get.dart';
 
 const options = ['BAJO', 'MEDIO', 'ALTO'];
 
-class DetailMonitore extends StatefulWidget {
-  const DetailMonitore({Key? key}) : super(key: key);
+class MonitoringDetailNewEditPage extends StatefulWidget {
+  const MonitoringDetailNewEditPage({Key? key}) : super(key: key);
   @override
-  _ProjectNewPageState createState() => _ProjectNewPageState();
+  _MonitoringDetailNewEditPageState createState() =>
+      _MonitoringDetailNewEditPageState();
 }
 
-class _ProjectNewPageState extends State<DetailMonitore> {
+class _MonitoringDetailNewEditPageState
+    extends State<MonitoringDetailNewEditPage> {
   final _formKey = GlobalKey<FormState>();
   final _questionCtrl = TextEditingController();
   final _questionCtrl2 = TextEditingController();
@@ -22,44 +25,13 @@ class _ProjectNewPageState extends State<DetailMonitore> {
 
   void showSnackbar({required bool success, required String text}) {
     AnimatedSnackBar.rectangle(
-      "Info!",
+      'I'.tr,
       text,
       type:
           success ? AnimatedSnackBarType.success : AnimatedSnackBarType.warning,
       brightness: Brightness.light,
       mobileSnackBarPosition: MobileSnackBarPosition.top,
     ).show(context);
-    /*
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        //margin: EdgeInsets.all(50),
-        padding: EdgeInsets.all(10),
-        duration: Duration(milliseconds: 1200),
-        //backgroundColor: Colors.grey[100],
-        //shape: StadiumBorder(),
-        behavior: SnackBarBehavior.floating,
-        content: Row(children: [
-          Icon(
-            success ? Icons.gpp_good : Icons.error,
-            color: success ? Colors.greenAccent : Colors.redAccent,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            textAlign: TextAlign.center,
-            text,
-          ),
-        ]),
-        action: SnackBarAction(
-          label: 'Cerrar',
-          disabledTextColor: Colors.white,
-          textColor: Color.fromARGB(255, 255, 0, 0),
-          onPressed: () {
-            //Do whatever you want
-          },
-        ),
-      ),
-    );
-    */
   }
 
   @override
@@ -74,11 +46,6 @@ class _ProjectNewPageState extends State<DetailMonitore> {
   String dropdownvalue = 'Reinicio';
   var items = [
     'Reinicio',
-    'Banana',
-    'Grapes',
-    'Orange',
-    'watermelon',
-    'Pineapple'
   ];
 
   String dropdownvalueRiesgo = 'Bajo';
@@ -114,7 +81,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
           ),
           child: Center(
             child: Text(
-              "Detalle de Monitoreo",
+              'Monitoring'.tr,
               style: const TextStyle(
                 color: const Color(0xfffefefe),
                 fontWeight: FontWeight.w600,
@@ -135,7 +102,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
           TextFormField(
             controller: _questionCtrl,
             decoration: const InputDecoration(labelText: 'Id Monitoreo *'),
-            validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
           /**
            * ESTADO MONITOREO
@@ -143,14 +110,14 @@ class _ProjectNewPageState extends State<DetailMonitore> {
           TextFormField(
             controller: _questionCtrl,
             decoration: const InputDecoration(labelText: 'Estado Monitoreo *'),
-            validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
           /**
            * FECHA MONITOREO
            */
           TextFormField(
             controller: _dateinput,
-            validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             decoration: InputDecoration(
                 //icon: Icon(Icons.calendar_today), //icon of text field
                 labelText: 'Fecha Monitoreo *' //label text of field
@@ -178,8 +145,6 @@ class _ProjectNewPageState extends State<DetailMonitore> {
                   _dateinput.text =
                       formattedDate; //set output date to TextField value.
                 });
-              } else {
-                print("Date is not selected");
               }
             },
           ),
@@ -191,13 +156,13 @@ class _ProjectNewPageState extends State<DetailMonitore> {
             decoration: const InputDecoration(
               labelText: '% Avance Fisico Estimado Acumulado *',
             ),
-            validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
           /**
            * % ESTADO DE AVANCE
            */
           const SizedBox(height: 32),
-          Text("Estado de Avance *"),
+          Text('Estado de Avance *'),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -221,7 +186,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
                     hint: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Select Data",
+                        'SelectData'.tr,
                         style: TextStyle(
                           color: Colors.black,
                         ),
@@ -255,7 +220,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
             controller: _questionCtrl,
             decoration: const InputDecoration(
                 labelText: '% Avance Fisico Acumulado Partida *'),
-            validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
           /**
            * PARTIDA EJECUTADA
@@ -263,7 +228,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
           TextFormField(
             controller: _questionCtrl,
             decoration: const InputDecoration(labelText: 'Partida Ejecutada *'),
-            validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
 
           /**
@@ -276,7 +241,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
             maxLines: 5,
             controller: _questionCtrl2,
             decoration: const InputDecoration(labelText: 'Observaciones *'),
-            validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
           /**
            * PROBLEMA IDENTIFICADO EN LA OBRA
@@ -285,7 +250,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
             controller: _questionCtrl,
             decoration: const InputDecoration(
                 labelText: 'Problema Indentificado en la Obra *'),
-            validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
           /**
            * ALTERNATIVA DE SOLUCION
@@ -294,7 +259,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
             controller: _questionCtrl,
             decoration:
                 const InputDecoration(labelText: 'Alternativa de Solución *'),
-            validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
           /**
            * SELECCIONES EL RIESGO
@@ -302,13 +267,13 @@ class _ProjectNewPageState extends State<DetailMonitore> {
           TextFormField(
             controller: _questionCtrl,
             decoration: const InputDecoration(labelText: 'Riesgo *'),
-            validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
           /**
            * NIVEL DE RIESGO
            */
           const SizedBox(height: 32),
-          Text("Nivel de Riesgo *"),
+          Text('Nivel de Riesgo *'),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -332,7 +297,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
                     hint: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Select Data",
+                        'SelectData'.tr,
                         style: TextStyle(
                           color: Colors.black,
                         ),
@@ -364,7 +329,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
            */
           TextFormField(
             controller: _dateinput,
-            validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             decoration: InputDecoration(
                 //icon: Icon(Icons.calendar_today), //icon of text field
                 labelText: 'Fecha Termino Obra *' //label text of field
@@ -393,8 +358,6 @@ class _ProjectNewPageState extends State<DetailMonitore> {
                   _dateinput.text =
                       formattedDate; //set output date to TextField value.
                 });
-              } else {
-                print("Date is not selected");
               }
             },
           ),
@@ -405,7 +368,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
           TextFormField(
             controller: _questionCtrl,
             decoration: const InputDecoration(labelText: 'Longitud *'),
-            validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
           /**
            * LATITUD
@@ -413,7 +376,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
           TextFormField(
             controller: _questionCtrl,
             decoration: const InputDecoration(labelText: 'Latitud *'),
-            validator: (v) => v!.isEmpty ? 'Requerido (*)' : null,
+            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
           /**
            * OTROS
@@ -466,12 +429,12 @@ class _ProjectNewPageState extends State<DetailMonitore> {
 
                     showSnackbar(
                       success: true,
-                      text: 'Formulario correcto.',
+                      text: 'FormIsComplete'.tr,
                     );
                   } else {
                     showSnackbar(
                       success: false,
-                      text: 'Campos requeridos (*).',
+                      text: 'RequiredFields'.tr,
                     );
                   }
                 },
@@ -480,7 +443,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
                   width: width / 3.5,
                   child: Center(
                     child: Text(
-                      "Grabar",
+                      'SaveData'.tr,
                       style: const TextStyle(
                         color: const Color(0xfffefefe),
                         fontWeight: FontWeight.w600,
@@ -509,15 +472,15 @@ class _ProjectNewPageState extends State<DetailMonitore> {
                         };
                       },
                     );
-                    _confirmDialog("SAVE");
+                    _confirmDialog('SAVE');
                     showSnackbar(
                       success: true,
-                      text: 'Formulario correcto.',
+                      text: 'FormIsComplete'.tr,
                     );
                   } else {
                     showSnackbar(
                       success: false,
-                      text: 'Campos requeridos (*).',
+                      text: 'RequiredFields'.tr,
                     );
                   }
                 },
@@ -526,7 +489,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
                   width: width / 3.5,
                   child: Center(
                     child: Text(
-                      "Enviar",
+                      'SendData'.tr,
                       style: TextStyle(
                         color: Color.fromARGB(255, 255, 255, 255),
                         letterSpacing: 1.5,
@@ -552,17 +515,17 @@ class _ProjectNewPageState extends State<DetailMonitore> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Warning!'),
+          title: Text('W'.tr),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('¿Estás seguro de realizar la operación?'),
+                Text('ConfirmationQuestion100'.tr),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Si'),
+              child: Text('Yes'.tr),
               onPressed: () {
                 if (sAction == 'SAVE') {}
                 /*Navigator.popUntil(
@@ -570,7 +533,7 @@ class _ProjectNewPageState extends State<DetailMonitore> {
               },
             ),
             TextButton(
-              child: const Text('No'),
+              child: Text('No'.tr),
               onPressed: () {
                 Navigator.of(context).pop();
               },
