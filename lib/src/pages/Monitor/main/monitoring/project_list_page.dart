@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'package:actividades_pais/src/pages/Monitor/main/monitoring/monitor_list.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/monitoring/project_detail_page.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/monitoring/project_new_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -58,12 +61,22 @@ class _ProjectPageState extends State<ProjectPage> {
                 iconSize: 30,
                 onPressed: () {},
                 icon: Icon(
-                  Icons.scatter_plot,
+                  Icons.search,
                   color: Color.fromARGB(255, 255, 255, 255),
                 )),
           )
         ],
-        title: Container(
+        title: Center(
+          child: Text(
+            "Lista de Proyectos",
+            style: const TextStyle(
+              color: const Color(0xfffefefe),
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+              fontSize: 20.0,
+            ),
+          ),
+        ) /*Container(
           height: 45,
           child: TextField(
             cursorColor: Colors.grey,
@@ -79,7 +92,8 @@ class _ProjectPageState extends State<ProjectPage> {
               hintStyle: TextStyle(fontSize: 14),
             ),
           ),
-        ),
+        )*/
+        ,
       ),
       body: Container(
         child: ListView.builder(
@@ -145,22 +159,27 @@ class _ProjectPageState extends State<ProjectPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    job.isSelect = !job.isSelect;
-                  });
+                  // setState(() {
+                  //   // job.isSelect = !job.isSelect;
+                  // });
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => MonitorList(),
+                  ));
                 },
                 child: AnimatedContainer(
-                    height: 35,
-                    padding: EdgeInsets.all(5),
-                    duration: Duration(milliseconds: 300),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.shade200),
-                    child: Center(
-                        child: Icon(
+                  height: 35,
+                  padding: EdgeInsets.all(5),
+                  duration: Duration(milliseconds: 300),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey.shade200),
+                  child: Center(
+                    child: Icon(
                       Icons.dynamic_feed,
                       color: Color.fromARGB(255, 85, 84, 84),
-                    ))),
+                    ),
+                  ),
+                ),
               )
             ],
           ),
@@ -173,16 +192,48 @@ class _ProjectPageState extends State<ProjectPage> {
               children: [
                 Row(
                   children: [
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.grey.shade200),
-                      child: Center(
-                        child: Icon(
-                          Icons.edit,
-                          color: Color.fromARGB(255, 56, 54, 54),
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ProjectNewPage(),
+                        ));
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey.shade200),
+                        child: Center(
+                          child: Icon(
+                            Icons.new_label,
+                            color: Color.fromARGB(255, 56, 54, 54),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ProjectDetailPage(),
+                        ));
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color:
+                                Color(int.parse("0xff${experienceLevelColor}"))
+                                    .withAlpha(20)),
+                        child: Center(
+                          child: Icon(
+                            Icons.visibility,
+                            color: Color.fromARGB(255, 56, 54, 54),
+                          ),
                         ),
                       ),
                     ),
@@ -198,8 +249,8 @@ class _ProjectPageState extends State<ProjectPage> {
                               .withAlpha(20)),
                       child: Center(
                         child: Icon(
-                          Icons.visibility,
-                          color: Color.fromARGB(255, 56, 54, 54),
+                          Icons.upload,
+                          color: Color.fromARGB(255, 38, 173, 108),
                         ),
                       ),
                     ),

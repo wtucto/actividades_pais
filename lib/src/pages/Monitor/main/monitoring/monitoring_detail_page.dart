@@ -6,13 +6,13 @@ import 'package:actividades_pais/util/Constants.dart';
 
 const options = ['BAJO', 'MEDIO', 'ALTO'];
 
-class ProjectNewPage extends StatefulWidget {
-  const ProjectNewPage({Key? key}) : super(key: key);
+class DetailMonitore extends StatefulWidget {
+  const DetailMonitore({Key? key}) : super(key: key);
   @override
   _ProjectNewPageState createState() => _ProjectNewPageState();
 }
 
-class _ProjectNewPageState extends State<ProjectNewPage> {
+class _ProjectNewPageState extends State<DetailMonitore> {
   final _formKey = GlobalKey<FormState>();
   final _questionCtrl = TextEditingController();
   final _questionCtrl2 = TextEditingController();
@@ -114,7 +114,7 @@ class _ProjectNewPageState extends State<ProjectNewPage> {
           ),
           child: Center(
             child: Text(
-              "Monitoreo",
+              "Detalle de Monitoreo",
               style: const TextStyle(
                 color: const Color(0xfffefefe),
                 fontWeight: FontWeight.w600,

@@ -243,14 +243,6 @@ class _HomePagePais extends State<HomePagePais> {
         color: LightColors.lightTeal,
       ));
     } else {
-      aHomeOptions.add(HomeOptions(
-        code: "OPT1001",
-        name: "TileBitacoraRegister".tr,
-        types: const ["Ver"],
-        image: icon6,
-        color: LightColors.lightBlue,
-      ));
-
       if (tipoPlataforma == 'TAMBO') {
         aHomeOptions.add(HomeOptions(
           code: "OPT1003",
@@ -277,6 +269,14 @@ class _HomePagePais extends State<HomePagePais> {
         }
       }
     }
+
+    aHomeOptions.add(HomeOptions(
+      code: "OPT1001",
+      name: "TileBitacoraRegister".tr,
+      types: const ["Ver"],
+      image: icon6,
+      color: LightColors.lightBlue,
+    ));
 
     aHomeOptions.add(HomeOptions(
       code: "OPT1005",
@@ -325,45 +325,52 @@ class _HomePagePais extends State<HomePagePais> {
                         gravity: ToastGravity.BOTTOM,
                       );
                     }
-                    return;
+                    //return;
+                  } else {
+                    switch (oHomeOptionSelect.code) {
+                      case 'OPT1001':
+                        var rspt = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Asistencia(long: long, lat: lat)),
+                        );
+                        break;
+                      case 'OPT1003':
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Intervenciones(snip, unidadTerritorial)),
+                        );
+                        break;
+                      case 'OPT1004':
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ListaReportesPias(
+                                  unidadTeritorial: unidadTerritorial,
+                                  plataforma: variable,
+                                  idPlataforma: idPlataforma,
+                                  long: long,
+                                  lat: lat,
+                                  campaniaCod: campaniaCod)),
+                        );
+                        break;
+                      default:
+                    }
                   }
 
                   switch (oHomeOptionSelect.code) {
-                    case 'OPT1001':
-                      var rspt = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                Asistencia(long: long, lat: lat)),
-                      );
-                      break;
-                    case 'OPT1003':
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                Intervenciones(snip, unidadTerritorial)),
-                      );
-                      break;
-                    case 'OPT1004':
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ListaReportesPias(
-                                unidadTeritorial: unidadTerritorial,
-                                plataforma: variable,
-                                idPlataforma: idPlataforma,
-                                long: long,
-                                lat: lat,
-                                campaniaCod: campaniaCod)),
-                      );
-                      break;
                     case "OPT1005":
-                      var rspt = await Navigator.pushAndRemoveUntil(
+                      var rspt = await Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (_) => MainPage()));
+
+                      /*await Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (_) => MainPage()),
                         (route) => false,
-                      );
+                      ); */
                       break;
                     default:
                   }

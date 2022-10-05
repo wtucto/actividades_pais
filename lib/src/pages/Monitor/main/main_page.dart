@@ -1,4 +1,5 @@
 import 'package:actividades_pais/src/pages/Monitor/main/components/fab.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/monitoring/monitor_list.dart';
 import 'package:flutter/material.dart';
 import 'components/custom_bottom_bar.dart';
 
@@ -45,13 +46,14 @@ class _MainPageState extends State<MainPage>
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
             ProjectPage(),
-            ProjectNewPage(),
+            // ProjectNewPage(),
+            MonitorList(),
             ProfilePage(),
             GalleryPage(),
           ],
         ),
       ),
-      floatingActionButton: ExpandedAnimationFab(
+      /*floatingActionButton: ExpandedAnimationFab(
         items: [
           FabItem(
             "Option 1",
@@ -76,7 +78,7 @@ class _MainPageState extends State<MainPage>
             _controller!.forward();
           }
         },
-      ),
+      ),*/
     );
   }
 }
