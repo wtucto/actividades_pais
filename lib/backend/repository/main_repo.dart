@@ -61,7 +61,7 @@ class MainRepository {
   Future<List<UserModel>> getAllUserApi() async {
     List<UserModel> oUserUp = [];
     final response = await _pnPaisApi.listarUsuarios();
-    if (response != null) {
+    if (response.data != null) {
       oUserUp = response.data!;
     } else {
       print(response.error.message);

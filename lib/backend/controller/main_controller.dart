@@ -16,8 +16,10 @@ class MainController extends GetxController {
   }
 
   Future<void> loadInitialData() async {
-    users.value = await Get.find<MainService>().loadAllUser();
+    /*final serv = Get.put(MainService());
+    users.value = await serv.loadAllUser();*/
     moniteos.value = await Get.find<MainService>().getAllMonitoreo();
+    users.value = await Get.find<MainService>().loadAllUser();
   }
 
   Future<void> getUser() async {

@@ -5,6 +5,9 @@ import 'package:get/get.dart';
 import 'package:actividades_pais/backend/repository/main_repo.dart';
 
 class MainService {
+  //final MainRepository _repository;
+  //MainService(this._repository);
+
   /// Returns `true` si existe conexion a internet por wifi.
   Future<bool> isOnline() async {
     bool isDeviceConnected = await CheckConnection.isOnlineWifi();
@@ -46,9 +49,17 @@ class MainService {
   Future<List<UserModel>> loadAllUser() async {
     List<UserModel> aNewLoadUser = [];
     if (await isOnline()) {
+      List<UserModel> aDb = await Get.find<MainRepository>().getAllUserDb();
       List<UserModel> aApi = await Get.find<MainRepository>().getAllUserApi();
 
-      for (var oUser in aApi) {
+      for (UserModel oUser in aApi) {
+        if (aDb.length > 0) {
+          UserModel oUserFind = aDb.firstWhere((o) => o.codigo == oUser.codigo);
+          if (oUserFind != null) {
+            continue;
+          }
+        }
+
         UserModel? response =
             await Get.find<MainRepository>().insertUserDb(oUser);
         if (response != null) {
@@ -59,9 +70,12 @@ class MainService {
       }
 
       //aApi.forEach((element) {});
-      List<UserModel> aDb = await Get.find<MainRepository>().getAllUserDb();
+
     }
 
-    return aNewLoadUser;
+    print("Nuevos usuarios cargados: ${aNewLoadUser.length}");
+
+    List<UserModel> aDbExist = await Get.find<MainRepository>().getAllUserDb();
+    return aDbExist;
   }
 }

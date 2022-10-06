@@ -1,3 +1,8 @@
+import 'package:actividades_pais/backend/api/pnpais_api.dart';
+import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/database/pnpais_db.dart';
+import 'package:actividades_pais/backend/repository/main_repo.dart';
+import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/helpers/dependecy_injection.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Monitor/intro/splash_intro_page.dart';
@@ -8,16 +13,31 @@ import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/Login/Login.dart';
 import 'package:get/route_manager.dart';
+import 'package:get_it/get_it.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:get/get.dart';
 
-void main() {
+void main() async {
   DependencyInjection.initialize("DEV");
+  //GlobalBindings().dependencies();
+
+  WidgetsFlutterBinding.ensureInitialized();
+  final mainApi = GetIt.instance<PnPaisApi>();
+  final mainDb = await DatabasePnPais.instance;
+  final mainRepo = MainRepository(mainApi, mainDb);
+  final mainServ = MainService();
+  Get.put(mainRepo);
+  Get.put(mainServ);
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final controller =
+        Get.put(MainController()); // Se ejecuta loadInitialData();
+
     return OverlaySupport.global(
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

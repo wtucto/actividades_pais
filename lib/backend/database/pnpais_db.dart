@@ -42,13 +42,54 @@ class DatabasePnPais {
     await db.execute('''
     CREATE TABLE $tableNameUsers ( 
       ${UserFields.id} $idType, 
+      ${UserFields.time} $textType,
       ${UserFields.isEdit} $boolType $notNull,
+
       ${UserFields.codigo} $textType $notNull,
       ${UserFields.nombres} $textType $notNull,
-      ${UserFields.rol} $textType $notNull,
-      ${UserFields.time} $textType
+      ${UserFields.rol} $textType $notNull
       )
     ''');
+
+    await db.execute('''
+    CREATE TABLE $tableNameMonitoreo ( 
+      ${TramaMonitoreoFields.id} $idType, 
+      ${TramaMonitoreoFields.isEdit} $boolType $notNull,
+      ${TramaMonitoreoFields.time} $textType,
+
+      ${TramaMonitoreoFields.snip} $textType $notNull,
+      ${TramaMonitoreoFields.cui} $textType,
+      ${TramaMonitoreoFields.latitud} $textType,
+      ${TramaMonitoreoFields.longitud} $textType,
+      ${TramaMonitoreoFields.tambo} $textType,
+      ${TramaMonitoreoFields.fechaTerminoEstimado} $textType,
+      ${TramaMonitoreoFields.actividadPartidaEjecutada} $textType,
+      ${TramaMonitoreoFields.alternativaSolucion} $textType,
+      ${TramaMonitoreoFields.avanceFisicoAcumulado} $textType,
+      ${TramaMonitoreoFields.avanceFisicoPartida} $textType,
+      ${TramaMonitoreoFields.estadoAvance} $textType,
+      ${TramaMonitoreoFields.estadoMonitoreo} $textType,
+      ${TramaMonitoreoFields.fechaMonitoreo} $textType,
+      ${TramaMonitoreoFields.idMonitoreo} $textType,
+      ${TramaMonitoreoFields.idUsuario} $textType,
+      ${TramaMonitoreoFields.imgActividad} $textType,
+      ${TramaMonitoreoFields.imgProblema} $textType,
+      ${TramaMonitoreoFields.imgRiesgo} $textType,
+      ${TramaMonitoreoFields.observaciones} $textType,
+      ${TramaMonitoreoFields.problemaIdentificado} $textType,
+      ${TramaMonitoreoFields.riesgoIdentificado} $textType,
+      ${TramaMonitoreoFields.rol} $textType,
+      ${TramaMonitoreoFields.usuario} $textType
+      )
+    ''');
+
+    /*var tableNames = (await db
+          .query('sqlite_master', where: 'type = ?', whereArgs: ['table']))
+      .map((row) => row['name'] as String)
+      .toList(growable: false);*/
+    (await db.query('sqlite_master', columns: ['type', 'name'])).forEach((row) {
+      print(row.values);
+    });
   }
 
   Future _upgradeDB(Database db, int oldversion, int newversion) async {
@@ -62,9 +103,8 @@ class DatabasePnPais {
    */
   Future<List<TramaMonitoreoModel>> readAllMonitoreo() async {
     final db = await instance.database;
-
     //SELECT * FROM $tableNameMonitoreo ORDER BY ASC
-    final orderBy = '${TramaMonitoreoFields.time} ASC';
+    final orderBy = '${TramaMonitoreoFields.snip} ASC';
     final result = await db.query(tableNameMonitoreo, orderBy: orderBy);
     return result.map((json) => TramaMonitoreoModel.fromJson(json)).toList();
   }

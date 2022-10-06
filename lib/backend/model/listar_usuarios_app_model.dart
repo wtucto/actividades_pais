@@ -19,7 +19,7 @@ class UserFields {
 
 class UserModel {
   final int? id;
-  final DateTime createdTime;
+  final DateTime? createdTime;
 
   final bool isEdit;
   final String codigo;
@@ -58,7 +58,9 @@ class UserModel {
         rol: json[UserFields.rol] as String,
         codigo: json[UserFields.codigo] as String,
         nombres: json[UserFields.nombres] as String,
-        createdTime: DateTime.parse(json[UserFields.time] as String),
+        createdTime: json[UserFields.time] != null
+            ? DateTime.parse(json[UserFields.time] as String)
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
