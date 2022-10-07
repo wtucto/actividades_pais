@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-final String tableNameTramaProyectos = 'listar_trama_proyecto';
+String tableNameTramaProyectos = 'listar_trama_proyecto';
 
 class TramaProyectoFields {
   static final List<String> values = [
@@ -35,69 +35,71 @@ class TramaProyectoFields {
     codCrp,
   ];
 
-  static final String id = '_id';
-  static final String isEdit = 'isEdit';
-  static final String time = 'time';
+  static String id = '_id';
+  static String isEdit = 'isEdit';
+  static String time = 'time';
 
-  static final String numSnip = 'numSnip';
-  static final String cui = 'cui';
-  static final String latitud = 'latitud';
-  static final String longitud = 'longitud';
-  static final String departamento = 'departamento';
-  static final String provincia = 'provincia';
-  static final String distrito = 'distrito';
-  static final String tambo = 'tambo';
-  static final String centroPoblado = 'centroPoblado';
-  static final String estado = 'estado';
-  static final String subEstado = 'subEstado';
-  static final String estadoSaneamiento = 'estadoSaneamiento';
-  static final String modalidad = 'modalidad';
-  static final String fechaInicio = 'fechaInicio';
-  static final String fechaTerminoEstimado = 'fechaTerminoEstimado';
-  static final String inversion = 'inversion';
-  static final String costoEjecutado = 'costoEjecutado';
-  static final String costoEstimadoFinal = 'costoEstimadoFinal';
-  static final String avanceFisico = 'avanceFisico';
-  static final String residente = 'residente';
-  static final String supervisor = 'supervisor';
-  static final String crp = 'crp';
-  static final String codResidente = 'codResidente';
-  static final String codSupervisor = 'codSupervisor';
-  static final String codCrp = 'codCrp';
+  static String numSnip = 'numSnip';
+  static String cui = 'cui';
+  static String latitud = 'latitud';
+  static String longitud = 'longitud';
+  static String departamento = 'departamento';
+  static String provincia = 'provincia';
+  static String distrito = 'distrito';
+  static String tambo = 'tambo';
+  static String centroPoblado = 'centroPoblado';
+  static String estado = 'estado';
+  static String subEstado = 'subEstado';
+  static String estadoSaneamiento = 'estadoSaneamiento';
+  static String modalidad = 'modalidad';
+  static String fechaInicio = 'fechaInicio';
+  static String fechaTerminoEstimado = 'fechaTerminoEstimado';
+  static String inversion = 'inversion';
+  static String costoEjecutado = 'costoEjecutado';
+  static String costoEstimadoFinal = 'costoEstimadoFinal';
+  static String avanceFisico = 'avanceFisico';
+  static String residente = 'residente';
+  static String supervisor = 'supervisor';
+  static String crp = 'crp';
+  static String codResidente = 'codResidente';
+  static String codSupervisor = 'codSupervisor';
+  static String codCrp = 'codCrp';
 }
 
 class TramaProyectoModel {
-  final int? id;
-  final bool isEdit;
-  final DateTime? createdTime;
+  int? id = 0;
+  bool isEdit = false;
+  DateTime? createdTime = null;
 
-  final String numSnip;
-  final String cui;
-  final String latitud;
-  final String longitud;
-  final String departamento;
-  final String provincia;
-  final String distrito;
-  final String tambo;
-  final String centroPoblado;
-  final String estado;
-  final String subEstado;
-  final String estadoSaneamiento;
-  final String modalidad;
-  final String fechaInicio;
-  final String fechaTerminoEstimado;
-  final String inversion;
-  final String costoEjecutado;
-  final String costoEstimadoFinal;
-  final String avanceFisico;
-  final String residente;
-  final String supervisor;
-  final String crp;
-  final String codResidente;
-  final String codSupervisor;
-  final String codCrp;
+  String numSnip = "";
+  String cui = "";
+  String latitud = "";
+  String longitud = "";
+  String departamento = "";
+  String provincia = "";
+  String distrito = "";
+  String tambo = "";
+  String centroPoblado = "";
+  String estado = "";
+  String subEstado = "";
+  String estadoSaneamiento = "";
+  String modalidad = "";
+  String fechaInicio = "";
+  String fechaTerminoEstimado = "";
+  String inversion = "";
+  String costoEjecutado = "";
+  String costoEstimadoFinal = "";
+  String avanceFisico = "";
+  String residente = "";
+  String supervisor = "";
+  String crp = "";
+  String codResidente = "";
+  String codSupervisor = "";
+  String codCrp = "";
 
-  const TramaProyectoModel({
+  TramaProyectoModel.empty() {}
+
+  TramaProyectoModel({
     required this.id,
     required this.isEdit,
     required this.createdTime,
@@ -192,7 +194,12 @@ class TramaProyectoModel {
   static TramaProyectoModel fromJson(Map<String, Object?> json) =>
       TramaProyectoModel(
         id: json[TramaProyectoFields.id] as int?,
-        isEdit: json[TramaProyectoFields.isEdit] == 1,
+        isEdit: json[TramaProyectoFields.isEdit] == null
+            ? false
+            : json[TramaProyectoFields.isEdit] == 0 ||
+                    json[TramaProyectoFields.isEdit] == false
+                ? false
+                : true,
         createdTime: json[TramaProyectoFields.time] != null
             ? DateTime.parse(json[TramaProyectoFields.time] as String)
             : null,
@@ -299,12 +306,12 @@ class TramaProyectoModel {
 
   List<TramaProyectoModel> userFromJson(String sOject) {
     final jsonData = json.decode(sOject);
-    return new List<TramaProyectoModel>.from(
+    return List<TramaProyectoModel>.from(
         jsonData.map((x) => TramaProyectoModel.fromJson(x)));
   }
 
   String userToJson(List<TramaProyectoModel> aTramaProyecto) {
-    final dyn = new List<dynamic>.from(aTramaProyecto.map((x) => x.toJson()));
+    final dyn = List<dynamic>.from(aTramaProyecto.map((x) => x.toJson()));
     return json.encode(dyn);
   }
 }

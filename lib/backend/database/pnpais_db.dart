@@ -54,7 +54,8 @@ class DatabasePnPais {
 
       ${UserFields.codigo} $textType $notNull,
       ${UserFields.nombres} $textType $notNull,
-      ${UserFields.rol} $textType $notNull
+      ${UserFields.rol} $textType $notNull,
+      ${UserFields.clave} $textType
       )
     ''');
 

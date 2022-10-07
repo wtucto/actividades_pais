@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-final String tableNameTramaMonitoreos = 'listar_trama_monitoreo';
+String tableNameTramaMonitoreos = 'listar_trama_monitoreo';
 
 class TramaMonitoreoFields {
   static final List<String> values = [
@@ -34,65 +34,67 @@ class TramaMonitoreoFields {
     usuario,
   ];
 
-  static final String id = '_id';
-  static final String isEdit = 'isEdit';
-  static final String time = 'time';
+  static String id = '_id';
+  static String isEdit = 'isEdit';
+  static String time = 'time';
 
-  static final String snip = 'snip';
-  static final String cui = 'cui';
-  static final String latitud = 'latitud';
-  static final String longitud = 'longitud';
-  static final String tambo = 'tambo';
-  static final String fechaTerminoEstimado = 'fechaTerminoEstimado';
-  static final String actividadPartidaEjecutada = 'actividadPartidaEjecutada';
-  static final String alternativaSolucion = 'alternativaSolucion';
-  static final String avanceFisicoAcumulado = 'avanceFisicoAcumulado';
-  static final String avanceFisicoPartida = 'avanceFisicoPartida';
-  static final String estadoAvance = 'estadoAvance';
-  static final String estadoMonitoreo = 'estadoMonitoreo';
-  static final String fechaMonitoreo = 'fechaMonitoreo';
-  static final String idMonitoreo = 'idMonitoreo';
-  static final String idUsuario = 'idUsuario';
-  static final String imgActividad = 'imgActividad';
-  static final String imgProblema = 'imgProblema';
-  static final String imgRiesgo = 'imgRiesgo';
-  static final String observaciones = 'observaciones';
-  static final String problemaIdentificado = 'problemaIdentificado';
-  static final String riesgoIdentificado = 'riesgoIdentificado';
-  static final String rol = 'rol';
-  static final String usuario = 'usuario';
+  static String snip = 'snip';
+  static String cui = 'cui';
+  static String latitud = 'latitud';
+  static String longitud = 'longitud';
+  static String tambo = 'tambo';
+  static String fechaTerminoEstimado = 'fechaTerminoEstimado';
+  static String actividadPartidaEjecutada = 'actividadPartidaEjecutada';
+  static String alternativaSolucion = 'alternativaSolucion';
+  static String avanceFisicoAcumulado = 'avanceFisicoAcumulado';
+  static String avanceFisicoPartida = 'avanceFisicoPartida';
+  static String estadoAvance = 'estadoAvance';
+  static String estadoMonitoreo = 'estadoMonitoreo';
+  static String fechaMonitoreo = 'fechaMonitoreo';
+  static String idMonitoreo = 'idMonitoreo';
+  static String idUsuario = 'idUsuario';
+  static String imgActividad = 'imgActividad';
+  static String imgProblema = 'imgProblema';
+  static String imgRiesgo = 'imgRiesgo';
+  static String observaciones = 'observaciones';
+  static String problemaIdentificado = 'problemaIdentificado';
+  static String riesgoIdentificado = 'riesgoIdentificado';
+  static String rol = 'rol';
+  static String usuario = 'usuario';
 }
 
 class TramaMonitoreoModel {
-  final int? id;
-  final bool isEdit;
-  final DateTime? createdTime;
+  int? id = 0;
+  bool isEdit = false;
+  DateTime? createdTime = null;
 
-  final String snip;
-  final String cui;
-  final String latitud;
-  final String longitud;
-  final String tambo;
-  final String fechaTerminoEstimado;
-  final String actividadPartidaEjecutada;
-  final String alternativaSolucion;
-  final String avanceFisicoAcumulado;
-  final String avanceFisicoPartida;
-  final String estadoAvance;
-  final String estadoMonitoreo;
-  final String fechaMonitoreo;
-  final String idMonitoreo;
-  final String idUsuario;
-  final String imgActividad;
-  final String imgProblema;
-  final String imgRiesgo;
-  final String observaciones;
-  final String problemaIdentificado;
-  final String riesgoIdentificado;
-  final String rol;
-  final String usuario;
+  String snip = "";
+  String cui = "";
+  String latitud = "";
+  String longitud = "";
+  String tambo = "";
+  String fechaTerminoEstimado = "";
+  String actividadPartidaEjecutada = "";
+  String alternativaSolucion = "";
+  String avanceFisicoAcumulado = "";
+  String avanceFisicoPartida = "";
+  String estadoAvance = "";
+  String estadoMonitoreo = "";
+  String fechaMonitoreo = "";
+  String idMonitoreo = "";
+  String idUsuario = "";
+  String imgActividad = "";
+  String imgProblema = "";
+  String imgRiesgo = "";
+  String observaciones = "";
+  String problemaIdentificado = "";
+  String riesgoIdentificado = "";
+  String rol = "";
+  String usuario = "";
 
-  const TramaMonitoreoModel({
+  TramaMonitoreoModel.empty() {}
+
+  TramaMonitoreoModel({
     required this.id,
     required this.isEdit,
     required this.createdTime,
@@ -183,7 +185,12 @@ class TramaMonitoreoModel {
   static TramaMonitoreoModel fromJson(Map<String, Object?> json) =>
       TramaMonitoreoModel(
         id: json[TramaMonitoreoFields.id] as int?,
-        isEdit: json[TramaMonitoreoFields.isEdit] == 1,
+        isEdit: json[TramaMonitoreoFields.isEdit] == null
+            ? false
+            : json[TramaMonitoreoFields.isEdit] == 0 ||
+                    json[TramaMonitoreoFields.isEdit] == false
+                ? false
+                : true,
         createdTime: json[TramaMonitoreoFields.time] != null
             ? DateTime.parse(json[TramaMonitoreoFields.time] as String)
             : null,
@@ -290,12 +297,12 @@ class TramaMonitoreoModel {
 
   List<TramaMonitoreoModel> userFromJson(String sOject) {
     final jsonData = json.decode(sOject);
-    return new List<TramaMonitoreoModel>.from(
+    return List<TramaMonitoreoModel>.from(
         jsonData.map((x) => TramaMonitoreoModel.fromJson(x)));
   }
 
   String userToJson(List<TramaMonitoreoModel> aTramaMonitoreo) {
-    final dyn = new List<dynamic>.from(aTramaMonitoreo.map((x) => x.toJson()));
+    final dyn = List<dynamic>.from(aTramaMonitoreo.map((x) => x.toJson()));
     return json.encode(dyn);
   }
 }

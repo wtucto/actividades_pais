@@ -12,9 +12,9 @@ class MainController extends GetxController {
   final proyectos = <TramaProyectoModel>[].obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    loadInitialData();
+    await loadInitialData();
   }
 
   Future<void> loadInitialData() async {
@@ -43,6 +43,10 @@ class MainController extends GetxController {
 
   Future<List<TramaProyectoModel>> getAllProyecto() async {
     return await Get.find<MainService>().getAllProyecto();
+  }
+
+  Future<List<TramaMonitoreoModel>> getAllMonitor() async {
+    return await Get.find<MainService>().getAllMonitoreo();
   }
 
   Future<bool> saveMonitoreo(TramaMonitoreoModel o) async {

@@ -33,9 +33,14 @@ class MainService {
 
       for (TramaProyectoModel oUser in aApi) {
         if (aDb.length > 0) {
-          TramaProyectoModel oUserFind =
-              aDb.firstWhere((o) => o.numSnip == oUser.numSnip);
-          if (oUserFind != null) {
+          TramaProyectoModel? oUserFind;
+          try {
+            oUserFind = aDb.firstWhere((o) => o.numSnip == oUser.numSnip,
+                orElse: () => TramaProyectoModel.empty());
+          } catch (oError) {
+            print(oError);
+          }
+          if (oUserFind != null || oUserFind!.id == 0) {
             continue;
           }
         }

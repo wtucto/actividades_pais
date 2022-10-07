@@ -32,6 +32,7 @@ void main() async {
   final mainServ = MainService();
   Get.put(mainRepo);
   Get.put(mainServ);
+  Get.put(await MainController()); // Se ejecuta loadInitialData();
 
   runApp(MyApp());
 }
@@ -39,9 +40,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final controller =
-        Get.put(MainController()); // Se ejecuta loadInitialData();
-
     return OverlaySupport.global(
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
