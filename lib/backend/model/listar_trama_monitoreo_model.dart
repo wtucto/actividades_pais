@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-final String tableNameMonitoreo = 'listar_trama_monitoreo';
+final String tableNameTramaMonitoreos = 'listar_trama_monitoreo';
 
 class TramaMonitoreoFields {
   static final List<String> values = [
-    // Add all fields
+    /// Add all fields
     id,
     isEdit,
     time,
@@ -64,6 +64,10 @@ class TramaMonitoreoFields {
 }
 
 class TramaMonitoreoModel {
+  final int? id;
+  final bool isEdit;
+  final DateTime? createdTime;
+
   final String snip;
   final String cui;
   final String latitud;
@@ -88,7 +92,10 @@ class TramaMonitoreoModel {
   final String rol;
   final String usuario;
 
-  TramaMonitoreoModel({
+  const TramaMonitoreoModel({
+    required this.id,
+    required this.isEdit,
+    required this.createdTime,
     required this.snip,
     required this.cui,
     required this.latitud,
@@ -114,66 +121,107 @@ class TramaMonitoreoModel {
     required this.usuario,
   });
 
-  static TramaMonitoreoModel fromJsonOne(Map<String, dynamic> json) {
-    return TramaMonitoreoModel(
-      snip: json[TramaMonitoreoFields.snip],
-      cui: json[TramaMonitoreoFields.cui],
-      latitud: json[TramaMonitoreoFields.latitud],
-      longitud: json[TramaMonitoreoFields.longitud],
-      tambo: json[TramaMonitoreoFields.tambo],
-      fechaTerminoEstimado: json[TramaMonitoreoFields.fechaTerminoEstimado],
-      actividadPartidaEjecutada:
-          json[TramaMonitoreoFields.actividadPartidaEjecutada],
-      alternativaSolucion: json[TramaMonitoreoFields.alternativaSolucion],
-      avanceFisicoAcumulado: json[TramaMonitoreoFields.avanceFisicoAcumulado],
-      avanceFisicoPartida: json[TramaMonitoreoFields.avanceFisicoPartida],
-      estadoAvance: json[TramaMonitoreoFields.estadoAvance],
-      estadoMonitoreo: json[TramaMonitoreoFields.estadoMonitoreo],
-      fechaMonitoreo: json[TramaMonitoreoFields.fechaMonitoreo],
-      idMonitoreo: json[TramaMonitoreoFields.idMonitoreo],
-      idUsuario: json[TramaMonitoreoFields.idUsuario],
-      imgActividad: json[TramaMonitoreoFields.imgActividad],
-      imgProblema: json[TramaMonitoreoFields.imgProblema],
-      imgRiesgo: json[TramaMonitoreoFields.imgRiesgo],
-      observaciones: json[TramaMonitoreoFields.observaciones],
-      problemaIdentificado: json[TramaMonitoreoFields.problemaIdentificado],
-      riesgoIdentificado: json[TramaMonitoreoFields.riesgoIdentificado],
-      rol: json[TramaMonitoreoFields.rol],
-      usuario: json[TramaMonitoreoFields.usuario],
-    );
-  }
-
-  factory TramaMonitoreoModel.fromJson(Map<String, dynamic> json) =>
+  TramaMonitoreoModel copy({
+    int? id,
+    bool? isEdit,
+    DateTime? createdTime,
+    String? snip,
+    String? cui,
+    String? latitud,
+    String? longitud,
+    String? tambo,
+    String? fechaTerminoEstimado,
+    String? actividadPartidaEjecutada,
+    String? alternativaSolucion,
+    String? avanceFisicoAcumulado,
+    String? avanceFisicoPartida,
+    String? estadoAvance,
+    String? estadoMonitoreo,
+    String? fechaMonitoreo,
+    String? idMonitoreo,
+    String? idUsuario,
+    String? imgActividad,
+    String? imgProblema,
+    String? imgRiesgo,
+    String? observaciones,
+    String? problemaIdentificado,
+    String? riesgoIdentificado,
+    String? rol,
+    String? usuario,
+  }) =>
       TramaMonitoreoModel(
-        snip: json[TramaMonitoreoFields.snip],
-        cui: json[TramaMonitoreoFields.cui],
-        latitud: json[TramaMonitoreoFields.latitud],
-        longitud: json[TramaMonitoreoFields.longitud],
-        tambo: json[TramaMonitoreoFields.tambo],
-        fechaTerminoEstimado: json[TramaMonitoreoFields.fechaTerminoEstimado],
+        id: id ?? this.id,
+        isEdit: isEdit ?? this.isEdit,
+        createdTime: createdTime ?? this.createdTime,
+        snip: snip ?? this.snip,
+        cui: cui ?? this.cui,
+        latitud: latitud ?? this.latitud,
+        longitud: longitud ?? this.longitud,
+        tambo: tambo ?? this.tambo,
+        fechaTerminoEstimado: fechaTerminoEstimado ?? this.fechaTerminoEstimado,
         actividadPartidaEjecutada:
-            json[TramaMonitoreoFields.actividadPartidaEjecutada],
-        alternativaSolucion: json[TramaMonitoreoFields.alternativaSolucion],
-        avanceFisicoAcumulado: json[TramaMonitoreoFields.avanceFisicoAcumulado],
-        avanceFisicoPartida: json[TramaMonitoreoFields.avanceFisicoPartida],
-        estadoAvance: json[TramaMonitoreoFields.estadoAvance],
-        estadoMonitoreo: json[TramaMonitoreoFields.estadoMonitoreo],
-        fechaMonitoreo: json[TramaMonitoreoFields.fechaMonitoreo],
-        idMonitoreo: json[TramaMonitoreoFields.idMonitoreo],
-        idUsuario: json[TramaMonitoreoFields.idUsuario],
-        imgActividad: json[TramaMonitoreoFields.imgActividad],
-        imgProblema: json[TramaMonitoreoFields.imgProblema],
-        imgRiesgo: json[TramaMonitoreoFields.imgRiesgo],
-        observaciones: json[TramaMonitoreoFields.observaciones],
-        problemaIdentificado: json[TramaMonitoreoFields.problemaIdentificado],
-        riesgoIdentificado: json[TramaMonitoreoFields.riesgoIdentificado],
-        rol: json[TramaMonitoreoFields.rol],
-        usuario: json[TramaMonitoreoFields.usuario],
+            actividadPartidaEjecutada ?? this.actividadPartidaEjecutada,
+        alternativaSolucion: alternativaSolucion ?? this.alternativaSolucion,
+        avanceFisicoAcumulado:
+            avanceFisicoAcumulado ?? this.avanceFisicoAcumulado,
+        avanceFisicoPartida: avanceFisicoPartida ?? this.avanceFisicoPartida,
+        estadoAvance: estadoAvance ?? this.estadoAvance,
+        estadoMonitoreo: estadoMonitoreo ?? this.estadoMonitoreo,
+        fechaMonitoreo: fechaMonitoreo ?? this.fechaMonitoreo,
+        idMonitoreo: idMonitoreo ?? this.idMonitoreo,
+        idUsuario: idUsuario ?? this.idUsuario,
+        imgActividad: imgActividad ?? this.imgActividad,
+        imgProblema: imgProblema ?? this.imgProblema,
+        imgRiesgo: imgRiesgo ?? this.imgRiesgo,
+        observaciones: observaciones ?? this.observaciones,
+        problemaIdentificado: problemaIdentificado ?? this.problemaIdentificado,
+        riesgoIdentificado: riesgoIdentificado ?? this.riesgoIdentificado,
+        rol: rol ?? this.rol,
+        usuario: usuario ?? this.usuario,
       );
 
-  Map<String, Object?> toJson() => {
+  static TramaMonitoreoModel fromJson(Map<String, Object?> json) =>
+      TramaMonitoreoModel(
+        id: json[TramaMonitoreoFields.id] as int?,
+        isEdit: json[TramaMonitoreoFields.isEdit] == 1,
+        createdTime: json[TramaMonitoreoFields.time] != null
+            ? DateTime.parse(json[TramaMonitoreoFields.time] as String)
+            : null,
+        snip: json[TramaMonitoreoFields.snip] as String,
+        cui: json[TramaMonitoreoFields.cui] as String,
+        latitud: json[TramaMonitoreoFields.latitud] as String,
+        longitud: json[TramaMonitoreoFields.longitud] as String,
+        tambo: json[TramaMonitoreoFields.tambo] as String,
+        fechaTerminoEstimado:
+            json[TramaMonitoreoFields.fechaTerminoEstimado] as String,
+        actividadPartidaEjecutada:
+            json[TramaMonitoreoFields.actividadPartidaEjecutada] as String,
+        alternativaSolucion:
+            json[TramaMonitoreoFields.alternativaSolucion] as String,
+        avanceFisicoAcumulado:
+            json[TramaMonitoreoFields.avanceFisicoAcumulado] as String,
+        avanceFisicoPartida:
+            json[TramaMonitoreoFields.avanceFisicoPartida] as String,
+        estadoAvance: json[TramaMonitoreoFields.estadoAvance] as String,
+        estadoMonitoreo: json[TramaMonitoreoFields.estadoMonitoreo] as String,
+        fechaMonitoreo: json[TramaMonitoreoFields.fechaMonitoreo] as String,
+        idMonitoreo: json[TramaMonitoreoFields.idMonitoreo] as String,
+        idUsuario: json[TramaMonitoreoFields.idUsuario] as String,
+        imgActividad: json[TramaMonitoreoFields.imgActividad] as String,
+        imgProblema: json[TramaMonitoreoFields.imgProblema] as String,
+        imgRiesgo: json[TramaMonitoreoFields.imgRiesgo] as String,
+        observaciones: json[TramaMonitoreoFields.observaciones] as String,
+        problemaIdentificado:
+            json[TramaMonitoreoFields.problemaIdentificado] as String,
+        riesgoIdentificado:
+            json[TramaMonitoreoFields.riesgoIdentificado] as String,
+        rol: json[TramaMonitoreoFields.rol] as String,
+        usuario: json[TramaMonitoreoFields.usuario] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
         //TramaMonitoreoFields.id: id,
-        //TramaMonitoreoFields.isEdit: isEdit ? 1 : 0,
+        TramaMonitoreoFields.isEdit: isEdit ? 1 : 0,
         //TramaMonitoreoFields.time: createdTime.toIso8601String(),
 
         TramaMonitoreoFields.snip: snip,
@@ -202,7 +250,7 @@ class TramaMonitoreoModel {
         TramaMonitoreoFields.usuario: usuario,
       };
 
-  static Map<String, dynamic?> toJsonObject(TramaMonitoreoModel o) {
+  static Map<String, dynamic> toJsonObject(TramaMonitoreoModel o) {
     return {
       TramaMonitoreoFields.snip: o.snip,
       TramaMonitoreoFields.cui: o.cui,
@@ -231,24 +279,23 @@ class TramaMonitoreoModel {
     };
   }
 
-  static List<Map<String, dynamic?>> toJsonArray(List<TramaMonitoreoModel> a) {
-    List<Map<String, dynamic?>> aList = [];
-    for (var item in a) {
+  static List<Map<String, dynamic>> toJsonArray(
+      List<TramaMonitoreoModel> aTramaMonitoreo) {
+    List<Map<String, dynamic>> aList = [];
+    for (var item in aTramaMonitoreo) {
       aList.add(TramaMonitoreoModel.toJsonObject(item));
     }
     return aList;
   }
 
-  List<TramaMonitoreoModel> userFromJson(String sO) {
-    final jsonData = json.decode(sO);
+  List<TramaMonitoreoModel> userFromJson(String sOject) {
+    final jsonData = json.decode(sOject);
     return new List<TramaMonitoreoModel>.from(
         jsonData.map((x) => TramaMonitoreoModel.fromJson(x)));
   }
 
-  String userToJson(List<TramaMonitoreoModel> a) {
-    final dyn = new List<dynamic>.from(a.map((x) => x.toJson()));
+  String userToJson(List<TramaMonitoreoModel> aTramaMonitoreo) {
+    final dyn = new List<dynamic>.from(aTramaMonitoreo.map((x) => x.toJson()));
     return json.encode(dyn);
   }
 }
-
-// return (data as List).map((e) => TramaMonitoreo.fromJson(e)).toList();

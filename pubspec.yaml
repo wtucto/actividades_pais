@@ -38,6 +38,7 @@ dependencies:
   provider: ^6.0.3
   image_picker:
   video_player: ^2.4.7
+  #image_gallery_saver: ^1.7.1
   sqflite:
   #connectivity: ^3.0.6
   #geolocator: ^9.0.2
@@ -62,6 +63,11 @@ dependencies:
   get_it: ^7.2.0
   get: ^4.6.5
 
+  #OBJECT BOX
+  #objectbox: ^1.6.2
+  #objectbox_flutter_libs: any #1 only local database
+  # objectbox_sync_flutter_libs: any #2 both local + server
+
   #TEST
   mockito: ^5.3.2
 
@@ -83,6 +89,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+
+  #OBJECT BOX
+  #build_runner: ^2.0.0
+  #objectbox_generator: any
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

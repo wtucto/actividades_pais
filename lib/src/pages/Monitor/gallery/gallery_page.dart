@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:get/get.dart';
 
@@ -175,6 +177,26 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListView.builder(
           key: UniqueKey(),
           itemBuilder: (BuildContext context, int index) {
+            ///ENCODE
+            File file = File(_imageFileList![index].path);
+            Uint8List fileInByte = file.readAsBytesSync();
+            String base64Image = base64Encode(fileInByte);
+
+            ///DECODE
+            Uint8List _byteImage = base64Decode(
+                base64Image); //Base64Decoder().convert(base64Image);
+
+            Widget image = Image.memory(_byteImage);
+            /*Directory tempDir = await getTemporaryDirectory();
+            String tempPath = tempDir.path;
+
+            File fileTemp = await File('${tempPath}/my-image.jpg').create();
+            //await fileTemp.writeAsBytes( _byteImage.buffer.asUint8List(_byteImage.offsetInBytes, _byteImage.lengthInBytes));
+            fileTemp.writeAsBytesSync(_byteImage);
+
+            Directory appDocDir = await getApplicationDocumentsDirectory();
+            String appDocPath = appDocDir.path;*/
+
             // Why network for web?
             // See https://pub.dev/packages/image_picker#getting-ready-for-the-web-platform
             return Semantics(

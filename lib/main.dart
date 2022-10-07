@@ -1,6 +1,7 @@
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
+import 'package:actividades_pais/backend/database/pnpais_objectbox.dart';
 import 'package:actividades_pais/backend/repository/main_repo.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/helpers/dependecy_injection.dart';
@@ -17,11 +18,14 @@ import 'package:get_it/get_it.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:get/get.dart';
 
+late ObjectBoxDbPnPais OBoxDbPnPais;
 void main() async {
   DependencyInjection.initialize("DEV");
   //GlobalBindings().dependencies();
 
   WidgetsFlutterBinding.ensureInitialized();
+  //OBoxDbPnPais = await ObjectBoxDbPnPais.init();
+
   final mainApi = GetIt.instance<PnPaisApi>();
   final mainDb = await DatabasePnPais.instance;
   final mainRepo = MainRepository(mainApi, mainDb);

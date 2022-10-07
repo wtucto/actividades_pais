@@ -1,6 +1,7 @@
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
+import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 
 class MainRepository {
@@ -12,6 +13,30 @@ class MainRepository {
   MainRepository(this._pnPaisApi, this._dbPnPais);
 
   /**
+   * PROYECTO RESPOSITORY
+   */
+
+  Future<List<TramaProyectoModel>> getAllProyectoDb() async {
+    return _dbPnPais.readAllProyecto();
+  }
+
+  Future<List<TramaProyectoModel>> getAllProyectoApi() async {
+    List<TramaProyectoModel> oUserUp = [];
+    final response = await _pnPaisApi.listarTramaProyectoModel();
+    if (response.data != null) {
+      oUserUp = response.data!;
+    } else {
+      print(response.error.message);
+    }
+
+    return oUserUp;
+  }
+
+  Future<TramaProyectoModel> insertProyectoDb(TramaProyectoModel o) async {
+    return await _dbPnPais.insertProyecto(o);
+  }
+
+  /**
    * MONITOREO RESPOSITORY
    */
 
@@ -20,6 +45,27 @@ class MainRepository {
   }
 
   Future<List<TramaMonitoreoModel>> saveAllMonitoreo(
+      List<TramaMonitoreoModel> aUser) async {
+    List<TramaMonitoreoModel> aUserUp = [];
+
+    for (var oUser in aUser) {
+      final response = await _pnPaisApi.insertarMonitoreo(oBody: oUser);
+
+      if (response != null) {
+        TramaMonitoreoModel? oUserUp = response.data;
+        aUserUp.add(oUserUp!);
+      } else {
+        print(response.error.message);
+      }
+    }
+    return aUserUp;
+  }
+
+  Future<TramaMonitoreoModel> insertMonitorDb(TramaMonitoreoModel o) async {
+    return await _dbPnPais.insertMonitoreo(o);
+  }
+
+  Future<List<TramaMonitoreoModel>> upLoadAllMonitoreo(
       List<TramaMonitoreoModel> aUser) async {
     List<TramaMonitoreoModel> aUserUp = [];
 
@@ -60,7 +106,7 @@ class MainRepository {
 
   Future<List<UserModel>> getAllUserApi() async {
     List<UserModel> oUserUp = [];
-    final response = await _pnPaisApi.listarUsuarios();
+    final response = await _pnPaisApi.listarUsuariosApp();
     if (response.data != null) {
       oUserUp = response.data!;
     } else {
@@ -70,43 +116,21 @@ class MainRepository {
     return oUserUp;
   }
 
-  Future<UserModel> getNewUser() async {
-    final RespUsers = await _pnPaisApi.listarUsuarios();
-    List<UserModel> aUser = RespUsers.data!;
-    UserModel oUser = aUser.firstWhere((o) => o.isEdit == true);
-
-    final user = UserModel(
-        id: oUser.id,
-        rol: oUser.rol,
-        codigo: oUser.codigo,
-        nombres: oUser.nombres,
-        createdTime: oUser.createdTime,
-        isEdit: true);
-    await _dbPnPais.createUser(user);
-    return user;
+  Future<List<UserModel>> readEditUser(String codigo, String clave) async {
+    List<UserModel> aUserFilter = [];
+    List<UserModel> aUser = await _dbPnPais.readEditUser(true);
+    if (aUser.length > 0) {
+      aUserFilter
+          .add(aUser.firstWhere((o) => o.codigo == codigo && o.clave == clave));
+    }
+    return aUserFilter;
   }
 
   Future<UserModel> insertUserDb(UserModel o) async {
-    return await _dbPnPais.createUser(o);
+    return await _dbPnPais.insertUser(o);
   }
 
-  Future<List<UserModel>> upLoadAllUser(List<UserModel> aUser) async {
-    List<UserModel> aUserUp = [];
-
-    for (var oUser in aUser) {
-      final response = await _pnPaisApi.insertarUsuario(oBody: oUser);
-
-      if (response != null) {
-        UserModel? oUserUp = response.data;
-        aUserUp.add(oUserUp!);
-      } else {
-        print(response.error.message);
-      }
-    }
-    return aUserUp;
-  }
-
-  Future<bool> deleteUser(UserModel toDelete) async {
+  Future<bool> deleteUserDb(UserModel toDelete) async {
     final result = await _dbPnPais.deleteUser(toDelete.id!);
     return result == 1;
   }

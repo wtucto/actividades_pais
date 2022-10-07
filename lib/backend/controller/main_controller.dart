@@ -1,4 +1,5 @@
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
+import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/repository/main_repo.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
@@ -8,6 +9,7 @@ class MainController extends GetxController {
   final loading = false.obs;
   final users = <UserModel>[].obs;
   final moniteos = <TramaMonitoreoModel>[].obs;
+  final proyectos = <TramaProyectoModel>[].obs;
 
   @override
   void onInit() {
@@ -16,23 +18,41 @@ class MainController extends GetxController {
   }
 
   Future<void> loadInitialData() async {
+    loading.value = true;
     /*final serv = Get.put(MainService());
     users.value = await serv.loadAllUser();*/
+    proyectos.value = await Get.find<MainService>().loadAllProyecto();
     moniteos.value = await Get.find<MainService>().getAllMonitoreo();
     users.value = await Get.find<MainService>().loadAllUser();
-  }
-
-  Future<void> getUser() async {
-    if (loading.isTrue) return;
-    loading.value = true;
-    final newUser = await Get.find<MainRepository>().getNewUser();
-    users.insert(0, newUser);
     loading.value = false;
   }
 
-  Future<void> deleteUser(UserModel toDelete) async {
-    users.remove(toDelete);
-    Get.find<MainRepository>().deleteUser(toDelete);
+  Future<void> getAllUser() async {
+    if (loading.isTrue) return;
+    loading.value = true;
+    final newUser = await Get.find<MainRepository>().getAllUser();
+    users.value = newUser;
+    loading.value = false;
+  }
+
+  Future<UserModel> getUserLogin(String codigo, String clave) async {
+    UserModel oUserLogin =
+        await Get.find<MainService>().getUserLogin(codigo, clave);
+    return oUserLogin;
+  }
+
+  Future<List<TramaProyectoModel>> getAllProyecto() async {
+    return await Get.find<MainService>().getAllProyecto();
+  }
+
+  Future<bool> saveMonitoreo(TramaMonitoreoModel o) async {
+    if (loading.isTrue) return false;
+    loading.value = true;
+    final newUser = await Get.find<MainRepository>().insertMonitorDb(o);
+    moniteos.value = [newUser];
+    loading.value = false;
+
+    return true;
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
+import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/util/check_connection.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,48 @@ class MainService {
   Future<bool> isOnline() async {
     bool isDeviceConnected = await CheckConnection.isOnlineWifi();
     return isDeviceConnected;
+  }
+
+  /**
+   * PROYECTO SERVICES
+   */
+
+  Future<List<TramaProyectoModel>> getAllProyecto() async {
+    return await Get.find<MainRepository>().getAllProyectoDb();
+  }
+
+  Future<List<TramaProyectoModel>> loadAllProyecto() async {
+    List<TramaProyectoModel> aNewProject = [];
+    if (await isOnline()) {
+      List<TramaProyectoModel> aDb =
+          await Get.find<MainRepository>().getAllProyectoDb();
+      List<TramaProyectoModel> aApi =
+          await Get.find<MainRepository>().getAllProyectoApi();
+
+      for (TramaProyectoModel oUser in aApi) {
+        if (aDb.length > 0) {
+          TramaProyectoModel oUserFind =
+              aDb.firstWhere((o) => o.numSnip == oUser.numSnip);
+          if (oUserFind != null) {
+            continue;
+          }
+        }
+
+        TramaProyectoModel? response =
+            await Get.find<MainRepository>().insertProyectoDb(oUser);
+        if (response != null) {
+          aNewProject.add(response!);
+        } else {
+          print("Error al ingresar proyectos a la Base de Datos");
+        }
+      }
+    }
+
+    print("Nuevos proyectos cargados: ${aNewProject.length}");
+
+    List<TramaProyectoModel> aDbExist =
+        await Get.find<MainRepository>().getAllProyectoDb();
+    return aDbExist;
   }
 
   /**
@@ -33,7 +76,13 @@ class MainService {
   }
 
   Future<List<TramaMonitoreoModel>> getAllMonitoreo() async {
+    //if (await isOnline()) {}
+
     return await Get.find<MainRepository>().getAllMonitoreoDb();
+  }
+
+  Future<TramaMonitoreoModel> insertMonitorDb(TramaMonitoreoModel o) async {
+    return await Get.find<MainRepository>().insertMonitorDb(o);
   }
 
   Future syncAllTramaMonitoreoModel() async {
@@ -68,14 +117,28 @@ class MainService {
           print("Error al ingresar usuario a la Base de Datos");
         }
       }
-
-      //aApi.forEach((element) {});
-
     }
 
     print("Nuevos usuarios cargados: ${aNewLoadUser.length}");
 
     List<UserModel> aDbExist = await Get.find<MainRepository>().getAllUserDb();
     return aDbExist;
+  }
+
+  Future<List<UserModel>> getAllUser() async {
+    List<UserModel> aDbExist = await Get.find<MainRepository>().getAllUserDb();
+    return aDbExist;
+  }
+
+  Future<UserModel> getUserLogin(String codigo, String clave) async {
+    try {
+      List<UserModel> oUserLogin =
+          await Get.find<MainRepository>().readEditUser(codigo, clave);
+      return oUserLogin[0];
+    } catch (oError) {
+      print(oError);
+    }
+    return Future.error(
+        'Usuario y/o Clave incorrecto, vuelve a intentarlo mas tarde.');
   }
 }

@@ -1,4 +1,5 @@
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
+import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -8,6 +9,8 @@ class DatabasePnPais {
 
   static Database? _database;
   static final _version = 1;
+
+  final insertTable = 'CREATE TABLE';
   final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
   final textType = 'TEXT';
   final boolType = 'BOOLEAN';
@@ -33,17 +36,21 @@ class DatabasePnPais {
     return await openDatabase(
       path,
       version: _version,
-      onCreate: _createDB,
+      onCreate: _insertDB,
       onUpgrade: _upgradeDB,
     );
   }
 
-  Future _createDB(Database db, int version) async {
+  Future _insertDB(Database db, int version) async {
+    var constFields = '''
+      ${TramaMonitoreoFields.id} $idType, 
+      ${TramaMonitoreoFields.time} $textType,
+      ${TramaMonitoreoFields.isEdit} $boolType $notNull
+      ''';
+
     await db.execute('''
-    CREATE TABLE $tableNameUsers ( 
-      ${UserFields.id} $idType, 
-      ${UserFields.time} $textType,
-      ${UserFields.isEdit} $boolType $notNull,
+    $insertTable $tableNameUsers ( 
+      $constFields,
 
       ${UserFields.codigo} $textType $notNull,
       ${UserFields.nombres} $textType $notNull,
@@ -52,10 +59,8 @@ class DatabasePnPais {
     ''');
 
     await db.execute('''
-    CREATE TABLE $tableNameMonitoreo ( 
-      ${TramaMonitoreoFields.id} $idType, 
-      ${TramaMonitoreoFields.isEdit} $boolType $notNull,
-      ${TramaMonitoreoFields.time} $textType,
+    $insertTable $tableNameTramaMonitoreos ( 
+      $constFields,
 
       ${TramaMonitoreoFields.snip} $textType $notNull,
       ${TramaMonitoreoFields.cui} $textType,
@@ -83,6 +88,38 @@ class DatabasePnPais {
       )
     ''');
 
+    await db.execute('''
+    $insertTable $tableNameTramaProyectos ( 
+      $constFields,
+
+      ${TramaProyectoFields.numSnip} $textType,
+      ${TramaProyectoFields.cui} $textType,
+      ${TramaProyectoFields.latitud} $textType,
+      ${TramaProyectoFields.longitud} $textType,
+      ${TramaProyectoFields.departamento} $textType,
+      ${TramaProyectoFields.provincia} $textType,
+      ${TramaProyectoFields.distrito} $textType,
+      ${TramaProyectoFields.tambo} $textType,
+      ${TramaProyectoFields.centroPoblado} $textType,
+      ${TramaProyectoFields.estado} $textType,
+      ${TramaProyectoFields.subEstado} $textType,
+      ${TramaProyectoFields.estadoSaneamiento} $textType,
+      ${TramaProyectoFields.modalidad} $textType,
+      ${TramaProyectoFields.fechaInicio} $textType,
+      ${TramaProyectoFields.fechaTerminoEstimado} $textType,
+      ${TramaProyectoFields.inversion} $textType,
+      ${TramaProyectoFields.costoEjecutado} $textType,
+      ${TramaProyectoFields.costoEstimadoFinal} $textType,
+      ${TramaProyectoFields.avanceFisico} $textType,
+      ${TramaProyectoFields.residente} $textType,
+      ${TramaProyectoFields.supervisor} $textType,
+      ${TramaProyectoFields.crp} $textType,
+      ${TramaProyectoFields.codResidente} $textType,
+      ${TramaProyectoFields.codSupervisor} $textType,
+      ${TramaProyectoFields.codCrp} $textType
+      )
+    ''');
+
     /*var tableNames = (await db
           .query('sqlite_master', where: 'type = ?', whereArgs: ['table']))
       .map((row) => row['name'] as String)
@@ -99,14 +136,116 @@ class DatabasePnPais {
   }
 
   /**
+   * TRAMA PROYECTO
+   */
+  Future<List<TramaProyectoModel>> readAllProyecto() async {
+    final db = await instance.database;
+    //SELECT * FROM $tableNameTramaProyectos ORDER BY ASC
+    final orderBy = '${TramaProyectoFields.numSnip} ASC';
+    final result = await db.query(tableNameTramaProyectos, orderBy: orderBy);
+    return result.map((json) => TramaProyectoModel.fromJson(json)).toList();
+  }
+
+  Future<TramaProyectoModel> readProyecto(int id) async {
+    final db = await instance.database;
+    final maps = await db.query(
+      tableNameTramaProyectos,
+      columns: TramaProyectoFields.values,
+      where: '${TramaProyectoFields.id} = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isNotEmpty) {
+      return TramaProyectoModel.fromJson(maps.first);
+    } else {
+      throw Exception('ID $id not found');
+    }
+  }
+
+  Future<TramaProyectoModel> insertProyecto(TramaProyectoModel o) async {
+    final db = await instance.database;
+    //INSERT INTO table_name ($columns) VALUES ($values)
+    final id = await db.insert(
+      tableNameTramaProyectos,
+      o.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    return o.copy(id: id);
+  }
+
+  Future<int> updateProyecto(TramaProyectoModel o) async {
+    final db = await instance.database;
+    return db.update(
+      tableNameTramaProyectos,
+      o.toJson(),
+      where: '${TramaProyectoFields.id} = ?',
+      whereArgs: [o.id],
+    );
+  }
+
+  Future<int> deleteProyecto(int id) async {
+    final db = await instance.database;
+    return await db.delete(
+      tableNameTramaProyectos,
+      where: '${TramaProyectoFields.id} = ?',
+      whereArgs: [id],
+    );
+  }
+
+  /**
    * TRAMA MONITOREO
    */
   Future<List<TramaMonitoreoModel>> readAllMonitoreo() async {
     final db = await instance.database;
-    //SELECT * FROM $tableNameMonitoreo ORDER BY ASC
     final orderBy = '${TramaMonitoreoFields.snip} ASC';
-    final result = await db.query(tableNameMonitoreo, orderBy: orderBy);
+    final result = await db.query(tableNameTramaMonitoreos, orderBy: orderBy);
     return result.map((json) => TramaMonitoreoModel.fromJson(json)).toList();
+  }
+
+  Future<TramaProyectoModel> readMonitoreo(int id) async {
+    final db = await instance.database;
+    final maps = await db.query(
+      tableNameTramaMonitoreos,
+      columns: TramaMonitoreoFields.values,
+      where: '${TramaMonitoreoFields.id} = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isNotEmpty) {
+      return TramaProyectoModel.fromJson(maps.first);
+    } else {
+      throw Exception('ID $id not found');
+    }
+  }
+
+  Future<TramaMonitoreoModel> insertMonitoreo(TramaMonitoreoModel o) async {
+    final db = await instance.database;
+    //INSERT INTO table_name ($columns) VALUES ($values)
+    final id = await db.insert(
+      tableNameTramaMonitoreos,
+      o.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    return o.copy(id: id);
+  }
+
+  Future<int> updateMonitoreo(TramaMonitoreoModel o) async {
+    final db = await instance.database;
+    return db.update(
+      tableNameTramaMonitoreos,
+      o.toJson(),
+      where: '${TramaMonitoreoFields.id} = ?',
+      whereArgs: [o.id],
+    );
+  }
+
+  Future<int> deleteMonitoreo(int id) async {
+    final db = await instance.database;
+    return await db.delete(
+      tableNameTramaMonitoreos,
+      where: '${TramaMonitoreoFields.id} = ?',
+      whereArgs: [id],
+    );
   }
 
   /**
@@ -123,7 +262,7 @@ class DatabasePnPais {
   }
 
   Future<UserModel> readUser(int id) async {
-    //USER => this.user = await NotesDatabase.instance.readUser(widget.userId);
+    //USER => this.user = await DatabasePnPais.instance.readUser(widget.userId);
     final db = await instance.database;
     final maps = await db.query(
       tableNameUsers,
@@ -139,24 +278,46 @@ class DatabasePnPais {
     }
   }
 
-  Future<UserModel> createUser(UserModel user) async {
+  Future<List<UserModel>> readEditUser(bool isEdit) async {
+    List<UserModel> aResp = [];
+    //USER => this.user = await DatabasePnPais.instance.readUser(widget.userId);
+    final db = await instance.database;
+    final maps = await db.query(
+      tableNameUsers,
+      columns: UserFields.values,
+      where: '${UserFields.isEdit} = ?',
+      whereArgs: [isEdit],
+    );
+
+    if (maps.isNotEmpty) {
+      for (var o in maps) {
+        aResp.add(UserModel.fromJson(o));
+      }
+    } else {
+      throw Exception('ID $isEdit not found');
+    }
+
+    return aResp;
+  }
+
+  Future<UserModel> insertUser(UserModel o) async {
     final db = await instance.database;
     //INSERT INTO table_name ($columns) VALUES ($values)
     final id = await db.insert(
       tableNameUsers,
-      user.toJson(),
+      o.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    return user.copy(id: id);
+    return o.copy(id: id);
   }
 
-  Future<int> updateUser(UserModel user) async {
+  Future<int> updateUser(UserModel o) async {
     final db = await instance.database;
     return db.update(
       tableNameUsers,
-      user.toJson(),
+      o.toJson(),
       where: '${UserFields.id} = ?',
-      whereArgs: [user.id],
+      whereArgs: [o.id],
     );
   }
 
@@ -174,7 +335,7 @@ class DatabasePnPais {
      * extends State<NotesPage> { ...
      @override
       void dispose() {
-        NotesDatabase.instance.close();
+        DatabasePnPais.instance.close();
         super.dispose();
       }
      */
@@ -217,7 +378,7 @@ void addOrUpdateNote() async {
       description: description,
     );
 
-    await NotesDatabase.instance.update(user);
+    await DatabasePnPais.instance.update(user);
   }
 
   Future addNote() async {
@@ -226,9 +387,9 @@ void addOrUpdateNote() async {
       isImportant: true,
       number: number,
       description: description,
-      createdTime: DateTime.now(),
+      insertdTime: DateTime.now(),
     );
 
-    await NotesDatabase.instance.create(user);
+    await DatabasePnPais.instance.insert(user);
   }
   */
