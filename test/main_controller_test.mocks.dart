@@ -15,7 +15,7 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeUser_0 extends _i1.Fake implements _i2.UserModel {}
+class _FakeUser_0 extends _i1.Fake implements _i2.TramaProyectoModel {}
 
 /// A class which mocks [MainRepository].
 ///
@@ -26,17 +26,18 @@ class MockMainRepository extends _i1.Mock implements _i3.MainRepository {
   }
 
   @override
-  _i4.Future<_i2.UserModel> getNewUserTest() =>
+  _i4.Future<_i2.TramaProyectoModel> getNewUserTest() =>
       (super.noSuchMethod(Invocation.method(#getNewUser, []),
-              returnValue: Future<_i2.UserModel>.value(_FakeUser_0()))
-          as _i4.Future<_i2.UserModel>);
+              returnValue: Future<_i2.TramaProyectoModel>.value(_FakeUser_0()))
+          as _i4.Future<_i2.TramaProyectoModel>);
   @override
-  _i4.Future<List<_i2.UserModel>> getAllUsers() =>
+  _i4.Future<List<_i2.TramaProyectoModel>> getAllUsers() =>
       (super.noSuchMethod(Invocation.method(#getAllUsers, []),
-              returnValue: Future<List<_i2.UserModel>>.value(<_i2.UserModel>[]))
-          as _i4.Future<List<_i2.UserModel>>);
+              returnValue: Future<List<_i2.TramaProyectoModel>>.value(
+                  <_i2.TramaProyectoModel>[]))
+          as _i4.Future<List<_i2.TramaProyectoModel>>);
   @override
-  _i4.Future<bool> deleteUserTest(_i2.UserModel? toDelete) =>
+  _i4.Future<bool> deleteUserTest(_i2.TramaProyectoModel? toDelete) =>
       (super.noSuchMethod(Invocation.method(#deleteUser, [toDelete]),
           returnValue: Future<bool>.value(false)) as _i4.Future<bool>);
   @override
@@ -46,7 +47,7 @@ class MockMainRepository extends _i1.Mock implements _i3.MainRepository {
 /// A class which mocks [UserModel].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUser extends _i1.Mock implements _i2.UserModel {
+class MockUser extends _i1.Mock implements _i2.TramaProyectoModel {
   MockUser() {
     _i1.throwOnMissingStub(this);
   }
