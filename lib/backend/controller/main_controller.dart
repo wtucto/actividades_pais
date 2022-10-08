@@ -8,11 +8,7 @@ import 'package:logger/logger.dart';
 
 class MainController extends GetxController {
   Logger _log = Logger();
-  /*
-   SAMPLE USE:
-   MainController c = Get.put(MainController());
-   c.log2.value
-   */
+
   final loading = false.obs;
   final users = <UserModel>[].obs;
   final moniteos = <TramaMonitoreoModel>[].obs;
