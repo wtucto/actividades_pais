@@ -1,3 +1,5 @@
+import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
@@ -9,6 +11,7 @@ const options = ['BAJO', 'MEDIO', 'ALTO'];
 
 class MonitoringDetailNewEditPage extends StatefulWidget {
   const MonitoringDetailNewEditPage({Key? key}) : super(key: key);
+
   @override
   _MonitoringDetailNewEditPageState createState() =>
       _MonitoringDetailNewEditPageState();
@@ -16,12 +19,34 @@ class MonitoringDetailNewEditPage extends StatefulWidget {
 
 class _MonitoringDetailNewEditPageState
     extends State<MonitoringDetailNewEditPage> {
+  _MonitoringDetailNewEditPageState() {
+    _statusAdvance = _itemStatusAdvance[0];
+    _valueRiesgo = _itemsRiesgo[0];
+  }
+
+  String? _statusAdvance;
+  String? _valueRiesgo;
   final _formKey = GlobalKey<FormState>();
+  final _idMonitor = TextEditingController();
+  final _statusMonitor = TextEditingController();
+  final _dateMonitor = TextEditingController();
+  final _advanceFEA = TextEditingController();
+  final _itemStatusAdvance = ['Reinicio', 'Final'];
+  final _advanceFEP = TextEditingController();
+  final _partidaEjecutada = TextEditingController();
+  final _obsMonitor = TextEditingController();
+  final _problemaIO = TextEditingController();
+  final _alternSolucion = TextEditingController();
+  final _nivelRiesgo = TextEditingController();
+  final _dateObra = TextEditingController();
+  final _longitud = TextEditingController();
+  final _latitud = TextEditingController();
   final _questionCtrl = TextEditingController();
-  final _questionCtrl2 = TextEditingController();
-  final _dateinput = TextEditingController();
+  final _itemsRiesgo = ['Bajo', 'Medio', 'Alto'];
   final _optionCtrls = options.map((o) => TextEditingController()).toList();
   final _question = {'value': '', 'correct': options[0], 'options': options};
+
+  final MainController mainController = MainController();
 
   void showSnackbar({required bool success, required String text}) {
     AnimatedSnackBar.rectangle(
@@ -34,64 +59,49 @@ class _MonitoringDetailNewEditPageState
     ).show(context);
   }
 
-  @override
-  void dispose() {
-    _questionCtrl.dispose();
-    for (var ctrl in _optionCtrls) {
-      ctrl.dispose();
-    }
-    super.dispose();
-  }
-
-  String dropdownvalue = 'Reinicio';
-  var items = [
-    'Reinicio',
-  ];
-
-  String dropdownvalueRiesgo = 'Bajo';
-  var itemsRiesgo = ['Bajo', 'Medio', 'Alto'];
+  // @override
+  // void dispose() {
+  //   _questionCtrl.dispose();
+  //   for (var ctrl in _optionCtrls) {
+  //     ctrl.dispose();
+  //   }
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 12, 124, 205),
-        elevation: 0,
-        leadingWidth: 20,
+        title: Center(
+          child: Text(
+            'Monitoring'.tr,
+            style: const TextStyle(
+              color: Color(0xfffefefe),
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+              fontSize: 18.0,
+            ),
+          ),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
                 iconSize: 30,
                 onPressed: () {},
-                icon: Icon(
+                icon: const Icon(
                   Icons.monitor,
                   color: Color.fromARGB(255, 255, 255, 255),
                 )),
           )
         ],
-        title: Container(
-          height: 45,
-          //width: width / 1.5,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(9.0),
-          ),
-          child: Center(
-            child: Text(
-              'Monitoring'.tr,
-              style: const TextStyle(
-                color: const Color(0xfffefefe),
-                fontWeight: FontWeight.w600,
-                fontStyle: FontStyle.normal,
-                fontSize: 20.0,
-              ),
-            ),
-          ),
-        ),
       ),
+      /**
+       * Formulario
+       */
       body: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -100,15 +110,15 @@ class _MonitoringDetailNewEditPageState
            * ID MONITOREO
            */
           TextFormField(
-            controller: _questionCtrl,
+            controller: _idMonitor,
             decoration: const InputDecoration(labelText: 'Id Monitoreo *'),
-            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+            // validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
           /**
            * ESTADO MONITOREO
            */
           TextFormField(
-            controller: _questionCtrl,
+            controller: _statusMonitor,
             decoration: const InputDecoration(labelText: 'Estado Monitoreo *'),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
@@ -116,9 +126,9 @@ class _MonitoringDetailNewEditPageState
            * FECHA MONITOREO
            */
           TextFormField(
-            controller: _dateinput,
+            controller: _dateMonitor,
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 //icon: Icon(Icons.calendar_today), //icon of text field
                 labelText: 'Fecha Monitoreo *' //label text of field
                 ),
@@ -142,7 +152,7 @@ class _MonitoringDetailNewEditPageState
                 //you can implement different kind of Date Format here according to your requirement
 
                 setState(() {
-                  _dateinput.text =
+                  _dateMonitor.text =
                       formattedDate; //set output date to TextField value.
                 });
               }
@@ -152,7 +162,7 @@ class _MonitoringDetailNewEditPageState
            * % AVANCE FISICO ESTIMADO ACUMULADO
            */
           TextFormField(
-            controller: _questionCtrl,
+            controller: _advanceFEA,
             decoration: const InputDecoration(
               labelText: '% Avance Fisico Estimado Acumulado *',
             ),
@@ -161,63 +171,24 @@ class _MonitoringDetailNewEditPageState
           /**
            * % ESTADO DE AVANCE
            */
-          const SizedBox(height: 32),
-          Text('Estado de Avance *'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: width / 1.209,
-                margin: EdgeInsets.only(top: 2, bottom: 2),
-                padding: EdgeInsets.all(4.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(
-                    color: Colors.grey,
-                    style: BorderStyle.solid,
-                  ),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    //isDense: true,
-                    isExpanded: true,
-                    value: dropdownvalue,
-                    dropdownColor: Color.fromARGB(255, 255, 255, 255),
-                    hint: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'SelectData'.tr,
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    items: items
-                        .map((item) => DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ))
-                        .toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownvalue = newValue!;
-                      });
-                    },
-                  ),
-                ),
-              ),
-            ],
+          const SizedBox(height: 20),
+          const Text('Estado de Avance *'),
+          DropdownButtonFormField(
+            value: _statusAdvance,
+            items: _itemStatusAdvance
+                .map((e) => DropdownMenuItem(child: Text(e), value: e))
+                .toList(),
+            onChanged: (val) {
+              setState(() {
+                _statusAdvance = val!;
+              });
+            },
           ),
           /**
            * % AVANCE FISICO ACUMULADO PARTIDA
            */
           TextFormField(
-            controller: _questionCtrl,
+            controller: _advanceFEP,
             decoration: const InputDecoration(
                 labelText: '% Avance Fisico Acumulado Partida *'),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
@@ -226,7 +197,7 @@ class _MonitoringDetailNewEditPageState
            * PARTIDA EJECUTADA
            */
           TextFormField(
-            controller: _questionCtrl,
+            controller: _partidaEjecutada,
             decoration: const InputDecoration(labelText: 'Partida Ejecutada *'),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
@@ -237,9 +208,7 @@ class _MonitoringDetailNewEditPageState
           TextFormField(
             keyboardType: TextInputType.multiline,
             textInputAction: TextInputAction.newline,
-            minLines: 4,
-            maxLines: 5,
-            controller: _questionCtrl2,
+            controller: _obsMonitor,
             decoration: const InputDecoration(labelText: 'Observaciones *'),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
@@ -247,7 +216,7 @@ class _MonitoringDetailNewEditPageState
            * PROBLEMA IDENTIFICADO EN LA OBRA
            */
           TextFormField(
-            controller: _questionCtrl,
+            controller: _problemaIO,
             decoration: const InputDecoration(
                 labelText: 'Problema Indentificado en la Obra *'),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
@@ -256,7 +225,7 @@ class _MonitoringDetailNewEditPageState
            * ALTERNATIVA DE SOLUCION
            */
           TextFormField(
-            controller: _questionCtrl,
+            controller: _alternSolucion,
             decoration:
                 const InputDecoration(labelText: 'Alternativa de Solución *'),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
@@ -265,72 +234,34 @@ class _MonitoringDetailNewEditPageState
            * SELECCIONES EL RIESGO
            */
           TextFormField(
-            controller: _questionCtrl,
+            controller: _nivelRiesgo,
             decoration: const InputDecoration(labelText: 'Riesgo *'),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
           /**
            * NIVEL DE RIESGO
            */
-          const SizedBox(height: 32),
-          Text('Nivel de Riesgo *'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: width / 1.209,
-                margin: EdgeInsets.only(top: 2, bottom: 2),
-                padding: EdgeInsets.all(4.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(
-                    color: Colors.grey,
-                    style: BorderStyle.solid,
-                  ),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    //isDense: true,
-                    isExpanded: true,
-                    value: dropdownvalueRiesgo,
-                    dropdownColor: Color.fromARGB(255, 255, 255, 255),
-                    hint: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'SelectData'.tr,
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    items: itemsRiesgo
-                        .map((item) => DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ))
-                        .toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownvalueRiesgo = newValue!;
-                      });
-                    },
-                  ),
-                ),
-              ),
-            ],
+          const SizedBox(height: 20),
+          const Text('Nivel de Riesgo *'),
+          DropdownButtonFormField(
+            value: _valueRiesgo,
+            items: _itemsRiesgo
+                .map((e) => DropdownMenuItem(child: Text(e), value: e))
+                .toList(),
+            onChanged: (val) {
+              setState(() {
+                _valueRiesgo = val!;
+              });
+            },
           ),
+
           /**
            * FECHA TERMINO OBRA
            */
           TextFormField(
-            controller: _dateinput,
+            controller: _dateObra,
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 //icon: Icon(Icons.calendar_today), //icon of text field
                 labelText: 'Fecha Termino Obra *' //label text of field
                 ),
@@ -355,7 +286,7 @@ class _MonitoringDetailNewEditPageState
                 //you can implement different kind of Date Format here according to your requirement
 
                 setState(() {
-                  _dateinput.text =
+                  _dateObra.text =
                       formattedDate; //set output date to TextField value.
                 });
               }
@@ -364,9 +295,8 @@ class _MonitoringDetailNewEditPageState
           /**
            * LOGITUD
            */
-
           TextFormField(
-            controller: _questionCtrl,
+            controller: _longitud,
             decoration: const InputDecoration(labelText: 'Longitud *'),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
@@ -374,7 +304,7 @@ class _MonitoringDetailNewEditPageState
            * LATITUD
            */
           TextFormField(
-            controller: _questionCtrl,
+            controller: _latitud,
             decoration: const InputDecoration(labelText: 'Latitud *'),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
@@ -410,22 +340,55 @@ class _MonitoringDetailNewEditPageState
             children: [
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color.fromARGB(255, 12, 124, 205),
+                  primary: const Color.fromARGB(255, 12, 124, 205),
                   onPrimary: Colors.white,
-                  shadowColor: Color.fromARGB(255, 53, 53, 53),
+                  shadowColor: const Color.fromARGB(255, 53, 53, 53),
                   elevation: 5,
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    _question['value'] = _questionCtrl.text;
-                    _question['options'] = _optionCtrls.asMap().entries.map(
-                      (entry) {
-                        return {
-                          'index': options[entry.key],
-                          'value': entry.value.text
-                        };
-                      },
+                    // _question['value'] = _questionCtrl.text;
+                    // _question['options'] = _optionCtrls.asMap().entries.map(
+                    //   (entry) {
+                    //     return {
+                    //       'index': options[entry.key],
+                    //       'value': entry.value.text
+                    //     };
+                    //   },
+                    // );
+                    await mainController.saveMonitoreo(
+                      TramaMonitoreoModel(
+                        id: 0,
+                        isEdit: true,
+                        createdTime: DateTime.now(),
+                        snip: "",
+                        cui: "",
+                        latitud: _latitud.text,
+                        longitud: _longitud.text,
+                        tambo: "",
+                        fechaTerminoEstimado: "",
+                        actividadPartidaEjecutada: "",
+                        alternativaSolucion: "",
+                        avanceFisicoAcumulado: "",
+                        avanceFisicoPartida: "",
+                        estadoAvance: _statusAdvance!,
+                        estadoMonitoreo: _statusMonitor.text,
+                        fechaMonitoreo: _dateMonitor.text,
+                        idMonitoreo: _idMonitor.text,
+                        idUsuario: "",
+                        imgActividad: "",
+                        imgProblema: "",
+                        imgRiesgo: "",
+                        observaciones: _obsMonitor.text,
+                        problemaIdentificado: _problemaIO.text,
+                        riesgoIdentificado: _valueRiesgo!,
+                        rol: "",
+                        usuario: "",
+                      ),
                     );
+
+                    List<TramaMonitoreoModel> aMonitoreo =
+                        await mainController.getAllMonitor();
 
                     showSnackbar(
                       success: true,
@@ -445,7 +408,7 @@ class _MonitoringDetailNewEditPageState
                     child: Text(
                       'SaveData'.tr,
                       style: const TextStyle(
-                        color: const Color(0xfffefefe),
+                        color: Color(0xfffefefe),
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
                         fontSize: 20.0,
@@ -456,9 +419,9 @@ class _MonitoringDetailNewEditPageState
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color.fromARGB(255, 1, 173, 130),
+                  primary: const Color.fromARGB(255, 1, 173, 130),
                   onPrimary: Colors.white,
-                  shadowColor: Color.fromARGB(255, 53, 53, 53),
+                  shadowColor: const Color.fromARGB(255, 53, 53, 53),
                   elevation: 5,
                 ),
                 onPressed: () {
@@ -490,7 +453,7 @@ class _MonitoringDetailNewEditPageState
                   child: Center(
                     child: Text(
                       'SendData'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Color.fromARGB(255, 255, 255, 255),
                         letterSpacing: 1.5,
                         fontSize: 18.0,
