@@ -29,24 +29,24 @@ class UserModel {
   static final sRolCRP = "CRP"; // (coordinador regional del proyecto)
 
   int? id = 0;
-  int isEdit = 0;
+  int? isEdit = 0;
   DateTime? createdTime = null;
 
-  String codigo = "";
+  String? codigo = "";
   String? clave = "";
-  String nombres = "";
-  String rol = "";
+  String? nombres = "";
+  String? rol = "";
 
   UserModel.empty() {}
 
   UserModel({
-    required this.id,
-    required this.isEdit,
-    required this.createdTime,
-    required this.codigo,
+    this.id,
+    this.isEdit,
+    this.createdTime,
+    this.codigo,
     this.clave,
-    required this.nombres,
-    required this.rol,
+    this.nombres,
+    this.rol,
   });
 
   UserModel copy({

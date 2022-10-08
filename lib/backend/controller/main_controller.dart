@@ -86,7 +86,7 @@ class MainController extends GetxController {
 
     loading.value = true;
 
-    if (o.estadoMonitoreo.trim().toUpperCase() ==
+    if (o.estadoMonitoreo!.trim().toUpperCase() ==
         TramaMonitoreoModel.sEstadoENV) {
       loading.value = false;
       return Future.error(
@@ -94,20 +94,20 @@ class MainController extends GetxController {
       );
     }
 
-    if (o.cui.trim() == '') {
+    if (o.cui!.trim() == '') {
       loading.value = false;
       return Future.error(
         'Error al procesar el Monitoreo, verifique los siguientes campos: CUI.',
       );
     }
 
-    if (o.fechaMonitoreo.trim() == '') {
+    if (o.fechaMonitoreo!.trim() == '') {
       o.fechaMonitoreo = oDFormat.format(DateTime.now());
     }
 
     String idBuild = '<CUI>_IDE_<FECHA_MONITOREO>';
-    idBuild = idBuild.replaceAll('<CIU>', o.cui);
-    idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo);
+    idBuild = idBuild.replaceAll('<CIU>', o.cui!);
+    idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
     o.idMonitoreo = idBuild;
 
     /*
@@ -119,19 +119,19 @@ class MainController extends GetxController {
     */
     try {
       List<TramaProyectoModel> aSearh =
-          await Get.find<MainService>().getProyectoById(o.cui);
+          await Get.find<MainService>().getProyectoById(o.cui!);
       if (aSearh != null && aSearh.length > 0) {
         TramaProyectoModel oProyecto = aSearh[0];
-        if (o.snip.trim() == '') {
+        if (o.snip!.trim() == '') {
           o.snip = oProyecto.numSnip;
         }
-        if (o.tambo.trim() == '') {
+        if (o.tambo!.trim() == '') {
           o.tambo = oProyecto.tambo;
         }
-        if (o.fechaTerminoEstimado.trim() == '') {
+        if (o.fechaTerminoEstimado!.trim() == '') {
           o.fechaTerminoEstimado = oProyecto.fechaTerminoEstimado;
         }
-        if (o.avanceFisicoAcumulado.trim() == '') {
+        if (o.avanceFisicoAcumulado!.trim() == '') {
           o.avanceFisicoAcumulado = oProyecto.avanceFisico;
         }
       }
@@ -155,23 +155,23 @@ class MainController extends GetxController {
     */
 
     bool isComplete = true;
-    if (o.latitud.trim() == '') {
+    if (o.latitud!.trim() == '') {
       isComplete = false;
-    } else if (o.longitud.trim() == '') {
+    } else if (o.longitud!.trim() == '') {
       isComplete = false;
-    } else if (o.fechaTerminoEstimado.trim() == '') {
+    } else if (o.fechaTerminoEstimado!.trim() == '') {
       isComplete = false;
-    } else if (o.actividadPartidaEjecutada.trim() == '') {
+    } else if (o.actividadPartidaEjecutada!.trim() == '') {
       isComplete = false;
-    } else if (o.alternativaSolucion.trim() == '') {
+    } else if (o.alternativaSolucion!.trim() == '') {
       isComplete = false;
-    } else if (o.avanceFisicoAcumulado.trim() == '') {
+    } else if (o.avanceFisicoAcumulado!.trim() == '') {
       isComplete = false;
-    } else if (o.estadoAvance.trim() == '') {
+    } else if (o.estadoAvance!.trim() == '') {
       isComplete = false;
-    } else if (o.imgActividad.trim() == '') {
+    } else if (o.imgActividad!.trim() == '') {
       isComplete = false;
-    } else if (o.problemaIdentificado.trim() == '') {
+    } else if (o.problemaIdentificado!.trim() == '') {
       isComplete = false;
     }
 

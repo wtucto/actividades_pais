@@ -171,106 +171,106 @@ class TramaMonitoreoModel {
   ];
 
   int? id = 0;
-  int isEdit = 0;
+  int? isEdit = 0;
   DateTime? createdTime = null;
 
   ///identificador autogenerado (CUI_IDE_FechaMonitoreo)
-  String idMonitoreo = '';
+  String? idMonitoreo = '';
 
   /// Código único del proyecto
-  String cui = '';
+  String? cui = '';
 
   /// Código de SNIP del proyecto
-  String snip = '';
+  String? snip = '';
 
   /// nombre del proyecto
-  String tambo = '';
+  String? tambo = '';
 
   ///(Obligatorio) Latitud del monitoreo: si el APP está en OnLine: se debe obtener automáticamente. Si el APP está en Offline: no se muestra valor.
-  String latitud = '';
+  String? latitud = '';
 
   /// (Obligatorio) Longitud del monitoreo: si el APP está en OnLine: se debe obtener automáticamente. Si el APP está en Offline: no se muestra valor.
-  String longitud = '';
+  String? longitud = '';
 
   /// (Obligatorio) Fecha Termino Estimada Obra: se obtiene de los datos generales del proyecto como referencia, y luego el usuario puede modificar su valor.
-  String fechaTerminoEstimado = '';
+  String? fechaTerminoEstimado = '';
 
   /// (Obligatorio) Partida ejecutada: selección de partida
-  String actividadPartidaEjecutada = '';
+  String? actividadPartidaEjecutada = '';
 
   /// (Obligatorio) Alternativa de Solución: selección de la solución.
-  String alternativaSolucion = '';
+  String? alternativaSolucion = '';
 
   /// (Obligatorio) % Avance Físico Estimado Acumulado: se obtiene de los datos generales del proyecto como referencia, y luego el usuario puede modificar su valor.
-  String avanceFisicoAcumulado = '';
+  String? avanceFisicoAcumulado = '';
 
   ///% Av. Físico Acum. Partida: % Avance Físico acumulado de la partida
-  String avanceFisicoPartida = '';
+  String? avanceFisicoPartida = '';
 
   /// (Obligatorio) Estado de Avance: selección del estado.
-  String estadoAvance = '';
+  String? estadoAvance = '';
 
   /// Estado del Registro del Monitoreo
-  String estadoMonitoreo = '';
+  String? estadoMonitoreo = '';
 
   /// (Obligatorio) se muestra la fecha del sistema APP por defecto (sólo lectura).
-  String fechaMonitoreo = '';
+  String? fechaMonitoreo = '';
 
   // (Obligatorio) Fotos de la partida ejecutada
-  String imgActividad = '';
+  String? imgActividad = '';
 
   /// (Opcional) Fotos del problema identificado
-  String imgProblema = '';
+  String? imgProblema = '';
 
   /// (Opcional) Fotos del riesgo identificado
-  String imgRiesgo = '';
+  String? imgRiesgo = '';
 
   /// Observaciones: descripción de la observación sobre la ejecución de la partida
-  String observaciones = '';
+  String? observaciones = '';
 
   /// (Obligatorio) Problema identificado: selección del problema identificado en la obra.
-  String problemaIdentificado = '';
+  String? problemaIdentificado = '';
 
   /// (Opcional) Riesgo Identificado: selección del riesgo identificado.
-  String riesgoIdentificado = '';
+  String? riesgoIdentificado = '';
 
   /// (Opcional) Nivel de Riesgo: selección del nivel de riesgo.
-  String nivelRiesgo = '';
+  String? nivelRiesgo = '';
 
-  String idUsuario = '';
-  String usuario = '';
-  String rol = '';
+  String? idUsuario = '';
+  String? usuario = '';
+  String? rol = '';
 
   TramaMonitoreoModel.empty() {}
 
   TramaMonitoreoModel({
-    required this.id,
-    required this.isEdit,
-    required this.createdTime,
-    required this.snip,
-    required this.cui,
-    required this.latitud,
-    required this.longitud,
-    required this.tambo,
-    required this.fechaTerminoEstimado,
-    required this.actividadPartidaEjecutada,
-    required this.alternativaSolucion,
-    required this.avanceFisicoAcumulado,
-    required this.avanceFisicoPartida,
-    required this.estadoAvance,
-    required this.estadoMonitoreo,
-    required this.fechaMonitoreo,
-    required this.idMonitoreo,
-    required this.idUsuario,
-    required this.imgActividad,
-    required this.imgProblema,
-    required this.imgRiesgo,
-    required this.observaciones,
-    required this.problemaIdentificado,
-    required this.riesgoIdentificado,
-    required this.nivelRiesgo,
-    required this.rol,
-    required this.usuario,
+    this.id,
+    this.isEdit,
+    this.createdTime,
+    this.snip,
+    this.cui,
+    this.latitud,
+    this.longitud,
+    this.tambo,
+    this.fechaTerminoEstimado,
+    this.actividadPartidaEjecutada,
+    this.alternativaSolucion,
+    this.avanceFisicoAcumulado,
+    this.avanceFisicoPartida,
+    this.estadoAvance,
+    this.estadoMonitoreo,
+    this.fechaMonitoreo,
+    this.idMonitoreo,
+    this.idUsuario,
+    this.imgActividad,
+    this.imgProblema,
+    this.imgRiesgo,
+    this.observaciones,
+    this.problemaIdentificado,
+    this.riesgoIdentificado,
+    this.nivelRiesgo,
+    this.rol,
+    this.usuario,
   });
 
   TramaMonitoreoModel copy({

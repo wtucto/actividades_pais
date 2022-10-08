@@ -142,13 +142,13 @@ class ListaProyectos extends StatelessWidget {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(listProyecto.tambo,
+                          Text(listProyecto.tambo!,
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500)),
                           const SizedBox(height: 5),
-                          Text(listProyecto.estado,
+                          Text(listProyecto.estado!,
                               style: TextStyle(color: Colors.grey[500])),
                         ]),
                   )
@@ -277,7 +277,7 @@ class ListaProyectos extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  listProyecto.cui,
+                  listProyecto.cui!,
                   style: const TextStyle(
                     color: Color.fromARGB(255, 13, 0, 255),
                     fontSize: 14,
@@ -329,8 +329,8 @@ class CustomSearch extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     List<String> matchQuery = [];
     for (var item in searchJobList) {
-      if ((item.cui).contains(query.toLowerCase()) ||
-          (item.tambo).toLowerCase().contains(query.toLowerCase())) {
+      if ((item.cui!).contains(query.toLowerCase()) ||
+          (item.tambo!).toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add('${item.cui} - ${item.tambo}');
       }
     }

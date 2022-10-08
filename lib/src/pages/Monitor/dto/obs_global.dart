@@ -11,19 +11,19 @@ import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
    */
 class ObsGlobal extends GetxController {
   final active = false.obs;
-  final users = <UserModel>[].obs;
-  final moniteos = <TramaMonitoreoModel>[].obs;
-  final proyectos = <TramaProyectoModel>[].obs;
+  final user = UserModel().obs;
+  final proyecto = TramaProyectoModel().obs;
+  final moniteo = TramaMonitoreoModel().obs;
 
-  List<UserModel> getUsuario() {
-    return users;
+  UserModel getUsuario() {
+    return user.value;
   }
 
-  List<TramaProyectoModel> getProyecto() {
-    return proyectos;
+  TramaProyectoModel getProyecto() {
+    return proyecto.value;
   }
 
-  List<TramaMonitoreoModel> getMonitoreo() {
-    return moniteos;
+  TramaMonitoreoModel getMonitoreo() {
+    return moniteo.value;
   }
 }

@@ -68,115 +68,115 @@ class TramaProyectoFields {
 
 class TramaProyectoModel {
   int? id = 0;
-  int isEdit = 0;
+  int? isEdit = 0;
   DateTime? createdTime = null;
 
   /// Código único del proyecto
-  String cui = "";
+  String? cui = "";
 
   /// Código de SNIP
-  String numSnip = "";
+  String? numSnip = "";
 
   /// Latitud de la ubicación del proyecto
-  String latitud = "";
+  String? latitud = "";
 
   /// Longitud de la ubicación del proyecto
-  String longitud = "";
+  String? longitud = "";
 
   /// Nombre del departamento del ubigeo del proyecto
-  String departamento = "";
+  String? departamento = "";
 
   /// Nombre de la provincia del ubigeo del proyecto
-  String provincia = "";
+  String? provincia = "";
 
   /// Nombre del distrito del ubigeo del proyecto
-  String distrito = "";
+  String? distrito = "";
 
   /// nombre del proyecto
-  String tambo = "";
+  String? tambo = "";
 
   //nombre del centro poblado del ubigeo del proyecto
-  String centroPoblado = "";
+  String? centroPoblado = "";
 
   /// estado del proyecto
-  String estado = "";
+  String? estado = "";
 
   /// sub estado del proyecto
-  String subEstado = "";
+  String? subEstado = "";
 
   /// estado de saneamiento del proyecto
-  String estadoSaneamiento = "";
+  String? estadoSaneamiento = "";
 
   /// modalidad de contratación del proyecto
-  String modalidad = "";
+  String? modalidad = "";
 
   /// fecha de inicio del proyecto
-  String fechaInicio = "";
+  String? fechaInicio = "";
 
   /// fecha de término estimado del proyecto
-  String fechaTerminoEstimado = "";
+  String? fechaTerminoEstimado = "";
 
   /// monto de inversión del proyecto
-  String inversion = "";
+  String? inversion = "";
 
   /// costo ejecutado acumulado del proyecto
-  String costoEjecutado = "";
+  String? costoEjecutado = "";
 
   /// costo estimado final del proyecto
-  String costoEstimadoFinal = "";
+  String? costoEstimadoFinal = "";
 
   /// % Avance físico acumulado
-  String avanceFisico = "";
+  String? avanceFisico = "";
 
   /// nombre del residente
-  String residente = "";
+  String? residente = "";
 
   /// nombre del supervisor
-  String supervisor = "";
+  String? supervisor = "";
 
   /// nombre del coordinador regional del proyecto
-  String crp = "";
+  String? crp = "";
 
   /// código del residente
-  String codResidente = "";
+  String? codResidente = "";
 
   /// código del supervisor
-  String codSupervisor = "";
+  String? codSupervisor = "";
 
   /// código del coordinador regional del proyecto
-  String codCrp = "";
+  String? codCrp = "";
 
   TramaProyectoModel.empty() {}
 
   TramaProyectoModel({
-    required this.id,
-    required this.isEdit,
-    required this.createdTime,
-    required this.numSnip,
-    required this.cui,
-    required this.latitud,
-    required this.longitud,
-    required this.departamento,
-    required this.provincia,
-    required this.distrito,
-    required this.tambo,
-    required this.centroPoblado,
-    required this.estado,
-    required this.subEstado,
-    required this.estadoSaneamiento,
-    required this.modalidad,
-    required this.fechaInicio,
-    required this.fechaTerminoEstimado,
-    required this.inversion,
-    required this.costoEjecutado,
-    required this.costoEstimadoFinal,
-    required this.avanceFisico,
-    required this.residente,
-    required this.supervisor,
-    required this.crp,
-    required this.codResidente,
-    required this.codSupervisor,
-    required this.codCrp,
+    this.id,
+    this.isEdit,
+    this.createdTime,
+    this.numSnip,
+    this.cui,
+    this.latitud,
+    this.longitud,
+    this.departamento,
+    this.provincia,
+    this.distrito,
+    this.tambo,
+    this.centroPoblado,
+    this.estado,
+    this.subEstado,
+    this.estadoSaneamiento,
+    this.modalidad,
+    this.fechaInicio,
+    this.fechaTerminoEstimado,
+    this.inversion,
+    this.costoEjecutado,
+    this.costoEstimadoFinal,
+    this.avanceFisico,
+    this.residente,
+    this.supervisor,
+    this.crp,
+    this.codResidente,
+    this.codSupervisor,
+    this.codCrp,
   });
 
   TramaProyectoModel copy({
