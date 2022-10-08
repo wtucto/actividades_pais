@@ -66,14 +66,108 @@ class TramaMonitoreoFields {
 }
 
 class TramaMonitoreoModel {
-  static final sEstadoINC = "INCOMPLETO";
-  static final sEstadoPEN = "POR ENVIAR";
-  static final sEstadoENV = "ENVIADO";
+  static const sEstadoINC = 'INCOMPLETO';
+  static const sEstadoPEN = 'POR ENVIAR';
+  static const sEstadoENV = 'ENVIADO';
 
-  static final List<String> statusLocal = [
+  static const sAltSol01 = 'Solicitar modificación de Exp. Técnico';
+  static const sAltSol02 = 'Gestionar reunión de coordinación con UPS';
+  static const sAltSol03 = 'Modificar programación de tareas (Fast track)';
+  static const sAltSol04 = 'Modificar programación de tareas (Crashing)';
+  static const sAltSol05 = 'Coordinación con el núcleo ejecutor';
+  static const sAltSol06 = 'Gestionar recursos adicionales';
+  static const sAltSol07 = 'Coordinar reunión con asesoría legal';
+  static const sAltSol08 = 'Incrementar presupuesto para saneamiento legal';
+
+  static const sActPartEjec01 = 'Cimentación';
+  static const sActPartEjec02 = 'Muros y Columnas';
+  static const sActPartEjec03 = 'Techo y Acabados';
+  static const sActPartEjec04 = 'obras Exteriores';
+  static const sActPartEjec05 = 'Equipamiento';
+
+  static const sEstAvan01 = 'Ejecución';
+  static const sEstAvan02 = 'Reinicio';
+  static const sEstAvan03 = 'Paralizado';
+  static const sEstAvan04 = 'Por iniciar';
+
+  static const sProbIden01 = 'Calculo inexacto en duración de las tareas';
+  static const sProbIden02 = 'Retraso en plazos establecidos en el proyecto';
+  static const sProbIden03 = 'Estimación inexacta de los costos';
+  static const sProbIden04 = 'Núcleo ejector no rinde gastos';
+  static const sProbIden05 = 'Limitados recursos y sobre utilizados';
+  static const sProbIden06 = 'Terreno con problemas de saneamiento legal';
+
+  static const sRiesIden01 =
+      'Incumplimiento de las características de los componentes';
+  static const sRiesIden02 = 'Lluvias 1 deslizamientos / Clima';
+  static const sRiesIden03 = 'Asignación de recursos y fondos fuera plazo';
+  static const sRiesIden04 = 'Inadecuada estimación de costos';
+  static const sRiesIden05 = 'Inadecuada programación';
+  static const sRiesIden06 = 'Inadecuada comunicación con UPS';
+
+  static const sNivelRies01 = 'Muy Bajo';
+  static const sNivelRies02 = 'Bajo';
+  static const sNivelRies03 = 'Medio';
+  static const sNivelRies04 = 'Medio Alto';
+  static const sNivelRies05 = 'Alto';
+  static const sNivelRies06 = 'Muy Alto';
+
+  static final List<String> aEstadoMonitoreo = [
     sEstadoINC,
     sEstadoPEN,
     sEstadoENV,
+  ];
+
+  static final List<String> aAlternativaSolucion = [
+    sAltSol01,
+    sAltSol02,
+    sAltSol03,
+    sAltSol04,
+    sAltSol05,
+    sAltSol06,
+    sAltSol07,
+    sAltSol08,
+  ];
+
+  static final List<String> aActividadPartidaEjecutada = [
+    sActPartEjec01,
+    sActPartEjec02,
+    sActPartEjec03,
+    sActPartEjec04,
+    sActPartEjec05,
+  ];
+  static final List<String> aEstadoAvance = [
+    sEstAvan01,
+    sEstAvan02,
+    sEstAvan03,
+    sEstAvan04,
+  ];
+
+  static final List<String> aProblemaIdentificado = [
+    sProbIden01,
+    sProbIden02,
+    sProbIden03,
+    sProbIden04,
+    sProbIden05,
+    sProbIden06,
+  ];
+
+  static final List<String> aRiesgoIdentificado = [
+    sRiesIden01,
+    sRiesIden02,
+    sRiesIden03,
+    sRiesIden04,
+    sRiesIden05,
+    sRiesIden06,
+  ];
+
+  static final List<String> aNivelRiesgo = [
+    sNivelRies01,
+    sNivelRies02,
+    sNivelRies03,
+    sNivelRies04,
+    sNivelRies05,
+    sNivelRies06,
   ];
 
   int? id = 0;
@@ -81,71 +175,71 @@ class TramaMonitoreoModel {
   DateTime? createdTime = null;
 
   ///identificador autogenerado (CUI_IDE_FechaMonitoreo)
-  String idMonitoreo = "";
-
-  /// Código de SNIP del proyecto
-  String snip = "";
+  String idMonitoreo = '';
 
   /// Código único del proyecto
-  String cui = "";
+  String cui = '';
+
+  /// Código de SNIP del proyecto
+  String snip = '';
 
   /// nombre del proyecto
-  String tambo = "";
+  String tambo = '';
 
   ///(Obligatorio) Latitud del monitoreo: si el APP está en OnLine: se debe obtener automáticamente. Si el APP está en Offline: no se muestra valor.
-  String latitud = "";
+  String latitud = '';
 
   /// (Obligatorio) Longitud del monitoreo: si el APP está en OnLine: se debe obtener automáticamente. Si el APP está en Offline: no se muestra valor.
-  String longitud = "";
+  String longitud = '';
 
   /// (Obligatorio) Fecha Termino Estimada Obra: se obtiene de los datos generales del proyecto como referencia, y luego el usuario puede modificar su valor.
-  String fechaTerminoEstimado = "";
+  String fechaTerminoEstimado = '';
 
-  /// (Obligatorio) Partida ejecutada: selección de partida (Cimentación, Muros y Columnas, Techo y Acabados, bras Exteriores, Equipamiento)
-  String actividadPartidaEjecutada = "";
+  /// (Obligatorio) Partida ejecutada: selección de partida
+  String actividadPartidaEjecutada = '';
 
-  /// (Obligatorio) Alternativa de Solución: selección de la solución (Solicitar modificación de Exp. Técnico, Gestionar reunión de coordinación con UPS, Modificar programación de tareas (Fast track), Modificar programación de tareas (Crashing), Coordinación con el núcleo ejecutor, Gestionar recursos adicionales, Coordinar reunión con asesoría legal, Incrementar presupuesto para saneamiento legal ).
-  String alternativaSolucion = "";
+  /// (Obligatorio) Alternativa de Solución: selección de la solución.
+  String alternativaSolucion = '';
 
   /// (Obligatorio) % Avance Físico Estimado Acumulado: se obtiene de los datos generales del proyecto como referencia, y luego el usuario puede modificar su valor.
-  String avanceFisicoAcumulado = "";
+  String avanceFisicoAcumulado = '';
 
   ///% Av. Físico Acum. Partida: % Avance Físico acumulado de la partida
-  String avanceFisicoPartida = "";
+  String avanceFisicoPartida = '';
 
-  /// (Obligatorio) Estado de Avance: selección del estado: Ejecución, Reinicio, Paralizado, Por iniciar.
-  String estadoAvance = "";
+  /// (Obligatorio) Estado de Avance: selección del estado.
+  String estadoAvance = '';
 
-  ///Estado del Registro del Monitoreo: incompleto, por Enviar, Enviado
-  String estadoMonitoreo = "";
+  /// Estado del Registro del Monitoreo
+  String estadoMonitoreo = '';
 
   /// (Obligatorio) se muestra la fecha del sistema APP por defecto (sólo lectura).
-  String fechaMonitoreo = "";
+  String fechaMonitoreo = '';
 
   // (Obligatorio) Fotos de la partida ejecutada
-  String imgActividad = "";
+  String imgActividad = '';
 
   /// (Opcional) Fotos del problema identificado
-  String imgProblema = "";
+  String imgProblema = '';
 
   /// (Opcional) Fotos del riesgo identificado
-  String imgRiesgo = "";
+  String imgRiesgo = '';
 
   /// Observaciones: descripción de la observación sobre la ejecución de la partida
-  String observaciones = "";
+  String observaciones = '';
 
-  /// (Obligatorio) Problema identificado: selección del problema identificado en la obra (Calculo inexacto en duración de las tareas, Retraso en plazos establecidos en el proyecto, Estimación inexacta de los costos, Núcleo ejector no rinde gastos, Limitados recursos y sobre utilizados, Terreno con problemas de saneamiento legal).
-  String problemaIdentificado = "";
+  /// (Obligatorio) Problema identificado: selección del problema identificado en la obra.
+  String problemaIdentificado = '';
 
-  /// (Opcional) Riesgo Identificado: selección del riesgo identificado (Incumplimiento de las características de los componentes, Lluvias 1 deslizamientos / Clima, Asignación de recursos y fondos fuera plazo, Inadecuada estimación de costos, Inadecuada programación, Inadecuada comunicación con UPS).
-  String riesgoIdentificado = "";
+  /// (Opcional) Riesgo Identificado: selección del riesgo identificado.
+  String riesgoIdentificado = '';
 
-  /// (Opcional) Nivel de Riesgo: selección del nivel de riesgo: Muy Bajo, Bajo, Medio, Medio Alto, Alto, Muy Alto.
-  String nivelRiesgo = "";
+  /// (Opcional) Nivel de Riesgo: selección del nivel de riesgo.
+  String nivelRiesgo = '';
 
-  String idUsuario = "";
-  String usuario = "";
-  String rol = "";
+  String idUsuario = '';
+  String usuario = '';
+  String rol = '';
 
   TramaMonitoreoModel.empty() {}
 
@@ -279,7 +373,7 @@ class TramaMonitoreoModel {
             json[TramaMonitoreoFields.riesgoIdentificado] as String,
         nivelRiesgo: json[TramaMonitoreoFields.nivelRiesgo] != null
             ? json[TramaMonitoreoFields.nivelRiesgo] as String
-            : "",
+            : '',
         rol: json[TramaMonitoreoFields.rol] as String,
         usuario: json[TramaMonitoreoFields.usuario] as String,
       );

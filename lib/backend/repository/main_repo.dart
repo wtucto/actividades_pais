@@ -25,6 +25,12 @@ class MainRepository {
     return _dbPnPais.readAllProyectoByUser(0, 0, o);
   }
 
+  Future<List<TramaProyectoModel>> getProyectoById(
+    String sId,
+  ) async {
+    return _dbPnPais.readAProyectoByCUI(sId);
+  }
+
   Future<List<TramaProyectoModel>> getAllProyectoApi() async {
     List<TramaProyectoModel> oUserUp = [];
     final response = await _pnPaisApi.listarTramaProyecto();

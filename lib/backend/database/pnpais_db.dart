@@ -227,7 +227,24 @@ class DatabasePnPais {
         .toList();
   }
 
-  Future<TramaProyectoModel> readProyecto(
+  Future<List<TramaProyectoModel>> readAProyectoByCUI(
+    String sId,
+  ) async {
+    final db = await instance.database;
+
+    dynamic result = await db.query(
+      tableNameTramaProyectos,
+      where: '${TramaProyectoFields.cui} = ?',
+      whereArgs: [sId],
+    );
+
+    if (result.length == 0) return List.empty();
+    return result
+        .map<TramaProyectoModel>((json) => TramaProyectoModel.fromJson(json))
+        .toList();
+  }
+
+  Future<TramaProyectoModel> readProyectoByIdLoc(
     int i,
   ) async {
     final db = await instance.database;

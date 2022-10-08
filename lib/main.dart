@@ -13,12 +13,11 @@ import 'package:flutter/material.dart';
 
 import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/Login/Login.dart';
-import 'package:get/route_manager.dart';
 import 'package:get_it/get_it.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:get/get.dart';
 
-late ObjectBoxDbPnPais OBoxDbPnPais;
+//late ObjectBoxDbPnPais OBoxDbPnPais;
 void main() async {
   DependencyInjection.initialize("DEV");
   //GlobalBindings().dependencies();

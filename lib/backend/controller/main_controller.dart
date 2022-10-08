@@ -3,8 +3,11 @@ import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart'
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 
 class MainController extends GetxController {
+  Logger _log = Logger();
   /*
    SAMPLE USE:
    MainController c = Get.put(MainController());
@@ -56,6 +59,12 @@ class MainController extends GetxController {
     return await Get.find<MainService>().getAllMonitoreo();
   }
 
+  Future<List<TramaProyectoModel>> getProyectoById(
+    String sId,
+  ) async {
+    return await Get.find<MainService>().getProyectoById(sId);
+  }
+
   Future<List<TramaProyectoModel>> getAllProyectoByUser(
     UserModel o,
   ) async {
@@ -68,32 +77,156 @@ class MainController extends GetxController {
     return await Get.find<MainService>().getAllMonitoreoByProyecto(o);
   }
 
-  Future<bool> saveMonitoreo(
+  Future<TramaMonitoreoModel> saveMonitoreo(
     TramaMonitoreoModel o,
   ) async {
-    if (loading.isTrue) return false;
+    DateFormat oDFormat = DateFormat('dd-MM-yyyy');
+
+    if (loading.isTrue) {
+      return Future.error(
+        'Ya hay un proceso en ejecución, espere a que finalice.',
+      );
+    }
+
     loading.value = true;
-    final newUser = await Get.find<MainService>().insertMonitorDb(o);
-    moniteos.value = [newUser];
+
+    if (o.estadoMonitoreo.trim().toUpperCase() ==
+        TramaMonitoreoModel.sEstadoENV) {
+      loading.value = false;
+      return Future.error(
+        'Imposible modificar un Monitoreo con el estado: ${TramaMonitoreoModel.sEstadoENV}',
+      );
+    }
+
+    if (o.cui.trim() == '') {
+      loading.value = false;
+      return Future.error(
+        'Error al procesar el Monitoreo, verifique los siguientes campos: CUI.',
+      );
+    }
+
+    if (o.fechaMonitoreo.trim() == '') {
+      o.fechaMonitoreo = oDFormat.format(DateTime.now());
+    }
+
+    String idBuild = '<CUI>_IDE_<FECHA_MONITOREO>';
+    idBuild = idBuild.replaceAll('<CIU>', o.cui);
+    idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo);
+    o.idMonitoreo = idBuild;
+
+    /*
+      Autocompletar campos con datos del Proyecto
+      - snip -> numSnip
+      - tambo -> tambo
+      - fechaTerminoEstimado -> fechaTerminoEstimado
+      - avanceFisicoAcumulado -> avanceFisico
+    */
+    try {
+      List<TramaProyectoModel> aSearh =
+          await Get.find<MainService>().getProyectoById(o.cui);
+      if (aSearh != null && aSearh.length > 0) {
+        TramaProyectoModel oProyecto = aSearh[0];
+        if (o.snip.trim() == '') {
+          o.snip = oProyecto.numSnip;
+        }
+        if (o.tambo.trim() == '') {
+          o.tambo = oProyecto.tambo;
+        }
+        if (o.fechaTerminoEstimado.trim() == '') {
+          o.fechaTerminoEstimado = oProyecto.fechaTerminoEstimado;
+        }
+        if (o.avanceFisicoAcumulado.trim() == '') {
+          o.avanceFisicoAcumulado = oProyecto.avanceFisico;
+        }
+      }
+    } catch (oError) {
+      _log.e(oError);
+    }
+
+    /*
+      Validar campos OBLIGATORIOS
+      - ID: <cui>_IDE_<fechaMonitoreo>
+      - latitud
+      - longitud
+      - fechaTerminoEstimado
+      - actividadPartidaEjecutada
+      - alternativaSolucion
+      - avanceFisicoAcumulado
+      - estadoAvance
+      - fechaMonitoreo
+      - imgActividad
+      - problemaIdentificado
+    */
+
+    bool isComplete = true;
+    if (o.latitud.trim() == '') {
+      isComplete = false;
+    } else if (o.longitud.trim() == '') {
+      isComplete = false;
+    } else if (o.fechaTerminoEstimado.trim() == '') {
+      isComplete = false;
+    } else if (o.actividadPartidaEjecutada.trim() == '') {
+      isComplete = false;
+    } else if (o.alternativaSolucion.trim() == '') {
+      isComplete = false;
+    } else if (o.avanceFisicoAcumulado.trim() == '') {
+      isComplete = false;
+    } else if (o.estadoAvance.trim() == '') {
+      isComplete = false;
+    } else if (o.imgActividad.trim() == '') {
+      isComplete = false;
+    } else if (o.problemaIdentificado.trim() == '') {
+      isComplete = false;
+    }
+
+    if (isComplete) {
+      o.estadoMonitoreo = TramaMonitoreoModel.sEstadoPEN;
+    } else {
+      o.estadoMonitoreo = TramaMonitoreoModel.sEstadoINC;
+    }
+
+    final aResp = await Get.find<MainService>().insertMonitorDb(o);
+    moniteos.value = [aResp];
     loading.value = false;
 
-    return true;
+    return aResp;
   }
 
-/*
-  Enviar registros a la nuve
-  - Validar que todos los campos requeridos esten completos
-  - Validar que el estado esta en: POR ENVIAR
-  - Validar que se encuentre con conexion a internet
- */
+  /*
+    Enviar registros a la nuve
+    - Validar que todos los campos requeridos esten completos
+    - Validar que el estado esta en: POR ENVIAR
+    - Validar que se encuentre con conexion a internet
+  */
   Future<List<TramaMonitoreoModel>> sendMonitoreo(
-    List<TramaMonitoreoModel> o,
+    List<TramaMonitoreoModel> a,
   ) async {
-    if (loading.isTrue) return [];
+    if (loading.isTrue) {
+      return Future.error(
+        'Ya hay un proceso en ejecución, espere a que finalice.',
+      );
+    }
+
     loading.value = true;
-    final newUser = await Get.find<MainService>().sendMonitoreo(o);
-    loading.value = false;
-    return newUser;
+
+    /// Evaluar que todos los monitoreos de la lista tengan el estado
+    /// POR ENVIAR
+    bool isOk = true;
+    a.forEach((o) {
+      if (o.estadoMonitoreo != TramaMonitoreoModel.sEstadoPEN) {
+        isOk = false;
+      }
+    });
+
+    if (isOk) {
+      final aResp = await Get.find<MainService>().sendMonitoreo(a);
+      return aResp;
+    } else {
+      loading.value = false;
+      return Future.error(
+        'Imposible enviar documentos al servidor debido a que tienen estados diferentes a : ${TramaMonitoreoModel.sEstadoPEN}',
+      );
+    }
   }
 }
 

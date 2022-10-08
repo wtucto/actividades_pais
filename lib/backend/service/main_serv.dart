@@ -48,6 +48,15 @@ class MainService {
     return aFind;
   }
 
+  Future<List<TramaProyectoModel>> getProyectoById(
+    String sId,
+  ) async {
+    ///Obtiene los registros de la DB Local
+    List<TramaProyectoModel> aFind =
+        await Get.find<MainRepository>().getProyectoById(sId);
+    return aFind;
+  }
+
   Future<List<TramaProyectoModel>> getAllProyecto() async {
     return await Get.find<MainRepository>().getAllProyectoDb();
   }
