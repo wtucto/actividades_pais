@@ -4,7 +4,7 @@ String tableNameTramaProyectos = 'listar_trama_proyecto';
 
 class TramaProyectoFields {
   static final List<String> values = [
-    /// Add all fields
+    //// Add all fields
     id,
     isEdit,
     time,
@@ -68,33 +68,82 @@ class TramaProyectoFields {
 
 class TramaProyectoModel {
   int? id = 0;
-  bool isEdit = false;
+  int isEdit = 0;
   DateTime? createdTime = null;
 
-  String numSnip = "";
+  /// Código único del proyecto
   String cui = "";
+
+  /// Código de SNIP
+  String numSnip = "";
+
+  /// Latitud de la ubicación del proyecto
   String latitud = "";
+
+  /// Longitud de la ubicación del proyecto
   String longitud = "";
+
+  /// Nombre del departamento del ubigeo del proyecto
   String departamento = "";
+
+  /// Nombre de la provincia del ubigeo del proyecto
   String provincia = "";
+
+  /// Nombre del distrito del ubigeo del proyecto
   String distrito = "";
+
+  /// nombre del proyecto
   String tambo = "";
+
+  //nombre del centro poblado del ubigeo del proyecto
   String centroPoblado = "";
+
+  /// estado del proyecto
   String estado = "";
+
+  /// sub estado del proyecto
   String subEstado = "";
+
+  /// estado de saneamiento del proyecto
   String estadoSaneamiento = "";
+
+  /// modalidad de contratación del proyecto
   String modalidad = "";
+
+  /// fecha de inicio del proyecto
   String fechaInicio = "";
+
+  /// fecha de término estimado del proyecto
   String fechaTerminoEstimado = "";
+
+  /// monto de inversión del proyecto
   String inversion = "";
+
+  /// costo ejecutado acumulado del proyecto
   String costoEjecutado = "";
+
+  /// costo estimado final del proyecto
   String costoEstimadoFinal = "";
+
+  /// % Avance físico acumulado
   String avanceFisico = "";
+
+  /// nombre del residente
   String residente = "";
+
+  /// nombre del supervisor
   String supervisor = "";
+
+  /// nombre del coordinador regional del proyecto
   String crp = "";
+
+  /// código del residente
   String codResidente = "";
+
+  /// código del supervisor
   String codSupervisor = "";
+
+  /// código del coordinador regional del proyecto
   String codCrp = "";
 
   TramaProyectoModel.empty() {}
@@ -132,7 +181,7 @@ class TramaProyectoModel {
 
   TramaProyectoModel copy({
     int? id,
-    bool? isEdit,
+    int? isEdit,
     DateTime? createdTime,
     String? numSnip,
     String? cui,
@@ -195,11 +244,8 @@ class TramaProyectoModel {
       TramaProyectoModel(
         id: json[TramaProyectoFields.id] as int?,
         isEdit: json[TramaProyectoFields.isEdit] == null
-            ? false
-            : json[TramaProyectoFields.isEdit] == 0 ||
-                    json[TramaProyectoFields.isEdit] == false
-                ? false
-                : true,
+            ? 0
+            : json[TramaProyectoFields.isEdit] as int,
         createdTime: json[TramaProyectoFields.time] != null
             ? DateTime.parse(json[TramaProyectoFields.time] as String)
             : null,
@@ -235,7 +281,7 @@ class TramaProyectoModel {
 
   Map<String, dynamic> toJson() => {
         //TramaProyectoFields.id: id,
-        TramaProyectoFields.isEdit: isEdit ? 1 : 0,
+        TramaProyectoFields.isEdit: isEdit,
         //TramaProyectoFields.time: createdTime.toIso8601String(),
 
         TramaProyectoFields.numSnip: numSnip,

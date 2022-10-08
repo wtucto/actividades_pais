@@ -4,7 +4,7 @@ String tableNameTramaMonitoreos = 'listar_trama_monitoreo';
 
 class TramaMonitoreoFields {
   static final List<String> values = [
-    /// Add all fields
+    ////Add all fields
     id,
     isEdit,
     time,
@@ -30,6 +30,7 @@ class TramaMonitoreoFields {
     observaciones,
     problemaIdentificado,
     riesgoIdentificado,
+    nivelRiesgo,
     rol,
     usuario,
   ];
@@ -59,38 +60,92 @@ class TramaMonitoreoFields {
   static String observaciones = 'observaciones';
   static String problemaIdentificado = 'problemaIdentificado';
   static String riesgoIdentificado = 'riesgoIdentificado';
+  static String nivelRiesgo = 'nivelRiesgo';
   static String rol = 'rol';
   static String usuario = 'usuario';
 }
 
 class TramaMonitoreoModel {
+  static final sEstadoINC = "INCOMPLETO";
+  static final sEstadoPEN = "POR ENVIAR";
+  static final sEstadoENV = "ENVIADO";
+
+  static final List<String> statusLocal = [
+    sEstadoINC,
+    sEstadoPEN,
+    sEstadoENV,
+  ];
+
   int? id = 0;
-  bool isEdit = false;
+  int isEdit = 0;
   DateTime? createdTime = null;
 
-  String snip = "";
-  String cui = "";
-  String latitud = "";
-  String longitud = "";
-  String tambo = "";
-  String fechaTerminoEstimado = "";
-  String actividadPartidaEjecutada = "";
-  String alternativaSolucion = "";
-  String avanceFisicoAcumulado = "";
-  String avanceFisicoPartida = "";
-  String estadoAvance = "";
-  String estadoMonitoreo = "";
-  String fechaMonitoreo = "";
+  ///identificador autogenerado (CUI_IDE_FechaMonitoreo)
   String idMonitoreo = "";
-  String idUsuario = "";
+
+  /// Código de SNIP del proyecto
+  String snip = "";
+
+  /// Código único del proyecto
+  String cui = "";
+
+  /// nombre del proyecto
+  String tambo = "";
+
+  ///(Obligatorio) Latitud del monitoreo: si el APP está en OnLine: se debe obtener automáticamente. Si el APP está en Offline: no se muestra valor.
+  String latitud = "";
+
+  /// (Obligatorio) Longitud del monitoreo: si el APP está en OnLine: se debe obtener automáticamente. Si el APP está en Offline: no se muestra valor.
+  String longitud = "";
+
+  /// (Obligatorio) Fecha Termino Estimada Obra: se obtiene de los datos generales del proyecto como referencia, y luego el usuario puede modificar su valor.
+  String fechaTerminoEstimado = "";
+
+  /// (Obligatorio) Partida ejecutada: selección de partida (Cimentación, Muros y Columnas, Techo y Acabados, bras Exteriores, Equipamiento)
+  String actividadPartidaEjecutada = "";
+
+  /// (Obligatorio) Alternativa de Solución: selección de la solución (Solicitar modificación de Exp. Técnico, Gestionar reunión de coordinación con UPS, Modificar programación de tareas (Fast track), Modificar programación de tareas (Crashing), Coordinación con el núcleo ejecutor, Gestionar recursos adicionales, Coordinar reunión con asesoría legal, Incrementar presupuesto para saneamiento legal ).
+  String alternativaSolucion = "";
+
+  /// (Obligatorio) % Avance Físico Estimado Acumulado: se obtiene de los datos generales del proyecto como referencia, y luego el usuario puede modificar su valor.
+  String avanceFisicoAcumulado = "";
+
+  ///% Av. Físico Acum. Partida: % Avance Físico acumulado de la partida
+  String avanceFisicoPartida = "";
+
+  /// (Obligatorio) Estado de Avance: selección del estado: Ejecución, Reinicio, Paralizado, Por iniciar.
+  String estadoAvance = "";
+
+  ///Estado del Registro del Monitoreo: incompleto, por Enviar, Enviado
+  String estadoMonitoreo = "";
+
+  /// (Obligatorio) se muestra la fecha del sistema APP por defecto (sólo lectura).
+  String fechaMonitoreo = "";
+
+  // (Obligatorio) Fotos de la partida ejecutada
   String imgActividad = "";
+
+  /// (Opcional) Fotos del problema identificado
   String imgProblema = "";
+
+  /// (Opcional) Fotos del riesgo identificado
   String imgRiesgo = "";
+
+  /// Observaciones: descripción de la observación sobre la ejecución de la partida
   String observaciones = "";
+
+  /// (Obligatorio) Problema identificado: selección del problema identificado en la obra (Calculo inexacto en duración de las tareas, Retraso en plazos establecidos en el proyecto, Estimación inexacta de los costos, Núcleo ejector no rinde gastos, Limitados recursos y sobre utilizados, Terreno con problemas de saneamiento legal).
   String problemaIdentificado = "";
+
+  /// (Opcional) Riesgo Identificado: selección del riesgo identificado (Incumplimiento de las características de los componentes, Lluvias 1 deslizamientos / Clima, Asignación de recursos y fondos fuera plazo, Inadecuada estimación de costos, Inadecuada programación, Inadecuada comunicación con UPS).
   String riesgoIdentificado = "";
-  String rol = "";
+
+  /// (Opcional) Nivel de Riesgo: selección del nivel de riesgo: Muy Bajo, Bajo, Medio, Medio Alto, Alto, Muy Alto.
+  String nivelRiesgo = "";
+
+  String idUsuario = "";
   String usuario = "";
+  String rol = "";
 
   TramaMonitoreoModel.empty() {}
 
@@ -119,13 +174,14 @@ class TramaMonitoreoModel {
     required this.observaciones,
     required this.problemaIdentificado,
     required this.riesgoIdentificado,
+    required this.nivelRiesgo,
     required this.rol,
     required this.usuario,
   });
 
   TramaMonitoreoModel copy({
     int? id,
-    bool? isEdit,
+    int? isEdit,
     DateTime? createdTime,
     String? snip,
     String? cui,
@@ -148,6 +204,7 @@ class TramaMonitoreoModel {
     String? observaciones,
     String? problemaIdentificado,
     String? riesgoIdentificado,
+    String? nivelRiesgo,
     String? rol,
     String? usuario,
   }) =>
@@ -178,6 +235,7 @@ class TramaMonitoreoModel {
         observaciones: observaciones ?? this.observaciones,
         problemaIdentificado: problemaIdentificado ?? this.problemaIdentificado,
         riesgoIdentificado: riesgoIdentificado ?? this.riesgoIdentificado,
+        nivelRiesgo: nivelRiesgo ?? this.nivelRiesgo,
         rol: rol ?? this.rol,
         usuario: usuario ?? this.usuario,
       );
@@ -186,11 +244,8 @@ class TramaMonitoreoModel {
       TramaMonitoreoModel(
         id: json[TramaMonitoreoFields.id] as int?,
         isEdit: json[TramaMonitoreoFields.isEdit] == null
-            ? false
-            : json[TramaMonitoreoFields.isEdit] == 0 ||
-                    json[TramaMonitoreoFields.isEdit] == false
-                ? false
-                : true,
+            ? 0
+            : json[TramaMonitoreoFields.isEdit] as int,
         createdTime: json[TramaMonitoreoFields.time] != null
             ? DateTime.parse(json[TramaMonitoreoFields.time] as String)
             : null,
@@ -222,15 +277,17 @@ class TramaMonitoreoModel {
             json[TramaMonitoreoFields.problemaIdentificado] as String,
         riesgoIdentificado:
             json[TramaMonitoreoFields.riesgoIdentificado] as String,
+        nivelRiesgo: json[TramaMonitoreoFields.nivelRiesgo] != null
+            ? json[TramaMonitoreoFields.nivelRiesgo] as String
+            : "",
         rol: json[TramaMonitoreoFields.rol] as String,
         usuario: json[TramaMonitoreoFields.usuario] as String,
       );
 
   Map<String, dynamic> toJson() => {
         //TramaMonitoreoFields.id: id,
-        TramaMonitoreoFields.isEdit: isEdit ? 1 : 0,
+        TramaMonitoreoFields.isEdit: isEdit,
         //TramaMonitoreoFields.time: createdTime.toIso8601String(),
-
         TramaMonitoreoFields.snip: snip,
         TramaMonitoreoFields.cui: cui,
         TramaMonitoreoFields.latitud: latitud,
@@ -253,6 +310,8 @@ class TramaMonitoreoModel {
         TramaMonitoreoFields.observaciones: observaciones,
         TramaMonitoreoFields.problemaIdentificado: problemaIdentificado,
         TramaMonitoreoFields.riesgoIdentificado: riesgoIdentificado,
+        TramaMonitoreoFields.nivelRiesgo: nivelRiesgo,
+
         TramaMonitoreoFields.rol: rol,
         TramaMonitoreoFields.usuario: usuario,
       };
@@ -281,6 +340,7 @@ class TramaMonitoreoModel {
       TramaMonitoreoFields.observaciones: o.observaciones,
       TramaMonitoreoFields.problemaIdentificado: o.problemaIdentificado,
       TramaMonitoreoFields.riesgoIdentificado: o.riesgoIdentificado,
+      TramaMonitoreoFields.nivelRiesgo: o.nivelRiesgo,
       TramaMonitoreoFields.rol: o.rol,
       TramaMonitoreoFields.usuario: o.usuario,
     };

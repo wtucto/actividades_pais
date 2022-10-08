@@ -24,8 +24,12 @@ class UserFields {
 }
 
 class UserModel {
+  static final sRolRES = "RESIDENTE"; // Residente,
+  static final sRolSUP = "SUPERVISOR"; // Supervisor,
+  static final sRolCRP = "CRP"; // (coordinador regional del proyecto)
+
   int? id = 0;
-  bool isEdit = false;
+  int isEdit = 0;
   DateTime? createdTime = null;
 
   String codigo = "";
@@ -47,7 +51,7 @@ class UserModel {
 
   UserModel copy({
     int? id,
-    bool? isEdit,
+    int? isEdit,
     DateTime? createdTime,
     String? codigo,
     String? clave,
@@ -67,10 +71,8 @@ class UserModel {
   static UserModel fromJson(Map<String, Object?> json) => UserModel(
         id: json[UserFields.id] as int?,
         isEdit: json[UserFields.isEdit] == null
-            ? false
-            : json[UserFields.isEdit] == 0 || json[UserFields.isEdit] == false
-                ? false
-                : true,
+            ? 0
+            : json[UserFields.isEdit] as int,
         createdTime: json[UserFields.time] != null
             ? DateTime.parse(json[UserFields.time] as String)
             : null,
@@ -84,7 +86,7 @@ class UserModel {
 
   Map<String, dynamic> toJson() => {
         //UserFields.id: id,
-        UserFields.isEdit: isEdit ? true : false,
+        UserFields.isEdit: isEdit,
         //UserFields.time: createdTime.toIso8601String(),
         UserFields.codigo: codigo,
         UserFields.clave: clave,
