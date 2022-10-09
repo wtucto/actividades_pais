@@ -11,7 +11,7 @@ abstract class BusyIndicator {
             width: double.infinity,
             height: double.infinity,
             color: Colors.white.withOpacity(0.9),
-            child: Center(
+            child: const Center(
               child: CircularProgressIndicator(),
             ), // Center
           ),
@@ -22,6 +22,7 @@ abstract class BusyIndicator {
   }
 
   static hide(BuildContext context) {
+    //Navigator.of(context).pop();
     Navigator.pop(context);
   }
 }

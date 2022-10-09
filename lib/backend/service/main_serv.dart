@@ -48,12 +48,21 @@ class MainService {
     return aFind;
   }
 
-  Future<List<TramaProyectoModel>> getProyectoById(
-    String sId,
+  Future<List<TramaProyectoModel>> getProyectoByCUI(
+    String cui,
   ) async {
     ///Obtiene los registros de la DB Local
     List<TramaProyectoModel> aFind =
-        await Get.find<MainRepository>().getProyectoById(sId);
+        await Get.find<MainRepository>().getProyectoByCUI(cui);
+    return aFind;
+  }
+
+  Future<List<TramaMonitoreoModel>> getMonitoreoByIdMonitor(
+    String idMonitoreo,
+  ) async {
+    ///Obtiene los registros de la DB Local
+    List<TramaMonitoreoModel> aFind =
+        await Get.find<MainRepository>().getMonitoreoByIdMonitor(idMonitoreo);
     return aFind;
   }
 
@@ -175,6 +184,11 @@ class MainService {
     return await Get.find<MainRepository>().getAllMonitoreoDb();
   }
 
+  Future<List<TramaMonitoreoModel>> getAllMonitorPorEnviar() async {
+    //if (await isOnline()) {}
+    return await Get.find<MainRepository>().getAllMonitorPorEnviarDB();
+  }
+
   Future<List<TramaMonitoreoModel>> getAllMonitoreoByProyecto(
     TramaProyectoModel o,
   ) async {
@@ -230,6 +244,13 @@ class MainService {
   }
 
   /// USUARIO APP
+
+  Future<UserModel> insertUserDb(UserModel o) async {
+    UserModel? response = await Get.find<MainRepository>().insertUserDb(o);
+
+    return response;
+  }
+
   Future<List<UserModel>> loadAllUser() async {
     List<UserModel> aNewLoadUser = [];
     if (await isOnline()) {
@@ -265,13 +286,12 @@ class MainService {
     return aDbExist;
   }
 
-  Future<UserModel> getUser(
+  Future<UserModel> getUserByCode(
     String codigo,
   ) async {
     try {
-      List<UserModel> oUserLogin =
-          await Get.find<MainRepository>().readUser(codigo);
-      return oUserLogin[0];
+      UserModel oUser = await Get.find<MainRepository>().readUserByCode(codigo);
+      return oUser;
     } catch (oError) {
       _log.e(oError);
     }

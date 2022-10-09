@@ -2,14 +2,26 @@
 
 import 'dart:async';
 
-import 'package:actividades_pais/util/Constants.dart';
-import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/Login/widgets/botonLog.dart';
 import 'package:actividades_pais/src/pages/Login/customImput.dart';
 import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
-import 'package:get_it/get_it.dart';
+
+import 'package:actividades_pais/util/Constants.dart';
+import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/api/pnpais_api.dart';
+
+SharedPreferences? _prefs;
+bool? checkGuardarDatos = false;
+bool? check = false;
+bool? bRepeat = false;
+
+MainController mainController = MainController();
 
 class LoginPage extends StatefulWidget {
   @override
@@ -17,6 +29,24 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  @override
+  void initState() {
+    loadPreferences();
+    super.initState();
+  }
+
+  loadPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
+    check = _prefs!.getBool("check");
+    if (_prefs != null && check == true) {
+      if (_prefs!.getString("clave") != "") {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => HomePagePais()),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -100,23 +130,90 @@ class _Form extends StatefulWidget {
 
 class __FormState extends State<_Form> {
   final pnPaisApi = GetIt.instance<PnPaisApi>();
-  final emailCtrl = TextEditingController();
+  final emailCtrl = TextEditingController(text: "CIP_119811");
   final passCtrl = TextEditingController();
+  final passCtrl2 = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    Future LoginUser(usn, psw) async {
+    Future LoginUser(usn, psw, rpsw) async {
       //final listarTramaproyecto = await pnPaisApi.listarTramaproyecto();
+
       if (usn == 'PAIS' && psw == 'PAIS') {
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (_) => HomePagePais()));
-      } else {
-        mostrarAlerta(
-            context, 'Login incorrecto', 'Revise sus credenciales nuevamente');
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => HomePagePais()),
+        );
+        return;
       }
-      return '';
+
+      UserModel oUser;
+      try {
+        oUser = await mainController.getUserLogin(usn, '');
+
+        if (oUser.clave == "") {
+          if (bRepeat != true) {
+            setState(() {
+              bRepeat = true;
+            });
+            return;
+          }
+        }
+
+        if (bRepeat == true) {
+          if (psw != rpsw) {
+            mostrarAlerta(
+              context,
+              'Login incorrecto',
+              'Las contraseñas no coinciden. vuelve a intentarlo',
+            );
+            return '';
+          }
+        }
+
+        if (bRepeat == true) {
+          oUser.clave = psw;
+
+          await mainController.insertUser(oUser);
+        } else {
+          oUser = await mainController.getUserLogin(usn, psw);
+        }
+
+        //setState(() { bRepeat = true; });
+
+        if ((oUser.codigo == usn && oUser.clave == psw)) {
+          // mainController.users.value = [oUser];
+
+          //SECCION
+          check = _prefs!.getBool("check");
+          if (_prefs != null && check == true) {
+            _prefs!.setString("clave", oUser.clave!);
+          } else {
+            _prefs!.setString("clave", "");
+          }
+
+          _prefs!.setString("nombres", oUser.nombres!);
+          _prefs!.setString("codigo", oUser.codigo!);
+          _prefs!.setString("rol", oUser.rol!);
+
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (_) => HomePagePais(),
+            ),
+          );
+        } else {
+          mostrarAlerta(
+            context,
+            'Login incorrecto',
+            'Revise sus credenciales nuevamente',
+          );
+        }
+      } catch (oError) {
+        mostrarAlerta(context, 'Login incorrecto', oError.toString());
+      }
+
+      return;
     }
 
     return Container(
@@ -136,12 +233,30 @@ class __FormState extends State<_Form> {
             textController: passCtrl,
             isPassword: true,
           ),
+          if (bRepeat == true)
+            CustomInput(
+              icon: Icons.lock_outline,
+              placeholder: 'Repetir Contraseña',
+              textController: passCtrl2,
+              isPassword: true,
+            ),
           BotonLog(
             text: 'Ingrese',
             onPressed: () {
-              LoginUser(emailCtrl.text, passCtrl.text);
+              LoginUser(emailCtrl.text, passCtrl.text, passCtrl2.text);
             },
-          )
+          ),
+          CheckboxListTile(
+            value: checkGuardarDatos,
+            title: const Text('Recordar'),
+            onChanged: (value) {
+              setState(() {
+                checkGuardarDatos = value!;
+                _prefs!.setBool("check", value);
+              });
+            },
+            secondary: const Icon(Icons.safety_check),
+          ),
         ],
       ),
     );

@@ -244,6 +244,23 @@ class DatabasePnPais {
         .toList();
   }
 
+  Future<List<TramaMonitoreoModel>> readMonitoreoByIdMonitor(
+    String sIdMonitoreo,
+  ) async {
+    final db = await instance.database;
+
+    dynamic result = await db.query(
+      tableNameTramaMonitoreos,
+      where: '${TramaMonitoreoFields.idMonitoreo} = ?',
+      whereArgs: [sIdMonitoreo],
+    );
+
+    if (result.length == 0) return List.empty();
+    return result
+        .map<TramaMonitoreoModel>((json) => TramaMonitoreoModel.fromJson(json))
+        .toList();
+  }
+
   Future<TramaProyectoModel> readProyectoByIdLoc(
     int i,
   ) async {
@@ -298,6 +315,38 @@ class DatabasePnPais {
   }
 
   /// MONITOREO
+  Future<List<TramaMonitoreoModel>> readAllMonitoreoPorEnviar(
+    int? limit,
+    int? offset,
+  ) async {
+    final db = await instance.database;
+    final orderBy = '${TramaMonitoreoFields.idMonitoreo} ASC';
+
+    dynamic result;
+    if (offset! > 0) {
+      result = await db.query(
+        tableNameTramaMonitoreos,
+        where: '${TramaMonitoreoFields.estadoMonitoreo} = ?',
+        whereArgs: [TramaMonitoreoModel.sEstadoPEN],
+        orderBy: orderBy,
+        limit: limit,
+        offset: offset,
+      );
+    } else {
+      result = await db.query(
+        tableNameTramaMonitoreos,
+        where: '${TramaMonitoreoFields.estadoMonitoreo} = ?',
+        whereArgs: [TramaMonitoreoModel.sEstadoPEN],
+        orderBy: orderBy,
+      );
+    }
+
+    if (result.length == 0) return [];
+    return result
+        .map<TramaMonitoreoModel>((json) => TramaMonitoreoModel.fromJson(json))
+        .toList();
+  }
+
   Future<List<TramaMonitoreoModel>> readAllMonitoreo(
     int? limit,
     int? offset,
@@ -439,6 +488,24 @@ class DatabasePnPais {
 
     if (result.length == 0) return [];
     return result.map<UserModel>((json) => UserModel.fromJson(json)).toList();
+  }
+
+  Future<UserModel> readUserByCode(
+    String i,
+  ) async {
+    final db = await instance.database;
+    final maps = await db.query(
+      tableNameUsers,
+      columns: UserFields.values,
+      where: '${UserFields.codigo} = ?',
+      whereArgs: [i],
+    );
+
+    if (maps.isNotEmpty) {
+      return UserModel.fromJson(maps.first);
+    } else {
+      throw Exception('Codigo $i not found');
+    }
   }
 
   Future<UserModel> readUser(

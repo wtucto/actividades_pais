@@ -20,6 +20,9 @@ class MainController extends GetxController {
     await loadInitialData();
   }
 
+  /*
+   Carga todos los registros inicial del sistema de la API REST a la DB local
+   */
   Future<void> loadInitialData() async {
     loading.value = true;
     /*final serv = Get.put(MainService());
@@ -30,6 +33,9 @@ class MainController extends GetxController {
     loading.value = false;
   }
 
+  /*
+   Obtiene la lista de Usuarios en general
+   */
   Future<void> getAllUser() async {
     if (loading.isTrue) return;
     loading.value = true;
@@ -38,41 +44,110 @@ class MainController extends GetxController {
     loading.value = false;
   }
 
+  /*
+   Obtiene los datos del usuario
+   @String codigo
+   @String clave (Opcional)
+   */
   Future<UserModel> getUserLogin(
     String codigo,
     String clave,
   ) async {
-    UserModel oUserLogin =
-        await Get.find<MainService>().getUserLogin(codigo, clave);
-    return oUserLogin;
+    UserModel oUserLogin = await Get.find<MainService>().getUserByCode(codigo);
+
+    if (clave != "") {
+      if (oUserLogin.clave == clave) {
+        return oUserLogin;
+      }
+    } else {
+      return oUserLogin;
+    }
+
+    return Future.error(
+      "Usuario y/o Clave incorrecto, vuelve a intentarlo mas tarde.",
+    );
   }
 
+  /*
+   Actualiza datos del Usuario
+   @UserModel o
+   */
+  Future<UserModel> insertUser(UserModel o) async {
+    try {
+      UserModel oUserLogin = await Get.find<MainService>().insertUserDb(o);
+      return oUserLogin;
+    } catch (oError) {
+      return Future.error(
+        oError.toString(),
+      );
+    }
+  }
+
+  /*
+   Obtiene la lista de Proyectos en general
+   */
   Future<List<TramaProyectoModel>> getAllProyecto() async {
     return await Get.find<MainService>().getAllProyecto();
   }
 
-  Future<List<TramaMonitoreoModel>> getAllMonitor() async {
-    return await Get.find<MainService>().getAllMonitoreo();
-  }
-
-  Future<List<TramaProyectoModel>> getProyectoById(
-    String sId,
-  ) async {
-    return await Get.find<MainService>().getProyectoById(sId);
-  }
-
+  /*
+   Obtiene la lista de proyectos segun el ROL del Usuario
+   @UserModel o
+   */
   Future<List<TramaProyectoModel>> getAllProyectoByUser(
     UserModel o,
   ) async {
     return await Get.find<MainService>().getAllProyectoByUser(o);
   }
 
+  /*
+   Obtiene los datos de generales del proyecto
+   @String CUI
+   */
+  Future<List<TramaProyectoModel>> getProyectoById(
+    String cui,
+  ) async {
+    return await Get.find<MainService>().getProyectoByCUI(cui);
+  }
+
+  /*
+   Obtiene la lista de Monitoreos en general
+   */
+  Future<List<TramaMonitoreoModel>> getAllMonitor() async {
+    return await Get.find<MainService>().getAllMonitoreo();
+  }
+
+  /*
+   Obtiene la lista de Monitoreos cuyo estado sea POR ENVIAR
+   */
+  Future<List<TramaMonitoreoModel>> getAllMonitorPorEnviar() async {
+    return await Get.find<MainService>().getAllMonitorPorEnviar();
+  }
+
+  /*
+   Obtiene la lista de Monitoreos segun el Proyecto seleccionado
+   @TramaProyectoModel o
+   */
   Future<List<TramaMonitoreoModel>> getAllMonitoreoByProyecto(
     TramaProyectoModel o,
   ) async {
     return await Get.find<MainService>().getAllMonitoreoByProyecto(o);
   }
 
+  /*
+   Obtiene los datos de generales del Monitoreo por el idMonitoreo
+   @String idMonitoreo
+   */
+  Future<List<TramaMonitoreoModel>> getMonitoreoById(
+    String sIdMonitoreo,
+  ) async {
+    return await Get.find<MainService>().getMonitoreoByIdMonitor(sIdMonitoreo);
+  }
+
+  /*
+   Guardar/Actualizar nuevo Monitoreo y valida campos requeridos
+   @TramaProyectoModel o
+   */
   Future<TramaMonitoreoModel> saveMonitoreo(
     TramaMonitoreoModel o,
   ) async {
@@ -119,7 +194,7 @@ class MainController extends GetxController {
     */
     try {
       List<TramaProyectoModel> aSearh =
-          await Get.find<MainService>().getProyectoById(o.cui!);
+          await Get.find<MainService>().getProyectoByCUI(o.cui!);
       if (aSearh != null && aSearh.length > 0) {
         TramaProyectoModel oProyecto = aSearh[0];
         if (o.snip!.trim() == '') {

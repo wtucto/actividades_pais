@@ -62,6 +62,9 @@ dependencies:
   dio: ^4.0.6
   get_it: ^7.2.0
   get: ^4.6.5
+  #SECCION
+  shared_preferences: ^2.0.15
+  encrypt: ^5.0.1
 
   #OBJECT BOX
   #objectbox: ^1.6.2

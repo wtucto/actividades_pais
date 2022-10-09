@@ -15,6 +15,16 @@ class ObsGlobal extends GetxController {
   final proyecto = TramaProyectoModel().obs;
   final moniteo = TramaMonitoreoModel().obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+  }
+
   UserModel getUsuario() {
     return user.value;
   }
@@ -26,4 +36,22 @@ class ObsGlobal extends GetxController {
   TramaMonitoreoModel getMonitoreo() {
     return moniteo.value;
   }
+
+  void setUsuario(UserModel o) {
+    user.value = o;
+    update();
+  }
+
+  void setProyecto(TramaProyectoModel o) {
+    proyecto.value = o;
+    update();
+  }
+
+  void setMonitoreo(TramaMonitoreoModel o) {
+    moniteo.value = o;
+    update();
+  }
+
+  //remove (index) => users.removeAt(index);
+
 }

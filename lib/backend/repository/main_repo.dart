@@ -25,10 +25,16 @@ class MainRepository {
     return _dbPnPais.readAllProyectoByUser(0, 0, o);
   }
 
-  Future<List<TramaProyectoModel>> getProyectoById(
-    String sId,
+  Future<List<TramaProyectoModel>> getProyectoByCUI(
+    String cui,
   ) async {
-    return _dbPnPais.readAProyectoByCUI(sId);
+    return _dbPnPais.readAProyectoByCUI(cui);
+  }
+
+  Future<List<TramaMonitoreoModel>> getMonitoreoByIdMonitor(
+    String idMonitoreo,
+  ) async {
+    return _dbPnPais.readMonitoreoByIdMonitor(idMonitoreo);
   }
 
   Future<List<TramaProyectoModel>> getAllProyectoApi() async {
@@ -52,6 +58,10 @@ class MainRepository {
   /// MONITOREO
   Future<List<TramaMonitoreoModel>> getAllMonitoreoDb() async {
     return _dbPnPais.readAllMonitoreo(0, 0);
+  }
+
+  Future<List<TramaMonitoreoModel>> getAllMonitorPorEnviarDB() async {
+    return _dbPnPais.readAllMonitoreoPorEnviar(0, 0);
   }
 
   Future<List<TramaMonitoreoModel>> getAllMonitoreoByIdProyectoDb(
@@ -148,6 +158,13 @@ class MainRepository {
     return oUserUp;
   }
 
+  Future<UserModel> readUserByCode(
+    String codigo,
+  ) async {
+    UserModel oUser = await _dbPnPais.readUserByCode(codigo);
+    return oUser;
+  }
+
   Future<List<UserModel>> readUser(
     String codigo,
   ) async {
@@ -166,8 +183,12 @@ class MainRepository {
     List<UserModel> aUserFilter = [];
     List<UserModel> aUser = await _dbPnPais.readEditUser(true);
     if (aUser.length > 0) {
-      aUserFilter
-          .add(aUser.firstWhere((o) => o.codigo == codigo && o.clave == clave));
+      if (clave.trim() == "") {
+        aUserFilter.add(aUser.firstWhere((o) => o.codigo == codigo));
+      } else {
+        aUserFilter.add(
+            aUser.firstWhere((o) => o.codigo == codigo && o.clave == clave));
+      }
     }
     return aUserFilter;
   }
@@ -175,7 +196,13 @@ class MainRepository {
   Future<UserModel> insertUserDb(
     UserModel o,
   ) async {
-    return await _dbPnPais.insertUser(o);
+    if (o.id! > 0) {
+      o.isEdit = 1;
+      await _dbPnPais.updateUser(o);
+      return o;
+    } else {
+      return await _dbPnPais.insertUser(o);
+    }
   }
 
   Future<bool> deleteUserDb(

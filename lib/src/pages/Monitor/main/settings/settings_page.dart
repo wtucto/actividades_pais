@@ -1,13 +1,20 @@
+import 'package:actividades_pais/src/pages/Login/Login.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/custom_background.dart';
 import 'package:flutter/material.dart';
 
 import 'package:actividades_pais/src/pages/Monitor/main/settings/change_language_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/auth/login_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/auth/change_password_page.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatelessWidget {
+  SharedPreferences? prefs;
+
+  Future<void> loadPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
@@ -79,12 +86,19 @@ class SettingsPage extends StatelessWidget {
                             ListTile(
                               title: Text('LogOut'.tr),
                               leading: Image.asset('assets/icons/sign_out.png'),
-                              onTap: () => Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => LoginScreen()),
-                                (route) => false,
-                              ),
+                              onTap: () async {
+                                await loadPreferences();
+                                if (prefs != null) {
+                                  prefs!.setString("clave", "");
+                                }
+
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => LoginPage()),
+                                  (route) => false,
+                                );
+                              },
                             ),
                           ],
                         ),
