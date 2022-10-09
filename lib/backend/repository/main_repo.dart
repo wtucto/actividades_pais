@@ -196,7 +196,7 @@ class MainRepository {
   Future<UserModel> insertUserDb(
     UserModel o,
   ) async {
-    if (o.id! > 0) {
+    if (o.id != null && o.id! > 0) {
       o.isEdit = 1;
       await _dbPnPais.updateUser(o);
       return o;
