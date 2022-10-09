@@ -204,9 +204,9 @@ class _MonitorListState extends State<MonitorList> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MonitoringDetailNewEditPage(),
-                        ));
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //   builder: (context) => MonitoringDetailNewEditPage(),
+                        // ));
                       },
                       child: AnimatedContainer(
                         height: 35,
@@ -235,9 +235,9 @@ class _MonitorListState extends State<MonitorList> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MonitoringDetailNewEditPage(),
-                        ));
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //   builder: (context) => MonitoringDetailNewEditPage(),
+                        // ));
                       },
                       child: AnimatedContainer(
                         height: 35,

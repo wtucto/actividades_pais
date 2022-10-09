@@ -1,16 +1,19 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
+import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
+import 'package:actividades_pais/src/pages/Monitor/dto/obs_global.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 
-import 'package:actividades_pais/util/Constants.dart';
 import 'package:get/get.dart';
 
-const options = ['BAJO', 'MEDIO', 'ALTO'];
+final options = TramaMonitoreoModel.aNivelRiesgo;
 
 class MonitoringDetailNewEditPage extends StatefulWidget {
-  const MonitoringDetailNewEditPage({Key? key}) : super(key: key);
+  final TramaProyectoModel datoProyecto;
+  MonitoringDetailNewEditPage({Key? key, required this.datoProyecto})
+      : super(key: key);
 
   @override
   _MonitoringDetailNewEditPageState createState() =>
@@ -29,7 +32,8 @@ class _MonitoringDetailNewEditPageState
   final _formKey = GlobalKey<FormState>();
   final _idMonitor = TextEditingController();
   final _statusMonitor = TextEditingController();
-  final _dateMonitor = TextEditingController();
+  final _dateMonitor = TextEditingController(
+      text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
   final _advanceFEA = TextEditingController();
   final _itemStatusAdvance = ['Reinicio', 'Final'];
   final _advanceFEP = TextEditingController();
@@ -128,6 +132,7 @@ class _MonitoringDetailNewEditPageState
           TextFormField(
             controller: _dateMonitor,
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+            enabled: false,
             decoration: const InputDecoration(
                 //icon: Icon(Icons.calendar_today), //icon of text field
                 labelText: 'Fecha Monitoreo *' //label text of field
@@ -143,17 +148,8 @@ class _MonitoringDetailNewEditPageState
                   lastDate: DateTime(2101));
 
               if (pickedDate != null) {
-                print(
-                    pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                String formattedDate =
-                    DateFormat('yyyy-MM-dd').format(pickedDate);
-                print(
-                    formattedDate); //formatted date output using intl package =>  2021-03-16
-                //you can implement different kind of Date Format here according to your requirement
-
                 setState(() {
-                  _dateMonitor.text =
-                      formattedDate; //set output date to TextField value.
+                  _dateMonitor.text = _dateMonitor.text;
                 });
               }
             },

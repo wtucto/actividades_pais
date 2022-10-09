@@ -2,12 +2,17 @@ import 'dart:async';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
+import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/src/pages/Monitor/dto/obs_global.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_list_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/project_detail_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+SharedPreferences? _prefs;
 
 class MainFooterProjectPage extends StatefulWidget {
   const MainFooterProjectPage({Key? key}) : super(key: key);
@@ -17,74 +22,74 @@ class MainFooterProjectPage extends StatefulWidget {
 }
 
 class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
-  late final ScrollController _horizontal;
-  late final ScrollController _vertical;
   List<TramaProyectoModel> jobList = [];
   MainController mainController = MainController();
 
+  @override
+  void initState() {
+    loadPreferences();
+    super.initState();
+    readJson();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  loadPreferences() async {}
+
   Future<void> readJson() async {
+    _prefs = await SharedPreferences.getInstance();
+    UserModel oUser = UserModel(
+      nombres: _prefs!.getString("nombres") ?? "",
+      codigo: _prefs!.getString("codigo") ?? "",
+      rol: _prefs!.getString("rol") ?? "",
+    );
     final List<TramaProyectoModel> response =
-        await mainController.getAllProyecto();
+        await mainController.getAllProyectoByUser(oUser);
     setState(() {
       jobList = response;
     });
   }
 
   @override
-  void initState() {
-    super.initState();
-    _horizontal = ScrollController();
-    _vertical = ScrollController();
-    readJson();
-  }
-
-  @override
-  void dispose() {
-    _horizontal.dispose();
-    _vertical.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scrollbar(
-      controller: _horizontal,
-      child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        appBar: AppBar(
-          title: Center(
-            child: Text(
-              'ProjectListTitle'.tr,
-              style: const TextStyle(
-                color: Color(0xfffefefe),
-                fontWeight: FontWeight.w600,
-                fontStyle: FontStyle.normal,
-                fontSize: 18.0,
-              ),
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            'ProjectListTitle'.tr,
+            style: const TextStyle(
+              color: Color(0xfffefefe),
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+              fontSize: 18.0,
             ),
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                showSearch(
-                  context: context,
-                  delegate: CustomSearch(jobList),
-                );
-              },
-            ),
-          ],
         ),
-        body: Container(
-          child: ListView.builder(
-            padding: const EdgeInsets.all(10),
-            itemCount: jobList.length,
-            itemBuilder: (context, index) {
-              //return jobList;
-              return ListaProyectos(
-                  context: context, listProyecto: jobList[index]);
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: CustomSearch(jobList),
+              );
             },
           ),
+        ],
+      ),
+      body: Container(
+        child: ListView.builder(
+          padding: const EdgeInsets.all(10),
+          itemCount: jobList.length,
+          itemBuilder: (context, index) {
+            //return jobList;
+            return ListaProyectos(
+                context: context, listProyecto: jobList[index]);
+          },
         ),
       ),
     );
@@ -193,10 +198,15 @@ class ListaProyectos extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              const MonitoringDetailNewEditPage(),
-                        ));
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          // c.proyecto.value = listProyecto;
+
+                          // datoProyecto.cui = listProyecto.cui;
+
+                          return MonitoringDetailNewEditPage(
+                              datoProyecto: listProyecto);
+                        }));
                       },
                       child: AnimatedContainer(
                         height: 35,
