@@ -27,19 +27,22 @@ class MainController extends GetxController {
     loading.value = true;
     /*final serv = Get.put(MainService());
     users.value = await serv.loadAllUser();*/
-    proyectos.value = await Get.find<MainService>().loadAllProyecto();
-    moniteos.value = await Get.find<MainService>().getAllMonitoreo();
-    users.value = await Get.find<MainService>().loadAllUser();
+    proyectos.value = await Get.find<MainService>().loadAllProyecto(0, 0);
+    moniteos.value = await Get.find<MainService>().getAllMonitoreo(0, 0);
+    users.value = await Get.find<MainService>().loadAllUser(0, 0);
     loading.value = false;
   }
 
   /*
    Obtiene la lista de Usuarios en general
    */
-  Future<void> getAllUser() async {
+  Future<void> getAllUser(
+    int? limit,
+    int? offset,
+  ) async {
     if (loading.isTrue) return;
     loading.value = true;
-    final newUser = await Get.find<MainService>().getAllUser();
+    final newUser = await Get.find<MainService>().getAllUser(limit, offset);
     users.value = newUser;
     loading.value = false;
   }
@@ -86,8 +89,11 @@ class MainController extends GetxController {
   /*
    Obtiene la lista de Proyectos en general
    */
-  Future<List<TramaProyectoModel>> getAllProyecto() async {
-    return await Get.find<MainService>().getAllProyecto();
+  Future<List<TramaProyectoModel>> getAllProyecto(
+    int? limit,
+    int? offset,
+  ) async {
+    return await Get.find<MainService>().getAllProyecto(limit, offset);
   }
 
   /*
@@ -96,8 +102,10 @@ class MainController extends GetxController {
    */
   Future<List<TramaProyectoModel>> getAllProyectoByUser(
     UserModel o,
+    int? limit,
+    int? offset,
   ) async {
-    return await Get.find<MainService>().getAllProyectoByUser(o);
+    return await Get.find<MainService>().getAllProyectoByUser(o, limit, offset);
   }
 
   /*
@@ -113,15 +121,21 @@ class MainController extends GetxController {
   /*
    Obtiene la lista de Monitoreos en general
    */
-  Future<List<TramaMonitoreoModel>> getAllMonitor() async {
-    return await Get.find<MainService>().getAllMonitoreo();
+  Future<List<TramaMonitoreoModel>> getAllMonitor(
+    int? limit,
+    int? offset,
+  ) async {
+    return await Get.find<MainService>().getAllMonitoreo(limit, offset);
   }
 
   /*
    Obtiene la lista de Monitoreos cuyo estado sea POR ENVIAR
    */
-  Future<List<TramaMonitoreoModel>> getAllMonitorPorEnviar() async {
-    return await Get.find<MainService>().getAllMonitorPorEnviar();
+  Future<List<TramaMonitoreoModel>> getAllMonitorPorEnviar(
+    int? limit,
+    int? offset,
+  ) async {
+    return await Get.find<MainService>().getAllMonitorPorEnviar(limit, offset);
   }
 
   /*
@@ -130,8 +144,11 @@ class MainController extends GetxController {
    */
   Future<List<TramaMonitoreoModel>> getAllMonitoreoByProyecto(
     TramaProyectoModel o,
+    int? limit,
+    int? offset,
   ) async {
-    return await Get.find<MainService>().getAllMonitoreoByProyecto(o);
+    return await Get.find<MainService>()
+        .getAllMonitoreoByProyecto(o, limit, offset);
   }
 
   /*

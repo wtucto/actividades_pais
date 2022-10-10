@@ -15,14 +15,19 @@ class MainRepository {
   MainRepository(this._pnPaisApi, this._dbPnPais);
 
   /// PROYECTO
-  Future<List<TramaProyectoModel>> getAllProyectoDb() async {
-    return _dbPnPais.readAllProyecto(0, 0);
+  Future<List<TramaProyectoModel>> getAllProyectoDb(
+    int? limit,
+    int? offset,
+  ) async {
+    return _dbPnPais.readAllProyecto(limit, offset);
   }
 
   Future<List<TramaProyectoModel>> getAllProyectoByUser(
     UserModel o,
+    int? limit,
+    int? offset,
   ) async {
-    return _dbPnPais.readAllProyectoByUser(0, 0, o);
+    return _dbPnPais.readAllProyectoByUser(limit, offset, o);
   }
 
   Future<List<TramaProyectoModel>> getProyectoByCUI(
@@ -56,18 +61,26 @@ class MainRepository {
   }
 
   /// MONITOREO
-  Future<List<TramaMonitoreoModel>> getAllMonitoreoDb() async {
-    return _dbPnPais.readAllMonitoreo(0, 0);
+  Future<List<TramaMonitoreoModel>> getAllMonitoreoDb(
+    int? limit,
+    int? offset,
+  ) async {
+    return _dbPnPais.readAllMonitoreo(limit, offset);
   }
 
-  Future<List<TramaMonitoreoModel>> getAllMonitorPorEnviarDB() async {
-    return _dbPnPais.readAllMonitoreoPorEnviar(0, 0);
+  Future<List<TramaMonitoreoModel>> getAllMonitorPorEnviarDB(
+    int? limit,
+    int? offset,
+  ) async {
+    return _dbPnPais.readAllMonitoreoPorEnviar(limit, offset);
   }
 
   Future<List<TramaMonitoreoModel>> getAllMonitoreoByIdProyectoDb(
     TramaProyectoModel o,
+    int? limit,
+    int? offset,
   ) async {
-    return _dbPnPais.readAllMonitoreoByIdProyecto(0, 0, o);
+    return _dbPnPais.readAllMonitoreoByIdProyecto(limit, offset, o);
   }
 
   Future<List<TramaMonitoreoModel>> getAllMonitoreoApi() async {
@@ -110,6 +123,12 @@ class MainRepository {
     return await _dbPnPais.insertMonitoreo(o);
   }
 
+  Future<int> updateMonitoreoDb(
+    TramaMonitoreoModel o,
+  ) async {
+    return await _dbPnPais.updateMonitoreo(o);
+  }
+
   Future<List<TramaMonitoreoModel>> upLoadAllMonitoreo(
     List<TramaMonitoreoModel> aUser,
   ) async {
@@ -143,8 +162,11 @@ class MainRepository {
     return aUser;
   }
 
-  Future<List<UserModel>> getAllUserDb() async {
-    return _dbPnPais.readAllUser(0, 0);
+  Future<List<UserModel>> getAllUserDb(
+    int? limit,
+    int? offset,
+  ) async {
+    return _dbPnPais.readAllUser(limit, offset);
   }
 
   Future<List<UserModel>> getAllUserApi() async {

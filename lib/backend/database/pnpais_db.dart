@@ -162,7 +162,7 @@ class DatabasePnPais {
     final orderBy = '${TramaProyectoFields.numSnip} ASC';
 
     dynamic result;
-    if (offset! > 0) {
+    if (limit! > 0) {
       result = await db.query(
         tableNameTramaProyectos,
         orderBy: orderBy,
@@ -203,7 +203,7 @@ class DatabasePnPais {
 
     if (sWahere == '') return [];
 
-    if (offset! > 0) {
+    if (limit! > 0) {
       result = await db.query(
         tableNameTramaProyectos,
         where: '$sWahere = ?',
@@ -323,7 +323,7 @@ class DatabasePnPais {
     final orderBy = '${TramaMonitoreoFields.idMonitoreo} ASC';
 
     dynamic result;
-    if (offset! > 0) {
+    if (limit! > 0) {
       result = await db.query(
         tableNameTramaMonitoreos,
         where: '${TramaMonitoreoFields.estadoMonitoreo} = ?',
@@ -355,7 +355,7 @@ class DatabasePnPais {
     final orderBy = '${TramaMonitoreoFields.idMonitoreo} ASC';
 
     dynamic result;
-    if (offset! > 0) {
+    if (limit! > 0) {
       result = await db.query(
         tableNameTramaMonitoreos,
         orderBy: orderBy,
@@ -384,7 +384,7 @@ class DatabasePnPais {
     final orderBy = '${TramaMonitoreoFields.idMonitoreo} ASC';
 
     dynamic result;
-    if (offset! > 0) {
+    if (limit! > 0) {
       result = await db.query(
         tableNameTramaMonitoreos,
         where: '${TramaMonitoreoFields.cui} = ?',
@@ -472,7 +472,7 @@ class DatabasePnPais {
     //SELECT * FROM $tableNameUsers ORDER BY ASC
     final orderBy = '${UserFields.time} ASC';
     dynamic result;
-    if (offset! > 0) {
+    if (limit! > 0) {
       result = await db.query(
         tableNameUsers,
         orderBy: orderBy,

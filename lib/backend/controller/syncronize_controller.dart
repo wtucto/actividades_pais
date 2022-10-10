@@ -12,7 +12,7 @@ class SyncronizeData {
 
   Future<void> syncAlllUser(TramaMonitoreoModel o) async {
     if (await isOnline()) {
-      Get.find<MainService>().syncAllTramaMonitoreoModel();
+      Get.find<MainService>().syncAllTramaMonitoreoModel(0, 0);
     }
   }
 }

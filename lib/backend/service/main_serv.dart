@@ -18,10 +18,12 @@ class MainService {
   /// PROYECTO
   Future<List<TramaProyectoModel>> getAllProyectoByUser(
     UserModel o,
+    int? limit,
+    int? offset,
   ) async {
     ///Obtiene los registros de la DB Local
     List<TramaProyectoModel> aFind =
-        await Get.find<MainRepository>().getAllProyectoByUser(o);
+        await Get.find<MainRepository>().getAllProyectoByUser(o, limit, offset);
 
     /*
     if (aDb.length > 0) {
@@ -66,18 +68,24 @@ class MainService {
     return aFind;
   }
 
-  Future<List<TramaProyectoModel>> getAllProyecto() async {
-    return await Get.find<MainRepository>().getAllProyectoDb();
+  Future<List<TramaProyectoModel>> getAllProyecto(
+    int? limit,
+    int? offset,
+  ) async {
+    return await Get.find<MainRepository>().getAllProyectoDb(limit, offset);
   }
 
-  Future<List<TramaProyectoModel>> loadAllProyecto() async {
+  Future<List<TramaProyectoModel>> loadAllProyecto(
+    int? limit,
+    int? offset,
+  ) async {
     List<TramaProyectoModel> aNewProject = [];
 
     ///Verifica que tenga conexion a internet
     if (await isOnline()) {
       ///Obtiene los registros de la DB Local
       List<TramaProyectoModel> aDb =
-          await Get.find<MainRepository>().getAllProyectoDb();
+          await Get.find<MainRepository>().getAllProyectoDb(limit, offset);
 
       ///Obtiene los registros de la nuve consumiento la API REST
       List<TramaProyectoModel> aApi =
@@ -121,16 +129,19 @@ class MainService {
 
     /// Obtiene y retorna todos los registros almacenados en la DB local
     List<TramaProyectoModel> aDbExist =
-        await Get.find<MainRepository>().getAllProyectoDb();
+        await Get.find<MainRepository>().getAllProyectoDb(limit, offset);
     return aDbExist;
   }
 
   /// MONITOREO
-  Future<List<TramaMonitoreoModel>> loadAllMonitoreo() async {
+  Future<List<TramaMonitoreoModel>> loadAllMonitoreo(
+    int? limit,
+    int? offset,
+  ) async {
     List<TramaMonitoreoModel> aNewProject = [];
     if (await isOnline()) {
       List<TramaMonitoreoModel> aDb =
-          await Get.find<MainRepository>().getAllMonitoreoDb();
+          await Get.find<MainRepository>().getAllMonitoreoDb(limit, offset);
       List<TramaMonitoreoModel> aApi =
           await Get.find<MainRepository>().getAllMonitoreoApi();
 
@@ -144,6 +155,15 @@ class MainService {
             _log.e(oError);
           }
           if (oDataFind != null || oDataFind!.id == 0) {
+            if (oDataFind.estadoMonitoreo != TramaMonitoreoModel.sEstadoENV) {
+              /*
+                Si el estado del monitoreo en la nuve es diferente a la data local, 
+                se actualiza el registro local.
+               */
+              oApi.id = oDataFind.id;
+              oApi.isEdit = 0;
+              await Get.find<MainRepository>().updateMonitoreoDb(oApi);
+            }
             continue;
           }
         }
@@ -161,13 +181,17 @@ class MainService {
     _log.i("Nuevos monitoreos cargados: ${aNewProject.length}");
 
     List<TramaMonitoreoModel> aDbExist =
-        await Get.find<MainRepository>().getAllMonitoreoDb();
+        await Get.find<MainRepository>().getAllMonitoreoDb(limit, offset);
     return aDbExist;
   }
 
-  Future<List<TramaMonitoreoModel>> fetchAllTramaMonitoreoModel() async {
+  Future<List<TramaMonitoreoModel>> fetchAllTramaMonitoreoModel(
+    int? limit,
+    int? offset,
+  ) async {
     List<TramaMonitoreoModel> aTramaMonitoreoModel = [];
-    aTramaMonitoreoModel = await Get.find<MainRepository>().getAllMonitoreoDb();
+    aTramaMonitoreoModel =
+        await Get.find<MainRepository>().getAllMonitoreoDb(limit, offset);
     return aTramaMonitoreoModel;
   }
 
@@ -179,30 +203,42 @@ class MainService {
     return aTramaMonitoreoModel;
   }
 
-  Future<List<TramaMonitoreoModel>> getAllMonitoreo() async {
+  Future<List<TramaMonitoreoModel>> getAllMonitoreo(
+    int? limit,
+    int? offset,
+  ) async {
     //if (await isOnline()) {}
-    return await Get.find<MainRepository>().getAllMonitoreoDb();
+    return await Get.find<MainRepository>().getAllMonitoreoDb(limit, offset);
   }
 
-  Future<List<TramaMonitoreoModel>> getAllMonitorPorEnviar() async {
+  Future<List<TramaMonitoreoModel>> getAllMonitorPorEnviar(
+    int? limit,
+    int? offset,
+  ) async {
     //if (await isOnline()) {}
-    return await Get.find<MainRepository>().getAllMonitorPorEnviarDB();
+    return await Get.find<MainRepository>()
+        .getAllMonitorPorEnviarDB(limit, offset);
   }
 
   Future<List<TramaMonitoreoModel>> getAllMonitoreoByProyecto(
     TramaProyectoModel o,
+    int? limit,
+    int? offset,
   ) async {
     ///Obtiene los registros de la DB Local
-    List<TramaMonitoreoModel> aFind =
-        await Get.find<MainRepository>().getAllMonitoreoByIdProyectoDb(o);
+    List<TramaMonitoreoModel> aFind = await Get.find<MainRepository>()
+        .getAllMonitoreoByIdProyectoDb(o, limit, offset);
 
     return aFind;
   }
 
-  Future<List<TramaMonitoreoModel>> getAllSyncMonitoreo() async {
+  Future<List<TramaMonitoreoModel>> getAllSyncMonitoreo(
+    int? limit,
+    int? offset,
+  ) async {
     List<TramaMonitoreoModel> aFilter = [];
     List<TramaMonitoreoModel> aDb =
-        await Get.find<MainRepository>().getAllMonitoreoDb();
+        await Get.find<MainRepository>().getAllMonitoreoDb(limit, offset);
 
     for (TramaMonitoreoModel oDb in aDb) {
       if (aDb.length > 0) {
@@ -237,8 +273,11 @@ class MainService {
     return [];
   }
 
-  Future syncAllTramaMonitoreoModel() async {
-    await fetchAllTramaMonitoreoModel().then((a) async {
+  Future syncAllTramaMonitoreoModel(
+    int? limit,
+    int? offset,
+  ) async {
+    await fetchAllTramaMonitoreoModel(limit, offset).then((a) async {
       await mergeAllTramaMonitoreoModel(a);
     });
   }
@@ -251,10 +290,14 @@ class MainService {
     return response;
   }
 
-  Future<List<UserModel>> loadAllUser() async {
+  Future<List<UserModel>> loadAllUser(
+    int? limit,
+    int? offset,
+  ) async {
     List<UserModel> aNewLoadUser = [];
     if (await isOnline()) {
-      List<UserModel> aDb = await Get.find<MainRepository>().getAllUserDb();
+      List<UserModel> aDb =
+          await Get.find<MainRepository>().getAllUserDb(limit, offset);
       List<UserModel> aApi = await Get.find<MainRepository>().getAllUserApi();
 
       for (UserModel oApi in aApi) {
@@ -277,12 +320,17 @@ class MainService {
 
     _log.i("Nuevos usuarios cargados: ${aNewLoadUser.length}");
 
-    List<UserModel> aDbExist = await Get.find<MainRepository>().getAllUserDb();
+    List<UserModel> aDbExist =
+        await Get.find<MainRepository>().getAllUserDb(limit, offset);
     return aDbExist;
   }
 
-  Future<List<UserModel>> getAllUser() async {
-    List<UserModel> aDbExist = await Get.find<MainRepository>().getAllUserDb();
+  Future<List<UserModel>> getAllUser(
+    int? limit,
+    int? offset,
+  ) async {
+    List<UserModel> aDbExist =
+        await Get.find<MainRepository>().getAllUserDb(limit, offset);
     return aDbExist;
   }
 
