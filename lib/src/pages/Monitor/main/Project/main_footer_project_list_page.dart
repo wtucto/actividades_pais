@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
-import 'package:actividades_pais/src/pages/Monitor/dto/obs_global.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_list_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/project_detail_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
@@ -24,12 +23,16 @@ class MainFooterProjectPage extends StatefulWidget {
 class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
   List<TramaProyectoModel> jobList = [];
   MainController mainController = MainController();
+  ScrollController scrollController = ScrollController();
+  bool loading = true;
+  int offset = 0;
 
   @override
   void initState() {
     loadPreferences();
     super.initState();
-    readJson();
+    readJson(offset);
+    handleNext();
   }
 
   @override
@@ -39,7 +42,10 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
 
   loadPreferences() async {}
 
-  Future<void> readJson() async {
+  Future<void> readJson(paraOffset) async {
+    setState(() {
+      loading = true;
+    });
     _prefs = await SharedPreferences.getInstance();
     UserModel oUser = UserModel(
       nombres: _prefs!.getString("nombres") ?? "",
@@ -47,9 +53,22 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
       rol: _prefs!.getString("rol") ?? "",
     );
     final List<TramaProyectoModel> response =
-        await mainController.getAllProyectoByUser(oUser);
+        await mainController.getAllProyectoByUser(oUser, 5, paraOffset);
+    jobList = jobList + response;
+    int localOffset = offset + 5;
     setState(() {
-      jobList = response;
+      jobList;
+      loading = false;
+      offset = localOffset;
+    });
+  }
+
+  void handleNext() {
+    scrollController.addListener(() async {
+      if (scrollController.position.maxScrollExtent ==
+          scrollController.position.pixels) {
+        readJson(offset);
+      }
     });
   }
 
@@ -81,17 +100,51 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
           ),
         ],
       ),
-      body: Container(
-        child: ListView.builder(
-          padding: const EdgeInsets.all(10),
-          itemCount: jobList.length,
-          itemBuilder: (context, index) {
-            //return jobList;
-            return ListaProyectos(
-                context: context, listProyecto: jobList[index]);
-          },
-        ),
-      ),
+      body: jobList.isNotEmpty
+          ? Container(
+              child: ListView.builder(
+                padding: const EdgeInsets.all(10),
+                controller: scrollController,
+                itemCount: jobList.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == jobList.length) {
+                    return loading
+                        ? Container(
+                            height: 200,
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 4,
+                              ),
+                            ),
+                          )
+                        : Container();
+                  }
+                  return ListaProyectos(
+                      context: context, listProyecto: jobList[index]);
+                },
+              ),
+            )
+          : Container(
+              padding: const EdgeInsets.all(20),
+              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 245, 246, 248)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                // ignore: prefer_const_literals_to_create_immutables
+                children: [
+                  const Text(
+                    "No existe nigún proyecto asignado, Verificar su conexión",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  // FloatingActionButton(
+                  //   onPressed: readJson,
+                  //   child: const Icon(Icons.refresh),
+                  // ),
+                ],
+              ),
+            ),
     );
   }
 }

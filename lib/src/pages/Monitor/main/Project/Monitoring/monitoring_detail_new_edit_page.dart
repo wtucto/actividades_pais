@@ -1,7 +1,6 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
-import 'package:actividades_pais/src/pages/Monitor/dto/obs_global.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
@@ -11,7 +10,8 @@ import 'package:get/get.dart';
 final options = TramaMonitoreoModel.aNivelRiesgo;
 
 class MonitoringDetailNewEditPage extends StatefulWidget {
-  final TramaProyectoModel datoProyecto;
+  TramaProyectoModel datoProyecto;
+  // TramaProyectoModel datoProyecto;
   MonitoringDetailNewEditPage({Key? key, required this.datoProyecto})
       : super(key: key);
 
@@ -23,29 +23,56 @@ class MonitoringDetailNewEditPage extends StatefulWidget {
 class _MonitoringDetailNewEditPageState
     extends State<MonitoringDetailNewEditPage> {
   _MonitoringDetailNewEditPageState() {
+    _statusMonitor = _itemStatusMonitor[0];
     _statusAdvance = _itemStatusAdvance[0];
     _valueRiesgo = _itemsRiesgo[0];
+    _vauluePartidaEje = _itemsPartidaEje[0];
+    _valueProblemaIO = _itemProblemaIO[0];
   }
-
+  String fechaMonitoreo = DateFormat("yyyy-MM-dd").format(DateTime.now());
   String? _statusAdvance;
   String? _valueRiesgo;
+  String? _statusMonitor;
+  String? _vauluePartidaEje;
+  String? _valueProblemaIO;
   final _formKey = GlobalKey<FormState>();
   final _idMonitor = TextEditingController();
-  final _statusMonitor = TextEditingController();
-  final _dateMonitor = TextEditingController(
-      text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
+  final _dateMonitor = TextEditingController();
   final _advanceFEA = TextEditingController();
-  final _itemStatusAdvance = ['Reinicio', 'Final'];
+  final _itemStatusAdvance = [
+    'Ejecución',
+    'Reinicio',
+    'Paralizado',
+    'Por iniciar'
+  ];
+  final _itemsPartidaEje = [
+    'Cimentación',
+    'Muros y Columnas',
+    'Techo y Acabados',
+    'Obras Exteriores',
+    'Equipamiento'
+  ];
+  final _itemProblemaIO = [
+    'Calculo inexacto en duración de las tareas',
+    'Retraso en plazos establecidos en proyecto',
+    'Estimación inexacta de los costos',
+    'Núcleo ejecutor no rinde gastos',
+    'Limitados recursos y sobre utilizados',
+    'Terreno con problemas de saneamiento legal'
+  ];
   final _advanceFEP = TextEditingController();
-  final _partidaEjecutada = TextEditingController();
   final _obsMonitor = TextEditingController();
-  final _problemaIO = TextEditingController();
   final _alternSolucion = TextEditingController();
   final _nivelRiesgo = TextEditingController();
   final _dateObra = TextEditingController();
   final _longitud = TextEditingController();
   final _latitud = TextEditingController();
   final _questionCtrl = TextEditingController();
+  final _itemStatusMonitor = [
+    'Monitoreo incompleto',
+    'Monitoreo por Enviar',
+    'Enviado'
+  ];
   final _itemsRiesgo = ['Bajo', 'Medio', 'Alto'];
   final _optionCtrls = options.map((o) => TextEditingController()).toList();
   final _question = {'value': '', 'correct': options[0], 'options': options};
@@ -74,14 +101,15 @@ class _MonitoringDetailNewEditPageState
 
   @override
   Widget build(BuildContext context) {
+    _idMonitor.text = "${widget.datoProyecto.cui}_$fechaMonitoreo";
+    _dateMonitor.text = fechaMonitoreo;
     double width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         title: Center(
           child: Text(
-            'Monitoring'.tr,
+            'Monitoring'.tr.toUpperCase(),
             style: const TextStyle(
               color: Color(0xfffefefe),
               fontWeight: FontWeight.w600,
@@ -121,11 +149,10 @@ class _MonitoringDetailNewEditPageState
           /**
            * ESTADO MONITOREO
            */
-          TextFormField(
-            controller: _statusMonitor,
-            decoration: const InputDecoration(labelText: 'Estado Monitoreo *'),
-            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-          ),
+          const SizedBox(height: 20),
+          const Text('Estado Monitoreo *'),
+          myDropdownButtonFormField(_statusMonitor!, _itemStatusMonitor, true),
+
           /**
            * FECHA MONITOREO
            */
@@ -169,16 +196,20 @@ class _MonitoringDetailNewEditPageState
            */
           const SizedBox(height: 20),
           const Text('Estado de Avance *'),
-          DropdownButtonFormField(
-            value: _statusAdvance,
-            items: _itemStatusAdvance
-                .map((e) => DropdownMenuItem(child: Text(e), value: e))
-                .toList(),
-            onChanged: (val) {
-              setState(() {
-                _statusAdvance = val!;
-              });
-            },
+          myDropdownButtonFormField(
+            _statusAdvance!,
+            _itemStatusAdvance,
+            true,
+          ),
+          /**
+           * PARTIDA EJECUTADA
+           */
+          const SizedBox(height: 20),
+          const Text('Partida Ejecutada *'),
+          myDropdownButtonFormField(
+            _vauluePartidaEje!,
+            _itemsPartidaEje,
+            true,
           ),
           /**
            * % AVANCE FISICO ACUMULADO PARTIDA
@@ -189,15 +220,6 @@ class _MonitoringDetailNewEditPageState
                 labelText: '% Avance Fisico Acumulado Partida *'),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
-          /**
-           * PARTIDA EJECUTADA
-           */
-          TextFormField(
-            controller: _partidaEjecutada,
-            decoration: const InputDecoration(labelText: 'Partida Ejecutada *'),
-            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-          ),
-
           /**
            * OBSERVACIONES
            */
@@ -211,11 +233,12 @@ class _MonitoringDetailNewEditPageState
           /**
            * PROBLEMA IDENTIFICADO EN LA OBRA
            */
-          TextFormField(
-            controller: _problemaIO,
-            decoration: const InputDecoration(
-                labelText: 'Problema Indentificado en la Obra *'),
-            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          const SizedBox(height: 20),
+          const Text('Problema Indentificado en la Obra *'),
+          myDropdownButtonFormField(
+            _valueProblemaIO!,
+            _itemProblemaIO,
+            false,
           ),
           /**
            * ALTERNATIVA DE SOLUCION
@@ -367,7 +390,7 @@ class _MonitoringDetailNewEditPageState
                       avanceFisicoAcumulado: "",
                       avanceFisicoPartida: "",
                       estadoAvance: _statusAdvance!,
-                      estadoMonitoreo: _statusMonitor.text,
+                      estadoMonitoreo: _statusMonitor!,
                       fechaMonitoreo: _dateMonitor.text,
                       idMonitoreo: _idMonitor.text,
                       idUsuario: "",
@@ -375,15 +398,15 @@ class _MonitoringDetailNewEditPageState
                       imgProblema: "",
                       imgRiesgo: "",
                       observaciones: _obsMonitor.text,
-                      problemaIdentificado: _problemaIO.text,
+                      problemaIdentificado: _valueProblemaIO!,
                       riesgoIdentificado: _valueRiesgo!,
                       nivelRiesgo: "",
                       rol: "",
                       usuario: "",
                     ));
 
-                    List<TramaMonitoreoModel> aMonitoreo =
-                        await mainController.getAllMonitor();
+                    // List<TramaMonitoreoModel> aMonitoreo =
+                    //     await mainController.getAllMonitor(0, 0);
 
                     showSnackbar(
                       success: true,
@@ -464,6 +487,22 @@ class _MonitoringDetailNewEditPageState
           const SizedBox(height: 32),
         ]),
       ),
+    );
+  }
+
+  DropdownButtonFormField<String> myDropdownButtonFormField(
+      String valueId, List<String> items, bool? isDense) {
+    return DropdownButtonFormField(
+      isExpanded: true,
+      isDense: isDense!,
+      value: valueId,
+      items:
+          items.map((e) => DropdownMenuItem(child: Text(e), value: e)).toList(),
+      onChanged: (val) {
+        setState(() {
+          valueId = val!;
+        });
+      },
     );
   }
 
