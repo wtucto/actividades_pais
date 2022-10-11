@@ -53,7 +53,8 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
       rol: _prefs!.getString("rol") ?? "",
     );
     final List<TramaProyectoModel> response =
-        await mainController.getAllProyectoByUser(oUser, 5, paraOffset);
+        // await mainController.getAllProyectoByUser(oUser, 5, paraOffset);
+        await mainController.getAllProyecto(0, 0);
     jobList = jobList + response;
     int localOffset = offset + 5;
     setState(() {
@@ -138,10 +139,19 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
                     style: TextStyle(color: Colors.black, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
-                  // FloatingActionButton(
-                  //   onPressed: readJson,
-                  //   child: const Icon(Icons.refresh),
-                  // ),
+                  FloatingActionButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        // c.proyecto.value = listProyecto;
+
+                        // datoProyecto.cui = listProyecto.cui;
+
+                        return MonitoringDetailNewEditPage();
+                      }));
+                    },
+                    child: const Icon(Icons.refresh),
+                  ),
                 ],
               ),
             ),

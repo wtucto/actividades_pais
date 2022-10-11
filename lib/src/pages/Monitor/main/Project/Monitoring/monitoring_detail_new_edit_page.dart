@@ -1,7 +1,9 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
+import 'package:actividades_pais/src/pages/Monitor/gallery/gallery_page.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 
@@ -10,10 +12,9 @@ import 'package:get/get.dart';
 final options = TramaMonitoreoModel.aNivelRiesgo;
 
 class MonitoringDetailNewEditPage extends StatefulWidget {
-  TramaProyectoModel datoProyecto;
+  TramaProyectoModel? datoProyecto;
   // TramaProyectoModel datoProyecto;
-  MonitoringDetailNewEditPage({Key? key, required this.datoProyecto})
-      : super(key: key);
+  MonitoringDetailNewEditPage({Key? key, this.datoProyecto}) : super(key: key);
 
   @override
   _MonitoringDetailNewEditPageState createState() =>
@@ -124,6 +125,46 @@ class _MonitoringDetailNewEditPageState
     ).show(context);
   }
 
+  //image
+  List<XFile>? _imageFileList;
+
+  void _setImageFileListFromFile(XFile? value) {
+    _imageFileList = value == null ? null : <XFile>[value];
+  }
+
+  dynamic _pickImageError;
+  String? _retrieveDataError;
+
+  final ImagePicker _picker = ImagePicker();
+  final TextEditingController maxWidthController = TextEditingController();
+  final TextEditingController maxHeightController = TextEditingController();
+  final TextEditingController qualityController = TextEditingController();
+
+  void _openGallery(BuildContext context) async {
+    try {
+      final List<XFile>? pickedFileList = await _picker.pickMultiImage(
+        maxWidth: null,
+        maxHeight: null,
+        imageQuality: null,
+      );
+      setState(() {
+        _imageFileList = pickedFileList;
+      });
+    } catch (e) {
+      setState(() {
+        _pickImageError = e;
+      });
+    }
+    // Navigator.of(context).pop();
+  }
+
+  @override
+  void dispose() {
+    maxWidthController.dispose();
+    maxHeightController.dispose();
+    qualityController.dispose();
+    super.dispose();
+  }
   // @override
   // void dispose() {
   //   _questionCtrl.dispose();
@@ -135,7 +176,7 @@ class _MonitoringDetailNewEditPageState
 
   @override
   Widget build(BuildContext context) {
-    _idMonitor.text = "${widget.datoProyecto.cui}_$fechaMonitoreo";
+    _idMonitor.text = "${widget.datoProyecto?.cui}_$fechaMonitoreo";
     _dateMonitor.text = fechaMonitoreo;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -255,6 +296,24 @@ class _MonitoringDetailNewEditPageState
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
           /**
+           * % FOTOS DE LA PARTIDA EJECUTADA (OBLIGATORIO)
+           */
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: OutlinedButton.icon(
+                  label: const Text('Fotos de la Partida Ejecutada'),
+                  icon: const Icon(Icons.image),
+                  onPressed: () async {
+                    _openGallery(context);
+                  },
+                ),
+              ),
+            ],
+          ),
+
+          /**
            * OBSERVACIONES
            */
           TextFormField(
@@ -358,32 +417,6 @@ class _MonitoringDetailNewEditPageState
             decoration: const InputDecoration(labelText: 'Latitud *'),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
-          /**
-           * OTROS
-        
-                  
-          const SizedBox(height: 32),
-          ...options
-              .asMap()
-              .entries
-              .map((entry) => [
-                    TextFormField(
-                      controller: _optionCtrls[entry.key],
-                      decoration:
-                          InputDecoration(labelText: 'Option ${entry.value}*'),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ),
-                      validator: (v) => v!.isEmpty
-                          ? 'Please fill in Option ${entry.value}'
-                          : null,
-                    ),
-                    const SizedBox(height: 32),
-                  ])
-              .expand((w) => w),
-              */
           const SizedBox(height: 32),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -418,8 +451,8 @@ class _MonitoringDetailNewEditPageState
                       fechaTerminoEstimado: "",
                       actividadPartidaEjecutada: "",
                       alternativaSolucion: "",
-                      avanceFisicoAcumulado: "",
-                      avanceFisicoPartida: "",
+                      // avanceFisicoAcumulado: "",
+                      // avanceFisicoPartida: "",
                       estadoAvance: _statusAdvance!,
                       estadoMonitoreo: _statusMonitor!,
                       fechaMonitoreo: _dateMonitor.text,
@@ -520,6 +553,15 @@ class _MonitoringDetailNewEditPageState
       ),
     );
   }
+  //https://www.codingpizza.com/como-tomar-una-foto-con-flutter-o-elegir-una-foto-de-la-galeria/
+  // https://www.youtube.com/watch?v=cxKYuZhqsOY
+// Widget _setImageView() {
+//     if (_imageFileList != null) {
+//       return Image.file(null, width: 500, height: 500);
+//     } else {
+//       return Text("Please select an image");
+//     }
+//   }
 
   DropdownButtonFormField<String> myDropdownButtonFormField(
       String valueId, List<String> items, bool? isDense) {
