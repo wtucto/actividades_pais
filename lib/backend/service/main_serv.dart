@@ -15,6 +15,67 @@ class MainService {
     return isDeviceConnected;
   }
 
+  /// SYNC
+  Future syncAllMonitoreoByStatusPorEnviar(
+    int? limit,
+    int? offset,
+  ) async {
+    /// Obtiene todos los registros de la DB Local cuyo estado esten en: POR ENVIAR
+    await getAllMonitorPorEnviar(limit, offset).then((a) async {
+      await sendAllMonitoreo(a);
+    });
+  }
+
+  /*
+  Enviar los registros de monitoreo a la Base de datos central mediante el 
+  API REST.
+
+  CONSIDERACIONES:
+  - Los estados del Monitoreo deben de tener el estado: POR ENVIAR
+
+  SECUENCIAS:
+    LOOP ... 
+      (1) - Se envia el registros de monitoreo al API REST 
+      (2) - Si el envio es correcto, se actualiza el registro en la DB Local al estado
+        ENVIADO
+      (3) - Responder con todos los registros enviados a la API REST
+    END LOOP.
+  */
+  Future<List<TramaMonitoreoModel>> sendAllMonitoreo(
+    List<TramaMonitoreoModel> a,
+  ) async {
+    if (await isOnline()) {
+      List<TramaMonitoreoModel> aResp = [];
+      List<TramaMonitoreoModel> aError = [];
+
+      for (var oMonit in a) {
+        /// (1)...
+        oMonit.estadoMonitoreo = TramaMonitoreoModel.sEstadoENV;
+        try {
+          final oResp =
+              await Get.find<MainRepository>().insertarMonitoreo(oMonit);
+
+          if (oResp.idMonitoreo != "") {
+            /// (2)...
+            TramaMonitoreoModel? oSend = oResp;
+            oSend.id = oMonit.id;
+            await Get.find<MainRepository>().updateMonitoreoDb(oSend);
+
+            /// (3)...
+            aResp.add(oSend);
+          }
+        } catch (oError) {
+          aError.add(oMonit);
+        }
+      }
+      return aResp;
+    } else {
+      return Future.error(
+        '¡Ups! Algo salió mal, verifica tu conexión a Internet.',
+      );
+    }
+  }
+
   /// PROYECTO
   Future<List<TramaProyectoModel>> getAllProyectoByUser(
     UserModel o,
@@ -47,6 +108,18 @@ class MainService {
       }
     }
     */
+    return aFind;
+  }
+
+  Future<List<TramaProyectoModel>> getAllProyectoByUserSearch(
+    UserModel o,
+    String search,
+    int? limit,
+    int? offset,
+  ) async {
+    ///Obtiene los registros de la DB Local
+    List<TramaProyectoModel> aFind = await Get.find<MainRepository>()
+        .getAllProyectoByUserSearch(o, search, limit, offset);
     return aFind;
   }
 
@@ -120,12 +193,12 @@ class MainService {
         if (response != null) {
           aNewProject.add(response!);
         } else {
-          _log.e("Error al ingresar proyectos a la Base de Datos");
+          _log.e('Error al ingresar proyectos a la Base de Datos');
         }
       }
     }
 
-    _log.i("Nuevos proyectos cargados: ${aNewProject.length}");
+    _log.i('Nuevos proyectos cargados: ${aNewProject.length}');
 
     /// Obtiene y retorna todos los registros almacenados en la DB local
     List<TramaProyectoModel> aDbExist =
@@ -173,34 +246,16 @@ class MainService {
         if (response != null) {
           aNewProject.add(response!);
         } else {
-          _log.e("Error al ingresar monitoreo a la Base de Datos");
+          _log.e('Error al ingresar monitoreo a la Base de Datos');
         }
       }
     }
 
-    _log.i("Nuevos monitoreos cargados: ${aNewProject.length}");
+    _log.i('Nuevos monitoreos cargados: ${aNewProject.length}');
 
     List<TramaMonitoreoModel> aDbExist =
         await Get.find<MainRepository>().getAllMonitoreoDb(limit, offset);
     return aDbExist;
-  }
-
-  Future<List<TramaMonitoreoModel>> fetchAllTramaMonitoreoModel(
-    int? limit,
-    int? offset,
-  ) async {
-    List<TramaMonitoreoModel> aTramaMonitoreoModel = [];
-    aTramaMonitoreoModel =
-        await Get.find<MainRepository>().getAllMonitoreoDb(limit, offset);
-    return aTramaMonitoreoModel;
-  }
-
-  Future<List<TramaMonitoreoModel>> mergeAllTramaMonitoreoModel(
-      List<TramaMonitoreoModel> a) async {
-    List<TramaMonitoreoModel> aTramaMonitoreoModel = [];
-    aTramaMonitoreoModel =
-        await Get.find<MainRepository>().saveAllMonitoreo(aTramaMonitoreoModel);
-    return aTramaMonitoreoModel;
   }
 
   Future<List<TramaMonitoreoModel>> getAllMonitoreo(
@@ -264,24 +319,6 @@ class MainService {
     return await Get.find<MainRepository>().insertMonitorDb(o);
   }
 
-  Future<List<TramaMonitoreoModel>> sendMonitoreo(
-    List<TramaMonitoreoModel> a,
-  ) async {
-    if (await isOnline()) {
-      return await Get.find<MainRepository>().saveAllMonitoreo(a);
-    }
-    return [];
-  }
-
-  Future syncAllTramaMonitoreoModel(
-    int? limit,
-    int? offset,
-  ) async {
-    await fetchAllTramaMonitoreoModel(limit, offset).then((a) async {
-      await mergeAllTramaMonitoreoModel(a);
-    });
-  }
-
   /// USUARIO APP
 
   Future<UserModel> insertUserDb(UserModel o) async {
@@ -313,12 +350,12 @@ class MainService {
         if (response != null) {
           aNewLoadUser.add(response!);
         } else {
-          _log.e("Error al ingresar usuario a la Base de Datos");
+          _log.e('Error al ingresar usuario a la Base de Datos');
         }
       }
     }
 
-    _log.i("Nuevos usuarios cargados: ${aNewLoadUser.length}");
+    _log.i('Nuevos usuarios cargados: ${aNewLoadUser.length}');
 
     List<UserModel> aDbExist =
         await Get.find<MainRepository>().getAllUserDb(limit, offset);

@@ -182,10 +182,80 @@ class DatabasePnPais {
         .toList();
   }
 
-  Future<List<TramaProyectoModel>> readAllProyectoByUser(
+  Future<List<TramaProyectoModel>> readAllProyectoByUserSearch(
+    UserModel o,
+    String search,
     int? limit,
     int? offset,
+  ) async {
+    final db = await instance.database;
+    final orderBy = '${TramaProyectoFields.numSnip} ASC';
+
+    dynamic result;
+
+    String sWahere = '';
+    if (o.rol == UserModel.sRolRES) {
+      sWahere = TramaProyectoFields.codResidente;
+    } else if (o.rol == UserModel.sRolSUP) {
+      sWahere = TramaProyectoFields.codSupervisor;
+    } else if (o.rol == UserModel.sRolCRP) {
+      sWahere = TramaProyectoFields.codCrp;
+    }
+
+    if (sWahere == '') return [];
+
+    if (limit! > 0) {
+      if (search != '') {
+        sWahere =
+            '$sWahere = ? AND ((${TramaProyectoFields.cui} || " " || ${TramaProyectoFields.tambo})  LIKE ?)';
+        result = await db.query(
+          tableNameTramaProyectos,
+          where: sWahere,
+          whereArgs: [o.codigo, '%${search.toUpperCase()}%'],
+          orderBy: orderBy,
+          limit: limit,
+          offset: offset,
+        );
+      } else {
+        result = await db.query(
+          tableNameTramaProyectos,
+          where: '$sWahere = ?',
+          whereArgs: [o.codigo],
+          orderBy: orderBy,
+          limit: limit,
+          offset: offset,
+        );
+      }
+    } else {
+      if (search != '') {
+        sWahere =
+            '$sWahere = ? AND ((${TramaProyectoFields.cui} || " " || ${TramaProyectoFields.tambo})  LIKE ?)';
+        result = await db.query(
+          tableNameTramaProyectos,
+          where: sWahere,
+          whereArgs: [o.codigo, '%${search.toUpperCase()}%'],
+          orderBy: orderBy,
+        );
+      } else {
+        result = await db.query(
+          tableNameTramaProyectos,
+          where: '$sWahere = ?',
+          whereArgs: [o.codigo],
+          orderBy: orderBy,
+        );
+      }
+    }
+
+    if (result.length == 0) return [];
+    return result
+        .map<TramaProyectoModel>((json) => TramaProyectoModel.fromJson(json))
+        .toList();
+  }
+
+  Future<List<TramaProyectoModel>> readAllProyectoByUser(
     UserModel o,
+    int? limit,
+    int? offset,
   ) async {
     final db = await instance.database;
     final orderBy = '${TramaProyectoFields.numSnip} ASC';

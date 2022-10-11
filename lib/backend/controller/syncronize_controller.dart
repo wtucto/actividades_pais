@@ -10,9 +10,13 @@ class SyncronizeData {
     return isDeviceConnected;
   }
 
-  Future<void> syncAlllUser(TramaMonitoreoModel o) async {
+  Future<void> syncAllMonitoreoByStatusPorEnviar(TramaMonitoreoModel o) async {
     if (await isOnline()) {
-      Get.find<MainService>().syncAllTramaMonitoreoModel(0, 0);
+      Get.find<MainService>().syncAllMonitoreoByStatusPorEnviar(0, 0);
+    } else {
+      return Future.error(
+        '¡Ups! Algo salió mal, verifica tu conexión a Internet.',
+      );
     }
   }
 }
