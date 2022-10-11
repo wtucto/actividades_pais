@@ -202,10 +202,10 @@ class TramaMonitoreoModel {
   String? alternativaSolucion = '';
 
   /// (Obligatorio) % Avance Físico Estimado Acumulado: se obtiene de los datos generales del proyecto como referencia, y luego el usuario puede modificar su valor.
-  String? avanceFisicoAcumulado = '';
+  double? avanceFisicoAcumulado = 0;
 
   ///% Av. Físico Acum. Partida: % Avance Físico acumulado de la partida
-  String? avanceFisicoPartida = '';
+  double? avanceFisicoPartida = 0;
 
   /// (Obligatorio) Estado de Avance: selección del estado.
   String? estadoAvance = '';
@@ -285,8 +285,8 @@ class TramaMonitoreoModel {
     String? fechaTerminoEstimado,
     String? actividadPartidaEjecutada,
     String? alternativaSolucion,
-    String? avanceFisicoAcumulado,
-    String? avanceFisicoPartida,
+    double? avanceFisicoAcumulado,
+    double? avanceFisicoPartida,
     String? estadoAvance,
     String? estadoMonitoreo,
     String? fechaMonitoreo,
@@ -355,9 +355,9 @@ class TramaMonitoreoModel {
         alternativaSolucion:
             json[TramaMonitoreoFields.alternativaSolucion] as String,
         avanceFisicoAcumulado:
-            json[TramaMonitoreoFields.avanceFisicoAcumulado] as String,
+            json[TramaMonitoreoFields.avanceFisicoAcumulado] as double,
         avanceFisicoPartida:
-            json[TramaMonitoreoFields.avanceFisicoPartida] as String,
+            json[TramaMonitoreoFields.avanceFisicoPartida] as double,
         estadoAvance: json[TramaMonitoreoFields.estadoAvance] as String,
         estadoMonitoreo: json[TramaMonitoreoFields.estadoMonitoreo] as String,
         fechaMonitoreo: json[TramaMonitoreoFields.fechaMonitoreo] as String,

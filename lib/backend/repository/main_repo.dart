@@ -27,7 +27,16 @@ class MainRepository {
     int? limit,
     int? offset,
   ) async {
-    return _dbPnPais.readAllProyectoByUser(limit, offset, o);
+    return _dbPnPais.readAllProyectoByUser(o, limit, offset);
+  }
+
+  Future<List<TramaProyectoModel>> getAllProyectoByUserSearch(
+    UserModel o,
+    String search,
+    int? limit,
+    int? offset,
+  ) async {
+    return _dbPnPais.readAllProyectoByUserSearch(o, search, limit, offset);
   }
 
   Future<List<TramaProyectoModel>> getProyectoByCUI(
@@ -95,28 +104,6 @@ class MainRepository {
     return aResp;
   }
 
-  Future<List<TramaMonitoreoModel>> saveAllMonitoreo(
-    List<TramaMonitoreoModel> a,
-  ) async {
-    List<TramaMonitoreoModel> aSend = [];
-
-    for (var oMon in a) {
-      final response = await _pnPaisApi.insertarMonitoreo(oBody: oMon);
-
-      if (response != null) {
-        TramaMonitoreoModel? oSend = response.data;
-        aSend.add(oSend!);
-
-        /*
-          Actualizar en registro en la BD local, con el IdMonitor
-         */
-      } else {
-        _log.e(response.error.message);
-      }
-    }
-    return aSend;
-  }
-
   Future<TramaMonitoreoModel> insertMonitorDb(
     TramaMonitoreoModel o,
   ) async {
@@ -130,12 +117,12 @@ class MainRepository {
   }
 
   Future<List<TramaMonitoreoModel>> upLoadAllMonitoreo(
-    List<TramaMonitoreoModel> aUser,
+    List<TramaMonitoreoModel> o,
   ) async {
     List<TramaMonitoreoModel> aUserUp = [];
 
-    for (var oUser in aUser) {
-      final response = await _pnPaisApi.insertarMonitoreo(oBody: oUser);
+    for (var oMonit in o) {
+      final response = await _pnPaisApi.insertarMonitoreo(oBody: oMonit);
 
       if (response != null) {
         TramaMonitoreoModel? oUserUp = response.data;
@@ -145,6 +132,29 @@ class MainRepository {
       }
     }
     return aUserUp;
+  }
+
+  /* API RESPONDE
+  {
+    "codResultado": 0,
+    "idPerfil": 0,
+    "msgResultado": "string",
+    "response": {},
+    "total": 0
+  }
+  */
+  Future<TramaMonitoreoModel> insertarMonitoreo(
+    TramaMonitoreoModel o,
+  ) async {
+    TramaMonitoreoModel? oResp;
+    final response = await _pnPaisApi.insertarMonitoreo(oBody: o);
+    if (response != null) {
+      oResp = response.data;
+    } else {
+      _log.e(response.error.message);
+    }
+
+    return oResp!;
   }
 
   /// USUARIO APP

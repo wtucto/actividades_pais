@@ -63,7 +63,7 @@ class PnPaisApi {
     required TramaMonitoreoModel oBody,
   }) {
     return _http.request<TramaMonitoreoModel>(
-      '${basePathApp}insertarUsuariosApp',
+      '${basePathApp}insertarMonitoreo',
       method: "POST",
       data: TramaMonitoreoModel.toJsonObject(oBody),
       parser: (data) {

@@ -109,6 +109,21 @@ class MainController extends GetxController {
   }
 
   /*
+   Obtiene la lista de proyectos segun el ROL del Usuario y busqueda según la coincidencia
+   @UserModel o
+   @String search
+   */
+  Future<List<TramaProyectoModel>> getAllProyectoByUserSearch(
+    UserModel o,
+    String search,
+    int? limit,
+    int? offset,
+  ) async {
+    return await Get.find<MainService>()
+        .getAllProyectoByUserSearch(o, search, limit, offset);
+  }
+
+  /*
    Obtiene los datos de generales del proyecto
    @String CUI
    */
@@ -223,8 +238,8 @@ class MainController extends GetxController {
         if (o.fechaTerminoEstimado!.trim() == '') {
           o.fechaTerminoEstimado = oProyecto.fechaTerminoEstimado;
         }
-        if (o.avanceFisicoAcumulado!.trim() == '') {
-          o.avanceFisicoAcumulado = oProyecto.avanceFisico;
+        if (o.avanceFisicoAcumulado! == 0) {
+          o.avanceFisicoAcumulado = (oProyecto.avanceFisico as double);
         }
       }
     } catch (oError) {
@@ -257,7 +272,7 @@ class MainController extends GetxController {
       isComplete = false;
     } else if (o.alternativaSolucion!.trim() == '') {
       isComplete = false;
-    } else if (o.avanceFisicoAcumulado!.trim() == '') {
+    } else if (o.avanceFisicoAcumulado! == 0) {
       isComplete = false;
     } else if (o.estadoAvance!.trim() == '') {
       isComplete = false;
@@ -307,7 +322,7 @@ class MainController extends GetxController {
     });
 
     if (isOk) {
-      final aResp = await Get.find<MainService>().sendMonitoreo(a);
+      final aResp = await Get.find<MainService>().sendAllMonitoreo(a);
       return aResp;
     } else {
       loading.value = false;
