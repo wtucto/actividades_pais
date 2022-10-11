@@ -25,9 +25,11 @@ class _MonitoringDetailNewEditPageState
   _MonitoringDetailNewEditPageState() {
     _statusMonitor = _itemStatusMonitor[0];
     _statusAdvance = _itemStatusAdvance[0];
-    _valueRiesgo = _itemsRiesgo[0];
     _vauluePartidaEje = _itemsPartidaEje[0];
     _valueProblemaIO = _itemProblemaIO[0];
+    _valueAlternSolucion = _itemAlternSolucion[0];
+    _valueRiesgo = _itemRiesgo[0];
+    _valueNivelRiesgo = _itemNivelRiesgo[0];
   }
   String fechaMonitoreo = DateFormat("yyyy-MM-dd").format(DateTime.now());
   String? _statusAdvance;
@@ -35,17 +37,21 @@ class _MonitoringDetailNewEditPageState
   String? _statusMonitor;
   String? _vauluePartidaEje;
   String? _valueProblemaIO;
+  String? _valueAlternSolucion;
+  String? _valueNivelRiesgo;
   final _formKey = GlobalKey<FormState>();
   final _idMonitor = TextEditingController();
   final _dateMonitor = TextEditingController();
   final _advanceFEA = TextEditingController();
   final _itemStatusAdvance = [
+    'Seleccionar',
     'Ejecución',
     'Reinicio',
     'Paralizado',
     'Por iniciar'
   ];
   final _itemsPartidaEje = [
+    'Seleccionar',
     'Cimentación',
     'Muros y Columnas',
     'Techo y Acabados',
@@ -53,6 +59,7 @@ class _MonitoringDetailNewEditPageState
     'Equipamiento'
   ];
   final _itemProblemaIO = [
+    'Seleccionar',
     'Calculo inexacto en duración de las tareas',
     'Retraso en plazos establecidos en proyecto',
     'Estimación inexacta de los costos',
@@ -60,20 +67,47 @@ class _MonitoringDetailNewEditPageState
     'Limitados recursos y sobre utilizados',
     'Terreno con problemas de saneamiento legal'
   ];
+  final _itemAlternSolucion = [
+    'Seleccionar',
+    'Solicitar modificación de Exp. Técnico',
+    'Gestionar reunión de coordinación con UPS',
+    'Modificar programación de tareas (Fast track)',
+    'Modificar programación de tareas (Crashing)',
+    'Coordinación con el núcleo ejecutor',
+    'Gestionar recursos adicionales',
+    'Coordinar reunión con asesoría legal',
+    'Incrementar presupuesto para saneamiento legal'
+  ];
+  final _itemRiesgo = [
+    'Seleccionar',
+    'Incumplimiento de las características de los componentes',
+    'Lluvias / deslizamientos / Clima',
+    'Asignación de recursos y fondos fuera plazo',
+    'Inadecuada estimación de costos',
+    'Inadecuada programación',
+    'Inadecuada comunicación con UPS'
+  ];
   final _advanceFEP = TextEditingController();
   final _obsMonitor = TextEditingController();
-  final _alternSolucion = TextEditingController();
-  final _nivelRiesgo = TextEditingController();
   final _dateObra = TextEditingController();
   final _longitud = TextEditingController();
   final _latitud = TextEditingController();
   final _questionCtrl = TextEditingController();
   final _itemStatusMonitor = [
+    'Seleccionar',
     'Monitoreo incompleto',
     'Monitoreo por Enviar',
     'Enviado'
   ];
-  final _itemsRiesgo = ['Bajo', 'Medio', 'Alto'];
+  final _itemNivelRiesgo = [
+    'Seleccionar',
+    'Muy Bajo',
+    'Bajo',
+    'Medio',
+    'Medio Alto',
+    'Alto',
+    'Muy Alto.'
+  ];
   final _optionCtrls = options.map((o) => TextEditingController()).toList();
   final _question = {'value': '', 'correct': options[0], 'options': options};
 
@@ -243,35 +277,32 @@ class _MonitoringDetailNewEditPageState
           /**
            * ALTERNATIVA DE SOLUCION
            */
-          TextFormField(
-            controller: _alternSolucion,
-            decoration:
-                const InputDecoration(labelText: 'Alternativa de Solución *'),
-            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          const SizedBox(height: 20),
+          const Text('Alternativa de Solución *'),
+          myDropdownButtonFormField(
+            _valueAlternSolucion!,
+            _itemAlternSolucion,
+            false,
           ),
           /**
            * SELECCIONES EL RIESGO
            */
-          TextFormField(
-            controller: _nivelRiesgo,
-            decoration: const InputDecoration(labelText: 'Riesgo *'),
-            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          const SizedBox(height: 20),
+          const Text('Riesgo Identificado'),
+          myDropdownButtonFormField(
+            _valueRiesgo!,
+            _itemRiesgo,
+            false,
           ),
           /**
            * NIVEL DE RIESGO
            */
           const SizedBox(height: 20),
           const Text('Nivel de Riesgo *'),
-          DropdownButtonFormField(
-            value: _valueRiesgo,
-            items: _itemsRiesgo
-                .map((e) => DropdownMenuItem(child: Text(e), value: e))
-                .toList(),
-            onChanged: (val) {
-              setState(() {
-                _valueRiesgo = val!;
-              });
-            },
+          myDropdownButtonFormField(
+            _valueNivelRiesgo!,
+            _itemNivelRiesgo,
+            true,
           ),
 
           /**
