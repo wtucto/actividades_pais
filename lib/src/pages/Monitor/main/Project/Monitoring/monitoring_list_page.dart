@@ -138,6 +138,23 @@ class _MonitorListState extends State<MonitorList> {
     return isUpdae;
   }
 
+  bool isEditDelete(String estadoMonitoreo) {
+    bool isUpdae = false;
+    switch (estadoMonitoreo) {
+      case TramaMonitoreoModel.sEstadoINC:
+        isUpdae = true;
+        break;
+      case TramaMonitoreoModel.sEstadoPEN:
+        isUpdae = true;
+        break;
+      case TramaMonitoreoModel.sEstadoENV:
+        isUpdae = false;
+        break;
+      default:
+    }
+    return isUpdae;
+  }
+
   Future<String> syncMonitor(
       BuildContext context, List<TramaMonitoreoModel> a) async {
     String sMsg = "";
@@ -274,17 +291,89 @@ class _MonitorListState extends State<MonitorList> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                              '${oMonitoreo.estadoAvance!} ${oMonitoreo.avanceFisicoAcumulado!} ${oMonitoreo.nivelRiesgo!}',
-                              style: TextStyle(
+                          Row(
+                            children: [
+                              Text(
+                                'Estado Avance: ',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 62, 61, 61),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                oMonitoreo.estadoAvance!,
+                                style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500)),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'Avance Fisico Acumulado: ',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 62, 61, 61),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                '${oMonitoreo.avanceFisicoAcumulado!}%',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'Nivel Riesgo: ',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 62, 61, 61),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                oMonitoreo.nivelRiesgo!,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                           SizedBox(
                             height: 5,
                           ),
-                          Text(oMonitoreo.fechaMonitoreo!,
-                              style: TextStyle(color: Colors.grey[500])),
+                          Row(
+                            children: [
+                              Text(
+                                'Fecha Monitoreo: ',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 62, 61, 61),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                oMonitoreo.fechaMonitoreo!,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ]),
                   )
                 ]),
@@ -310,12 +399,16 @@ class _MonitorListState extends State<MonitorList> {
                     padding: EdgeInsets.all(5),
                     duration: Duration(milliseconds: 300),
                     decoration: BoxDecoration(
-                        border: new Border.all(
-                            color: Color.fromARGB(255, 179, 177, 177),
-                            width: 1.0,
-                            style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.shade200),
+                      border: new Border.all(
+                        color: Color.fromARGB(255, 179, 177, 177),
+                        width: 1.0,
+                        style: BorderStyle.solid,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      color: Color(
+                        int.parse("0xff${experienceLevelColor}"),
+                      ).withAlpha(20),
+                    ),
                     child: Center(
                       child: Icon(
                         Icons.upload,
@@ -335,32 +428,33 @@ class _MonitorListState extends State<MonitorList> {
               children: [
                 Row(
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        //Navigator.of(context).push(MaterialPageRoute( builder: (context) => MonitorList(datoProyecto: _oProject), ));
-                      },
-                      child: AnimatedContainer(
-                        height: 35,
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 15),
-                        duration: Duration(milliseconds: 300),
-                        decoration: BoxDecoration(
-                            border: new Border.all(
-                                color: Color.fromARGB(255, 179, 177, 177),
-                                width: 1.0,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(12),
-                            color:
-                                Color(int.parse("0xff${experienceLevelColor}"))
-                                    .withAlpha(20)),
-                        child: Center(
-                          child: Icon(
-                            Icons.edit,
-                            color: Color.fromARGB(255, 56, 54, 54),
+                    if (isEditDelete(oMonitoreo.estadoMonitoreo!))
+                      GestureDetector(
+                        onTap: () {
+                          //Navigator.of(context).push(MaterialPageRoute( builder: (context) => MonitorList(datoProyecto: _oProject), ));
+                        },
+                        child: AnimatedContainer(
+                          height: 35,
+                          padding:
+                              EdgeInsets.symmetric(vertical: 3, horizontal: 15),
+                          duration: Duration(milliseconds: 300),
+                          decoration: BoxDecoration(
+                              border: new Border.all(
+                                  color: Color.fromARGB(255, 179, 177, 177),
+                                  width: 1.0,
+                                  style: BorderStyle.solid),
+                              borderRadius: BorderRadius.circular(12),
+                              color: Color(
+                                      int.parse("0xff${experienceLevelColor}"))
+                                  .withAlpha(20)),
+                          child: Center(
+                            child: Icon(
+                              Icons.edit,
+                              color: Color.fromARGB(255, 56, 54, 54),
+                            ),
                           ),
                         ),
                       ),
-                    ),
                     SizedBox(
                       width: 10,
                     ),
@@ -395,30 +489,32 @@ class _MonitorListState extends State<MonitorList> {
                     SizedBox(
                       width: 10,
                     ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: AnimatedContainer(
-                        height: 35,
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 15),
-                        duration: Duration(milliseconds: 300),
-                        decoration: BoxDecoration(
+                    if (isEditDelete(oMonitoreo.estadoMonitoreo!))
+                      GestureDetector(
+                        onTap: () {},
+                        child: AnimatedContainer(
+                          height: 35,
+                          padding:
+                              EdgeInsets.symmetric(vertical: 3, horizontal: 15),
+                          duration: Duration(milliseconds: 300),
+                          decoration: BoxDecoration(
                             border: new Border.all(
                                 color: Color.fromARGB(255, 179, 177, 177),
                                 width: 1.0,
                                 style: BorderStyle.solid),
                             borderRadius: BorderRadius.circular(12),
-                            color:
-                                Color(int.parse("0xff${experienceLevelColor}"))
-                                    .withAlpha(20)),
-                        child: Center(
-                          child: Icon(
-                            Icons.recycling,
-                            color: Color.fromARGB(255, 173, 52, 48),
+                            color: Color(
+                              int.parse("0xff${experienceLevelColor}"),
+                            ).withAlpha(20),
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Icons.delete,
+                              color: Color.fromARGB(255, 241, 85, 64),
+                            ),
                           ),
                         ),
                       ),
-                    ),
                     SizedBox(
                       width: 10,
                     ),
@@ -428,7 +524,7 @@ class _MonitorListState extends State<MonitorList> {
                   oMonitoreo.idMonitoreo!,
                   style: TextStyle(
                     color: Color.fromARGB(255, 13, 0, 255),
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
                 )
