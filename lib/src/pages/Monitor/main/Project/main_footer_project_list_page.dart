@@ -4,6 +4,7 @@ import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_list_page.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/Project/firestore_image.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/project_detail_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
 import 'package:flutter/material.dart';
@@ -150,7 +151,8 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
 
                         // datoProyecto.cui = listProyecto.cui;
 
-                        return MonitoringDetailNewEditPage();
+                        // return MonitoringDetailNewEditPage();
+                        return MyStoreImage();
                       }));
                     },
                     child: const Icon(Icons.refresh),
