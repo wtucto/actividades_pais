@@ -21,7 +21,7 @@ class MainFooterProjectPage extends StatefulWidget {
 }
 
 class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
-  List<TramaProyectoModel> jobList = [];
+  List<TramaProyectoModel> aProyecto = [];
   MainController mainController = MainController();
   ScrollController scrollController = ScrollController();
   bool loading = true;
@@ -52,13 +52,14 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
       codigo: _prefs!.getString("codigo") ?? "",
       rol: _prefs!.getString("rol") ?? "",
     );
+
     final List<TramaProyectoModel> response =
-        // await mainController.getAllProyectoByUser(oUser, 5, paraOffset);
-        await mainController.getAllProyecto(0, 0);
-    jobList = jobList + response;
+        await mainController.getAllProyectoByUser(oUser, 0, 0);
+    aProyecto = aProyecto + response;
     int localOffset = offset + 5;
+
     setState(() {
-      jobList;
+      aProyecto;
       loading = false;
       offset = localOffset;
     });
@@ -95,20 +96,20 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: CustomSearch(jobList),
+                delegate: CustomSearch(aProyecto),
               );
             },
           ),
         ],
       ),
-      body: jobList.isNotEmpty
+      body: aProyecto.isNotEmpty
           ? Container(
               child: ListView.builder(
                 padding: const EdgeInsets.all(10),
                 controller: scrollController,
-                itemCount: jobList.length + 1,
+                itemCount: aProyecto.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == jobList.length) {
+                  if (index == aProyecto.length) {
                     return loading
                         ? Container(
                             height: 200,
@@ -121,7 +122,9 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
                         : Container();
                   }
                   return ListaProyectos(
-                      context: context, listProyecto: jobList[index]);
+                    context: context,
+                    oProyecto: aProyecto[index],
+                  );
                 },
               ),
             )
@@ -163,11 +166,11 @@ class ListaProyectos extends StatelessWidget {
   const ListaProyectos({
     Key? key,
     required this.context,
-    required this.listProyecto,
+    required this.oProyecto,
   }) : super(key: key);
 
   final BuildContext context;
-  final TramaProyectoModel listProyecto;
+  final TramaProyectoModel oProyecto;
 
   @override
   Widget build(BuildContext context) {
@@ -210,13 +213,13 @@ class ListaProyectos extends StatelessWidget {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(listProyecto.tambo!,
+                          Text(oProyecto.tambo!,
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500)),
                           const SizedBox(height: 5),
-                          Text(listProyecto.estado!,
+                          Text(oProyecto.estado!,
                               style: TextStyle(color: Colors.grey[500])),
                         ]),
                   )
@@ -224,11 +227,10 @@ class ListaProyectos extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  // setState(() {
-                  //   // job.isSelect = !job.isSelect;
-                  // });
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const MonitorList(),
+                    builder: (context) => MonitorList(
+                      datoProyecto: oProyecto,
+                    ),
                   ));
                 },
                 child: AnimatedContainer(
@@ -263,12 +265,12 @@ class ListaProyectos extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {
-                          // c.proyecto.value = listProyecto;
+                          // c.proyecto.value = oProyecto;
 
-                          // datoProyecto.cui = listProyecto.cui;
+                          // datoProyecto.cui = oProyecto.cui;
 
                           return MonitoringDetailNewEditPage(
-                              datoProyecto: listProyecto);
+                              datoProyecto: oProyecto);
                         }));
                       },
                       child: AnimatedContainer(
@@ -297,7 +299,8 @@ class ListaProyectos extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const ProjectDetailPage(),
+                          builder: (context) =>
+                              ProjectDetailPage(datoProyecto: oProyecto),
                         ));
                       },
                       child: AnimatedContainer(
@@ -350,7 +353,7 @@ class ListaProyectos extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  listProyecto.cui!,
+                  oProyecto.cui!,
                   style: const TextStyle(
                     color: Color.fromARGB(255, 13, 0, 255),
                     fontSize: 14,
@@ -367,8 +370,8 @@ class ListaProyectos extends StatelessWidget {
 }
 
 class CustomSearch extends SearchDelegate<String> {
-  List<TramaProyectoModel> searchJobList;
-  CustomSearch(this.searchJobList);
+  List<TramaProyectoModel> searchaProyecto;
+  CustomSearch(this.searchaProyecto);
   final List<int> _data =
       List<int>.generate(100001, (int i) => i).reversed.toList();
 
@@ -401,7 +404,7 @@ class CustomSearch extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     List<String> matchQuery = [];
-    for (var item in searchJobList) {
+    for (var item in searchaProyecto) {
       if ((item.cui!).contains(query.toLowerCase()) ||
           (item.tambo!).toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add('${item.cui} - ${item.tambo}');
@@ -420,13 +423,13 @@ class CustomSearch extends SearchDelegate<String> {
 
     if (searched == null || !_data.contains(searched)) {
       final splitted = searched.split(' - ');
-      for (var item in searchJobList) {
+      for (var item in searchaProyecto) {
         if (item.cui == splitted[0]) {
           return ListView.builder(
             padding: const EdgeInsets.all(10),
             itemCount: 1,
             itemBuilder: (context, index) {
-              return ListaProyectos(context: context, listProyecto: item);
+              return ListaProyectos(context: context, oProyecto: item);
             },
           );
         }

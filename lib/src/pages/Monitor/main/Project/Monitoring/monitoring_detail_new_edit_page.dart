@@ -451,8 +451,8 @@ class _MonitoringDetailNewEditPageState
                       fechaTerminoEstimado: "",
                       actividadPartidaEjecutada: "",
                       alternativaSolucion: "",
-                      // avanceFisicoAcumulado: "",
-                      // avanceFisicoPartida: "",
+                      avanceFisicoAcumulado: 0,
+                      avanceFisicoPartida: 0,
                       estadoAvance: _statusAdvance!,
                       estadoMonitoreo: _statusMonitor!,
                       fechaMonitoreo: _dateMonitor.text,
@@ -469,8 +469,7 @@ class _MonitoringDetailNewEditPageState
                       usuario: "",
                     ));
 
-                    // List<TramaMonitoreoModel> aMonitoreo =
-                    //     await mainController.getAllMonitor(0, 0);
+                    //List<TramaMonitoreoModel> aMonitoreo = await mainController.getAllMonitor(0, 0);
 
                     showSnackbar(
                       success: true,
