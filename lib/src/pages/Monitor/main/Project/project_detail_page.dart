@@ -159,30 +159,40 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
         child: ListView(padding: const EdgeInsets.all(32), children: [
           TextFormField(
             controller: _cui,
+
+            ///CÓDIGO ÚNICO DEL PROYECTO
             decoration: InputDecoration(labelText: 'FldProyect001'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
           ),
           TextFormField(
             controller: _numSnip,
+
+            ///CÓDIGO DE SNIP
             decoration: InputDecoration(labelText: 'FldProyect002'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
           ),
           TextFormField(
             controller: _latitud,
+
+            ///LATITUD DE LA UBICACIÓN DEL PROYECTO
             decoration: InputDecoration(labelText: 'FldProyect003'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
           ),
           TextFormField(
             controller: _longitud,
+
+            ///LONGITUD DE LA UBICACIÓN DEL PROYECTO
             decoration: InputDecoration(labelText: 'FldProyect004'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
           ),
           TextFormField(
             controller: _departamento,
+
+            ///NOMBRE DEL DEPARTAMENTO DEL UBIGEO DEL PROYECTO
             decoration: InputDecoration(labelText: 'FldProyect005'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,

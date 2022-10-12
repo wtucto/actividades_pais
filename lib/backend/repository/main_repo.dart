@@ -54,7 +54,7 @@ class MainRepository {
   Future<List<TramaProyectoModel>> getAllProyectoApi() async {
     List<TramaProyectoModel> oUserUp = [];
     final response = await _pnPaisApi.listarTramaProyecto();
-    if (response.data != null) {
+    if (response.error == null) {
       oUserUp = response.data!;
     } else {
       _log.e(response.error.message);
@@ -95,7 +95,7 @@ class MainRepository {
   Future<List<TramaMonitoreoModel>> getAllMonitoreoApi() async {
     List<TramaMonitoreoModel> aResp = [];
     final response = await _pnPaisApi.listarTramaMonitoreo();
-    if (response.data != null) {
+    if (response.error == null) {
       aResp = response.data!;
     } else {
       _log.e(response.error.message);
@@ -124,7 +124,7 @@ class MainRepository {
     for (var oMonit in o) {
       final response = await _pnPaisApi.insertarMonitoreo(oBody: oMonit);
 
-      if (response != null) {
+      if (response.error == null) {
         TramaMonitoreoModel? oUserUp = response.data;
         aUserUp.add(oUserUp!);
       } else {
@@ -148,10 +148,13 @@ class MainRepository {
   ) async {
     TramaMonitoreoModel? oResp;
     final response = await _pnPaisApi.insertarMonitoreo(oBody: o);
-    if (response != null) {
+    if (response.error == null) {
       oResp = response.data;
     } else {
       _log.e(response.error.message);
+      return Future.error(
+        response.error.message,
+      );
     }
 
     return oResp!;
@@ -182,7 +185,7 @@ class MainRepository {
   Future<List<UserModel>> getAllUserApi() async {
     List<UserModel> oUserUp = [];
     final response = await _pnPaisApi.listarUsuariosApp();
-    if (response.data != null) {
+    if (response.error == null) {
       oUserUp = response.data!;
     } else {
       _log.e(response.error.message);

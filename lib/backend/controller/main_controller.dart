@@ -28,7 +28,7 @@ class MainController extends GetxController {
     /*final serv = Get.put(MainService());
     users.value = await serv.loadAllUser();*/
     proyectos.value = await Get.find<MainService>().loadAllProyecto(0, 0);
-    moniteos.value = await Get.find<MainService>().getAllMonitoreo(0, 0);
+    moniteos.value = await Get.find<MainService>().loadAllMonitoreo(0, 0);
     users.value = await Get.find<MainService>().loadAllUser(0, 0);
     loading.value = false;
   }
@@ -323,6 +323,12 @@ class MainController extends GetxController {
 
     if (isOk) {
       final aResp = await Get.find<MainService>().sendAllMonitoreo(a);
+      /*if (aResp.length > 0) {
+        return Future.error(
+          'Hay registros que no se pudieron enviar al servidor porque generaron un error: ${aResp.length}',
+        );
+      }*/
+      /// Retornar registros que generar error al enviarse al servidor
       return aResp;
     } else {
       loading.value = false;

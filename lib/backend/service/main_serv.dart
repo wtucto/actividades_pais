@@ -39,6 +39,7 @@ class MainService {
       (2) - Si el envio es correcto, se actualiza el registro en la DB Local al estado
         ENVIADO
       (3) - Responder con todos los registros enviados a la API REST
+      (4) - Responder con todos los registros que generaron Error en la API REST
     END LOOP.
   */
   Future<List<TramaMonitoreoModel>> sendAllMonitoreo(
@@ -51,24 +52,30 @@ class MainService {
       for (var oMonit in a) {
         /// (1)...
         oMonit.estadoMonitoreo = TramaMonitoreoModel.sEstadoENV;
-        try {
-          final oResp =
-              await Get.find<MainRepository>().insertarMonitoreo(oMonit);
 
-          if (oResp.idMonitoreo != "") {
-            /// (2)...
-            TramaMonitoreoModel? oSend = oResp;
-            oSend.id = oMonit.id;
-            await Get.find<MainRepository>().updateMonitoreoDb(oSend);
+        if (await isOnline()) {
+          try {
+            final oResp =
+                await Get.find<MainRepository>().insertarMonitoreo(oMonit);
+            if (oResp.idMonitoreo != "") {
+              /// (2)...
+              TramaMonitoreoModel? oSend = oResp;
+              oSend.id = oMonit.id;
+              await Get.find<MainRepository>().updateMonitoreoDb(oSend);
 
-            /// (3)...
-            aResp.add(oSend);
+              /// (3)...
+              aResp.add(oSend);
+            }
+          } catch (oError) {
+            /// (4)...
+            aError.add(oMonit);
           }
-        } catch (oError) {
+        } else {
+          /// (4)...
           aError.add(oMonit);
         }
       }
-      return aResp;
+      return aError;
     } else {
       return Future.error(
         '¡Ups! Algo salió mal, verifica tu conexión a Internet.',

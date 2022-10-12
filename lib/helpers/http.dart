@@ -44,7 +44,7 @@ class Http {
       }
       return HttpResponse.success<T>(oData);
     } catch (e) {
-      _logger.e(e);
+      //_logger.e(e);
 
       int statusCode = 0;
       String message = "Unknown error";
@@ -54,7 +54,9 @@ class Http {
         message = e.message;
         if (e.response != null) {
           statusCode = e.response!.statusCode!;
-          message = e.response!.statusMessage!;
+          if (e.response!.statusMessage! != "") {
+            message = e.response!.statusMessage!;
+          }
           data = e.response!.data;
         }
       }
