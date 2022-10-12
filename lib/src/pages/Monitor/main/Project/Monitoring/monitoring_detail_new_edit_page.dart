@@ -1,8 +1,9 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
-import 'package:actividades_pais/src/pages/Monitor/dto/obs_global.dart';
+import 'package:actividades_pais/src/pages/Monitor/gallery/gallery_page.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 
@@ -11,9 +12,9 @@ import 'package:get/get.dart';
 final options = TramaMonitoreoModel.aNivelRiesgo;
 
 class MonitoringDetailNewEditPage extends StatefulWidget {
-  final TramaProyectoModel datoProyecto;
-  MonitoringDetailNewEditPage({Key? key, required this.datoProyecto})
-      : super(key: key);
+  TramaProyectoModel? datoProyecto;
+  // TramaProyectoModel datoProyecto;
+  MonitoringDetailNewEditPage({Key? key, this.datoProyecto}) : super(key: key);
 
   @override
   _MonitoringDetailNewEditPageState createState() =>
@@ -23,30 +24,91 @@ class MonitoringDetailNewEditPage extends StatefulWidget {
 class _MonitoringDetailNewEditPageState
     extends State<MonitoringDetailNewEditPage> {
   _MonitoringDetailNewEditPageState() {
+    _statusMonitor = _itemStatusMonitor[0];
     _statusAdvance = _itemStatusAdvance[0];
-    _valueRiesgo = _itemsRiesgo[0];
+    _vauluePartidaEje = _itemsPartidaEje[0];
+    _valueProblemaIO = _itemProblemaIO[0];
+    _valueAlternSolucion = _itemAlternSolucion[0];
+    _valueRiesgo = _itemRiesgo[0];
+    _valueNivelRiesgo = _itemNivelRiesgo[0];
   }
-
+  String fechaMonitoreo = DateFormat("yyyy-MM-dd").format(DateTime.now());
   String? _statusAdvance;
   String? _valueRiesgo;
+  String? _statusMonitor;
+  String? _vauluePartidaEje;
+  String? _valueProblemaIO;
+  String? _valueAlternSolucion;
+  String? _valueNivelRiesgo;
   final _formKey = GlobalKey<FormState>();
   final _idMonitor = TextEditingController();
-  final _statusMonitor = TextEditingController();
-  final _dateMonitor = TextEditingController(
-      text: DateFormat("yyyy-MM-dd").format(DateTime.now()));
+  final _dateMonitor = TextEditingController();
   final _advanceFEA = TextEditingController();
-  final _itemStatusAdvance = ['Reinicio', 'Final'];
+  final _itemStatusAdvance = [
+    'Seleccionar',
+    'Ejecución',
+    'Reinicio',
+    'Paralizado',
+    'Por iniciar'
+  ];
+  final _itemsPartidaEje = [
+    'Seleccionar',
+    'Cimentación',
+    'Muros y Columnas',
+    'Techo y Acabados',
+    'Obras Exteriores',
+    'Equipamiento'
+  ];
+  final _itemProblemaIO = [
+    'Seleccionar',
+    'Calculo inexacto en duración de las tareas',
+    'Retraso en plazos establecidos en proyecto',
+    'Estimación inexacta de los costos',
+    'Núcleo ejecutor no rinde gastos',
+    'Limitados recursos y sobre utilizados',
+    'Terreno con problemas de saneamiento legal'
+  ];
+  final _itemAlternSolucion = [
+    'Seleccionar',
+    'Solicitar modificación de Exp. Técnico',
+    'Gestionar reunión de coordinación con UPS',
+    'Modificar programación de tareas (Fast track)',
+    'Modificar programación de tareas (Crashing)',
+    'Coordinación con el núcleo ejecutor',
+    'Gestionar recursos adicionales',
+    'Coordinar reunión con asesoría legal',
+    'Incrementar presupuesto para saneamiento legal'
+  ];
+  final _itemRiesgo = [
+    'Seleccionar',
+    'Incumplimiento de las características de los componentes',
+    'Lluvias / deslizamientos / Clima',
+    'Asignación de recursos y fondos fuera plazo',
+    'Inadecuada estimación de costos',
+    'Inadecuada programación',
+    'Inadecuada comunicación con UPS'
+  ];
   final _advanceFEP = TextEditingController();
-  final _partidaEjecutada = TextEditingController();
   final _obsMonitor = TextEditingController();
-  final _problemaIO = TextEditingController();
-  final _alternSolucion = TextEditingController();
-  final _nivelRiesgo = TextEditingController();
   final _dateObra = TextEditingController();
   final _longitud = TextEditingController();
   final _latitud = TextEditingController();
   final _questionCtrl = TextEditingController();
-  final _itemsRiesgo = ['Bajo', 'Medio', 'Alto'];
+  final _itemStatusMonitor = [
+    'Seleccionar',
+    'Monitoreo incompleto',
+    'Monitoreo por Enviar',
+    'Enviado'
+  ];
+  final _itemNivelRiesgo = [
+    'Seleccionar',
+    'Muy Bajo',
+    'Bajo',
+    'Medio',
+    'Medio Alto',
+    'Alto',
+    'Muy Alto.'
+  ];
   final _optionCtrls = options.map((o) => TextEditingController()).toList();
   final _question = {'value': '', 'correct': options[0], 'options': options};
 
@@ -63,6 +125,46 @@ class _MonitoringDetailNewEditPageState
     ).show(context);
   }
 
+  //image
+  List<XFile>? _imageFileList;
+
+  void _setImageFileListFromFile(XFile? value) {
+    _imageFileList = value == null ? null : <XFile>[value];
+  }
+
+  dynamic _pickImageError;
+  String? _retrieveDataError;
+
+  final ImagePicker _picker = ImagePicker();
+  final TextEditingController maxWidthController = TextEditingController();
+  final TextEditingController maxHeightController = TextEditingController();
+  final TextEditingController qualityController = TextEditingController();
+
+  void _openGallery(BuildContext context) async {
+    try {
+      final List<XFile>? pickedFileList = await _picker.pickMultiImage(
+        maxWidth: null,
+        maxHeight: null,
+        imageQuality: null,
+      );
+      setState(() {
+        _imageFileList = pickedFileList;
+      });
+    } catch (e) {
+      setState(() {
+        _pickImageError = e;
+      });
+    }
+    // Navigator.of(context).pop();
+  }
+
+  @override
+  void dispose() {
+    maxWidthController.dispose();
+    maxHeightController.dispose();
+    qualityController.dispose();
+    super.dispose();
+  }
   // @override
   // void dispose() {
   //   _questionCtrl.dispose();
@@ -74,14 +176,15 @@ class _MonitoringDetailNewEditPageState
 
   @override
   Widget build(BuildContext context) {
+    _idMonitor.text = "${widget.datoProyecto?.cui}_$fechaMonitoreo";
+    _dateMonitor.text = fechaMonitoreo;
     double width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         title: Center(
           child: Text(
-            'Monitoring'.tr,
+            'Monitoring'.tr.toUpperCase(),
             style: const TextStyle(
               color: Color(0xfffefefe),
               fontWeight: FontWeight.w600,
@@ -121,11 +224,10 @@ class _MonitoringDetailNewEditPageState
           /**
            * ESTADO MONITOREO
            */
-          TextFormField(
-            controller: _statusMonitor,
-            decoration: const InputDecoration(labelText: 'Estado Monitoreo *'),
-            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-          ),
+          const SizedBox(height: 20),
+          const Text('Estado Monitoreo *'),
+          myDropdownButtonFormField(_statusMonitor!, _itemStatusMonitor, true),
+
           /**
            * FECHA MONITOREO
            */
@@ -169,16 +271,20 @@ class _MonitoringDetailNewEditPageState
            */
           const SizedBox(height: 20),
           const Text('Estado de Avance *'),
-          DropdownButtonFormField(
-            value: _statusAdvance,
-            items: _itemStatusAdvance
-                .map((e) => DropdownMenuItem(child: Text(e), value: e))
-                .toList(),
-            onChanged: (val) {
-              setState(() {
-                _statusAdvance = val!;
-              });
-            },
+          myDropdownButtonFormField(
+            _statusAdvance!,
+            _itemStatusAdvance,
+            true,
+          ),
+          /**
+           * PARTIDA EJECUTADA
+           */
+          const SizedBox(height: 20),
+          const Text('Partida Ejecutada *'),
+          myDropdownButtonFormField(
+            _vauluePartidaEje!,
+            _itemsPartidaEje,
+            true,
           ),
           /**
            * % AVANCE FISICO ACUMULADO PARTIDA
@@ -190,12 +296,21 @@ class _MonitoringDetailNewEditPageState
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
           /**
-           * PARTIDA EJECUTADA
+           * % FOTOS DE LA PARTIDA EJECUTADA (OBLIGATORIO)
            */
-          TextFormField(
-            controller: _partidaEjecutada,
-            decoration: const InputDecoration(labelText: 'Partida Ejecutada *'),
-            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: OutlinedButton.icon(
+                  label: const Text('Fotos de la Partida Ejecutada'),
+                  icon: const Icon(Icons.image),
+                  onPressed: () async {
+                    _openGallery(context);
+                  },
+                ),
+              ),
+            ],
           ),
 
           /**
@@ -211,44 +326,42 @@ class _MonitoringDetailNewEditPageState
           /**
            * PROBLEMA IDENTIFICADO EN LA OBRA
            */
-          TextFormField(
-            controller: _problemaIO,
-            decoration: const InputDecoration(
-                labelText: 'Problema Indentificado en la Obra *'),
-            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          const SizedBox(height: 20),
+          const Text('Problema Indentificado en la Obra *'),
+          myDropdownButtonFormField(
+            _valueProblemaIO!,
+            _itemProblemaIO,
+            false,
           ),
           /**
            * ALTERNATIVA DE SOLUCION
            */
-          TextFormField(
-            controller: _alternSolucion,
-            decoration:
-                const InputDecoration(labelText: 'Alternativa de Solución *'),
-            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          const SizedBox(height: 20),
+          const Text('Alternativa de Solución *'),
+          myDropdownButtonFormField(
+            _valueAlternSolucion!,
+            _itemAlternSolucion,
+            false,
           ),
           /**
            * SELECCIONES EL RIESGO
            */
-          TextFormField(
-            controller: _nivelRiesgo,
-            decoration: const InputDecoration(labelText: 'Riesgo *'),
-            validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          const SizedBox(height: 20),
+          const Text('Riesgo Identificado'),
+          myDropdownButtonFormField(
+            _valueRiesgo!,
+            _itemRiesgo,
+            false,
           ),
           /**
            * NIVEL DE RIESGO
            */
           const SizedBox(height: 20),
           const Text('Nivel de Riesgo *'),
-          DropdownButtonFormField(
-            value: _valueRiesgo,
-            items: _itemsRiesgo
-                .map((e) => DropdownMenuItem(child: Text(e), value: e))
-                .toList(),
-            onChanged: (val) {
-              setState(() {
-                _valueRiesgo = val!;
-              });
-            },
+          myDropdownButtonFormField(
+            _valueNivelRiesgo!,
+            _itemNivelRiesgo,
+            true,
           ),
 
           /**
@@ -304,32 +417,6 @@ class _MonitoringDetailNewEditPageState
             decoration: const InputDecoration(labelText: 'Latitud *'),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
           ),
-          /**
-           * OTROS
-        
-                  
-          const SizedBox(height: 32),
-          ...options
-              .asMap()
-              .entries
-              .map((entry) => [
-                    TextFormField(
-                      controller: _optionCtrls[entry.key],
-                      decoration:
-                          InputDecoration(labelText: 'Option ${entry.value}*'),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ),
-                      validator: (v) => v!.isEmpty
-                          ? 'Please fill in Option ${entry.value}'
-                          : null,
-                    ),
-                    const SizedBox(height: 32),
-                  ])
-              .expand((w) => w),
-              */
           const SizedBox(height: 32),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -364,10 +451,10 @@ class _MonitoringDetailNewEditPageState
                       fechaTerminoEstimado: "",
                       actividadPartidaEjecutada: "",
                       alternativaSolucion: "",
-                      avanceFisicoAcumulado: "",
-                      avanceFisicoPartida: "",
+                      // avanceFisicoAcumulado: "",
+                      // avanceFisicoPartida: "",
                       estadoAvance: _statusAdvance!,
-                      estadoMonitoreo: _statusMonitor.text,
+                      estadoMonitoreo: _statusMonitor!,
                       fechaMonitoreo: _dateMonitor.text,
                       idMonitoreo: _idMonitor.text,
                       idUsuario: "",
@@ -375,15 +462,15 @@ class _MonitoringDetailNewEditPageState
                       imgProblema: "",
                       imgRiesgo: "",
                       observaciones: _obsMonitor.text,
-                      problemaIdentificado: _problemaIO.text,
+                      problemaIdentificado: _valueProblemaIO!,
                       riesgoIdentificado: _valueRiesgo!,
                       nivelRiesgo: "",
                       rol: "",
                       usuario: "",
                     ));
 
-                    List<TramaMonitoreoModel> aMonitoreo =
-                        await mainController.getAllMonitor();
+                    // List<TramaMonitoreoModel> aMonitoreo =
+                    //     await mainController.getAllMonitor(0, 0);
 
                     showSnackbar(
                       success: true,
@@ -464,6 +551,31 @@ class _MonitoringDetailNewEditPageState
           const SizedBox(height: 32),
         ]),
       ),
+    );
+  }
+  //https://www.codingpizza.com/como-tomar-una-foto-con-flutter-o-elegir-una-foto-de-la-galeria/
+  // https://www.youtube.com/watch?v=cxKYuZhqsOY
+// Widget _setImageView() {
+//     if (_imageFileList != null) {
+//       return Image.file(null, width: 500, height: 500);
+//     } else {
+//       return Text("Please select an image");
+//     }
+//   }
+
+  DropdownButtonFormField<String> myDropdownButtonFormField(
+      String valueId, List<String> items, bool? isDense) {
+    return DropdownButtonFormField(
+      isExpanded: true,
+      isDense: isDense!,
+      value: valueId,
+      items:
+          items.map((e) => DropdownMenuItem(child: Text(e), value: e)).toList(),
+      onChanged: (val) {
+        setState(() {
+          valueId = val!;
+        });
+      },
     );
   }
 
