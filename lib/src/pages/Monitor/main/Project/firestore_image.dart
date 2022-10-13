@@ -13,10 +13,9 @@ class MyStoreImage extends StatefulWidget {
 }
 
 class _MyStoreImageState extends State<MyStoreImage> {
-  bool _showContent = false;
   ImageController controller = ImageController();
 
-  late ImageProvider placeholder;
+  String nameInputImage = "imagePartigaEjecutada";
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +56,13 @@ class _MyStoreImageState extends State<MyStoreImage> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      controller.selectMultipleImage();
+                      controller.selectMultipleImage(nameInputImage);
                     },
                     child: const Text('Seleccionar imagen'),
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      controller.uploadImage();
+                      controller.uploadImage(nameInputImage);
                     },
                     child: const Text('subir imagen'),
                   ),
@@ -76,7 +75,7 @@ class _MyStoreImageState extends State<MyStoreImage> {
                       itemCount: controller.selectedFileCount.value,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
+                              crossAxisCount: 4,
                               crossAxisSpacing: 16,
                               mainAxisSpacing: 16),
                       itemBuilder: ((context, index) {
@@ -101,14 +100,14 @@ class _MyStoreImageState extends State<MyStoreImage> {
                                   child: ClipOval(
                                     child: InkWell(
                                       onTap: () {
-                                        // _removeVisions(index);
                                         controller.removeMultipleImage(
-                                            controller.listImagePath[index]);
+                                            controller.listImagePath[index],
+                                            nameInputImage);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(6),
                                         color: Color.fromARGB(255, 221, 22, 22),
-                                        child: const Icon(Icons.delete,
+                                        child: const Icon(Icons.remove_circle,
                                             size: 20,
                                             color: Color.fromARGB(
                                                 255, 233, 224, 222)),
@@ -117,28 +116,6 @@ class _MyStoreImageState extends State<MyStoreImage> {
                                   ),
                                 ),
                               ),
-
-                              // Container(
-                              //   // color: Colors.black.withOpacity(0.7),
-                              //   height: 30,
-                              //   width: double.infinity,
-                              //   child: Center(
-                              //     child: IconButton(
-                              //       onPressed: () {
-                              //         setState(() {
-                              //           imageCache.clear();
-                              //         });
-                              //         // print(controller.listImagePath[index]);
-                              //       },
-                              //       icon: const Icon(Icons.delete),
-                              //       // padding: const EdgeInsets.only(left: 25),
-                              //       color:
-                              //           const Color.fromARGB(255, 230, 13, 13),
-                              //       highlightColor: Colors.red,
-                              //       iconSize: 40,
-                              //     ),
-                              //   ),
-                              // ),
                             ],
                           ),
                         );

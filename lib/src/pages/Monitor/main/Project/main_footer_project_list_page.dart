@@ -151,8 +151,9 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
 
                         // datoProyecto.cui = listProyecto.cui;
 
-                        // return MonitoringDetailNewEditPage();
-                        return MyStoreImage();
+                        return MonitoringDetailNewEditPage();
+
+                        // return MyStoreImage();
                       }));
                     },
                     child: const Icon(Icons.refresh),

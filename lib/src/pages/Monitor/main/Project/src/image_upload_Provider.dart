@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:get/get_connect/connect.dart';
 
 class ImageUploadProvider extends GetConnect {
-  Future<String> uploadImage(List<String> list) async {
+  Future<String> uploadImage(List<String> list, var itemsImagesAll) async {
     try {
       final form = FormData({});
-
+      print(itemsImagesAll); // aqui todas las imagenes del formulario
       for (String path in list) {
         form.files.add(MapEntry(
             "file[]",
