@@ -54,6 +54,74 @@ class _MainFooterAllOptionPageState extends State<MainFooterAllOptionPage>
           ],
         ),
       ),
+      drawer: Drawer(
+        child: Material(
+          textStyle: const TextStyle(color: Colors.white, fontSize: 16),
+          child: Container(
+            color: const Color(0xFF5B4382),
+            padding: const EdgeInsets.all(20),
+            child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //----------------------------
+                  // Drawer title
+                  //----------------------------
+                  Row(
+                    children: const [
+                      Icon(
+                        Icons.settings_outlined,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                      Text(
+                        ' Settings',
+                        style: TextStyle(
+                          fontSize: 26,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Divider(height: 40),
+                  //----------------------------
+                  // Visible Items Control
+                  //----------------------------
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.visibility_rounded,
+                        color: Colors.white,
+                        size: 16,
+                      ),
+                      const Text(
+                        ' Visible items',
+                        style: TextStyle(),
+                      ),
+                      Expanded(
+                        child: Slider(
+                          value: 8,
+                          min: 2,
+                          max: 15,
+                          divisions: 15,
+                          label: '8',
+                          activeColor: Colors.deepPurple[200],
+                          inactiveColor: Colors.deepPurple[400],
+                          onChanged: (value) {
+                            setState(() {
+                              //_visibleItems = value.toInt();
+                            });
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  const Divider(height: 40),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
       /*floatingActionButton: ExpandedAnimationFab(
         items: [
           FabItem(

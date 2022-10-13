@@ -238,7 +238,9 @@ class _MonitorListState extends State<MonitorList> {
                 itemCount: aMonResp.length,
                 itemBuilder: (context, index) {
                   return jobComponent(
-                      context: context, oMonitoreo: aMonResp[index]);
+                    context: context,
+                    oMonitoreo: aMonResp[index],
+                  );
                 },
               )
             : Center(child: Text('EmptyData'.tr)),

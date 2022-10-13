@@ -26,7 +26,9 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
   MainController mainController = MainController();
   ScrollController scrollController = ScrollController();
   bool loading = true;
+  bool isEndPagination = false;
   int offset = 0;
+  int limit = 50;
 
   @override
   void initState() {
@@ -38,32 +40,37 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
 
   @override
   void dispose() {
+    scrollController.removeListener(() async {});
     super.dispose();
   }
 
   loadPreferences() async {}
 
   Future<void> readJson(paraOffset) async {
-    setState(() {
-      loading = true;
-    });
-    _prefs = await SharedPreferences.getInstance();
-    UserModel oUser = UserModel(
-      nombres: _prefs!.getString("nombres") ?? "",
-      codigo: _prefs!.getString("codigo") ?? "",
-      rol: _prefs!.getString("rol") ?? "",
-    );
+    if (!isEndPagination) {
+      setState(() {
+        loading = true;
+      });
 
-    final List<TramaProyectoModel> response =
-        await mainController.getAllProyectoByUser(oUser, 0, 0);
-    aProyecto = aProyecto + response;
-    int localOffset = offset + 5;
+      _prefs = await SharedPreferences.getInstance();
+      UserModel oUser = UserModel(
+        nombres: _prefs!.getString("nombres") ?? "",
+        codigo: _prefs!.getString("codigo") ?? "",
+        rol: _prefs!.getString("rol") ?? "",
+      );
 
-    setState(() {
-      aProyecto;
-      loading = false;
-      offset = localOffset;
-    });
+      final List<TramaProyectoModel> response =
+          await mainController.getAllProyectoByUser(oUser, limit, offset);
+      if (response.length == 0) {
+        isEndPagination = true;
+      } else {
+        aProyecto = aProyecto + response;
+        offset = offset + limit;
+      }
+      setState(() {
+        loading = false;
+      });
+    }
   }
 
   void handleNext() {
@@ -104,30 +111,43 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
         ],
       ),
       body: aProyecto.isNotEmpty
-          ? Container(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(10),
-                controller: scrollController,
-                itemCount: aProyecto.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == aProyecto.length) {
-                    return loading
-                        ? Container(
-                            height: 200,
-                            child: const Center(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 4,
-                              ),
-                            ),
-                          )
-                        : Container();
-                  }
-                  return ListaProyectos(
-                    context: context,
-                    oProyecto: aProyecto[index],
-                  );
-                },
-              ),
+          ? Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(10),
+                    controller: scrollController,
+                    itemCount: aProyecto.length,
+                    itemBuilder: (context, index) {
+                      return ListaProyectos(
+                        context: context,
+                        oProyecto: aProyecto[index],
+                      );
+                    },
+                  ),
+                ),
+                if (loading == true)
+                  const Padding(
+                    padding: EdgeInsets.only(
+                      top: 10,
+                      bottom: 40,
+                    ),
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                if (isEndPagination == true)
+                  Container(
+                    padding: const EdgeInsets.only(
+                      top: 10,
+                      bottom: 10,
+                    ),
+                    color: Colors.blue,
+                    child: const Center(
+                      child: Text('Has obtenido todo el contenido.'),
+                    ),
+                  ),
+              ],
             )
           : Container(
               padding: const EdgeInsets.all(20),
