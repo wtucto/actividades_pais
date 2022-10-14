@@ -156,31 +156,25 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
                   color: Color.fromARGB(255, 245, 246, 248)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                // ignore: prefer_const_literals_to_create_immutables
-                children: [
-                  const Text(
+                children: const [
+                  Text(
                     "No existe nigún proyecto asignado, Verificar su conexión",
                     style: TextStyle(color: Colors.black, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
-                  FloatingActionButton(
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        // c.proyecto.value = listProyecto;
-
-                        // datoProyecto.cui = listProyecto.cui;
-
-                        return MonitoringDetailNewEditPage();
-
-                        // return MyStoreImage();
-                      }));
-                    },
-                    child: const Icon(Icons.refresh),
-                  ),
                 ],
               ),
             ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Colors.blue,
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return MonitoringDetailNewEditPage();
+          }));
+        },
+      ),
     );
   }
 }

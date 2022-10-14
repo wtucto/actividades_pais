@@ -34,7 +34,7 @@ class _MainFooterAllOptionPageState extends State<MainFooterAllOptionPage>
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
 
     super.initState();
-    bottomTabController = TabController(length: 4, vsync: this);
+    bottomTabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -50,7 +50,7 @@ class _MainFooterAllOptionPageState extends State<MainFooterAllOptionPage>
             MainFooterProjectPage(),
             MonitorList(),
             MainFooterSettingPage(),
-            GalleryPage(),
+            // GalleryPage(),
           ],
         ),
       ),

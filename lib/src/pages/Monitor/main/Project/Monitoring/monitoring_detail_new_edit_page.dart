@@ -117,9 +117,12 @@ class _MonitoringDetailNewEditPageState
   final _question = {'value': '', 'correct': options[0], 'options': options};
   final MainController mainController = MainController();
   ImageController controller = ImageController();
-  final String _imgPartidaEjecutada = '_imgPartidaEjecutada';
-
-  List<bool> expanded = [false, false];
+  final String _imgPartidaEjecutada = 'imgPartidaEjecutada';
+  List<bool> expandedPE = [false, false];
+  final String _imgProblemaIdentificado = 'imgProblemaIdentificado';
+  List<bool> expandedPI = [false, false];
+  final String _imgRiesgoIdentificado = 'imgRiesgoIdentificado';
+  List<bool> expandedRI = [false, false];
 
   void showSnackbar({required bool success, required String text}) {
     AnimatedSnackBar.rectangle(
@@ -143,7 +146,7 @@ class _MonitoringDetailNewEditPageState
 
   @override
   Widget build(BuildContext context) {
-    _idMonitor.text = "${widget.datoProyecto?.cui}_$fechaMonitoreo";
+    _idMonitor.text = "${widget.datoProyecto?.cui ?? ''}_$fechaMonitoreo";
     _dateMonitor.text = fechaMonitoreo;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -269,49 +272,13 @@ class _MonitoringDetailNewEditPageState
                   OutlinedButton.icon(
                     label: const Text('Fotos de la Partida Ejecutada'),
                     icon: const Icon(Icons.image),
-                    onPressed: () async {
+                    onPressed: () {
                       controller.selectMultipleImage(_imgPartidaEjecutada);
                     },
                   ),
                 ],
               ),
-              ListView(shrinkWrap: true, children: [
-                ExpansionPanelList(
-                    expansionCallback: (panelIndex, isExpanded) {
-                      setState(() {
-                        expanded[panelIndex] = !isExpanded;
-                      });
-                    },
-                    animationDuration: const Duration(milliseconds: 600),
-                    children: [
-                      ExpansionPanel(
-                          backgroundColor: expanded[0] == true
-                              ? const Color.fromARGB(255, 224, 230, 231)
-                              : Colors.white,
-                          headerBuilder: (context, isOpen) {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 30),
-                              child: const Text(
-                                "Lista de Imagenes",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            );
-                          },
-                          body: Container(
-                            padding: const EdgeInsets.all(5),
-                            child: ListView(
-                              shrinkWrap: true,
-                              children: [
-                                MyImageMultiple(
-                                    controller: controller,
-                                    nameField: _imgPartidaEjecutada),
-                              ],
-                            ),
-                          ),
-                          isExpanded: expanded[0]),
-                    ]),
-              ]),
+              myExpansionPanelListethod(_imgPartidaEjecutada, expandedPE),
 
               /**
              * OBSERVACIONES
@@ -324,12 +291,29 @@ class _MonitoringDetailNewEditPageState
                 validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               ),
               /**
-             * PROBLEMA IDENTIFICADO EN LA OBRA
+             * PROBLEMA IDENTIFICADO EN LA OBRA (Obligatorio)
              */
               const SizedBox(height: 20),
               const Text('Problema Indentificado en la Obra *'),
               myDropdownButtonFormField(
                   _valueProblemaIO!, _itemProblemaIO, false),
+
+              /**
+               * Foto del Problema Identificado (Opcional)
+               */
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  OutlinedButton.icon(
+                    label: const Text('Fotos del Problema Identificado'),
+                    icon: const Icon(Icons.image),
+                    onPressed: () {
+                      controller.selectMultipleImage(_imgProblemaIdentificado);
+                    },
+                  ),
+                ],
+              ),
+              myExpansionPanelListethod(_imgProblemaIdentificado, expandedPI),
               /**
              * ALTERNATIVA DE SOLUCION
              */
@@ -338,11 +322,26 @@ class _MonitoringDetailNewEditPageState
               myDropdownButtonFormField(
                   _valueAlternSolucion!, _itemAlternSolucion, false),
               /**
-             * SELECCIONES EL RIESGO
+             * SELECCIONES EL RIESGO Identificado
              */
               const SizedBox(height: 20),
               const Text('Riesgo Identificado'),
               myDropdownButtonFormField(_valueRiesgo!, _itemRiesgo, false),
+              /**
+               * Foto del Riesgo Identificado (Opcional)
+               */
+              Row(
+                children: [
+                  OutlinedButton.icon(
+                    label: const Text('Fotos del Riesgo Identificado'),
+                    icon: const Icon(Icons.image),
+                    onPressed: () {
+                      controller.selectMultipleImage(_imgRiesgoIdentificado);
+                    },
+                  ),
+                ],
+              ),
+              myExpansionPanelListethod(_imgRiesgoIdentificado, expandedRI),
               /**
              * NIVEL DE RIESGO
              */
@@ -540,6 +539,47 @@ class _MonitoringDetailNewEditPageState
         ),
       ),
     );
+  }
+
+  ListView myExpansionPanelListethod(
+      String fieldNameImage, List<bool> expanded) {
+    return ListView(shrinkWrap: true, children: [
+      ExpansionPanelList(
+          expansionCallback: (panelIndex, isExpanded) {
+            setState(() {
+              expanded[panelIndex] = !isExpanded;
+            });
+          },
+          animationDuration: const Duration(milliseconds: 600),
+          children: [
+            ExpansionPanel(
+              backgroundColor: expanded[0] == true
+                  ? const Color.fromARGB(255, 224, 230, 231)
+                  : Colors.white,
+              headerBuilder: (context, isOpen) {
+                return Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                  child: const Text(
+                    "Lista de Imagenes",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                );
+              },
+              body: Container(
+                padding: const EdgeInsets.all(5),
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    MyImageMultiple(
+                        controller: controller, nameField: fieldNameImage),
+                  ],
+                ),
+              ),
+              isExpanded: expanded[0],
+            ),
+          ]),
+    ]);
   }
 
   DropdownButtonFormField<String> myDropdownButtonFormField(
