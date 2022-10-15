@@ -25,8 +25,20 @@ class TramaMonitoreoFields {
     idMonitoreo,
     idUsuario,
     imgActividad,
+    imgActividad1,
+    imgActividad2,
+    imgActividad3,
+    imgActividad4,
     imgProblema,
+    imgProblema1,
+    imgProblema2,
+    imgProblema3,
+    imgProblema4,
     imgRiesgo,
+    imgRiesgo1,
+    imgRiesgo2,
+    imgRiesgo3,
+    imgRiesgo4,
     observaciones,
     problemaIdentificado,
     riesgoIdentificado,
@@ -55,8 +67,20 @@ class TramaMonitoreoFields {
   static String idMonitoreo = 'idMonitoreo';
   static String idUsuario = 'idUsuario';
   static String imgActividad = 'imgActividad';
+  static String imgActividad1 = 'imgActividad1';
+  static String imgActividad2 = 'imgActividad2';
+  static String imgActividad3 = 'imgActividad3';
+  static String imgActividad4 = 'imgActividad4';
   static String imgProblema = 'imgProblema';
+  static String imgProblema1 = 'imgProblema1';
+  static String imgProblema2 = 'imgProblema2';
+  static String imgProblema3 = 'imgProblema3';
+  static String imgProblema4 = 'imgProblema4';
   static String imgRiesgo = 'imgRiesgo';
+  static String imgRiesgo1 = 'imgRiesgo1';
+  static String imgRiesgo2 = 'imgRiesgo2';
+  static String imgRiesgo3 = 'imgRiesgo3';
+  static String imgRiesgo4 = 'imgRiesgo4';
   static String observaciones = 'observaciones';
   static String problemaIdentificado = 'problemaIdentificado';
   static String riesgoIdentificado = 'riesgoIdentificado';
@@ -171,38 +195,24 @@ class TramaMonitoreoModel {
   ];
 
 /*
-"idMonitoreo": "1",
-"estadoMonitoreo": "1",
-"idUsuario": "1",
-"usuario": "1",
-"rol": "1",
-"tambo": "1",
-"snip": "1",
-"cui": "1",
 "fechaMonitoreo": "2022-06-01 00:00:00.0",
-"avanceFisicoAcumulado": 1,
-"estadoAvance": "1",
-"actividadPartidaEjecutada": "1",
-"avanceFisicoPartida": 1,
-"observaciones": "1",
-"problemaIdentificado": "1",
-"alternativaSolucion": "1",
-"riesgoIdentificado": "1",
-"fechaTerminoEstimado": "2022-06-01 00:00:00.0",
-"latitud": "1",
-"longitud": "1"
+
+
 
 "imgActividad1": "/opt/uploads/8000002492.docx",
 "imgActividad2": "/opt/uploads/8000002497.docx",
 "imgActividad3": "/opt/uploads/8000002765.docx",
+"imgActividad4": "/opt/uploads/8000002765.docx",
 
 "imgProblema1": "/opt/uploads/8000002492.docx",
 "imgProblema2": "/opt/uploads/8000002497.docx",
 "imgProblema3": "/opt/uploads/8000002765.docx",
+"imgProblema4": "/opt/uploads/8000002765.docx",
 
 "imgRiesgo1": "/opt/uploads/8000002765.docx",
 "imgRiesgo2": "/opt/uploads/8000002497.docx",
 "imgRiesgo3": "",
+"imgRiesgo4": "",
 */
   int? id = 0;
   int? isEdit = 0;
@@ -252,12 +262,24 @@ class TramaMonitoreoModel {
 
   // (Obligatorio) Fotos de la partida ejecutada
   String? imgActividad = '';
+  String? imgActividad1 = '';
+  String? imgActividad2 = '';
+  String? imgActividad3 = '';
+  String? imgActividad4 = '';
 
   /// (Opcional) Fotos del problema identificado
   String? imgProblema = '';
+  String? imgProblema1 = '';
+  String? imgProblema2 = '';
+  String? imgProblema3 = '';
+  String? imgProblema4 = '';
 
   /// (Opcional) Fotos del riesgo identificado
   String? imgRiesgo = '';
+  String? imgRiesgo1 = '';
+  String? imgRiesgo2 = '';
+  String? imgRiesgo3 = '';
+  String? imgRiesgo4 = '';
 
   /// Observaciones: descripción de la observación sobre la ejecución de la partida
   String? observaciones = '';
@@ -297,8 +319,20 @@ class TramaMonitoreoModel {
     this.idMonitoreo,
     this.idUsuario,
     this.imgActividad,
+    this.imgActividad1,
+    this.imgActividad2,
+    this.imgActividad3,
+    this.imgActividad4,
     this.imgProblema,
+    this.imgProblema1,
+    this.imgProblema2,
+    this.imgProblema3,
+    this.imgProblema4,
     this.imgRiesgo,
+    this.imgRiesgo1,
+    this.imgRiesgo2,
+    this.imgRiesgo3,
+    this.imgRiesgo4,
     this.observaciones,
     this.problemaIdentificado,
     this.riesgoIdentificado,
@@ -327,8 +361,20 @@ class TramaMonitoreoModel {
     String? idMonitoreo,
     String? idUsuario,
     String? imgActividad,
+    String? imgActividad1,
+    String? imgActividad2,
+    String? imgActividad3,
+    String? imgActividad4,
     String? imgProblema,
+    String? imgProblema1,
+    String? imgProblema2,
+    String? imgProblema3,
+    String? imgProblema4,
     String? imgRiesgo,
+    String? imgRiesgo1,
+    String? imgRiesgo2,
+    String? imgRiesgo3,
+    String? imgRiesgo4,
     String? observaciones,
     String? problemaIdentificado,
     String? riesgoIdentificado,
@@ -358,8 +404,20 @@ class TramaMonitoreoModel {
         idMonitoreo: idMonitoreo ?? this.idMonitoreo,
         idUsuario: idUsuario ?? this.idUsuario,
         imgActividad: imgActividad ?? this.imgActividad,
+        imgActividad1: imgActividad ?? this.imgActividad1,
+        imgActividad2: imgActividad ?? this.imgActividad2,
+        imgActividad3: imgActividad ?? this.imgActividad3,
+        imgActividad4: imgActividad ?? this.imgActividad4,
         imgProblema: imgProblema ?? this.imgProblema,
+        imgProblema1: imgProblema ?? this.imgProblema1,
+        imgProblema2: imgProblema ?? this.imgProblema2,
+        imgProblema3: imgProblema ?? this.imgProblema3,
+        imgProblema4: imgProblema ?? this.imgProblema4,
         imgRiesgo: imgRiesgo ?? this.imgRiesgo,
+        imgRiesgo1: imgRiesgo ?? this.imgRiesgo1,
+        imgRiesgo2: imgRiesgo ?? this.imgRiesgo2,
+        imgRiesgo3: imgRiesgo ?? this.imgRiesgo3,
+        imgRiesgo4: imgRiesgo ?? this.imgRiesgo4,
         observaciones: observaciones ?? this.observaciones,
         problemaIdentificado: problemaIdentificado ?? this.problemaIdentificado,
         riesgoIdentificado: riesgoIdentificado ?? this.riesgoIdentificado,
@@ -388,18 +446,31 @@ class TramaMonitoreoModel {
             json[TramaMonitoreoFields.actividadPartidaEjecutada] as String,
         alternativaSolucion:
             json[TramaMonitoreoFields.alternativaSolucion] as String,
-        avanceFisicoAcumulado:
-            json[TramaMonitoreoFields.avanceFisicoAcumulado] as double,
-        avanceFisicoPartida:
-            json[TramaMonitoreoFields.avanceFisicoPartida] as double,
+        avanceFisicoAcumulado: double.parse(
+            (json[TramaMonitoreoFields.avanceFisicoAcumulado] ?? "0")
+                .toString()),
+        avanceFisicoPartida: double.parse(
+            (json[TramaMonitoreoFields.avanceFisicoPartida] ?? "0").toString()),
         estadoAvance: json[TramaMonitoreoFields.estadoAvance] as String,
         estadoMonitoreo: json[TramaMonitoreoFields.estadoMonitoreo] as String,
         fechaMonitoreo: json[TramaMonitoreoFields.fechaMonitoreo] as String,
         idMonitoreo: json[TramaMonitoreoFields.idMonitoreo] as String,
         idUsuario: json[TramaMonitoreoFields.idUsuario] as String,
-        imgActividad: json[TramaMonitoreoFields.imgActividad] as String,
-        imgProblema: json[TramaMonitoreoFields.imgProblema] as String,
-        imgRiesgo: json[TramaMonitoreoFields.imgRiesgo] as String,
+        imgActividad: json[TramaMonitoreoFields.imgActividad] as String?,
+        imgActividad1: json[TramaMonitoreoFields.imgActividad1] as String?,
+        imgActividad2: json[TramaMonitoreoFields.imgActividad2] as String?,
+        imgActividad3: json[TramaMonitoreoFields.imgActividad3] as String?,
+        imgActividad4: json[TramaMonitoreoFields.imgActividad4] as String?,
+        imgProblema: json[TramaMonitoreoFields.imgProblema] as String?,
+        imgProblema1: json[TramaMonitoreoFields.imgProblema1] as String?,
+        imgProblema2: json[TramaMonitoreoFields.imgProblema2] as String?,
+        imgProblema3: json[TramaMonitoreoFields.imgProblema3] as String?,
+        imgProblema4: json[TramaMonitoreoFields.imgProblema4] as String?,
+        imgRiesgo: json[TramaMonitoreoFields.imgRiesgo] as String?,
+        imgRiesgo1: json[TramaMonitoreoFields.imgRiesgo1] as String?,
+        imgRiesgo2: json[TramaMonitoreoFields.imgRiesgo2] as String?,
+        imgRiesgo3: json[TramaMonitoreoFields.imgRiesgo3] as String?,
+        imgRiesgo4: json[TramaMonitoreoFields.imgRiesgo4] as String?,
         observaciones: json[TramaMonitoreoFields.observaciones] as String,
         problemaIdentificado:
             json[TramaMonitoreoFields.problemaIdentificado] as String,
@@ -433,8 +504,20 @@ class TramaMonitoreoModel {
         TramaMonitoreoFields.idMonitoreo: idMonitoreo,
         TramaMonitoreoFields.idUsuario: idUsuario,
         TramaMonitoreoFields.imgActividad: imgActividad,
+        TramaMonitoreoFields.imgActividad1: imgActividad1,
+        TramaMonitoreoFields.imgActividad2: imgActividad2,
+        TramaMonitoreoFields.imgActividad3: imgActividad3,
+        TramaMonitoreoFields.imgActividad4: imgActividad4,
         TramaMonitoreoFields.imgProblema: imgProblema,
+        TramaMonitoreoFields.imgProblema1: imgProblema1,
+        TramaMonitoreoFields.imgProblema2: imgProblema2,
+        TramaMonitoreoFields.imgProblema3: imgProblema3,
+        TramaMonitoreoFields.imgProblema4: imgProblema4,
         TramaMonitoreoFields.imgRiesgo: imgRiesgo,
+        TramaMonitoreoFields.imgRiesgo1: imgRiesgo1,
+        TramaMonitoreoFields.imgRiesgo2: imgRiesgo2,
+        TramaMonitoreoFields.imgRiesgo3: imgRiesgo3,
+        TramaMonitoreoFields.imgRiesgo4: imgRiesgo4,
         TramaMonitoreoFields.observaciones: observaciones,
         TramaMonitoreoFields.problemaIdentificado: problemaIdentificado,
         TramaMonitoreoFields.riesgoIdentificado: riesgoIdentificado,
@@ -463,8 +546,20 @@ class TramaMonitoreoModel {
       TramaMonitoreoFields.idMonitoreo: o.idMonitoreo,
       TramaMonitoreoFields.idUsuario: o.idUsuario,
       TramaMonitoreoFields.imgActividad: o.imgActividad,
+      TramaMonitoreoFields.imgActividad1: o.imgActividad1,
+      TramaMonitoreoFields.imgActividad2: o.imgActividad2,
+      TramaMonitoreoFields.imgActividad3: o.imgActividad3,
+      TramaMonitoreoFields.imgActividad4: o.imgActividad4,
       TramaMonitoreoFields.imgProblema: o.imgProblema,
+      TramaMonitoreoFields.imgProblema1: o.imgProblema1,
+      TramaMonitoreoFields.imgProblema2: o.imgProblema2,
+      TramaMonitoreoFields.imgProblema3: o.imgProblema3,
+      TramaMonitoreoFields.imgProblema4: o.imgProblema4,
       TramaMonitoreoFields.imgRiesgo: o.imgRiesgo,
+      TramaMonitoreoFields.imgRiesgo1: o.imgRiesgo1,
+      TramaMonitoreoFields.imgRiesgo2: o.imgRiesgo2,
+      TramaMonitoreoFields.imgRiesgo3: o.imgRiesgo3,
+      TramaMonitoreoFields.imgRiesgo4: o.imgRiesgo4,
       TramaMonitoreoFields.observaciones: o.observaciones,
       TramaMonitoreoFields.problemaIdentificado: o.problemaIdentificado,
       TramaMonitoreoFields.riesgoIdentificado: o.riesgoIdentificado,
