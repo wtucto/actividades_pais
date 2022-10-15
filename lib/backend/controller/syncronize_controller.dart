@@ -6,7 +6,7 @@ import 'package:get/instance_manager.dart';
 
 class SyncronizeData {
   Future<bool> isOnline() async {
-    bool isDeviceConnected = await CheckConnection.isOnlineWifi();
+    bool isDeviceConnected = await CheckConnection.isOnlineWifiMobile();
     return isDeviceConnected;
   }
 

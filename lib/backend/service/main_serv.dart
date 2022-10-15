@@ -11,7 +11,7 @@ class MainService {
 
   /// Returns `true` si existe conexion a internet por wifi.
   Future<bool> isOnline() async {
-    bool isDeviceConnected = await CheckConnection.isOnlineWifi();
+    bool isDeviceConnected = await CheckConnection.isOnlineWifiMobile();
     return isDeviceConnected;
   }
 
@@ -22,13 +22,17 @@ class MainService {
   ) async {
     /// Obtiene todos los registros de la DB Local cuyo estado esten en: POR ENVIAR
     await getAllMonitorPorEnviar(limit, offset).then((a) async {
-      await sendAllMonitoreo(a);
+      await sendAllMonitoreo(a, []);
     });
   }
 
   /*
   Enviar los registros de monitoreo a la Base de datos central mediante el 
   API REST.
+
+  @TramaMonitoreoModel a : Listado de Monitoreos para enviar registros a la nuve
+  @TramaMonitoreoModel e : Listado de Monitoreos que fallaron al enviar
+                           (Parametro solo valido para el metodo recursivo)
 
   CONSIDERACIONES:
   - Los estados del Monitoreo deben de tener el estado: POR ENVIAR
@@ -44,16 +48,19 @@ class MainService {
   */
   Future<List<TramaMonitoreoModel>> sendAllMonitoreo(
     List<TramaMonitoreoModel> a,
+    List<TramaMonitoreoModel>? e,
   ) async {
-    if (await isOnline()) {
+    bool isOnlines = await isOnline();
+    if (isOnlines) {
       List<TramaMonitoreoModel> aResp = [];
-      List<TramaMonitoreoModel> aError = [];
+      List<TramaMonitoreoModel> aError = e ?? [];
+      List<TramaMonitoreoModel> aNoConect = [];
 
       for (var oMonit in a) {
         /// (1)...
         oMonit.estadoMonitoreo = TramaMonitoreoModel.sEstadoENV;
 
-        if (await isOnline()) {
+        if (isOnlines) {
           try {
             final oResp =
                 await Get.find<MainRepository>().insertarMonitoreo(oMonit);
@@ -69,12 +76,25 @@ class MainService {
           } catch (oError) {
             /// (4)...
             aError.add(oMonit);
+
+            ///Si falla volver a consultar si existe conexión
+            isOnlines = await isOnline();
           }
         } else {
           /// (4)...
-          aError.add(oMonit);
+          aNoConect.add(oMonit);
         }
       }
+
+      if (aNoConect.length > 0) {
+        /**
+         * Metodo recursivo: Solo reintentar los registros que no se enviaron
+         * por perdida de conexión despues de 3 segundos
+         */
+        await Future.delayed(Duration(seconds: 2));
+        sendAllMonitoreo(aNoConect, aError);
+      }
+
       return aError;
     } else {
       return Future.error(

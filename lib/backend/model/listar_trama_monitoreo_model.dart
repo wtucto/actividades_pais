@@ -90,9 +90,16 @@ class TramaMonitoreoFields {
 }
 
 class TramaMonitoreoModel {
+  static const sOptDropdownDefault = 'Seleccione una opción';
+
   static const sEstadoINC = 'INCOMPLETO';
   static const sEstadoPEN = 'POR ENVIAR';
   static const sEstadoENV = 'ENVIADO';
+  static final List<String> aEstadoMonitoreo = [
+    sEstadoINC,
+    sEstadoPEN,
+    sEstadoENV,
+  ];
 
   static const sAltSol01 = 'Solicitar modificación de Exp. Técnico';
   static const sAltSol02 = 'Gestionar reunión de coordinación con UPS';
@@ -102,47 +109,8 @@ class TramaMonitoreoModel {
   static const sAltSol06 = 'Gestionar recursos adicionales';
   static const sAltSol07 = 'Coordinar reunión con asesoría legal';
   static const sAltSol08 = 'Incrementar presupuesto para saneamiento legal';
-
-  static const sActPartEjec01 = 'Cimentación';
-  static const sActPartEjec02 = 'Muros y Columnas';
-  static const sActPartEjec03 = 'Techo y Acabados';
-  static const sActPartEjec04 = 'obras Exteriores';
-  static const sActPartEjec05 = 'Equipamiento';
-
-  static const sEstAvan01 = 'Ejecución';
-  static const sEstAvan02 = 'Reinicio';
-  static const sEstAvan03 = 'Paralizado';
-  static const sEstAvan04 = 'Por iniciar';
-
-  static const sProbIden01 = 'Calculo inexacto en duración de las tareas';
-  static const sProbIden02 = 'Retraso en plazos establecidos en el proyecto';
-  static const sProbIden03 = 'Estimación inexacta de los costos';
-  static const sProbIden04 = 'Núcleo ejector no rinde gastos';
-  static const sProbIden05 = 'Limitados recursos y sobre utilizados';
-  static const sProbIden06 = 'Terreno con problemas de saneamiento legal';
-
-  static const sRiesIden01 =
-      'Incumplimiento de las características de los componentes';
-  static const sRiesIden02 = 'Lluvias 1 deslizamientos / Clima';
-  static const sRiesIden03 = 'Asignación de recursos y fondos fuera plazo';
-  static const sRiesIden04 = 'Inadecuada estimación de costos';
-  static const sRiesIden05 = 'Inadecuada programación';
-  static const sRiesIden06 = 'Inadecuada comunicación con UPS';
-
-  static const sNivelRies01 = 'Muy Bajo';
-  static const sNivelRies02 = 'Bajo';
-  static const sNivelRies03 = 'Medio';
-  static const sNivelRies04 = 'Medio Alto';
-  static const sNivelRies05 = 'Alto';
-  static const sNivelRies06 = 'Muy Alto';
-
-  static final List<String> aEstadoMonitoreo = [
-    sEstadoINC,
-    sEstadoPEN,
-    sEstadoENV,
-  ];
-
   static final List<String> aAlternativaSolucion = [
+    sOptDropdownDefault,
     sAltSol01,
     sAltSol02,
     sAltSol03,
@@ -153,21 +121,40 @@ class TramaMonitoreoModel {
     sAltSol08,
   ];
 
+  static const sActPartEjec01 = 'Cimentación';
+  static const sActPartEjec02 = 'Muros y Columnas';
+  static const sActPartEjec03 = 'Techo y Acabados';
+  static const sActPartEjec04 = 'obras Exteriores';
+  static const sActPartEjec05 = 'Equipamiento';
   static final List<String> aActividadPartidaEjecutada = [
+    sOptDropdownDefault,
     sActPartEjec01,
     sActPartEjec02,
     sActPartEjec03,
     sActPartEjec04,
     sActPartEjec05,
   ];
+
+  static const sEstAvan01 = 'Ejecución';
+  static const sEstAvan02 = 'Reinicio';
+  static const sEstAvan03 = 'Paralizado';
+  static const sEstAvan04 = 'Por iniciar';
   static final List<String> aEstadoAvance = [
+    sOptDropdownDefault,
     sEstAvan01,
     sEstAvan02,
     sEstAvan03,
     sEstAvan04,
   ];
 
+  static const sProbIden01 = 'Calculo inexacto en duración de las tareas';
+  static const sProbIden02 = 'Retraso en plazos establecidos en el proyecto';
+  static const sProbIden03 = 'Estimación inexacta de los costos';
+  static const sProbIden04 = 'Núcleo ejector no rinde gastos';
+  static const sProbIden05 = 'Limitados recursos y sobre utilizados';
+  static const sProbIden06 = 'Terreno con problemas de saneamiento legal';
   static final List<String> aProblemaIdentificado = [
+    sOptDropdownDefault,
     sProbIden01,
     sProbIden02,
     sProbIden03,
@@ -176,7 +163,15 @@ class TramaMonitoreoModel {
     sProbIden06,
   ];
 
+  static const sRiesIden01 =
+      'Incumplimiento de las características de los componentes';
+  static const sRiesIden02 = 'Lluvias 1 deslizamientos / Clima';
+  static const sRiesIden03 = 'Asignación de recursos y fondos fuera plazo';
+  static const sRiesIden04 = 'Inadecuada estimación de costos';
+  static const sRiesIden05 = 'Inadecuada programación';
+  static const sRiesIden06 = 'Inadecuada comunicación con UPS';
   static final List<String> aRiesgoIdentificado = [
+    sOptDropdownDefault,
     sRiesIden01,
     sRiesIden02,
     sRiesIden03,
@@ -185,7 +180,14 @@ class TramaMonitoreoModel {
     sRiesIden06,
   ];
 
+  static const sNivelRies01 = 'Muy Bajo';
+  static const sNivelRies02 = 'Bajo';
+  static const sNivelRies03 = 'Medio';
+  static const sNivelRies04 = 'Medio Alto';
+  static const sNivelRies05 = 'Alto';
+  static const sNivelRies06 = 'Muy Alto';
   static final List<String> aNivelRiesgo = [
+    sOptDropdownDefault,
     sNivelRies01,
     sNivelRies02,
     sNivelRies03,

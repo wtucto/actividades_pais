@@ -219,6 +219,7 @@ class MainController extends GetxController {
 
     /*
       Autocompletar campos con datos del Proyecto
+      - cui -> cui
       - snip -> numSnip
       - tambo -> tambo
       - fechaTerminoEstimado -> fechaTerminoEstimado
@@ -322,7 +323,7 @@ class MainController extends GetxController {
     });
 
     if (isOk) {
-      final aResp = await Get.find<MainService>().sendAllMonitoreo(a);
+      final aResp = await Get.find<MainService>().sendAllMonitoreo(a, []);
       /*if (aResp.length > 0) {
         return Future.error(
           'Hay registros que no se pudieron enviar al servidor porque generaron un error: ${aResp.length}',
