@@ -36,6 +36,7 @@ class _MonitoringDetailNewEditPageState
     _valueRiesgo = _itemRiesgo[0];
     _valueNivelRiesgo = _itemNivelRiesgo[0];
   }
+  String titleMonitor = "";
   String fechaMonitoreo = DateFormat("yyyy-MM-dd").format(DateTime.now());
   String? _statusAdvance;
   String? _valueRiesgo;
@@ -135,6 +136,17 @@ class _MonitoringDetailNewEditPageState
     ).show(context);
   }
 
+  // final ImagePicker imagePicker = ImagePicker();
+
+  // List<XFile>? imageFileList = [];
+
+  // void selectImages() async {
+  //   final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
+  //   if (selectedImages!.isNotEmpty) {
+  //     imageFileList!.addAll(selectedImages);
+  //   }
+  //   setState(() {});
+  // }
   // @override
   // void dispose() {
   //   _questionCtrl.dispose();
@@ -146,15 +158,21 @@ class _MonitoringDetailNewEditPageState
 
   @override
   Widget build(BuildContext context) {
-    _idMonitor.text = "${widget.datoProyecto?.cui ?? ''}_$fechaMonitoreo";
+    _idMonitor.text = widget.datoProyecto?.cui == null
+        ? "${fechaMonitoreo}"
+        : "${widget.datoProyecto?.cui}_$fechaMonitoreo";
     _dateMonitor.text = fechaMonitoreo;
+    titleMonitor = widget.datoProyecto?.tambo == null
+        ? "MONITOR"
+        : "${widget.datoProyecto?.tambo}";
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         title: Center(
           child: Text(
-            'Monitoring'.tr.toUpperCase(),
+            // 'Monitoring'.tr.toUpperCase(),
+            titleMonitor,
             style: const TextStyle(
               color: Color(0xfffefefe),
               fontWeight: FontWeight.w600,
@@ -179,363 +197,338 @@ class _MonitoringDetailNewEditPageState
       /**
        * Formulario
        */
-      body: Container(
-        child: Form(
-          key: _formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: ListView(
-            padding: const EdgeInsets.all(32),
-            children: [
-              /**
-             * ID MONITOREO
-             */
-              TextFormField(
-                controller: _idMonitor,
-                decoration: const InputDecoration(labelText: 'Id Monitoreo *'),
-                // validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-              ),
-              /**
-             * ESTADO MONITOREO
-             */
-              const SizedBox(height: 20),
-              const Text('Estado Monitoreo *'),
-              myDropdownButtonFormField(
-                  _statusMonitor!, _itemStatusMonitor, true),
+      body: Form(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: ListView(
+          padding: const EdgeInsets.all(32.0),
+          children: [
+            /**
+               * ID MONITOREO
+              */
+            TextFormField(
+              controller: _idMonitor,
+              decoration: const InputDecoration(labelText: 'Id Monitoreo *'),
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+            ),
+            /**
+               * ESTADO MONITOREO
+              */
+            myDropdownButtonFormField(_statusMonitor!, _itemStatusMonitor, true,
+                'Estado Monitoreo *'),
+            /**
+               * FECHA MONITOREO
+               */
+            TextFormField(
+              controller: _dateMonitor,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+              enabled: false,
+              decoration: const InputDecoration(
+                  //icon: Icon(Icons.calendar_today), //icon of text field
+                  labelText: 'Fecha Monitoreo *' //label text of field
+                  ),
+              readOnly:
+                  true, //set it true, so that user will not able to edit text
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(
+                        2000), //DateTime.now() - not to allow to choose before today.
+                    lastDate: DateTime(2101));
 
-              /**
-             * FECHA MONITOREO
-             */
-              TextFormField(
-                controller: _dateMonitor,
-                validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-                enabled: false,
-                decoration: const InputDecoration(
-                    //icon: Icon(Icons.calendar_today), //icon of text field
-                    labelText: 'Fecha Monitoreo *' //label text of field
-                    ),
-                readOnly:
-                    true, //set it true, so that user will not able to edit text
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(
-                          2000), //DateTime.now() - not to allow to choose before today.
-                      lastDate: DateTime(2101));
+                if (pickedDate != null) {
+                  setState(() {
+                    _dateMonitor.text = _dateMonitor.text;
+                  });
+                }
+              },
+            ),
+            /**
+              * % AVANCE FISICO ESTIMADO ACUMULADO
+              */
+            TextFormField(
+              controller: _advanceFEA,
+              decoration: const InputDecoration(
+                labelText: '% Avance Fisico Estimado Acumulado *',
+              ),
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+            ),
 
-                  if (pickedDate != null) {
-                    setState(() {
-                      _dateMonitor.text = _dateMonitor.text;
-                    });
-                  }
-                },
-              ),
-              /**
-             * % AVANCE FISICO ESTIMADO ACUMULADO
-             */
-              TextFormField(
-                controller: _advanceFEA,
-                decoration: const InputDecoration(
-                  labelText: '% Avance Fisico Estimado Acumulado *',
-                ),
-                validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-              ),
-              /**
+            /**
              * % ESTADO DE AVANCE
              */
-              const SizedBox(height: 20),
-              const Text('Estado de Avance *'),
-              myDropdownButtonFormField(
-                  _statusAdvance!, _itemStatusAdvance, true),
-              /**
-             * PARTIDA EJECUTADA
-             */
-              const SizedBox(height: 20),
-              const Text('Partida Ejecutada *'),
-              myDropdownButtonFormField(
-                  _vauluePartidaEje!, _itemsPartidaEje, true),
-              /**
-             * % AVANCE FISICO ACUMULADO PARTIDA
-             */
-              TextFormField(
-                controller: _advanceFEP,
-                decoration: const InputDecoration(
-                    labelText: '% Avance Fisico Acumulado Partida *'),
-                validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-              ),
-              /**
-             * % FOTOS DE LA PARTIDA EJECUTADA (OBLIGATORIO)
-             */
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  OutlinedButton.icon(
-                    label: const Text('Fotos de la Partida Ejecutada'),
-                    icon: const Icon(Icons.image),
-                    onPressed: () {
-                      controller.selectMultipleImage(_imgPartidaEjecutada);
-                    },
-                  ),
-                ],
-              ),
-              myExpansionPanelListethod(_imgPartidaEjecutada, expandedPE),
-
-              /**
-             * OBSERVACIONES
-             */
-              TextFormField(
-                keyboardType: TextInputType.multiline,
-                textInputAction: TextInputAction.newline,
-                controller: _obsMonitor,
-                decoration: const InputDecoration(labelText: 'Observaciones *'),
-                validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-              ),
-              /**
-             * PROBLEMA IDENTIFICADO EN LA OBRA (Obligatorio)
-             */
-              const SizedBox(height: 20),
-              const Text('Problema Indentificado en la Obra *'),
-              myDropdownButtonFormField(
-                  _valueProblemaIO!, _itemProblemaIO, false),
-
-              /**
-               * Foto del Problema Identificado (Opcional)
+            myDropdownButtonFormField(_statusAdvance!, _itemStatusAdvance, true,
+                'Estado de Avance *'),
+            /**
+               * PARTIDA EJECUTADA
                */
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  OutlinedButton.icon(
-                    label: const Text('Fotos del Problema Identificado'),
-                    icon: const Icon(Icons.image),
-                    onPressed: () {
-                      controller.selectMultipleImage(_imgProblemaIdentificado);
-                    },
-                  ),
-                ],
-              ),
-              myExpansionPanelListethod(_imgProblemaIdentificado, expandedPI),
-              /**
+            myDropdownButtonFormField(_vauluePartidaEje!, _itemsPartidaEje,
+                true, 'Partida Ejecutada *'),
+            /**
+               * % AVANCE FISICO ACUMULADO PARTIDA
+               */
+            TextFormField(
+              controller: _advanceFEP,
+              decoration: const InputDecoration(
+                  labelText: '% Avance Fisico Acumulado Partida *'),
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+            ),
+            /**
+             * Fotos de la Partida Ejecutada(Obligatorio) 
+            */
+            OutlinedButton.icon(
+              label: const Text('Fotos de la Partida Ejecutada *'),
+              icon: const Icon(Icons.image),
+              onPressed: () {
+                controller.selectMultipleImage(_imgPartidaEjecutada);
+              },
+            ),
+            MyImageMultiple(
+                controller: controller, nameField: _imgPartidaEjecutada),
+            // myExpansionPanelListethod(_imgPartidaEjecutada, expandedPE),
+
+            /**
+           * OBSERVACIONES
+           */
+            TextFormField(
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.newline,
+              controller: _obsMonitor,
+              decoration: const InputDecoration(labelText: 'Observaciones *'),
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+            ),
+            /**
+           * PROBLEMA IDENTIFICADO EN LA OBRA (Obligatorio)
+           */
+            myDropdownButtonFormField(_valueProblemaIO!, _itemProblemaIO, false,
+                'Problema Indentificado en la Obra *'),
+            /**
+             * Foto del Problema Identificado (Opcional)
+             */
+            OutlinedButton.icon(
+              label: const Text('Foto del Problema Identificado'),
+              icon: const Icon(Icons.image),
+              onPressed: () {
+                controller.selectMultipleImage(_imgProblemaIdentificado);
+              },
+            ),
+            myExpansionPanelListethod(_imgProblemaIdentificado, expandedPI),
+            /**
              * ALTERNATIVA DE SOLUCION
              */
-              const SizedBox(height: 20),
-              const Text('Alternativa de Solución *'),
-              myDropdownButtonFormField(
-                  _valueAlternSolucion!, _itemAlternSolucion, false),
-              /**
-             * SELECCIONES EL RIESGO Identificado
+            myDropdownButtonFormField(_valueAlternSolucion!,
+                _itemAlternSolucion, false, 'Alternativa de Solución *'),
+            /**
+           * SELECCIONES EL RIESGO Identificado
+           */
+            myDropdownButtonFormField(
+                _valueRiesgo!, _itemRiesgo, false, 'Riesgo Identificado'),
+            /**
+             * Foto del Riesgo Identificado (Opcional)
              */
-              const SizedBox(height: 20),
-              const Text('Riesgo Identificado'),
-              myDropdownButtonFormField(_valueRiesgo!, _itemRiesgo, false),
-              /**
-               * Foto del Riesgo Identificado (Opcional)
-               */
-              Row(
-                children: [
-                  OutlinedButton.icon(
-                    label: const Text('Fotos del Riesgo Identificado'),
-                    icon: const Icon(Icons.image),
-                    onPressed: () {
-                      controller.selectMultipleImage(_imgRiesgoIdentificado);
-                    },
+            OutlinedButton.icon(
+              label: const Text('Foto del Riesgo Identificado'),
+              icon: const Icon(Icons.image),
+              onPressed: () {
+                controller.selectMultipleImage(_imgRiesgoIdentificado);
+              },
+            ),
+            myExpansionPanelListethod(_imgRiesgoIdentificado, expandedRI),
+            /**
+            * NIVEL DE RIESGO
+            */
+            myDropdownButtonFormField(_valueNivelRiesgo!, _itemNivelRiesgo,
+                true, 'Nivel de Riesgo *'),
+
+            /**
+           * FECHA TERMINO OBRA
+           */
+            TextFormField(
+              controller: _dateObra,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+              decoration: const InputDecoration(
+                  //icon: Icon(Icons.calendar_today), //icon of text field
+                  labelText: 'Fecha Termino Obra *' //label text of field
                   ),
-                ],
-              ),
-              myExpansionPanelListethod(_imgRiesgoIdentificado, expandedRI),
-              /**
-             * NIVEL DE RIESGO
+
+              readOnly:
+                  true, //set it true, so that user will not able to edit text
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(
+                        2000), //DateTime.now() - not to allow to choose before today.
+                    lastDate: DateTime(2101));
+
+                if (pickedDate != null) {
+                  print(
+                      pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                  String formattedDate =
+                      DateFormat('yyyy-MM-dd').format(pickedDate);
+                  print(
+                      formattedDate); //formatted date output using intl package =>  2021-03-16
+                  //you can implement different kind of Date Format here according to your requirement
+
+                  setState(() {
+                    _dateObra.text =
+                        formattedDate; //set output date to TextField value.
+                  });
+                }
+              },
+            ),
+            /**
+           * LOGITUD
+           */
+            TextFormField(
+              controller: _longitud,
+              decoration: const InputDecoration(labelText: 'Longitud *'),
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+            ),
+            /**
+           * LATITUD
+           */
+            TextFormField(
+              controller: _latitud,
+              decoration: const InputDecoration(labelText: 'Latitud *'),
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+            ),
+            /**
+             * Botones
              */
-              const SizedBox(height: 20),
-              const Text('Nivel de Riesgo *'),
-              myDropdownButtonFormField(
-                  _valueNivelRiesgo!, _itemNivelRiesgo, true),
+            const SizedBox(height: 32),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color.fromARGB(255, 12, 124, 205),
+                    onPrimary: Colors.white,
+                    shadowColor: const Color.fromARGB(255, 53, 53, 53),
+                    elevation: 5,
+                  ),
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      // _question['value'] = _questionCtrl.text;
+                      // _question['options'] = _optionCtrls.asMap().entries.map(
+                      //   (entry) {
+                      //     return {
+                      //       'index': options[entry.key],
+                      //       'value': entry.value.text
+                      //     };
+                      //   },
+                      // );
+                      await mainController.saveMonitoreo(TramaMonitoreoModel(
+                        id: 0,
+                        isEdit: 1,
+                        createdTime: DateTime.now(),
+                        snip: "",
+                        cui: "",
+                        latitud: _latitud.text,
+                        longitud: _longitud.text,
+                        tambo: "",
+                        fechaTerminoEstimado: "",
+                        actividadPartidaEjecutada: "",
+                        alternativaSolucion: "",
+                        // avanceFisicoAcumulado: "",
+                        // avanceFisicoPartida: "",
+                        estadoAvance: _statusAdvance!,
+                        estadoMonitoreo: _statusMonitor!,
+                        fechaMonitoreo: _dateMonitor.text,
+                        idMonitoreo: _idMonitor.text,
+                        idUsuario: "",
+                        imgActividad: "",
+                        imgProblema: "",
+                        imgRiesgo: "",
+                        observaciones: _obsMonitor.text,
+                        problemaIdentificado: _valueProblemaIO!,
+                        riesgoIdentificado: _valueRiesgo!,
+                        nivelRiesgo: "",
+                        rol: "",
+                        usuario: "",
+                      ));
 
-              /**
-             * FECHA TERMINO OBRA
-             */
-              TextFormField(
-                controller: _dateObra,
-                validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-                decoration: const InputDecoration(
-                    //icon: Icon(Icons.calendar_today), //icon of text field
-                    labelText: 'Fecha Termino Obra *' //label text of field
-                    ),
+                      // List<TramaMonitoreoModel> aMonitoreo =
+                      //     await mainController.getAllMonitor(0, 0);
 
-                readOnly:
-                    true, //set it true, so that user will not able to edit text
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(
-                          2000), //DateTime.now() - not to allow to choose before today.
-                      lastDate: DateTime(2101));
-
-                  if (pickedDate != null) {
-                    print(
-                        pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                    String formattedDate =
-                        DateFormat('yyyy-MM-dd').format(pickedDate);
-                    print(
-                        formattedDate); //formatted date output using intl package =>  2021-03-16
-                    //you can implement different kind of Date Format here according to your requirement
-
-                    setState(() {
-                      _dateObra.text =
-                          formattedDate; //set output date to TextField value.
-                    });
-                  }
-                },
-              ),
-              /**
-             * LOGITUD
-             */
-              TextFormField(
-                controller: _longitud,
-                decoration: const InputDecoration(labelText: 'Longitud *'),
-                validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-              ),
-              /**
-             * LATITUD
-             */
-              TextFormField(
-                controller: _latitud,
-                decoration: const InputDecoration(labelText: 'Latitud *'),
-                validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-              ),
-              const SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color.fromARGB(255, 12, 124, 205),
-                      onPrimary: Colors.white,
-                      shadowColor: const Color.fromARGB(255, 53, 53, 53),
-                      elevation: 5,
-                    ),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        // _question['value'] = _questionCtrl.text;
-                        // _question['options'] = _optionCtrls.asMap().entries.map(
-                        //   (entry) {
-                        //     return {
-                        //       'index': options[entry.key],
-                        //       'value': entry.value.text
-                        //     };
-                        //   },
-                        // );
-                        await mainController.saveMonitoreo(TramaMonitoreoModel(
-                          id: 0,
-                          isEdit: 1,
-                          createdTime: DateTime.now(),
-                          snip: "",
-                          cui: "",
-                          latitud: _latitud.text,
-                          longitud: _longitud.text,
-                          tambo: "",
-                          fechaTerminoEstimado: "",
-                          actividadPartidaEjecutada: "",
-                          alternativaSolucion: "",
-                          // avanceFisicoAcumulado: "",
-                          // avanceFisicoPartida: "",
-                          estadoAvance: _statusAdvance!,
-                          estadoMonitoreo: _statusMonitor!,
-                          fechaMonitoreo: _dateMonitor.text,
-                          idMonitoreo: _idMonitor.text,
-                          idUsuario: "",
-                          imgActividad: "",
-                          imgProblema: "",
-                          imgRiesgo: "",
-                          observaciones: _obsMonitor.text,
-                          problemaIdentificado: _valueProblemaIO!,
-                          riesgoIdentificado: _valueRiesgo!,
-                          nivelRiesgo: "",
-                          rol: "",
-                          usuario: "",
-                        ));
-
-                        // List<TramaMonitoreoModel> aMonitoreo =
-                        //     await mainController.getAllMonitor(0, 0);
-
-                        showSnackbar(
-                          success: true,
-                          text: 'FormIsComplete'.tr,
-                        );
-                      } else {
-                        showSnackbar(
-                          success: false,
-                          text: 'RequiredFields'.tr,
-                        );
-                      }
-                    },
-                    child: Container(
-                      height: 50,
-                      width: width / 3.5,
-                      child: Center(
-                        child: Text(
-                          'SaveData'.tr,
-                          style: const TextStyle(
-                            color: Color(0xfffefefe),
-                            fontWeight: FontWeight.w600,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 20.0,
-                          ),
+                      showSnackbar(
+                        success: true,
+                        text: 'FormIsComplete'.tr,
+                      );
+                    } else {
+                      showSnackbar(
+                        success: false,
+                        text: 'RequiredFields'.tr,
+                      );
+                    }
+                  },
+                  child: Container(
+                    height: 50,
+                    width: width / 3.5,
+                    child: Center(
+                      child: Text(
+                        'SaveData'.tr,
+                        style: const TextStyle(
+                          color: Color(0xfffefefe),
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 20.0,
                         ),
                       ),
                     ),
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color.fromARGB(255, 1, 173, 130),
-                      onPrimary: Colors.white,
-                      shadowColor: const Color.fromARGB(255, 53, 53, 53),
-                      elevation: 5,
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _question['value'] = _questionCtrl.text;
-                        _question['options'] = _optionCtrls.asMap().entries.map(
-                          (entry) {
-                            return {
-                              'index': options[entry.key],
-                              'value': entry.value.text
-                            };
-                          },
-                        );
-                        _confirmDialog('SAVE');
-                        showSnackbar(
-                          success: true,
-                          text: 'FormIsComplete'.tr,
-                        );
-                      } else {
-                        showSnackbar(
-                          success: false,
-                          text: 'RequiredFields'.tr,
-                        );
-                      }
-                    },
-                    child: Container(
-                      height: 50,
-                      width: width / 3.5,
-                      child: Center(
-                        child: Text(
-                          'SendData'.tr,
-                          style: const TextStyle(
-                            color: Color.fromARGB(255, 255, 255, 255),
-                            letterSpacing: 1.5,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'OpenSans',
-                          ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color.fromARGB(255, 1, 173, 130),
+                    onPrimary: Colors.white,
+                    shadowColor: const Color.fromARGB(255, 53, 53, 53),
+                    elevation: 5,
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _question['value'] = _questionCtrl.text;
+                      _question['options'] = _optionCtrls.asMap().entries.map(
+                        (entry) {
+                          return {
+                            'index': options[entry.key],
+                            'value': entry.value.text
+                          };
+                        },
+                      );
+                      _confirmDialog('SAVE');
+                      showSnackbar(
+                        success: true,
+                        text: 'FormIsComplete'.tr,
+                      );
+                    } else {
+                      showSnackbar(
+                        success: false,
+                        text: 'RequiredFields'.tr,
+                      );
+                    }
+                  },
+                  child: Container(
+                    height: 50,
+                    width: width / 3.5,
+                    child: Center(
+                      child: Text(
+                        'SendData'.tr,
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          letterSpacing: 1.5,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'OpenSans',
                         ),
                       ),
                     ),
-                  )
-                ],
-              ),
-            ],
-          ),
+                  ),
+                )
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -583,8 +576,9 @@ class _MonitoringDetailNewEditPageState
   }
 
   DropdownButtonFormField<String> myDropdownButtonFormField(
-      String valueId, List<String> items, bool? isDense) {
+      String valueId, List<String> items, bool? isDense, textLabel) {
     return DropdownButtonFormField(
+      decoration: InputDecoration(labelText: textLabel),
       isExpanded: true,
       isDense: isDense!,
       value: valueId,

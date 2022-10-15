@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MyImageMultiple extends StatelessWidget {
-  const MyImageMultiple({
+  MyImageMultiple({
     Key? key,
     required this.controller,
     required this.nameField,
@@ -16,67 +16,71 @@ class MyImageMultiple extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          Obx(
-            () {
-              return Expanded(
-                child: GridView.count(
-                    shrinkWrap: true,
-                    crossAxisCount: 3,
-                    // mainAxisSpacing: 2.0,
-                    // crossAxisSpacing: 2.0,
-                    children: List.generate(
-                      controller.selectedFileCount.value,
-                      (index) {
-                        return Card(
-                          clipBehavior: Clip.antiAlias,
-                          child: Stack(
-                            children: [
-                              // FadeInImage(
-                              //   placeholder:
-                              //       const AssetImage('assets/loading_icon.gif'),
-                              //   fit: BoxFit.cover,
-                              //   width: double.infinity,
-                              //   height: double.infinity,
-                              //   image: FileImage(
-                              //     File(controller.listImagePath[index]),
-                              //   ),
-                              // ),
-                              Image.file(
-                                File(controller.listImagePath[index]),
-                                width: double.infinity,
-                                height: double.infinity,
-                                fit: BoxFit.cover,
-                              ),
-                              Positioned(
-                                right: 1,
-                                // top: -1,
-                                child: InkWell(
-                                  child: const Icon(
-                                    Icons.remove_circle,
-                                    size: 25,
-                                    color: Colors.red,
-                                  ),
-                                  onTap: () {
-                                    controller.removeMultipleImage(
-                                        controller.listImagePath[index],
-                                        nameField);
-                                  },
-                                ),
-                              ),
-                            ],
+    List<String> itemsImagePath = [];
+    var selectedItemCount = 0.obs;
+    controller.itemsImagesAll.forEach((key, items) {
+      if (key == nameField) {
+        items.forEach((entry) {
+          itemsImagePath.add(entry);
+        });
+      }
+    });
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        Obx(() {
+          selectedItemCount.value = itemsImagePath.length;
+          return GridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 3,
+            // mainAxisSpacing: 2.0,
+            // crossAxisSpacing: 2.0,
+            children: List.generate(
+              selectedItemCount.value,
+              (index) {
+                return Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: Stack(
+                    children: [
+                      // FadeInImage(
+                      //   placeholder:
+                      //       const AssetImage('assets/loading_icon.gif'),
+                      //   fit: BoxFit.cover,
+                      //   width: double.infinity,
+                      //   height: double.infinity,
+                      //   image: FileImage(
+                      //     File(controller.listImagePath[index]),
+                      //   ),
+                      // ),
+                      Image.file(
+                        File(itemsImagePath[index]),
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                      Positioned(
+                        right: 1,
+                        // top: -1,
+                        child: InkWell(
+                          child: const Icon(
+                            Icons.remove_circle,
+                            size: 35,
+                            color: Colors.red,
                           ),
-                        );
-                      },
-                    )),
-              );
-            },
-          ),
-        ],
-      ),
+                          onTap: () {
+                            controller.removeMultipleImage(
+                                itemsImagePath[index], nameField);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        })
+      ],
     );
   }
 }
