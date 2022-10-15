@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:actividades_pais/backend/model/dto/trama_monitoreo_response_api.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/helpers/http.dart';
@@ -59,7 +60,46 @@ class PnPaisApi {
     );
   }
 
-  Future<HttpResponse<TramaMonitoreoModel>> insertarMonitoreo({
+  Future<HttpResponse<TramaMonitoreoRespApiDto>> insertarMonitoreo({
+    required TramaMonitoreoModel oBody,
+  }) {
+    List<Map<String, String>> aFile = [];
+
+    if (oBody.imgActividad != '') {
+      final aImgActividad =
+          oBody.imgActividad!.split(':'); // Notice the whitespace after colon
+      for (var oValue in aImgActividad) {
+        aFile.add({TramaMonitoreoFields.imgActividad: oValue.trim()});
+      }
+    }
+
+    if (oBody.imgProblema != '') {
+      final aImgProblema =
+          oBody.imgProblema!.split(':'); // Notice the whitespace after colon
+      for (var oValue in aImgProblema) {
+        aFile.add({TramaMonitoreoFields.imgProblema: oValue.trim()});
+      }
+    }
+
+    if (oBody.imgRiesgo != '') {
+      final aImgRiesgo =
+          oBody.imgRiesgo!.split(':'); // Notice the whitespace after colon
+      for (var oValue in aImgRiesgo) {
+        aFile.add({TramaMonitoreoFields.imgRiesgo: oValue.trim()});
+      }
+    }
+
+    return _http.postMultipartFile2<TramaMonitoreoRespApiDto>(
+      '${basePathApp}insertarMonitoreo',
+      data: TramaMonitoreoModel.toJsonObjectApi(oBody),
+      aFile: aFile,
+      parser: (data) {
+        return TramaMonitoreoRespApiDto.fromJson(data);
+      },
+    );
+  }
+
+  /*Future<HttpResponse<TramaMonitoreoModel>> insertarMonitoreo({
     required TramaMonitoreoModel oBody,
   }) {
     return _http.request<TramaMonitoreoModel>(
@@ -70,5 +110,5 @@ class PnPaisApi {
         return TramaMonitoreoModel.fromJson(data);
       },
     );
-  }
+  }*/
 }

@@ -170,6 +170,40 @@ class TramaMonitoreoModel {
     sNivelRies06,
   ];
 
+/*
+"idMonitoreo": "1",
+"estadoMonitoreo": "1",
+"idUsuario": "1",
+"usuario": "1",
+"rol": "1",
+"tambo": "1",
+"snip": "1",
+"cui": "1",
+"fechaMonitoreo": "2022-06-01 00:00:00.0",
+"avanceFisicoAcumulado": 1,
+"estadoAvance": "1",
+"actividadPartidaEjecutada": "1",
+"avanceFisicoPartida": 1,
+"observaciones": "1",
+"problemaIdentificado": "1",
+"alternativaSolucion": "1",
+"riesgoIdentificado": "1",
+"fechaTerminoEstimado": "2022-06-01 00:00:00.0",
+"latitud": "1",
+"longitud": "1"
+
+"imgActividad1": "/opt/uploads/8000002492.docx",
+"imgActividad2": "/opt/uploads/8000002497.docx",
+"imgActividad3": "/opt/uploads/8000002765.docx",
+
+"imgProblema1": "/opt/uploads/8000002492.docx",
+"imgProblema2": "/opt/uploads/8000002497.docx",
+"imgProblema3": "/opt/uploads/8000002765.docx",
+
+"imgRiesgo1": "/opt/uploads/8000002765.docx",
+"imgRiesgo2": "/opt/uploads/8000002497.docx",
+"imgRiesgo3": "",
+*/
   int? id = 0;
   int? isEdit = 0;
   DateTime? createdTime = null;
@@ -435,6 +469,32 @@ class TramaMonitoreoModel {
       TramaMonitoreoFields.problemaIdentificado: o.problemaIdentificado,
       TramaMonitoreoFields.riesgoIdentificado: o.riesgoIdentificado,
       TramaMonitoreoFields.nivelRiesgo: o.nivelRiesgo,
+      TramaMonitoreoFields.rol: o.rol,
+      TramaMonitoreoFields.usuario: o.usuario,
+    };
+  }
+
+  static Map<String, dynamic> toJsonObjectApi(TramaMonitoreoModel o) {
+    return {
+      TramaMonitoreoFields.snip: o.snip,
+      TramaMonitoreoFields.cui: o.cui,
+      TramaMonitoreoFields.latitud: o.latitud,
+      TramaMonitoreoFields.longitud: o.longitud,
+      TramaMonitoreoFields.tambo: o.tambo,
+      TramaMonitoreoFields.fechaTerminoEstimado: o.fechaTerminoEstimado,
+      TramaMonitoreoFields.actividadPartidaEjecutada:
+          o.actividadPartidaEjecutada,
+      TramaMonitoreoFields.alternativaSolucion: o.alternativaSolucion,
+      TramaMonitoreoFields.avanceFisicoAcumulado: o.avanceFisicoAcumulado,
+      TramaMonitoreoFields.avanceFisicoPartida: o.avanceFisicoPartida,
+      TramaMonitoreoFields.estadoAvance: o.estadoAvance,
+      TramaMonitoreoFields.estadoMonitoreo: o.estadoMonitoreo,
+      TramaMonitoreoFields.fechaMonitoreo: o.fechaMonitoreo,
+      TramaMonitoreoFields.idMonitoreo: o.idMonitoreo,
+      TramaMonitoreoFields.idUsuario: o.idUsuario,
+      TramaMonitoreoFields.observaciones: o.observaciones,
+      TramaMonitoreoFields.problemaIdentificado: o.problemaIdentificado,
+      TramaMonitoreoFields.riesgoIdentificado: o.riesgoIdentificado,
       TramaMonitoreoFields.rol: o.rol,
       TramaMonitoreoFields.usuario: o.usuario,
     };

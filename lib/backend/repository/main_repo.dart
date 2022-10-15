@@ -1,5 +1,6 @@
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
+import 'package:actividades_pais/backend/model/dto/trama_monitoreo_response_api.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
@@ -116,22 +117,24 @@ class MainRepository {
     return await _dbPnPais.updateMonitoreo(o);
   }
 
-  Future<List<TramaMonitoreoModel>> upLoadAllMonitoreo(
+  Future<List<TramaMonitoreoModel>> uploadAllMonitoreo(
     List<TramaMonitoreoModel> o,
   ) async {
-    List<TramaMonitoreoModel> aUserUp = [];
+    List<TramaMonitoreoModel> aResp = [];
 
     for (var oMonit in o) {
       final response = await _pnPaisApi.insertarMonitoreo(oBody: oMonit);
 
       if (response.error == null) {
-        TramaMonitoreoModel? oUserUp = response.data;
-        aUserUp.add(oUserUp!);
+        TramaMonitoreoRespApiDto? oResp = response.data;
+        if (oResp != null) {
+          aResp.add(oMonit);
+        }
       } else {
         _log.e(response.error.message);
       }
     }
-    return aUserUp;
+    return aResp;
   }
 
   /* API RESPONDE
@@ -146,7 +149,7 @@ class MainRepository {
   Future<TramaMonitoreoModel> insertarMonitoreo(
     TramaMonitoreoModel o,
   ) async {
-    TramaMonitoreoModel? oResp;
+    TramaMonitoreoRespApiDto? oResp;
     final response = await _pnPaisApi.insertarMonitoreo(oBody: o);
     if (response.error == null) {
       oResp = response.data;
@@ -157,7 +160,7 @@ class MainRepository {
       );
     }
 
-    return oResp!;
+    return o;
   }
 
   /// USUARIO APP

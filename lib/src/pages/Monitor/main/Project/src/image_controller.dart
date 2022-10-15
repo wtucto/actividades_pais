@@ -25,7 +25,7 @@ class ImageController extends GetxController {
     super.onClose();
   }
 
-  void selectMultipleImage(String nameInputImage) async {
+  Future<void> selectMultipleImage(String nameInputImage) async {
     images = await _picker.pickMultiImage();
     if (images != null) {
       for (XFile file in images!) {
