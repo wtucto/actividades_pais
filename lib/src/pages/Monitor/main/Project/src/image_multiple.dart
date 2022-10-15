@@ -4,7 +4,7 @@ import 'package:actividades_pais/src/pages/Monitor/main/Project/src/image_contro
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MyImageMultiple extends StatelessWidget {
+class MyImageMultiple extends StatefulWidget {
   MyImageMultiple({
     Key? key,
     required this.controller,
@@ -15,11 +15,16 @@ class MyImageMultiple extends StatelessWidget {
   final String nameField;
 
   @override
+  _MyImageMultipleState createState() => _MyImageMultipleState();
+}
+
+class _MyImageMultipleState extends State<MyImageMultiple> {
+  @override
   Widget build(BuildContext context) {
     List<String> itemsImagePath = [];
     var selectedItemCount = 0.obs;
-    controller.itemsImagesAll.forEach((key, items) {
-      if (key == nameField) {
+    widget.controller.itemsImagesAll.forEach((key, items) {
+      if (key == widget.nameField) {
         items.forEach((entry) {
           itemsImagePath.add(entry);
         });
@@ -42,22 +47,22 @@ class MyImageMultiple extends StatelessWidget {
                   clipBehavior: Clip.antiAlias,
                   child: Stack(
                     children: [
-                      // FadeInImage(
-                      //   placeholder:
-                      //       const AssetImage('assets/loading_icon.gif'),
-                      //   fit: BoxFit.cover,
-                      //   width: double.infinity,
-                      //   height: double.infinity,
-                      //   image: FileImage(
-                      //     File(controller.listImagePath[index]),
-                      //   ),
-                      // ),
-                      Image.file(
+                      FadeInImage(
+                        placeholder:
+                            const AssetImage('assets/loading_icon.gif'),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                        image: FileImage(
+                          File(itemsImagePath[index]),
+                        ),
+                      ),
+                      /*Image.file(
                         File(itemsImagePath[index]),
                         width: double.infinity,
                         height: double.infinity,
                         fit: BoxFit.cover,
-                      ),
+                      ),*/
                       Positioned(
                         right: 1,
                         // top: -1,
@@ -67,9 +72,12 @@ class MyImageMultiple extends StatelessWidget {
                             size: 35,
                             color: Colors.red,
                           ),
-                          onTap: () {
-                            controller.removeMultipleImage(
-                                itemsImagePath[index], nameField);
+                          onTap: () async {
+                            await widget.controller.removeMultipleImage(
+                              itemsImagePath[index],
+                              widget.nameField,
+                            );
+                            setState(() {});
                           },
                         ),
                       ),

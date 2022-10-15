@@ -23,7 +23,7 @@ class ImageController extends GetxController {
     super.onClose();
   }
 
-  void selectMultipleImage(String nameInputImage) async {
+  Future<void> selectMultipleImage(String nameInputImage) async {
     images = await _picker.pickMultiImage();
     listImagePath = [];
     if (images != null) {
@@ -47,7 +47,7 @@ class ImageController extends GetxController {
     itemsImagesAll[nameInputImage] = listImagePath;
   }
 
-  void removeMultipleImage(String index, String nameInputImage) {
+  Future<void> removeMultipleImage(String index, String nameInputImage) async {
     listImagePath = [];
     itemsImagesAll.forEach((key, items) {
       if (key == nameInputImage) {

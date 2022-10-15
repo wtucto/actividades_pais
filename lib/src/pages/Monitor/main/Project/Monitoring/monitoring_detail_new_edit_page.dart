@@ -280,12 +280,15 @@ class _MonitoringDetailNewEditPageState
             OutlinedButton.icon(
               label: const Text('Fotos de la Partida Ejecutada *'),
               icon: const Icon(Icons.image),
-              onPressed: () {
-                controller.selectMultipleImage(_imgPartidaEjecutada);
+              onPressed: () async {
+                await controller.selectMultipleImage(_imgPartidaEjecutada);
+                setState(() {});
               },
             ),
             MyImageMultiple(
-                controller: controller, nameField: _imgPartidaEjecutada),
+              controller: controller,
+              nameField: _imgPartidaEjecutada,
+            ),
             // myExpansionPanelListethod(_imgPartidaEjecutada, expandedPE),
 
             /**
