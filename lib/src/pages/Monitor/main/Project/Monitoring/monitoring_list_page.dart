@@ -3,6 +3,7 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -132,15 +133,7 @@ class _MonitorListState extends State<MonitorList> {
       ),
       body: Container(
         child: aMonResp.isNotEmpty
-            ? ListView.builder(
-                padding: const EdgeInsets.all(10),
-                itemCount: aMonResp.length,
-                itemBuilder: (context, index) {
-                  String experienceLevelColor = "4495FF";
-                  return ListaMonitores(
-                      context: context, oMonitoreo: aMonResp[index]);
-                },
-              )
+            ? ListaMonitores(context: context, oMonitoreo: aMonResp)
             : Container(
                 padding: const EdgeInsets.all(20),
                 width: MediaQuery.of(context).size.width,
@@ -162,16 +155,22 @@ class _MonitorListState extends State<MonitorList> {
   }
 }
 
-class ListaMonitores extends StatelessWidget {
+class ListaMonitores extends StatefulWidget {
+  List<TramaMonitoreoModel> oMonitoreo;
   ListaMonitores({
     Key? key,
     required this.context,
     required this.oMonitoreo,
   }) : super(key: key);
 
-  final MainController mainController = MainController();
   final BuildContext context;
-  final TramaMonitoreoModel oMonitoreo;
+
+  @override
+  State<ListaMonitores> createState() => _ListaMonitoresState();
+}
+
+class _ListaMonitoresState extends State<ListaMonitores> {
+  final MainController mainController = MainController();
 
   Color getColorByStatus(String estadoMonitoreo) {
     Color c = Colors.green;
@@ -240,285 +239,336 @@ class ListaMonitores extends StatelessWidget {
     return sMsg;
   }
 
+  void showSnackbar({required bool success, required String text}) {
+    AnimatedSnackBar.rectangle(
+      'I'.tr,
+      text,
+      type:
+          success ? AnimatedSnackBarType.success : AnimatedSnackBarType.warning,
+      brightness: Brightness.light,
+      mobileSnackBarPosition: MobileSnackBarPosition.top,
+    ).show(widget.context);
+  }
+
   @override
   Widget build(BuildContext context) {
     String experienceLevelColor = "4495FF";
-    return Container(
+    return ListView.builder(
       padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.9),
-            spreadRadius: 0,
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Chip(
-                  label: Text(oMonitoreo.actividadPartidaEjecutada!),
-                  backgroundColor: Colors.green,
-                  labelStyle: const TextStyle(color: Colors.white)),
-              const Padding(padding: EdgeInsets.all(10.0)),
-              Chip(
-                label: Text(oMonitoreo.estadoMonitoreo!),
-                backgroundColor: getColorByStatus(oMonitoreo.estadoMonitoreo!),
-                labelStyle: const TextStyle(color: Colors.white),
+      itemCount: widget.oMonitoreo.length, //widget.oMonitoreo.length,
+      itemBuilder: (context, index) {
+        return Container(
+          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.9),
+                spreadRadius: 0,
+                blurRadius: 2,
+                offset: const Offset(0, 1),
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
             children: [
-              Expanded(
-                child: Row(children: [
-                  const SizedBox(width: 10),
-                  Flexible(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Text(
-                                'Estado Avance: ',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 62, 61, 61),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                oMonitoreo.estadoAvance!,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text(
-                                'Avance Fisico Acumulado: ',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 62, 61, 61),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                '${oMonitoreo.avanceFisicoAcumulado!}%',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text(
-                                'Nivel Riesgo: ',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 62, 61, 61),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                oMonitoreo.nivelRiesgo!,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            children: [
-                              const Text(
-                                'Fecha Monitoreo: ',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 62, 61, 61),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                oMonitoreo.fechaMonitoreo!,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ]),
-                  )
-                ]),
-              ),
-              if (isUpdate(oMonitoreo.estadoMonitoreo!))
-                GestureDetector(
-                  onTap: () async {
-                    BusyIndicator.show(context);
-                    String sMsg = await syncMonitor(context, [oMonitoreo]);
-
-                    // setState(() {
-                    //   loadData(context);
-                    // });
-
-                    BusyIndicator.hide(context);
-                    if (sMsg != "") {
-                      await Future.delayed(const Duration(milliseconds: 100));
-                      mostrarAlerta(context, "Error!", sMsg);
-                    }
-                  },
-                  child: AnimatedContainer(
-                    height: 35,
-                    padding: const EdgeInsets.all(5),
-                    duration: const Duration(milliseconds: 300),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: const Color.fromARGB(255, 179, 177, 177),
-                        width: 1.0,
-                        style: BorderStyle.solid,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                      color: Color(
-                        int.parse("0xff${experienceLevelColor}"),
-                      ).withAlpha(20),
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.upload,
-                        color: Color.fromARGB(255, 38, 173, 108),
-                      ),
-                    ),
+              Row(
+                children: [
+                  Chip(
+                      label: Text(
+                          widget.oMonitoreo[index].actividadPartidaEjecutada!),
+                      backgroundColor: Colors.green,
+                      labelStyle: const TextStyle(color: Colors.white)),
+                  const Padding(padding: EdgeInsets.all(10.0)),
+                  Chip(
+                    label: Text(widget.oMonitoreo[index].estadoMonitoreo!),
+                    backgroundColor: getColorByStatus(
+                        widget.oMonitoreo[index].estadoMonitoreo!),
+                    labelStyle: const TextStyle(color: Colors.white),
                   ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    if (isEditDelete(oMonitoreo.estadoMonitoreo!))
-                      GestureDetector(
-                        onTap: () {
-                          //Navigator.of(context).push(MaterialPageRoute( builder: (context) => MonitorList(datoProyecto: _oProject), ));
-                        },
-                        child: AnimatedContainer(
-                          height: 35,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 3, horizontal: 15),
-                          duration: const Duration(milliseconds: 300),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 179, 177, 177),
-                                  width: 1.0,
-                                  style: BorderStyle.solid),
-                              borderRadius: BorderRadius.circular(12),
-                              color: Color(
-                                      int.parse("0xff${experienceLevelColor}"))
-                                  .withAlpha(20)),
-                          child: const Center(
-                            child: Icon(
-                              Icons.edit,
-                              color: Color.fromARGB(255, 56, 54, 54),
-                            ),
-                          ),
-                        ),
-                      ),
-                    const SizedBox(width: 10),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Row(children: [
+                      const SizedBox(width: 10),
+                      Flexible(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Text(
+                                    'Estado Avance: ',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 62, 61, 61),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    widget.oMonitoreo[index].estadoAvance!,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Text(
+                                    'Avance Fisico Acumulado: ',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 62, 61, 61),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${widget.oMonitoreo[index].avanceFisicoAcumulado!}%',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Text(
+                                    'Nivel Riesgo: ',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 62, 61, 61),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    widget.oMonitoreo[index].nivelRiesgo!,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 5),
+                              Row(
+                                children: [
+                                  const Text(
+                                    'Fecha Monitoreo: ',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 62, 61, 61),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    widget.oMonitoreo[index].fechaMonitoreo!,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ]),
+                      )
+                    ]),
+                  ),
+                  if (isUpdate(widget.oMonitoreo[index].estadoMonitoreo!))
                     GestureDetector(
-                      onTap: () {
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //   builder: (context) => MonitoringDetailNewEditPage(),
-                        // ));
+                      onTap: () async {
+                        BusyIndicator.show(context);
+                        String sMsg = await syncMonitor(
+                            context, [widget.oMonitoreo[index]]);
+
+                        // setState(() {
+                        //   loadData(context);
+                        // });
+
+                        BusyIndicator.hide(context);
+                        if (sMsg != "") {
+                          await Future.delayed(
+                              const Duration(milliseconds: 100));
+                          mostrarAlerta(context, "Error!", sMsg);
+                        }
                       },
                       child: AnimatedContainer(
                         height: 35,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 3, horizontal: 15),
+                        padding: const EdgeInsets.all(5),
                         duration: const Duration(milliseconds: 300),
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                color: const Color.fromARGB(255, 179, 177, 177),
-                                width: 1.0,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(12),
-                            color:
-                                Color(int.parse("0xff${experienceLevelColor}"))
-                                    .withAlpha(20)),
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 179, 177, 177),
+                            width: 1.0,
+                            style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                          color: Color(
+                            int.parse("0xff${experienceLevelColor}"),
+                          ).withAlpha(20),
+                        ),
                         child: const Center(
                           child: Icon(
-                            Icons.visibility,
-                            color: Color.fromARGB(255, 56, 54, 54),
+                            Icons.upload,
+                            color: Color.fromARGB(255, 38, 173, 108),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    if (isEditDelete(oMonitoreo.estadoMonitoreo!))
-                      GestureDetector(
-                        onTap: () {},
-                        child: AnimatedContainer(
-                          height: 35,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 3, horizontal: 15),
-                          duration: const Duration(milliseconds: 300),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: const Color.fromARGB(255, 179, 177, 177),
-                                width: 1.0,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(12),
-                            color: Color(
-                              int.parse("0xff${experienceLevelColor}"),
-                            ).withAlpha(20),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        if (isEditDelete(
+                            widget.oMonitoreo[index].estadoMonitoreo!))
+                          GestureDetector(
+                            onTap: () {
+                              //Navigator.of(context).push(MaterialPageRoute( builder: (context) => MonitorList(datoProyecto: _oProject), ));
+                            },
+                            child: AnimatedContainer(
+                              height: 35,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 3, horizontal: 15),
+                              duration: const Duration(milliseconds: 300),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color.fromARGB(
+                                          255, 179, 177, 177),
+                                      width: 1.0,
+                                      style: BorderStyle.solid),
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Color(int.parse(
+                                          "0xff${experienceLevelColor}"))
+                                      .withAlpha(20)),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Color.fromARGB(255, 56, 54, 54),
+                                ),
+                              ),
+                            ),
                           ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.delete,
-                              color: Color.fromARGB(255, 241, 85, 64),
+                        const SizedBox(width: 10),
+                        GestureDetector(
+                          onTap: () {
+                            // Navigator.of(context).push(MaterialPageRoute(
+                            //   builder: (context) => MonitoringDetailNewEditPage(),
+                            // ));
+                          },
+                          child: AnimatedContainer(
+                            height: 35,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 3, horizontal: 15),
+                            duration: const Duration(milliseconds: 300),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: const Color.fromARGB(
+                                        255, 179, 177, 177),
+                                    width: 1.0,
+                                    style: BorderStyle.solid),
+                                borderRadius: BorderRadius.circular(12),
+                                color: Color(int.parse(
+                                        "0xff${experienceLevelColor}"))
+                                    .withAlpha(20)),
+                            child: const Center(
+                              child: Icon(
+                                Icons.visibility,
+                                color: Color.fromARGB(255, 56, 54, 54),
+                              ),
                             ),
                           ),
                         ),
+                        const SizedBox(width: 10),
+                        if (isEditDelete(
+                            widget.oMonitoreo[index].estadoMonitoreo!))
+                          GestureDetector(
+                            onTap: () async {
+                              BusyIndicator.show(context);
+                              bool res = await mainController
+                                  .deleteMonitor(widget.oMonitoreo[index]);
+                              if (res) {
+                                BusyIndicator.hide(context);
+                                showSnackbar(
+                                  success: true,
+                                  text: 'Monitor Eliminado Correctamente',
+                                );
+                                widget.oMonitoreo.removeAt(index);
+                                setState(() {
+                                  // loadData(context);
+                                });
+                                // aMonResp.setState(() {});
+                              } else {
+                                // ignore: use_build_context_synchronously
+                                AnimatedSnackBar.rectangle(
+                                  'Error',
+                                  'No se pudo Enviar Monitore',
+                                  type: AnimatedSnackBarType.error,
+                                  brightness: Brightness.light,
+                                  mobileSnackBarPosition:
+                                      MobileSnackBarPosition.top,
+                                ).show(context);
+                              }
+                            },
+                            child: AnimatedContainer(
+                              height: 35,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 3, horizontal: 15),
+                              duration: const Duration(milliseconds: 300),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: const Color.fromARGB(
+                                        255, 179, 177, 177),
+                                    width: 1.0,
+                                    style: BorderStyle.solid),
+                                borderRadius: BorderRadius.circular(12),
+                                color: Color(
+                                  int.parse("0xff${experienceLevelColor}"),
+                                ).withAlpha(20),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.delete,
+                                  color: Color.fromARGB(255, 241, 85, 64),
+                                ),
+                              ),
+                            ),
+                          ),
+                        const SizedBox(width: 10),
+                      ],
+                    ),
+                    Expanded(
+                      child: Text(
+                        widget.oMonitoreo[index].idMonitoreo!,
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 13, 0, 255),
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    const SizedBox(width: 10),
+                    )
                   ],
                 ),
-                Expanded(
-                  child: Text(
-                    oMonitoreo.idMonitoreo!,
-                    style: const TextStyle(
-                      color: Color.fromARGB(255, 13, 0, 255),
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -577,19 +627,11 @@ class CustomSearchMonitor extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     final String searched = query;
-
     if (searched == null || !_data.contains(searched)) {
       final splitted = searched.split(' - ');
       for (var item in searchMonitor) {
         if (item.idMonitoreo == splitted[0]) {
-          return ListView.builder(
-            padding: const EdgeInsets.all(10),
-            itemCount: 1,
-            itemBuilder: (context, index) {
-              return ListaMonitores(
-                  context: context, oMonitoreo: searchMonitor[index]);
-            },
-          );
+          return ListaMonitores(context: context, oMonitoreo: [item]);
         }
       }
     }

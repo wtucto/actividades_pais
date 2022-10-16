@@ -612,18 +612,30 @@ class _MonitoringDetailNewEditPageState
                           ]);
 
                           BusyIndicator.hide(context);
-                          if (idM == 0) {
-                            showSnackbar(
-                              success: true,
-                              text: 'Datos Enviados Correctamente',
-                            );
+                          //  idM = dataSend[0].id!;
+                          if (dataSend.isEmpty) {
+                            if (idM == 0) {
+                              showSnackbar(
+                                success: true,
+                                text: 'Datos Enviados Correctamente',
+                              );
+                            } else {
+                              showSnackbar(
+                                success: true,
+                                text: 'Datos Enviados Correctamente',
+                              );
+                            }
                           } else {
-                            showSnackbar(
-                              success: true,
-                              text: 'Datos Enviados Correctamente',
-                            );
+                            // ignore: use_build_context_synchronously
+                            AnimatedSnackBar.rectangle(
+                              'Error',
+                              'No se pudo enviar el monitor',
+                              type: AnimatedSnackBarType.error,
+                              brightness: Brightness.light,
+                              mobileSnackBarPosition:
+                                  MobileSnackBarPosition.top,
+                            ).show(context);
                           }
-                          idM = dataSend[0].id!;
                         } catch (ex) {
                           BusyIndicator.hide(context);
                           // ignore: use_build_context_synchronously
