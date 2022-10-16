@@ -183,7 +183,9 @@ class MainController extends GetxController {
   Future<TramaMonitoreoModel> saveMonitoreo(
     TramaMonitoreoModel o,
   ) async {
-    DateFormat oDFormat = DateFormat('dd-MM-yyyy');
+    DateFormat oDFormat = DateFormat('yyyy-MM-dd');
+    DateFormat oDFormat2 = DateFormat('HHmmss');
+    DateTime _now = DateTime.now();
 
     if (loading.isTrue) {
       return Future.error(
@@ -209,10 +211,11 @@ class MainController extends GetxController {
     }
 
     if (o.fechaMonitoreo!.trim() == '') {
-      o.fechaMonitoreo = oDFormat.format(DateTime.now());
+      o.fechaMonitoreo = oDFormat.format(_now);
     }
 
     String idBuild = '<CUI>_IDE_<FECHA_MONITOREO>';
+    idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
     idBuild = idBuild.replaceAll('<CIU>', o.cui!);
     idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
     o.idMonitoreo = idBuild;
@@ -240,48 +243,14 @@ class MainController extends GetxController {
           o.fechaTerminoEstimado = oProyecto.fechaTerminoEstimado;
         }
         if (o.avanceFisicoAcumulado! == 0) {
-          o.avanceFisicoAcumulado = (oProyecto.avanceFisico as double);
+          o.avanceFisicoAcumulado = oProyecto.avanceFisico;
         }
       }
     } catch (oError) {
       _log.e(oError);
     }
 
-    /*
-      Validar campos OBLIGATORIOS
-      - ID: <cui>_IDE_<fechaMonitoreo>
-      - latitud
-      - longitud
-      - fechaTerminoEstimado
-      - actividadPartidaEjecutada
-      - alternativaSolucion
-      - avanceFisicoAcumulado
-      - estadoAvance
-      - fechaMonitoreo
-      - imgActividad
-      - problemaIdentificado
-    */
-
-    bool isComplete = true;
-    if (o.latitud!.trim() == '') {
-      isComplete = false;
-    } else if (o.longitud!.trim() == '') {
-      isComplete = false;
-    } else if (o.fechaTerminoEstimado!.trim() == '') {
-      isComplete = false;
-    } else if (o.actividadPartidaEjecutada!.trim() == '') {
-      isComplete = false;
-    } else if (o.alternativaSolucion!.trim() == '') {
-      isComplete = false;
-    } else if (o.avanceFisicoAcumulado! == 0) {
-      isComplete = false;
-    } else if (o.estadoAvance!.trim() == '') {
-      isComplete = false;
-    } else if (o.imgActividad!.trim() == '') {
-      isComplete = false;
-    } else if (o.problemaIdentificado!.trim() == '') {
-      isComplete = false;
-    }
+    bool isComplete = await validateMonitor(o);
 
     if (isComplete) {
       o.estadoMonitoreo = TramaMonitoreoModel.sEstadoPEN;
@@ -338,8 +307,108 @@ class MainController extends GetxController {
       );
     }
   }
-}
 
+  Future<bool> validateMonitor(
+    TramaMonitoreoModel o,
+  ) async {
+/*
+      Validar campos OBLIGATORIOS
+      - ID: <cui>_IDE_<fechaMonitoreo>
+      - latitud
+      - longitud
+      - fechaTerminoEstimado
+      - actividadPartidaEjecutada
+      - alternativaSolucion
+      - avanceFisicoAcumulado
+      - estadoAvance
+      - fechaMonitoreo
+      - imgActividad
+      - problemaIdentificado
+    */
+
+    bool isComplete = true;
+    if (o.latitud!.trim() == '') {
+      isComplete = false;
+    } else if (o.longitud!.trim() == '') {
+      isComplete = false;
+    } else if (o.fechaTerminoEstimado!.trim() == '') {
+      isComplete = false;
+    } else if (o.actividadPartidaEjecutada!.trim() == '') {
+      isComplete = false;
+    } else if (o.alternativaSolucion!.trim() == '') {
+      isComplete = false;
+    } else if (o.avanceFisicoAcumulado! == 0) {
+      isComplete = false;
+    } else if (o.estadoAvance!.trim() == '') {
+      isComplete = false;
+    } else if (o.imgActividad!.trim() == '') {
+      isComplete = false;
+    } else if (o.problemaIdentificado!.trim() == '') {
+      isComplete = false;
+    }
+
+    return isComplete;
+  }
+
+  Future<TramaMonitoreoModel> buildNewMonitor(
+    String cui,
+  ) async {
+    DateFormat oDFormat = DateFormat('yyyy-MM-dd');
+    DateFormat oDFormat2 = DateFormat('HHmmss');
+    DateTime _now = DateTime.now();
+    TramaMonitoreoModel o = TramaMonitoreoModel.empty();
+
+    if (o.fechaMonitoreo!.trim() == '') {
+      o.fechaMonitoreo = oDFormat.format(DateTime.now());
+    }
+
+    String idBuild = '<CUI>_IDE_<FECHA_MONITOREO>';
+    idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
+    idBuild = idBuild.replaceAll('<CIU>', o.cui!);
+    idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
+    o.idMonitoreo = idBuild;
+
+    /*
+      Autocompletar campos con datos del Proyecto
+      - cui -> cui
+      - snip -> numSnip
+      - tambo -> tambo
+      - fechaTerminoEstimado -> fechaTerminoEstimado
+      - avanceFisicoAcumulado -> avanceFisico
+    */
+    try {
+      List<TramaProyectoModel> aSearh =
+          await Get.find<MainService>().getProyectoByCUI(o.cui!);
+      if (aSearh != null && aSearh.length > 0) {
+        TramaProyectoModel oProyecto = aSearh[0];
+        if (o.snip!.trim() == '') {
+          o.snip = oProyecto.numSnip;
+        }
+        if (o.tambo!.trim() == '') {
+          o.tambo = oProyecto.tambo;
+        }
+        if (o.fechaTerminoEstimado!.trim() == '') {
+          o.fechaTerminoEstimado = oProyecto.fechaTerminoEstimado;
+        }
+        if (o.avanceFisicoAcumulado! == 0) {
+          o.avanceFisicoAcumulado = oProyecto.avanceFisico;
+        }
+      }
+    } catch (oError) {
+      _log.e(oError);
+    }
+
+    bool isComplete = await validateMonitor(o);
+
+    if (isComplete) {
+      o.estadoMonitoreo = TramaMonitoreoModel.sEstadoPEN;
+    } else {
+      o.estadoMonitoreo = TramaMonitoreoModel.sEstadoINC;
+    }
+
+    return o;
+  }
+}
 /**
  * @override
   Widget build(BuildContext context) {
