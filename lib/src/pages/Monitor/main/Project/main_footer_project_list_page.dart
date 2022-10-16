@@ -6,6 +6,7 @@ import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_list_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/project_detail_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
+import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -50,7 +51,6 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
       setState(() {
         loading = true;
       });
-
       _prefs = await SharedPreferences.getInstance();
       UserModel oUser = UserModel(
         nombres: _prefs!.getString("nombres") ?? "",
@@ -60,6 +60,7 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
 
       final List<TramaProyectoModel> response =
           await mainController.getAllProyectoByUser(oUser, limit, offset);
+
       if (response.length == 0) {
         isEndPagination = true;
       } else {

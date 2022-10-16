@@ -500,12 +500,14 @@ class ListaMonitores extends StatelessWidget {
                     const SizedBox(width: 10),
                   ],
                 ),
-                Text(
-                  oMonitoreo.idMonitoreo!,
-                  style: const TextStyle(
-                    color: Color.fromARGB(255, 13, 0, 255),
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    oMonitoreo.idMonitoreo!,
+                    style: const TextStyle(
+                      color: Color.fromARGB(255, 13, 0, 255),
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 )
               ],
