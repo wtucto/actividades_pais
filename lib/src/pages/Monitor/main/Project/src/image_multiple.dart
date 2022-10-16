@@ -47,29 +47,29 @@ class _MyImageMultipleState extends State<MyImageMultiple> {
                   clipBehavior: Clip.antiAlias,
                   child: Stack(
                     children: [
-                      FadeInImage(
-                        placeholder:
-                            const AssetImage('assets/loading_icon.gif'),
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
-                        image: FileImage(
-                          File(itemsImagePath[index]),
-                        ),
-                      ),
-                      /*Image.file(
+                      // FadeInImage(
+                      //   placeholder:
+                      //       const AssetImage('assets/loading_icon.gif'),
+                      //   fit: BoxFit.cover,
+                      //   width: double.infinity,
+                      //   height: double.infinity,
+                      //   image: FileImage(
+                      //     File(itemsImagePath[index]),
+                      //   ),
+                      // ),
+                      Image.file(
                         File(itemsImagePath[index]),
                         width: double.infinity,
                         height: double.infinity,
                         fit: BoxFit.cover,
-                      ),*/
+                      ),
                       Positioned(
-                        right: 1,
-                        // top: -1,
+                        right: -2,
+                        top: -2,
                         child: InkWell(
                           child: const Icon(
                             Icons.remove_circle,
-                            size: 35,
+                            size: 30,
                             color: Colors.red,
                           ),
                           onTap: () async {

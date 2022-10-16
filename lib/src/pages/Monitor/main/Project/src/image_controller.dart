@@ -26,20 +26,33 @@ class ImageController extends GetxController {
   Future<void> selectMultipleImage(String nameInputImage) async {
     images = await _picker.pickMultiImage();
     listImagePath = [];
+    int count = 0;
     if (images != null) {
       itemsImagesAll.forEach((key, items) {
         if (key == nameInputImage) {
           items.forEach((entry) {
-            listImagePath.add(entry);
+            if (count < 4 && listImagePath.length < 4) {
+              listImagePath.add(entry);
+            }
+            count++;
           });
         }
       });
-      for (XFile file in images!) {
-        listImagePath.add(file.path);
-        itemsImagesAll.addAll({nameInputImage: listImagePath});
+      if (count < 4) {
+        for (XFile file in images!) {
+          if (listImagePath.length < 4) {
+            listImagePath.add(file.path);
+            itemsImagesAll.addAll({nameInputImage: listImagePath});
+          }
+        }
+      } else {
+        Get.snackbar('Error', 'Solo esta permitido 4 imaganes',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white);
       }
     } else {
-      Get.snackbar('Error', 'No Image Selected',
+      Get.snackbar('Error', 'Ninguna Imagen Selecionada',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.white);
@@ -58,48 +71,5 @@ class ImageController extends GetxController {
       }
     });
     itemsImagesAll[nameInputImage] = listImagePath;
-    if (listImagePath.length <= 0) {
-      Get.snackbar('Error', 'No Existe Imagenes',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
-    }
   }
-
-  // void uploadImage(String nameInputImage) {
-  //   if (selectedFileCount.value > 0) {
-  //     Get.dialog(
-  //         const Center(
-  //           child: CircularProgressIndicator(),
-  //         ),
-  //         barrierDismissible: false);
-
-  //     ImageUploadProvider()
-  //         .uploadImage(listImagePath, itemsImagesAll)
-  //         .then((resp) {
-  //       Get.back();
-  //       if (resp == "success") {
-  //         Get.snackbar('Error', 'Imagen Enviado Correctamente',
-  //             snackPosition: SnackPosition.BOTTOM,
-  //             backgroundColor: Colors.green,
-  //             colorText: Colors.white);
-  //         images = [];
-  //         listImagePath = [];
-  //         itemsImagesAll = {};
-  //         selectedFileCount.value = listImagePath.length;
-  //       }
-  //     }).onError((error, stackTrace) {
-  //       Get.back();
-  //       Get.snackbar('Error', 'Error en subir la imagen',
-  //           snackPosition: SnackPosition.BOTTOM,
-  //           backgroundColor: Colors.red,
-  //           colorText: Colors.white);
-  //     });
-  //   } else {
-  //     Get.snackbar('Error', 'Imagen no selecionada',
-  //         snackPosition: SnackPosition.BOTTOM,
-  //         backgroundColor: Colors.red,
-  //         colorText: Colors.white);
-  //   }
-  // }
 }
