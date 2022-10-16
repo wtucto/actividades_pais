@@ -358,16 +358,6 @@ class MainController extends GetxController {
     DateTime _now = DateTime.now();
     TramaMonitoreoModel o = TramaMonitoreoModel.empty();
 
-    if (o.fechaMonitoreo!.trim() == '') {
-      o.fechaMonitoreo = oDFormat.format(DateTime.now());
-    }
-
-    String idBuild = '<CUI>_IDE_<FECHA_MONITOREO>';
-    idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
-    idBuild = idBuild.replaceAll('<CIU>', o.cui!);
-    idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
-    o.idMonitoreo = idBuild;
-
     /*
       Autocompletar campos con datos del Proyecto
       - cui -> cui
@@ -377,10 +367,23 @@ class MainController extends GetxController {
       - avanceFisicoAcumulado -> avanceFisico
     */
     try {
+      if (o.fechaMonitoreo!.trim() == '') {
+        o.fechaMonitoreo = oDFormat.format(DateTime.now());
+      }
+
+      String idBuild = '<CUI>_IDE_<FECHA_MONITOREO>';
+      idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
+      idBuild = idBuild.replaceAll('<CIU>', o.cui!);
+      idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
+      o.idMonitoreo = idBuild;
+
       List<TramaProyectoModel> aSearh =
           await Get.find<MainService>().getProyectoByCUI(o.cui!);
       if (aSearh != null && aSearh.length > 0) {
         TramaProyectoModel oProyecto = aSearh[0];
+        if (o.cui!.trim() == '') {
+          o.cui = oProyecto.cui;
+        }
         if (o.snip!.trim() == '') {
           o.snip = oProyecto.numSnip;
         }
@@ -393,9 +396,13 @@ class MainController extends GetxController {
         if (o.avanceFisicoAcumulado! == 0) {
           o.avanceFisicoAcumulado = oProyecto.avanceFisico;
         }
+      } else {
+        throw Exception(
+            'Error: Imposible generar un nuevo monitoreo porque no se encontraron registros con el código del proyecto.');
       }
     } catch (oError) {
       _log.e(oError);
+      return Future.error(oError.toString());
     }
 
     bool isComplete = await validateMonitor(o);
