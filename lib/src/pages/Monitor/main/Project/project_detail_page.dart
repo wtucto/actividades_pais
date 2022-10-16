@@ -71,7 +71,8 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
     _costoEjecutado = TextEditingController(text: _oProject.costoEjecutado);
     _costoEstimadoFinal =
         TextEditingController(text: _oProject.costoEstimadoFinal);
-    _avanceFisico = TextEditingController(text: _oProject.avanceFisico);
+    _avanceFisico =
+        TextEditingController(text: (_oProject.avanceFisico).toString());
     _residente = TextEditingController(text: _oProject.residente);
     _supervisor = TextEditingController(text: _oProject.supervisor);
     _crp = TextEditingController(text: _oProject.crp);

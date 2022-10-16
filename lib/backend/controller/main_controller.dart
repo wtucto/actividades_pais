@@ -2,6 +2,8 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
+import 'package:actividades_pais/util/check_geolocator.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
@@ -396,6 +398,11 @@ class MainController extends GetxController {
         if (o.avanceFisicoAcumulado! == 0) {
           o.avanceFisicoAcumulado = oProyecto.avanceFisico;
         }
+        try {
+          List<Position> aPosition = await CheckGeolocator().check();
+          o.latitud = aPosition[0].latitude.toString();
+          o.longitud = aPosition[0].longitude.toString();
+        } catch (oError) {}
       } else {
         throw Exception(
             'Error: Imposible generar un nuevo monitoreo porque no se encontraron registros con el código del proyecto.');
