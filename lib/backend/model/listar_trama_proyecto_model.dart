@@ -126,7 +126,7 @@ class TramaProyectoModel {
   String? costoEstimadoFinal = "";
 
   /// % Avance físico acumulado
-  double? avanceFisico = 0;
+  String? avanceFisico = "";
 
   /// nombre del residente
   String? residente = "";
@@ -201,7 +201,7 @@ class TramaProyectoModel {
     String? inversion,
     String? costoEjecutado,
     String? costoEstimadoFinal,
-    double? avanceFisico,
+    String? avanceFisico,
     String? residente,
     String? supervisor,
     String? crp,
@@ -270,8 +270,7 @@ class TramaProyectoModel {
         costoEjecutado: json[TramaProyectoFields.costoEjecutado] as String,
         costoEstimadoFinal:
             json[TramaProyectoFields.costoEstimadoFinal] as String,
-        avanceFisico: double.parse(
-            (json[TramaProyectoFields.avanceFisico] ?? "0").toString()),
+        avanceFisico: json[TramaProyectoFields.avanceFisico] as String,
         residente: json[TramaProyectoFields.residente] as String,
         supervisor: json[TramaProyectoFields.supervisor] as String,
         crp: json[TramaProyectoFields.crp] as String,

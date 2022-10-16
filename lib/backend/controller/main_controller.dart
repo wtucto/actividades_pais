@@ -245,7 +245,9 @@ class MainController extends GetxController {
           o.fechaTerminoEstimado = oProyecto.fechaTerminoEstimado;
         }
         if (o.avanceFisicoAcumulado! == 0) {
-          o.avanceFisicoAcumulado = oProyecto.avanceFisico;
+          o.avanceFisicoAcumulado = isNumeric(oProyecto.avanceFisico)
+              ? double.parse(oProyecto.avanceFisico.toString())
+              : 0;
         }
       }
     } catch (oError) {
@@ -396,7 +398,9 @@ class MainController extends GetxController {
           o.fechaTerminoEstimado = oProyecto.fechaTerminoEstimado;
         }
         if (o.avanceFisicoAcumulado! == 0) {
-          o.avanceFisicoAcumulado = oProyecto.avanceFisico;
+          o.avanceFisicoAcumulado = isNumeric(oProyecto.avanceFisico)
+              ? double.parse(oProyecto.avanceFisico.toString())
+              : 0;
         }
         try {
           List<Position> aPosition = await CheckGeolocator().check();
@@ -421,6 +425,11 @@ class MainController extends GetxController {
     }
 
     return o;
+  }
+
+  bool isNumeric(dynamic s) {
+    final numericRegex = RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$');
+    return numericRegex.hasMatch(s);
   }
 }
 /**
