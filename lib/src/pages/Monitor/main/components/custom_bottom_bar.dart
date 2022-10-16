@@ -16,7 +16,7 @@ class CustomBottomBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.home,
               color: iconColor,
             ),
@@ -25,8 +25,8 @@ class CustomBottomBar extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: Icon(
-              Icons.folder_rounded,
+            icon: const Icon(
+              Icons.upload_sharp,
               color: iconColor,
             ),
             iconSize: 30,
@@ -35,7 +35,7 @@ class CustomBottomBar extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.manage_accounts,
               color: iconColor,
             ),

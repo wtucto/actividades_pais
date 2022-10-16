@@ -1,16 +1,10 @@
-import 'dart:convert';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_list_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/Project/project_detail_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-import 'package:actividades_pais/util/Constants.dart';
 import 'package:get/get.dart';
 
 class MonitorList extends StatefulWidget {
@@ -62,26 +56,26 @@ class _MonitorListState extends State<MonitorList> {
             await mainController.getAllMonitoreoByProyecto(_oProject, 0, 0);
 
         ///Comentar: Data solo para pruebas
-        TramaMonitoreoModel o1 = TramaMonitoreoModel();
-        o1.idMonitoreo = "122_IDE_01-10-2022";
-        o1.actividadPartidaEjecutada = "Cimentación";
-        o1.estadoMonitoreo = "INCOMPLETO";
-        o1.fechaMonitoreo = "01-10-2022";
-        o1.estadoAvance = "Reinicio";
-        o1.avanceFisicoAcumulado = 1;
-        o1.nivelRiesgo = "Alto";
-        aMonResp.add(o1);
+        // TramaMonitoreoModel o1 = TramaMonitoreoModel();
+        // o1.idMonitoreo = "122_IDE_01-10-2022";
+        // o1.actividadPartidaEjecutada = "Cimentación";
+        // o1.estadoMonitoreo = "INCOMPLETO";
+        // o1.fechaMonitoreo = "01-10-2022";
+        // o1.estadoAvance = "Reinicio";
+        // o1.avanceFisicoAcumulado = 1;
+        // o1.nivelRiesgo = "Alto";
+        // aMonResp.add(o1);
 
         ///Comentar: Data solo para pruebas
-        TramaMonitoreoModel o3 = TramaMonitoreoModel();
-        o3.idMonitoreo = "124_IDE_01-10-2022";
-        o3.actividadPartidaEjecutada = "obras Exteriores";
-        o3.estadoMonitoreo = "ENVIADO";
-        o3.fechaMonitoreo = "01-10-2022";
-        o3.estadoAvance = "Por iniciar";
-        o3.avanceFisicoAcumulado = 1;
-        o3.nivelRiesgo = "Medio Alto";
-        aMonResp.add(o3);
+        // TramaMonitoreoModel o3 = TramaMonitoreoModel();
+        // o3.idMonitoreo = "124_IDE_01-10-2022";
+        // o3.actividadPartidaEjecutada = "obras Exteriores";
+        // o3.estadoMonitoreo = "ENVIADO";
+        // o3.fechaMonitoreo = "01-10-2022";
+        // o3.estadoAvance = "Por iniciar";
+        // o3.avanceFisicoAcumulado = 1;
+        // o3.nivelRiesgo = "Medio Alto";
+        // aMonResp.add(o3);
       } else {
         isResume = true;
         aMonResp = await mainController.getAllMonitorPorEnviar(0, 0);
@@ -92,15 +86,15 @@ class _MonitorListState extends State<MonitorList> {
     }
 
     ///Comentar: Data solo para pruebas
-    TramaMonitoreoModel o2 = TramaMonitoreoModel();
-    o2.idMonitoreo = "123_IDE_01-10-2022";
-    o2.actividadPartidaEjecutada = "Muros y Columnas";
-    o2.estadoMonitoreo = "POR ENVIAR";
-    o2.fechaMonitoreo = "01-10-2022";
-    o2.estadoAvance = "Ejecución";
-    o2.avanceFisicoAcumulado = 1;
-    o2.nivelRiesgo = "Muy Alto";
-    aMonResp.add(o2);
+    // TramaMonitoreoModel o2 = TramaMonitoreoModel();
+    // o2.idMonitoreo = "123_IDE_01-10-2022";
+    // o2.actividadPartidaEjecutada = "Muros y Columnas";
+    // o2.estadoMonitoreo = "POR ENVIAR";
+    // o2.fechaMonitoreo = "01-10-2022";
+    // o2.estadoAvance = "Ejecución";
+    // o2.avanceFisicoAcumulado = 1;
+    // o2.nivelRiesgo = "Muy Alto";
+    // aMonResp.add(o2);
 
     setState(() {});
   }
@@ -177,59 +171,28 @@ class _MonitorListState extends State<MonitorList> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 12, 124, 205),
-        elevation: 0,
-        leadingWidth: 20,
-        /*
-        -- Navigation button
-        leading: IconButton(
-          padding: EdgeInsets.only(left: 20),
-          onPressed: () {},
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.grey.shade600,
-          ),
-        ),
-        */
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-                iconSize: 30,
-                onPressed: () {},
-                icon: Icon(
-                  Icons.search,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                )),
-          )
-        ],
         title: Center(
           child: Text(
             'MonitoringListTitle'.tr,
             style: const TextStyle(
-              color: const Color(0xfffefefe),
+              color: Color(0xfffefefe),
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-              fontSize: 20.0,
+              fontSize: 18.0,
             ),
           ),
-        ), /*Container(
-          height: 45,
-          child: TextField(
-            cursorColor: Colors.grey,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-              filled: true,
-              fillColor: Colors.grey.shade200,
-              prefixIcon: Icon(Icons.search, color: Colors.grey),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  borderSide: BorderSide.none),
-              hintText: "Buscar",
-              hintStyle: TextStyle(fontSize: 14),
-            ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: CustomSearchMonitor(aMonResp),
+              );
+            },
           ),
-        ),*/
+        ],
       ),
       body: Container(
         child: aMonResp.isNotEmpty
@@ -537,4 +500,115 @@ class _MonitorListState extends State<MonitorList> {
       ),
     );
   }
+}
+
+class CustomSearchMonitor extends SearchDelegate<String> {
+  List<TramaMonitoreoModel> searchMonitor;
+  CustomSearchMonitor(this.searchMonitor);
+  final List<int> _data =
+      List<int>.generate(100001, (int i) => i).reversed.toList();
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          if (query.isEmpty) {
+            close(context, '');
+          } else {
+            query = '';
+            showSuggestions(context);
+          }
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+        onPressed: () {
+          close(context, '');
+        },
+        icon: const Icon(Icons.arrow_back));
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<String> matchQuery = [];
+    for (var item in searchMonitor) {
+      if ((item.cui!).contains(query.toLowerCase()) ||
+          (item.tambo!).toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add('${item.cui} - ${item.tambo}');
+      }
+    }
+    if (query.isEmpty || matchQuery.isEmpty) {
+      return buildNoSuggestions();
+    } else {
+      return buildSuggestionsSuccess(matchQuery);
+    }
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final String searched = query;
+
+    if (searched == null || !_data.contains(searched)) {
+      final splitted = searched.split(' - ');
+      for (var item in searchMonitor) {
+        if (item.cui == splitted[0]) {
+          return ListView.builder(
+            padding: const EdgeInsets.all(10),
+            itemCount: 1,
+            itemBuilder: (context, index) {
+              return Container();
+              // return ListaProyectos(context: context, oProyecto: item);
+            },
+          );
+        }
+      }
+    }
+    return buildNoSuggestions();
+  }
+
+  Widget buildNoSuggestions() => const Center(
+        child: Text(
+          '¡No hay sugerencias!',
+          style: TextStyle(fontSize: 20, color: Colors.black),
+        ),
+      );
+
+  Widget buildSuggestionsSuccess(List<String> suggestions) => ListView.builder(
+        itemCount: suggestions.length,
+        itemBuilder: (context, index) {
+          final suggestion = suggestions[index];
+          return ListTile(
+            onTap: () {
+              query = suggestion;
+              showResults(context);
+              // 2. Close Search & Return Result
+              // close(context, suggestion);
+              // 3. Navigate to Result Page
+              //  Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (BuildContext context) => ResultPage(suggestion),
+              //   ),
+              // );
+            },
+            leading: const Icon(Icons.search),
+            title: RichText(
+              text: TextSpan(
+                text: suggestion,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          );
+        },
+      );
 }
