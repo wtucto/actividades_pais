@@ -392,6 +392,9 @@ class CustomSearch extends SearchDelegate<String> {
       List<int>.generate(100001, (int i) => i).reversed.toList();
 
   @override
+  String get searchFieldLabel => 'Buscar';
+
+  @override
   List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(

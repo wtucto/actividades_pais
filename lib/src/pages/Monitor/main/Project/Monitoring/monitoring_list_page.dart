@@ -21,6 +21,7 @@ class MonitorList extends StatefulWidget {
 }
 
 class _MonitorListState extends State<MonitorList> {
+  List<TramaMonitoreoModel> aMonResp = [];
   bool _isLoading = false;
   MainController mainController = MainController();
   late TramaProyectoModel _oProject = TramaProyectoModel.empty();
@@ -45,8 +46,6 @@ class _MonitorListState extends State<MonitorList> {
       _isLoading = false;
     });
   }
-
-  late List<TramaMonitoreoModel> aMonResp = [];
 
   Future<void> loadData(BuildContext context) async {
     try {
@@ -99,14 +98,85 @@ class _MonitorListState extends State<MonitorList> {
     setState(() {});
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            'MonitoringListTitle'.tr,
+            style: const TextStyle(
+              color: Color(0xfffefefe),
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+              fontSize: 18.0,
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: CustomSearchMonitor(aMonResp),
+              );
+            },
+          ),
+        ],
+      ),
+      body: Container(
+        child: aMonResp.isNotEmpty
+            ? ListView.builder(
+                padding: const EdgeInsets.all(10),
+                itemCount: aMonResp.length,
+                itemBuilder: (context, index) {
+                  String experienceLevelColor = "4495FF";
+                  return ListaMonitores(
+                      context: context, oMonitoreo: aMonResp[index]);
+                },
+              )
+            : Container(
+                padding: const EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width,
+                decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 245, 246, 248)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      "No existe Monitores, Verificar su conexión",
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+      ),
+    );
+  }
+}
+
+class ListaMonitores extends StatelessWidget {
+  ListaMonitores({
+    Key? key,
+    required this.context,
+    required this.oMonitoreo,
+  }) : super(key: key);
+
+  final MainController mainController = MainController();
+  final BuildContext context;
+  final TramaMonitoreoModel oMonitoreo;
+
   Color getColorByStatus(String estadoMonitoreo) {
     Color c = Colors.green;
     switch (estadoMonitoreo) {
       case TramaMonitoreoModel.sEstadoINC:
-        c = Color.fromARGB(255, 255, 115, 96);
+        c = const Color.fromARGB(255, 255, 115, 96);
         break;
       case TramaMonitoreoModel.sEstadoPEN:
-        c = Color.fromARGB(249, 255, 152, 0);
+        c = const Color.fromARGB(249, 255, 152, 0);
         break;
       case TramaMonitoreoModel.sEstadoENV:
         c = Colors.green;
@@ -168,68 +238,22 @@ class _MonitorListState extends State<MonitorList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            'MonitoringListTitle'.tr,
-            style: const TextStyle(
-              color: Color(0xfffefefe),
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-              fontSize: 18.0,
-            ),
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: CustomSearchMonitor(aMonResp),
-              );
-            },
+    String experienceLevelColor = "4495FF";
+    return Container(
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.9),
+            spreadRadius: 0,
+            blurRadius: 2,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
-      body: Container(
-        child: aMonResp.isNotEmpty
-            ? ListView.builder(
-                padding: EdgeInsets.all(10),
-                itemCount: aMonResp.length,
-                itemBuilder: (context, index) {
-                  return jobComponent(
-                    context: context,
-                    oMonitoreo: aMonResp[index],
-                  );
-                },
-              )
-            : Center(child: Text('EmptyData'.tr)),
-      ),
-    );
-  }
-
-  jobComponent({
-    required BuildContext context,
-    required TramaMonitoreoModel oMonitoreo,
-  }) {
-    String experienceLevelColor = "4495FF";
-    return Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.9),
-              spreadRadius: 0,
-              blurRadius: 2,
-              offset: Offset(0, 1),
-            ),
-          ]),
       child: Column(
         children: [
           Row(
@@ -237,12 +261,12 @@ class _MonitorListState extends State<MonitorList> {
               Chip(
                   label: Text(oMonitoreo.actividadPartidaEjecutada!),
                   backgroundColor: Colors.green,
-                  labelStyle: TextStyle(color: Colors.white)),
-              Padding(padding: EdgeInsets.all(10.0)),
+                  labelStyle: const TextStyle(color: Colors.white)),
+              const Padding(padding: EdgeInsets.all(10.0)),
               Chip(
                 label: Text(oMonitoreo.estadoMonitoreo!),
                 backgroundColor: getColorByStatus(oMonitoreo.estadoMonitoreo!),
-                labelStyle: TextStyle(color: Colors.white),
+                labelStyle: const TextStyle(color: Colors.white),
               ),
             ],
           ),
@@ -251,14 +275,14 @@ class _MonitorListState extends State<MonitorList> {
             children: [
               Expanded(
                 child: Row(children: [
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Flexible(
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              Text(
+                              const Text(
                                 'Estado Avance: ',
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 62, 61, 61),
@@ -268,7 +292,7 @@ class _MonitorListState extends State<MonitorList> {
                               ),
                               Text(
                                 oMonitoreo.estadoAvance!,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -278,7 +302,7 @@ class _MonitorListState extends State<MonitorList> {
                           ),
                           Row(
                             children: [
-                              Text(
+                              const Text(
                                 'Avance Fisico Acumulado: ',
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 62, 61, 61),
@@ -288,7 +312,7 @@ class _MonitorListState extends State<MonitorList> {
                               ),
                               Text(
                                 '${oMonitoreo.avanceFisicoAcumulado!}%',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -298,7 +322,7 @@ class _MonitorListState extends State<MonitorList> {
                           ),
                           Row(
                             children: [
-                              Text(
+                              const Text(
                                 'Nivel Riesgo: ',
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 62, 61, 61),
@@ -308,7 +332,7 @@ class _MonitorListState extends State<MonitorList> {
                               ),
                               Text(
                                 oMonitoreo.nivelRiesgo!,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -316,12 +340,10 @@ class _MonitorListState extends State<MonitorList> {
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: 5,
-                          ),
+                          const SizedBox(height: 5),
                           Row(
                             children: [
-                              Text(
+                              const Text(
                                 'Fecha Monitoreo: ',
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 62, 61, 61),
@@ -331,7 +353,7 @@ class _MonitorListState extends State<MonitorList> {
                               ),
                               Text(
                                 oMonitoreo.fechaMonitoreo!,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -349,9 +371,9 @@ class _MonitorListState extends State<MonitorList> {
                     BusyIndicator.show(context);
                     String sMsg = await syncMonitor(context, [oMonitoreo]);
 
-                    setState(() {
-                      loadData(context);
-                    });
+                    // setState(() {
+                    //   loadData(context);
+                    // });
 
                     BusyIndicator.hide(context);
                     if (sMsg != "") {
@@ -361,11 +383,11 @@ class _MonitorListState extends State<MonitorList> {
                   },
                   child: AnimatedContainer(
                     height: 35,
-                    padding: EdgeInsets.all(5),
-                    duration: Duration(milliseconds: 300),
+                    padding: const EdgeInsets.all(5),
+                    duration: const Duration(milliseconds: 300),
                     decoration: BoxDecoration(
-                      border: new Border.all(
-                        color: Color.fromARGB(255, 179, 177, 177),
+                      border: Border.all(
+                        color: const Color.fromARGB(255, 179, 177, 177),
                         width: 1.0,
                         style: BorderStyle.solid,
                       ),
@@ -374,7 +396,7 @@ class _MonitorListState extends State<MonitorList> {
                         int.parse("0xff${experienceLevelColor}"),
                       ).withAlpha(20),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Icon(
                         Icons.upload,
                         color: Color.fromARGB(255, 38, 173, 108),
@@ -384,9 +406,7 @@ class _MonitorListState extends State<MonitorList> {
                 ),
             ],
           ),
-          SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -400,19 +420,20 @@ class _MonitorListState extends State<MonitorList> {
                         },
                         child: AnimatedContainer(
                           height: 35,
-                          padding:
-                              EdgeInsets.symmetric(vertical: 3, horizontal: 15),
-                          duration: Duration(milliseconds: 300),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 3, horizontal: 15),
+                          duration: const Duration(milliseconds: 300),
                           decoration: BoxDecoration(
-                              border: new Border.all(
-                                  color: Color.fromARGB(255, 179, 177, 177),
+                              border: Border.all(
+                                  color:
+                                      const Color.fromARGB(255, 179, 177, 177),
                                   width: 1.0,
                                   style: BorderStyle.solid),
                               borderRadius: BorderRadius.circular(12),
                               color: Color(
                                       int.parse("0xff${experienceLevelColor}"))
                                   .withAlpha(20)),
-                          child: Center(
+                          child: const Center(
                             child: Icon(
                               Icons.edit,
                               color: Color.fromARGB(255, 56, 54, 54),
@@ -420,9 +441,7 @@ class _MonitorListState extends State<MonitorList> {
                           ),
                         ),
                       ),
-                    SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () {
                         // Navigator.of(context).push(MaterialPageRoute(
@@ -431,19 +450,19 @@ class _MonitorListState extends State<MonitorList> {
                       },
                       child: AnimatedContainer(
                         height: 35,
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 15),
-                        duration: Duration(milliseconds: 300),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 3, horizontal: 15),
+                        duration: const Duration(milliseconds: 300),
                         decoration: BoxDecoration(
-                            border: new Border.all(
-                                color: Color.fromARGB(255, 179, 177, 177),
+                            border: Border.all(
+                                color: const Color.fromARGB(255, 179, 177, 177),
                                 width: 1.0,
                                 style: BorderStyle.solid),
                             borderRadius: BorderRadius.circular(12),
                             color:
                                 Color(int.parse("0xff${experienceLevelColor}"))
                                     .withAlpha(20)),
-                        child: Center(
+                        child: const Center(
                           child: Icon(
                             Icons.visibility,
                             color: Color.fromARGB(255, 56, 54, 54),
@@ -451,20 +470,18 @@ class _MonitorListState extends State<MonitorList> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 10),
                     if (isEditDelete(oMonitoreo.estadoMonitoreo!))
                       GestureDetector(
                         onTap: () {},
                         child: AnimatedContainer(
                           height: 35,
-                          padding:
-                              EdgeInsets.symmetric(vertical: 3, horizontal: 15),
-                          duration: Duration(milliseconds: 300),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 3, horizontal: 15),
+                          duration: const Duration(milliseconds: 300),
                           decoration: BoxDecoration(
-                            border: new Border.all(
-                                color: Color.fromARGB(255, 179, 177, 177),
+                            border: Border.all(
+                                color: const Color.fromARGB(255, 179, 177, 177),
                                 width: 1.0,
                                 style: BorderStyle.solid),
                             borderRadius: BorderRadius.circular(12),
@@ -472,7 +489,7 @@ class _MonitorListState extends State<MonitorList> {
                               int.parse("0xff${experienceLevelColor}"),
                             ).withAlpha(20),
                           ),
-                          child: Center(
+                          child: const Center(
                             child: Icon(
                               Icons.delete,
                               color: Color.fromARGB(255, 241, 85, 64),
@@ -480,14 +497,12 @@ class _MonitorListState extends State<MonitorList> {
                           ),
                         ),
                       ),
-                    SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 10),
                   ],
                 ),
                 Text(
                   oMonitoreo.idMonitoreo!,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Color.fromARGB(255, 13, 0, 255),
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
@@ -507,6 +522,9 @@ class CustomSearchMonitor extends SearchDelegate<String> {
   CustomSearchMonitor(this.searchMonitor);
   final List<int> _data =
       List<int>.generate(100001, (int i) => i).reversed.toList();
+
+  @override
+  String get searchFieldLabel => 'Buscar';
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -538,9 +556,9 @@ class CustomSearchMonitor extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     List<String> matchQuery = [];
     for (var item in searchMonitor) {
-      if ((item.cui!).contains(query.toLowerCase()) ||
-          (item.tambo!).toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add('${item.cui} - ${item.tambo}');
+      if ((item.idMonitoreo!).contains(query.toLowerCase()) ||
+          (item.estadoMonitoreo!).toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add('${item.idMonitoreo} - ${item.estadoMonitoreo}');
       }
     }
     if (query.isEmpty || matchQuery.isEmpty) {
@@ -557,13 +575,13 @@ class CustomSearchMonitor extends SearchDelegate<String> {
     if (searched == null || !_data.contains(searched)) {
       final splitted = searched.split(' - ');
       for (var item in searchMonitor) {
-        if (item.cui == splitted[0]) {
+        if (item.idMonitoreo == splitted[0]) {
           return ListView.builder(
             padding: const EdgeInsets.all(10),
             itemCount: 1,
             itemBuilder: (context, index) {
-              return Container();
-              // return ListaProyectos(context: context, oProyecto: item);
+              return ListaMonitores(
+                  context: context, oMonitoreo: searchMonitor[index]);
             },
           );
         }
@@ -587,15 +605,6 @@ class CustomSearchMonitor extends SearchDelegate<String> {
             onTap: () {
               query = suggestion;
               showResults(context);
-              // 2. Close Search & Return Result
-              // close(context, suggestion);
-              // 3. Navigate to Result Page
-              //  Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (BuildContext context) => ResultPage(suggestion),
-              //   ),
-              // );
             },
             leading: const Icon(Icons.search),
             title: RichText(
