@@ -218,11 +218,13 @@ class MainController extends GetxController {
       o.fechaMonitoreo = oDFormat.format(_now);
     }
 
-    String idBuild = '<CUI>_<IDE>_<FECHA_MONITOREO>';
-    idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
-    idBuild = idBuild.replaceAll('<CUI>', o.cui!);
-    idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
-    o.idMonitoreo = idBuild;
+    if (o.idMonitoreo!.contains("<")) {
+      String idBuild = '<CUI>_<IDE>_<FECHA_MONITOREO>';
+      idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
+      idBuild = idBuild.replaceAll('<CUI>', o.cui!);
+      idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
+      o.idMonitoreo = idBuild;
+    }
 
     /*
       Autocompletar campos con datos del Proyecto
