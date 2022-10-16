@@ -67,7 +67,7 @@ class PnPaisApi {
 
     if (oBody.imgActividad != '') {
       final aImgActividad =
-          oBody.imgActividad!.split(':'); // Notice the whitespace after colon
+          oBody.imgActividad!.split(','); // Notice the whitespace after colon
       for (var oValue in aImgActividad) {
         aFile.add({TramaMonitoreoFields.imgActividad: oValue.trim()});
       }
@@ -75,7 +75,7 @@ class PnPaisApi {
 
     if (oBody.imgProblema != '') {
       final aImgProblema =
-          oBody.imgProblema!.split(':'); // Notice the whitespace after colon
+          oBody.imgProblema!.split(','); // Notice the whitespace after colon
       for (var oValue in aImgProblema) {
         aFile.add({TramaMonitoreoFields.imgProblema: oValue.trim()});
       }
@@ -83,7 +83,7 @@ class PnPaisApi {
 
     if (oBody.imgRiesgo != '') {
       final aImgRiesgo =
-          oBody.imgRiesgo!.split(':'); // Notice the whitespace after colon
+          oBody.imgRiesgo!.split(','); // Notice the whitespace after colon
       for (var oValue in aImgRiesgo) {
         aFile.add({TramaMonitoreoFields.imgRiesgo: oValue.trim()});
       }

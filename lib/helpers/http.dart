@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 class Http {
   late Dio _dio;
-  late Logger _logger;
+  late Logger _log;
   late bool _logsEnabled;
 
   Http({
@@ -16,7 +16,7 @@ class Http {
     required bool logsEnabled,
   }) {
     _dio = dio;
-    _logger = logger;
+    _log = logger;
     _logsEnabled = logsEnabled;
   }
 
@@ -46,21 +46,23 @@ class Http {
         return HttpResponse.success<T>(parser(oData));
       }
       return HttpResponse.success<T>(oData);
-    } catch (e) {
-      //_logger.e(e);
+    } catch (oError) {
+      _log.e(
+        oError.toString(),
+      );
 
       int statusCode = 0;
       String message = "Unknown error";
       dynamic data;
-      if (e is DioError) {
+      if (oError is DioError) {
         statusCode = -1;
-        message = e.message;
-        if (e.response != null) {
-          statusCode = e.response!.statusCode!;
-          if (e.response!.statusMessage! != "") {
-            message = e.response!.statusMessage!;
+        message = oError.message;
+        if (oError.response != null) {
+          statusCode = oError.response!.statusCode!;
+          if (oError.response!.statusMessage! != "") {
+            message = oError.response!.statusMessage!;
           }
-          data = e.response!.data;
+          data = oError.response!.data;
         }
       }
 
@@ -75,19 +77,22 @@ class Http {
   Future<HttpResponse<T>> postMultipartFile2<T>(
     String path, {
     Map<String, String>? headers,
-    Map<String, dynamic>? data,
+    Map<String, String>? data,
     Map<String, dynamic>? formData,
     List<Map<String, String>>? aFile,
     T Function(dynamic data)? parser,
   }) async {
     try {
-      var request = http.MultipartRequest('POST', Uri.parse(path));
-      request.headers.addAll(headers!);
-      request.fields.addAll(data as Map<String, String>);
+      var request = http.MultipartRequest(
+          'POST', Uri.parse('${_dio.options.baseUrl}${path}'));
+      if (headers != null) {
+        request.headers.addAll(headers!);
+      }
+
+      request.fields.addAll(data!);
 
       for (var oFile in aFile!) {
         for (final entry in oFile.entries) {
-          ///request.files.add(await http.MultipartFile.fromPath('imgActividad', '/Users/egarciti/Downloads/8000002492.docx'));
           request.files
               .add(await http.MultipartFile.fromPath(entry.key, entry.value));
         }
@@ -96,20 +101,21 @@ class Http {
       http.StreamedResponse response = await request.send();
       var oData;
       if (response.statusCode == 200) {
-        await response.stream.bytesToString().then((value) {
-          oData = json.decode(value.toString());
-        });
+        final oResp2 = await http.Response.fromStream(response);
+        print(oResp2.body);
+        oData = json.decode(oResp2.body == "" ? "{}" : oResp2.body);
 
         if (parser != null) {
           return HttpResponse.success<T>(parser(oData));
         }
         return HttpResponse.success<T>(oData);
       } else {
-        print(response.reasonPhrase);
-        return oData;
+        throw Exception(
+          'Servidor responde con statusCode: ${response.statusCode}',
+        );
       }
     } catch (e) {
-      //_logger.e(e);
+      _log.e(e.toString());
 
       int statusCode = 0;
       String message = "Unknown error";

@@ -571,29 +571,33 @@ class TramaMonitoreoModel {
     };
   }
 
-  static Map<String, dynamic> toJsonObjectApi(TramaMonitoreoModel o) {
+  static Map<String, String> toJsonObjectApi(TramaMonitoreoModel o) {
     return {
-      TramaMonitoreoFields.snip: o.snip,
-      TramaMonitoreoFields.cui: o.cui,
-      TramaMonitoreoFields.latitud: o.latitud,
-      TramaMonitoreoFields.longitud: o.longitud,
-      TramaMonitoreoFields.tambo: o.tambo,
-      TramaMonitoreoFields.fechaTerminoEstimado: o.fechaTerminoEstimado,
+      TramaMonitoreoFields.snip: o.snip as String,
+      TramaMonitoreoFields.cui: o.cui as String,
+      TramaMonitoreoFields.latitud: o.latitud as String,
+      TramaMonitoreoFields.longitud: o.longitud as String,
+      TramaMonitoreoFields.tambo: o.tambo as String,
+      TramaMonitoreoFields.fechaTerminoEstimado:
+          o.fechaTerminoEstimado as String,
       TramaMonitoreoFields.actividadPartidaEjecutada:
-          o.actividadPartidaEjecutada,
-      TramaMonitoreoFields.alternativaSolucion: o.alternativaSolucion,
-      TramaMonitoreoFields.avanceFisicoAcumulado: o.avanceFisicoAcumulado,
-      TramaMonitoreoFields.avanceFisicoPartida: o.avanceFisicoPartida,
-      TramaMonitoreoFields.estadoAvance: o.estadoAvance,
-      TramaMonitoreoFields.estadoMonitoreo: o.estadoMonitoreo,
-      TramaMonitoreoFields.fechaMonitoreo: o.fechaMonitoreo,
-      TramaMonitoreoFields.idMonitoreo: o.idMonitoreo,
-      TramaMonitoreoFields.idUsuario: o.idUsuario,
-      TramaMonitoreoFields.observaciones: o.observaciones,
-      TramaMonitoreoFields.problemaIdentificado: o.problemaIdentificado,
-      TramaMonitoreoFields.riesgoIdentificado: o.riesgoIdentificado,
-      TramaMonitoreoFields.rol: o.rol,
-      TramaMonitoreoFields.usuario: o.usuario,
+          o.actividadPartidaEjecutada as String,
+      TramaMonitoreoFields.alternativaSolucion: o.alternativaSolucion as String,
+      TramaMonitoreoFields.avanceFisicoAcumulado:
+          o.avanceFisicoAcumulado.toString(),
+      TramaMonitoreoFields.avanceFisicoPartida:
+          o.avanceFisicoPartida.toString(),
+      TramaMonitoreoFields.estadoAvance: o.estadoAvance as String,
+      TramaMonitoreoFields.estadoMonitoreo: o.estadoMonitoreo as String,
+      TramaMonitoreoFields.fechaMonitoreo: o.fechaMonitoreo as String,
+      TramaMonitoreoFields.idMonitoreo: o.idMonitoreo as String,
+      TramaMonitoreoFields.idUsuario: o.idUsuario as String,
+      TramaMonitoreoFields.observaciones: o.observaciones as String,
+      TramaMonitoreoFields.problemaIdentificado:
+          o.problemaIdentificado as String,
+      TramaMonitoreoFields.riesgoIdentificado: o.riesgoIdentificado as String,
+      TramaMonitoreoFields.rol: o.rol as String,
+      TramaMonitoreoFields.usuario: o.usuario as String,
     };
   }
 

@@ -45,7 +45,6 @@ class MainController extends GetxController {
     if (loading.isTrue) return;
     loading.value = true;
     final newUser = await Get.find<MainService>().getAllUser(limit, offset);
-    users.value = newUser;
     loading.value = false;
   }
 
@@ -216,9 +215,9 @@ class MainController extends GetxController {
       o.fechaMonitoreo = oDFormat.format(_now);
     }
 
-    String idBuild = '<CUI>_IDE_<FECHA_MONITOREO>';
+    String idBuild = '<CUI>_<IDE>_<FECHA_MONITOREO>';
     idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
-    idBuild = idBuild.replaceAll('<CIU>', o.cui!);
+    idBuild = idBuild.replaceAll('<CUI>', o.cui!);
     idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
     o.idMonitoreo = idBuild;
 
@@ -251,7 +250,9 @@ class MainController extends GetxController {
         }
       }
     } catch (oError) {
-      _log.e(oError);
+      _log.e(
+        oError.toString(),
+      );
     }
 
     bool isComplete = await validateMonitor(o);
@@ -262,11 +263,10 @@ class MainController extends GetxController {
       o.estadoMonitoreo = TramaMonitoreoModel.sEstadoINC;
     }
 
-    final aResp = await Get.find<MainService>().insertMonitorDb(o);
-    moniteos.value = [aResp];
+    final oResp = await Get.find<MainService>().insertMonitorDb(o);
     loading.value = false;
 
-    return aResp;
+    return oResp;
   }
 
   /*
@@ -278,36 +278,43 @@ class MainController extends GetxController {
   Future<List<TramaMonitoreoModel>> sendMonitoreo(
     List<TramaMonitoreoModel> a,
   ) async {
-    if (loading.isTrue) {
-      return Future.error(
-        'Ya hay un proceso en ejecución, espere a que finalice.',
-      );
-    }
-
-    loading.value = true;
-
-    /// Evaluar que todos los monitoreos de la lista tengan el estado
-    /// POR ENVIAR
-    bool isOk = true;
-    a.forEach((o) {
-      if (o.estadoMonitoreo != TramaMonitoreoModel.sEstadoPEN) {
-        isOk = false;
+    try {
+      if (loading.isTrue) {
+        return Future.error(
+          'Ya hay un proceso en ejecución, espere a que finalice.',
+        );
       }
-    });
 
-    if (isOk) {
-      final aResp = await Get.find<MainService>().sendAllMonitoreo(a, []);
-      /*if (aResp.length > 0) {
+      loading.value = true;
+
+      /// Evaluar que todos los monitoreos de la lista tengan el estado
+      /// POR ENVIAR
+      bool isOk = true;
+      a.forEach((o) {
+        if (o.estadoMonitoreo != TramaMonitoreoModel.sEstadoPEN) {
+          //isOk = false;
+        }
+      });
+
+      if (isOk == true) {
+        final aResp = await Get.find<MainService>().sendAllMonitoreo(a, []);
+        /*if (aResp.length > 0) {
         return Future.error(
           'Hay registros que no se pudieron enviar al servidor porque generaron un error: ${aResp.length}',
         );
       }*/
-      /// Retornar registros que generar error al enviarse al servidor
-      return aResp;
-    } else {
+        /// Retornar registros que generar error al enviarse al servidor
+        loading.value = false;
+        return aResp;
+      }
+
+      throw Exception(
+        'Imposible enviar documentos al servidor debido a que tienen estados diferentes a : ${TramaMonitoreoModel.sEstadoPEN}',
+      );
+    } catch (oError) {
       loading.value = false;
       return Future.error(
-        'Imposible enviar documentos al servidor debido a que tienen estados diferentes a : ${TramaMonitoreoModel.sEstadoPEN}',
+        oError.toString(),
       );
     }
   }
@@ -375,9 +382,9 @@ class MainController extends GetxController {
         o.fechaMonitoreo = oDFormat.format(DateTime.now());
       }
 
-      String idBuild = '<CUI>_IDE_<FECHA_MONITOREO>';
+      String idBuild = '<CUI>_<IDE>_<FECHA_MONITOREO>';
       idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
-      idBuild = idBuild.replaceAll('<CIU>', o.cui!);
+      idBuild = idBuild.replaceAll('<CUI>', o.cui!);
       idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
       o.idMonitoreo = idBuild;
 
@@ -406,13 +413,19 @@ class MainController extends GetxController {
           List<Position> aPosition = await CheckGeolocator().check();
           o.latitud = aPosition[0].latitude.toString();
           o.longitud = aPosition[0].longitude.toString();
-        } catch (oError) {}
+        } catch (oError) {
+          _log.e(
+            oError.toString(),
+          );
+        }
       } else {
         throw Exception(
             'Error: Imposible generar un nuevo monitoreo porque no se encontraron registros con el código del proyecto.');
       }
     } catch (oError) {
-      _log.e(oError);
+      _log.e(
+        oError.toString(),
+      );
       return Future.error(oError.toString());
     }
 

@@ -54,9 +54,13 @@ class TramaMonitoreoRespApiDto {
             ? 0
             : json[TramaMonitoreoRespApiFields.codResultado] as int,
         msgResultado: json[TramaMonitoreoRespApiFields.msgResultado] as String,
-        total: json[TramaMonitoreoRespApiFields.total] as int,
+        total: json[TramaMonitoreoRespApiFields.total] == null
+            ? 0
+            : json[TramaMonitoreoRespApiFields.total] as int,
         response: json[TramaMonitoreoRespApiFields.response] as dynamic,
-        idPerfil: json[TramaMonitoreoRespApiFields.idPerfil] as int,
+        idPerfil: json[TramaMonitoreoRespApiFields.idPerfil] == null
+            ? 0
+            : json[TramaMonitoreoRespApiFields.idPerfil] as int,
       );
 
   Map<String, dynamic> toJson() => {
