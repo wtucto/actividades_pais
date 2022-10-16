@@ -1,18 +1,20 @@
 import 'dart:async';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_list_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/project_detail_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
-import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences? _prefs;
+MainController mainController = MainController();
 
 class MainFooterProjectPage extends StatefulWidget {
   const MainFooterProjectPage({Key? key}) : super(key: key);
@@ -23,7 +25,7 @@ class MainFooterProjectPage extends StatefulWidget {
 
 class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
   List<TramaProyectoModel> aProyecto = [];
-  MainController mainController = MainController();
+
   ScrollController scrollController = ScrollController();
   bool loading = true;
   bool isEndPagination = false;
@@ -51,16 +53,16 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
       setState(() {
         loading = true;
       });
+
       _prefs = await SharedPreferences.getInstance();
       UserModel oUser = UserModel(
-        nombres: _prefs!.getString("nombres") ?? "",
-        codigo: _prefs!.getString("codigo") ?? "",
-        rol: _prefs!.getString("rol") ?? "",
+        nombres: _prefs!.getString('nombres') ?? '',
+        codigo: _prefs!.getString('codigo') ?? '',
+        rol: _prefs!.getString('rol') ?? '',
       );
 
       final List<TramaProyectoModel> response =
           await mainController.getAllProyectoByUser(oUser, limit, offset);
-
       if (response.length == 0) {
         isEndPagination = true;
       } else {
@@ -158,7 +160,7 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Text(
-                    "No existe nigún proyecto asignado, Verificar su conexión",
+                    'No existe nigún proyecto asignado, Verificar su conexión',
                     style: TextStyle(color: Colors.black, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
@@ -189,9 +191,27 @@ class ListaProyectos extends StatelessWidget {
   final BuildContext context;
   final TramaProyectoModel oProyecto;
 
+  void sendMonitoreoPorEnviarByProject() async {
+    List<TramaMonitoreoModel> aError =
+        await mainController.sendMonitoreoByProyecto(oProyecto);
+    if (aError.isNotEmpty) {
+      mostrarAlerta(
+        context,
+        'Error',
+        'Existen documentos que no se puedieron enviar, verifique que todo los datos sean correctos.',
+      );
+    } else {
+      mostrarAlerta(
+        context,
+        'Success',
+        'Se enviaron los registros correctamente.',
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    String experienceLevelColor = "4495FF";
+    String experienceLevelColor = '4495FF';
     return Container(
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.only(bottom: 10),
@@ -280,15 +300,15 @@ class ListaProyectos extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          // c.proyecto.value = oProyecto;
-
-                          // datoProyecto.cui = oProyecto.cui;
-
-                          return MonitoringDetailNewEditPage(
-                              datoProyecto: oProyecto);
-                        }));
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return MonitoringDetailNewEditPage(
+                                datoProyecto: oProyecto,
+                              );
+                            },
+                          ),
+                        );
                       },
                       child: AnimatedContainer(
                         height: 35,
@@ -296,14 +316,14 @@ class ListaProyectos extends StatelessWidget {
                             vertical: 3, horizontal: 15),
                         duration: const Duration(milliseconds: 300),
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                color: const Color.fromARGB(255, 179, 177, 177),
-                                width: 1.0,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(12),
-                            color:
-                                Color(int.parse("0xff${experienceLevelColor}"))
-                                    .withAlpha(20)),
+                          border: Border.all(
+                              color: const Color.fromARGB(255, 179, 177, 177),
+                              width: 1.0,
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(12),
+                          color: Color(int.parse('0xff${experienceLevelColor}'))
+                              .withAlpha(20),
+                        ),
                         child: const Center(
                           child: Icon(
                             Icons.add_box,
@@ -332,7 +352,7 @@ class ListaProyectos extends StatelessWidget {
                                 style: BorderStyle.solid),
                             borderRadius: BorderRadius.circular(12),
                             color:
-                                Color(int.parse("0xff${experienceLevelColor}"))
+                                Color(int.parse('0xff${experienceLevelColor}'))
                                     .withAlpha(20)),
                         child: const Center(
                           child: Icon(
@@ -344,7 +364,9 @@ class ListaProyectos extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        sendMonitoreoPorEnviarByProject();
+                      },
                       child: AnimatedContainer(
                         height: 35,
                         padding: const EdgeInsets.symmetric(
@@ -357,7 +379,7 @@ class ListaProyectos extends StatelessWidget {
                                 style: BorderStyle.solid),
                             borderRadius: BorderRadius.circular(12),
                             color:
-                                Color(int.parse("0xff${experienceLevelColor}"))
+                                Color(int.parse('0xff${experienceLevelColor}'))
                                     .withAlpha(20)),
                         child: const Center(
                           child: Icon(

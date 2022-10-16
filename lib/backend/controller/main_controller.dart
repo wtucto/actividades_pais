@@ -150,8 +150,10 @@ class MainController extends GetxController {
   Future<List<TramaMonitoreoModel>> getAllMonitorPorEnviar(
     int? limit,
     int? offset,
+    TramaProyectoModel? o,
   ) async {
-    return await Get.find<MainService>().getAllMonitorPorEnviar(limit, offset);
+    return await Get.find<MainService>()
+        .getAllMonitorPorEnviar(limit, offset, o!);
   }
 
   /*
@@ -292,7 +294,7 @@ class MainController extends GetxController {
       bool isOk = true;
       a.forEach((o) {
         if (o.estadoMonitoreo != TramaMonitoreoModel.sEstadoPEN) {
-          //isOk = false;
+          isOk = false;
         }
       });
 
@@ -319,10 +321,60 @@ class MainController extends GetxController {
     }
   }
 
+  Future<List<TramaMonitoreoModel>> sendMonitoreoByProyecto(
+    TramaProyectoModel? o,
+  ) async {
+    try {
+      if (loading.isTrue) {
+        return Future.error(
+          'Ya hay un proceso en ejecución, espere a que finalice.',
+        );
+      }
+
+      loading.value = true;
+
+      List<TramaMonitoreoModel> a =
+          await Get.find<MainService>().getAllMonitorPorEnviar(0, 0, o);
+
+      /// Evaluar que todos los monitoreos de la lista tengan el estado
+      /// POR ENVIAR
+      bool isOk = true;
+      a.forEach((o) {
+        if (o.estadoMonitoreo != TramaMonitoreoModel.sEstadoPEN) {
+          isOk = false;
+        }
+      });
+
+      if (isOk == true) {
+        final aError = await Get.find<MainService>().sendAllMonitoreo(a, []);
+
+        /// Retornar registros que generar error al enviarse al servidor
+        loading.value = false;
+        return aError;
+      }
+
+      throw Exception(
+        'Imposible enviar documentos al servidor debido a que tienen estados diferentes a : ${TramaMonitoreoModel.sEstadoPEN}',
+      );
+    } catch (oError) {
+      loading.value = false;
+      return Future.error(
+        oError.toString(),
+      );
+    }
+  }
+
+  Future<bool> deleteMonitor(
+    TramaMonitoreoModel o,
+  ) async {
+    final result = await Get.find<MainService>().deleteMonitorDb(o);
+    return result == 1;
+  }
+
   Future<bool> validateMonitor(
     TramaMonitoreoModel o,
   ) async {
-/*
+    /*
       Validar campos OBLIGATORIOS
       - ID: <cui>_IDE_<fechaMonitoreo>
       - latitud

@@ -21,7 +21,11 @@ class MainService {
     int? offset,
   ) async {
     /// Obtiene todos los registros de la DB Local cuyo estado esten en: POR ENVIAR
-    await getAllMonitorPorEnviar(limit, offset).then((a) async {
+    await getAllMonitorPorEnviar(
+      limit,
+      offset,
+      TramaProyectoModel.empty(),
+    ).then((a) async {
       await sendAllMonitoreo(a, []);
     });
   }
@@ -296,10 +300,11 @@ class MainService {
   Future<List<TramaMonitoreoModel>> getAllMonitorPorEnviar(
     int? limit,
     int? offset,
+    TramaProyectoModel? o,
   ) async {
     //if (await isOnline()) {}
     return await Get.find<MainRepository>()
-        .getAllMonitorPorEnviarDB(limit, offset);
+        .getAllMonitorPorEnviarDB(limit, offset, o!);
   }
 
   Future<List<TramaMonitoreoModel>> getAllMonitoreoByProyecto(
@@ -344,6 +349,13 @@ class MainService {
     TramaMonitoreoModel o,
   ) async {
     return await Get.find<MainRepository>().insertMonitorDb(o);
+  }
+
+  Future<int> deleteMonitorDb(
+    TramaMonitoreoModel o,
+  ) async {
+    final result = await Get.find<MainRepository>().deleteMonitorDb(o);
+    return result;
   }
 
   /// USUARIO APP

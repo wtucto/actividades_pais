@@ -77,7 +77,11 @@ class _MonitorListState extends State<MonitorList> {
         // aMonResp.add(o3);
       } else {
         isResume = true;
-        aMonResp = await mainController.getAllMonitorPorEnviar(0, 0);
+        aMonResp = await mainController.getAllMonitorPorEnviar(
+          0,
+          0,
+          TramaProyectoModel.empty(),
+        );
       }
     } catch (oError) {
       mostrarAlerta(

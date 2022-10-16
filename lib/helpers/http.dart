@@ -115,10 +115,9 @@ class Http {
         );
       }
     } catch (e) {
-      _log.e(e.toString());
-
+      //_log.e(e.toString());
       int statusCode = 0;
-      String message = "Unknown error";
+      String message = e.toString() == "" ? "Unknown error" : e.toString();
       dynamic data;
       if (e is DioError) {
         statusCode = -1;

@@ -400,16 +400,24 @@ class DatabasePnPais {
   Future<List<TramaMonitoreoModel>> readAllMonitoreoPorEnviar(
     int? limit,
     int? offset,
+    TramaProyectoModel? o,
   ) async {
     final db = await instance.database;
     final orderBy = '${TramaMonitoreoFields.idMonitoreo} ASC';
+
+    String sWhere = '${TramaMonitoreoFields.estadoMonitoreo} = ?';
+    List<Object?> arg = [TramaMonitoreoModel.sEstadoPEN];
+    if (o!.cui != "") {
+      sWhere = '$sWhere AND ${TramaMonitoreoFields.cui} = ?';
+      arg.add(o.cui);
+    }
 
     dynamic result;
     if (limit! > 0) {
       result = await db.query(
         tableNameTramaMonitoreos,
-        where: '${TramaMonitoreoFields.estadoMonitoreo} = ?',
-        whereArgs: [TramaMonitoreoModel.sEstadoPEN],
+        where: sWhere,
+        whereArgs: arg,
         orderBy: orderBy,
         limit: limit,
         offset: offset,
@@ -417,8 +425,8 @@ class DatabasePnPais {
     } else {
       result = await db.query(
         tableNameTramaMonitoreos,
-        where: '${TramaMonitoreoFields.estadoMonitoreo} = ?',
-        whereArgs: [TramaMonitoreoModel.sEstadoPEN],
+        where: sWhere,
+        whereArgs: arg,
         orderBy: orderBy,
       );
     }

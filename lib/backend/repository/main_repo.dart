@@ -81,8 +81,9 @@ class MainRepository {
   Future<List<TramaMonitoreoModel>> getAllMonitorPorEnviarDB(
     int? limit,
     int? offset,
+    TramaProyectoModel? o,
   ) async {
-    return _dbPnPais.readAllMonitoreoPorEnviar(limit, offset);
+    return _dbPnPais.readAllMonitoreoPorEnviar(limit, offset, o!);
   }
 
   Future<List<TramaMonitoreoModel>> getAllMonitoreoByIdProyectoDb(
@@ -161,6 +162,13 @@ class MainRepository {
     }
 
     return o;
+  }
+
+  Future<int> deleteMonitorDb(
+    TramaMonitoreoModel o,
+  ) async {
+    final result = await _dbPnPais.deleteMonitoreo(o.id!);
+    return result;
   }
 
   /// USUARIO APP
