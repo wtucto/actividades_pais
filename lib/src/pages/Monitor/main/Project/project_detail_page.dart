@@ -1,9 +1,7 @@
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 
-import 'package:actividades_pais/util/Constants.dart';
 import 'package:get/get.dart';
 
 const options = ['BAJO', 'MEDIO', 'ALTO'];
@@ -120,39 +118,29 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 12, 124, 205),
-        elevation: 0,
-        leadingWidth: 20,
+        title: Center(
+          child: Text(
+            'ProjectDetailTitle'.tr,
+            style: const TextStyle(
+              color: Color(0xfffefefe),
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+              fontSize: 18.0,
+            ),
+          ),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
                 iconSize: 30,
                 onPressed: () {},
-                icon: Icon(
+                icon: const Icon(
                   Icons.monitor,
                   color: Color.fromARGB(255, 255, 255, 255),
                 )),
           )
         ],
-        title: Container(
-          height: 45,
-          //width: width / 1.5,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(9.0),
-          ),
-          child: Center(
-            child: Text(
-              'ProjectDetailTitle'.tr,
-              style: const TextStyle(
-                color: const Color(0xfffefefe),
-                fontWeight: FontWeight.w600,
-                fontStyle: FontStyle.normal,
-                fontSize: 20.0,
-              ),
-            ),
-          ),
-        ),
       ),
       body: Form(
         key: _formKey,

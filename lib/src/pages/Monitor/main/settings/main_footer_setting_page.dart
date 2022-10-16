@@ -10,29 +10,29 @@ class MainFooterSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffF9F9F9),
+      backgroundColor: const Color(0xffF9F9F9),
       body: SafeArea(
         top: true,
         child: SingleChildScrollView(
           child: Padding(
-            padding:
-                EdgeInsets.only(left: 16.0, right: 16.0, top: kToolbarHeight),
+            padding: const EdgeInsets.only(
+                left: 16.0, right: 16.0, top: kToolbarHeight),
             child: Column(
               children: <Widget>[
-                CircleAvatar(
+                const CircleAvatar(
                   maxRadius: 48,
                   backgroundImage: AssetImage('assets/Monitor/background.jpg'),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     'John Doe',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 16.0),
-                  decoration: BoxDecoration(
+                  margin: const EdgeInsets.symmetric(vertical: 16.0),
+                  decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(8),
                           topRight: Radius.circular(8),
@@ -60,7 +60,8 @@ class MainFooterSettingPage extends StatelessWidget {
                             ),
                             Text(
                               'Suport'.tr,
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             )
                           ],
                         ),
@@ -77,7 +78,7 @@ class MainFooterSettingPage extends StatelessWidget {
                     width: 30,
                     height: 30,
                   ),
-                  trailing: Icon(Icons.chevron_right, color: yellow),
+                  trailing: const Icon(Icons.chevron_right, color: yellow),
                   onTap: () => Navigator.of(context)
                       .push(MaterialPageRoute(builder: (_) => SettingsPage())),
                 ),
@@ -86,7 +87,7 @@ class MainFooterSettingPage extends StatelessWidget {
                   title: Text('PrivacyPolicy'.tr),
                   subtitle: Text('Legal'.tr),
                   leading: Image.asset('assets/icons/support.png'),
-                  trailing: Icon(
+                  trailing: const Icon(
                     Icons.chevron_right,
                     color: yellow,
                   ),
@@ -98,7 +99,7 @@ class MainFooterSettingPage extends StatelessWidget {
                   title: Text('FrequentlyAskedQuestions'.tr),
                   subtitle: Text('FrequentlyAskedQuestionsResp'.tr),
                   leading: Image.asset('assets/icons/faq.png'),
-                  trailing: Icon(Icons.chevron_right, color: yellow),
+                  trailing: const Icon(Icons.chevron_right, color: yellow),
                   onTap: () => Navigator.of(context)
                       .push(MaterialPageRoute(builder: (_) => FaqPage())),
                 ),
