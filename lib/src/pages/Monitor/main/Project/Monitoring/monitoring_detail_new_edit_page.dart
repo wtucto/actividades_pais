@@ -24,25 +24,6 @@ class MonitoringDetailNewEditPage extends StatefulWidget {
 
 class _MonitoringDetailNewEditPageState
     extends State<MonitoringDetailNewEditPage> {
-  _MonitoringDetailNewEditPageState() {
-    _statusMonitor = _itemStatusMonitor[0];
-    _statusAdvance = _itemStatusAdvance[0];
-    _valuePartidaEje = _itemsPartidaEje[0];
-    _valueProblemaIO = _itemProblemaIO[0];
-    _valueAlternSolucion = _itemAlternSolucion[0];
-    _valueRiesgo = _itemRiesgo[0];
-    _valueNivelRiesgo = _itemNivelRiesgo[0];
-  }
-  int idM = 0;
-  String titleMonitor = "";
-  String fechaMonitoreo = DateFormat("yyyy-MM-dd").format(DateTime.now());
-  String? _statusAdvance;
-  String? _valueRiesgo;
-  String? _statusMonitor;
-  String? _valuePartidaEje;
-  String? _valueProblemaIO;
-  String? _valueAlternSolucion;
-  String? _valueNivelRiesgo;
   final _formKey = GlobalKey<FormState>();
   final _idMonitor = TextEditingController();
   final _dateMonitor = TextEditingController();
@@ -53,13 +34,28 @@ class _MonitoringDetailNewEditPageState
   final _longitud = TextEditingController();
   final _latitud = TextEditingController();
 
-  final _itemStatusMonitor = TramaMonitoreoModel.aEstadoMonitoreo;
-  final _itemNivelRiesgo = TramaMonitoreoModel.aNivelRiesgo;
-  final _itemStatusAdvance = TramaMonitoreoModel.aEstadoAvance;
-  final _itemsPartidaEje = TramaMonitoreoModel.aActividadPartidaEjecutada;
-  final _itemProblemaIO = TramaMonitoreoModel.aProblemaIdentificado;
-  final _itemAlternSolucion = TramaMonitoreoModel.aAlternativaSolucion;
-  final _itemRiesgo = TramaMonitoreoModel.aRiesgoIdentificado;
+  static final _itemStatusMonitor = TramaMonitoreoModel.aEstadoMonitoreo;
+  static final _itemNivelRiesgo = TramaMonitoreoModel.aNivelRiesgo;
+  static final _itemStatusAdvance = TramaMonitoreoModel.aEstadoAvance;
+  static final _itemsPartidaEje =
+      TramaMonitoreoModel.aActividadPartidaEjecutada;
+  static final _itemProblemaIO = TramaMonitoreoModel.aProblemaIdentificado;
+  static final _itemAlternSolucion = TramaMonitoreoModel.aAlternativaSolucion;
+  static final _itemRiesgo = TramaMonitoreoModel.aRiesgoIdentificado;
+
+  int idM = 0;
+  String titleMonitor = "";
+  String fechaMonitoreo = DateFormat("yyyy-MM-dd").format(DateTime.now());
+
+  TramaMonitoreoModel oMonitoreo = TramaMonitoreoModel.empty();
+
+  String? _statusMonitor = _itemStatusMonitor[0];
+  String? _statusAdvance = _itemStatusAdvance[0];
+  String? _valuePartidaEje = _itemsPartidaEje[0];
+  String? _valueProblemaIO = _itemProblemaIO[0];
+  String? _valueAlternSolucion = _itemAlternSolucion[0];
+  String? _valueRiesgo = _itemRiesgo[0];
+  String? _valueNivelRiesgo = _itemNivelRiesgo[0];
 
   final MainController mainController = MainController();
   ImageController controller = ImageController();
@@ -82,20 +78,33 @@ class _MonitoringDetailNewEditPageState
   }
 
   @override
+  void initState() {
+    loadData(context);
+    super.initState();
+  }
+
+  Future<void> loadData(BuildContext context) async {
+    try {
+      if (widget.datoProyecto != null) {
+        oMonitoreo =
+            await mainController.buildNewMonitor(widget.datoProyecto!.cui!);
+      }
+    } catch (oError) {}
+
+    setState(() {
+      _idMonitor.text = oMonitoreo.idMonitoreo!;
+      _dateMonitor.text = oMonitoreo.fechaMonitoreo!;
+      titleMonitor = oMonitoreo.tambo! == "" ? 'MONITOR' : oMonitoreo.tambo!;
+      _advanceFEA.text = oMonitoreo.avanceFisicoAcumulado.toString();
+      _dateObra.text = oMonitoreo.fechaTerminoEstimado!;
+      _longitud.text = oMonitoreo.longitud!;
+      _latitud.text = oMonitoreo.latitud!;
+      _statusMonitor = oMonitoreo.estadoMonitoreo;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _idMonitor.text = widget.datoProyecto?.cui == null
-        ? "${fechaMonitoreo}"
-        : "${widget.datoProyecto?.cui}_IDE_$fechaMonitoreo";
-    _dateMonitor.text = fechaMonitoreo;
-    titleMonitor = widget.datoProyecto?.tambo == null
-        ? "MONITOR"
-        : "${widget.datoProyecto?.tambo}";
-    _advanceFEA.text = widget.datoProyecto?.avanceFisico == null
-        ? ""
-        : "${widget.datoProyecto?.avanceFisico}";
-    _dateObra.text = widget.datoProyecto?.fechaTerminoEstimado == null
-        ? ""
-        : "${widget.datoProyecto?.fechaTerminoEstimado}";
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -129,7 +138,7 @@ class _MonitoringDetailNewEditPageState
        */
       body: Form(
         key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
+        //autovalidateMode: AutovalidateMode.onUserInteraction,
         child: ListView(
           padding: const EdgeInsets.all(32.0),
           children: [
@@ -144,8 +153,14 @@ class _MonitoringDetailNewEditPageState
             /**
                * ESTADO MONITOREO
               */
-            myDropdownButtonFormField(_statusMonitor!, _itemStatusMonitor,
-                false, 'Estado Monitoreo *', false),
+            myDropdownButtonFormField(
+              "DDOW0001",
+              _statusMonitor!,
+              _itemStatusMonitor,
+              false,
+              'Estado Monitoreo *',
+              false,
+            ),
             /**
                * FECHA MONITOREO
                */
@@ -185,13 +200,25 @@ class _MonitoringDetailNewEditPageState
             /**
              * % ESTADO DE AVANCE
              */
-            myDropdownButtonFormField(_statusAdvance!, _itemStatusAdvance,
-                false, 'Estado de Avance *', true),
+            myDropdownButtonFormField(
+              "DDOW0002",
+              _statusAdvance!,
+              _itemStatusAdvance,
+              false,
+              'Estado de Avance *',
+              true,
+            ),
             /**
                * PARTIDA EJECUTADA
                */
-            myDropdownButtonFormField(_valuePartidaEje!, _itemsPartidaEje,
-                false, 'Partida Ejecutada *', true),
+            myDropdownButtonFormField(
+              "DDOW0003",
+              _valuePartidaEje!,
+              _itemsPartidaEje,
+              false,
+              'Partida Ejecutada *',
+              true,
+            ),
             /**
                * % AVANCE FISICO ACUMULADO PARTIDA
                */
@@ -199,7 +226,8 @@ class _MonitoringDetailNewEditPageState
               controller: _advanceFEP,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                  labelText: '% Avance Fisico Acumulado Partida *'),
+                labelText: '% Avance Fisico Acumulado Partida *',
+              ),
               // validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             ),
             /**
@@ -228,8 +256,14 @@ class _MonitoringDetailNewEditPageState
             /**
            * PROBLEMA IDENTIFICADO EN LA OBRA (Obligatorio)
            */
-            myDropdownButtonFormField(_valueProblemaIO!, _itemProblemaIO, false,
-                'Problema Indentificado en la Obra *', true),
+            myDropdownButtonFormField(
+              "DDOW0004",
+              _valueProblemaIO!,
+              _itemProblemaIO,
+              false,
+              'Problema Indentificado en la Obra *',
+              true,
+            ),
             /**
              * Foto del Problema Identificado (Opcional)
              */
@@ -245,13 +279,25 @@ class _MonitoringDetailNewEditPageState
             /**
              * ALTERNATIVA DE SOLUCION
              */
-            myDropdownButtonFormField(_valueAlternSolucion!,
-                _itemAlternSolucion, false, 'Alternativa de Solución *', true),
+            myDropdownButtonFormField(
+              "DDOW0005",
+              _valueAlternSolucion!,
+              _itemAlternSolucion,
+              false,
+              'Alternativa de Solución *',
+              true,
+            ),
             /**
            * SELECCIONES EL RIESGO Identificado
            */
-            myDropdownButtonFormField(_valueRiesgo!, _itemRiesgo, false,
-                'Riesgo Identificado', false),
+            myDropdownButtonFormField(
+              "DDOW0006",
+              _valueRiesgo!,
+              _itemRiesgo,
+              false,
+              'Riesgo Identificado',
+              false,
+            ),
             /**
              * Foto del Riesgo Identificado (Opcional)
              */
@@ -267,8 +313,14 @@ class _MonitoringDetailNewEditPageState
             /**
             * NIVEL DE RIESGO
             */
-            myDropdownButtonFormField(_valueNivelRiesgo!, _itemNivelRiesgo,
-                false, 'Nivel de Riesgo', false),
+            myDropdownButtonFormField(
+              "DDOW0007",
+              _valueNivelRiesgo!,
+              _itemNivelRiesgo,
+              false,
+              'Nivel de Riesgo',
+              false,
+            ),
 
             /**
            * FECHA TERMINO OBRA
@@ -637,8 +689,14 @@ class _MonitoringDetailNewEditPageState
     ]);
   }
 
-  DropdownButtonFormField<String> myDropdownButtonFormField(String valueId,
-      List<String> items, bool? isDense, textLabel, bool isvalidad) {
+  DropdownButtonFormField<String> myDropdownButtonFormField(
+    String code,
+    String valueId,
+    List<String> items,
+    bool? isDense,
+    textLabel,
+    bool isvalidad,
+  ) {
     return DropdownButtonFormField(
       decoration: InputDecoration(labelText: textLabel),
       isExpanded: true,
@@ -651,9 +709,32 @@ class _MonitoringDetailNewEditPageState
           : null,
       items:
           items.map((e) => DropdownMenuItem(child: Text(e), value: e)).toList(),
-      onChanged: (val) {
+      onChanged: (val) async {
         setState(() {
-          valueId = val!;
+          switch (code) {
+            case "DDOW0001":
+              _statusMonitor = val;
+              break;
+            case "DDOW0002":
+              _statusAdvance = val;
+              break;
+            case "DDOW0003":
+              _valuePartidaEje = val;
+              break;
+            case "DDOW0004":
+              _valueProblemaIO = val;
+              break;
+            case "DDOW0005":
+              _valueAlternSolucion = val;
+              break;
+            case "DDOW0006":
+              _valueRiesgo = val;
+              break;
+            case "DDOW0007":
+              _valueNivelRiesgo = val;
+              break;
+            default:
+          }
         });
       },
     );

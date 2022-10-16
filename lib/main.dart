@@ -1,10 +1,8 @@
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
-import 'package:actividades_pais/backend/database/pnpais_objectbox.dart';
 import 'package:actividades_pais/backend/repository/main_repo.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
-import 'package:actividades_pais/card6/template_gallery_app.dart';
 import 'package:actividades_pais/helpers/dependecy_injection.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Monitor/intro/splash_intro_page.dart';

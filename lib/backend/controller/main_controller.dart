@@ -382,16 +382,19 @@ class MainController extends GetxController {
         o.fechaMonitoreo = oDFormat.format(DateTime.now());
       }
 
-      String idBuild = '<CUI>_<IDE>_<FECHA_MONITOREO>';
-      idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
-      idBuild = idBuild.replaceAll('<CUI>', o.cui!);
-      idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
-      o.idMonitoreo = idBuild;
+      o.estadoMonitoreo = TramaMonitoreoModel.sEstadoINC;
 
       List<TramaProyectoModel> aSearh =
-          await Get.find<MainService>().getProyectoByCUI(o.cui!);
+          await Get.find<MainService>().getProyectoByCUI(cui);
       if (aSearh != null && aSearh.length > 0) {
         TramaProyectoModel oProyecto = aSearh[0];
+
+        String idBuild = '<CUI>_<IDE>_<FECHA_MONITOREO>';
+        idBuild = idBuild.replaceAll('<CUI>', oProyecto.cui!);
+        idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
+        idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
+        o.idMonitoreo = idBuild;
+
         if (o.cui!.trim() == '') {
           o.cui = oProyecto.cui;
         }
@@ -419,8 +422,12 @@ class MainController extends GetxController {
           );
         }
       } else {
-        throw Exception(
-            'Error: Imposible generar un nuevo monitoreo porque no se encontraron registros con el código del proyecto.');
+        String idBuild = '<CUI>_<IDE>_<FECHA_MONITOREO>';
+        idBuild = idBuild.replaceAll('<CUI>', cui);
+        idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
+        idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
+        o.idMonitoreo = idBuild;
+        o.cui = cui;
       }
     } catch (oError) {
       _log.e(
