@@ -3,6 +3,7 @@ import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart'
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/util/check_geolocator.dart';
+import 'package:actividades_pais/util/throw-exception.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -324,44 +325,72 @@ class MainController extends GetxController {
   Future<List<TramaMonitoreoModel>> sendMonitoreoByProyecto(
     TramaProyectoModel? o,
   ) async {
-    try {
-      if (loading.isTrue) {
-        return Future.error(
-          'Ya hay un proceso en ejecución, espere a que finalice.',
+    if (loading.isTrue) {
+      return Future.error(
+        'Ya hay un proceso en ejecución, espere a que finalice.',
+      );
+    }
+    loading.value = true;
+
+    List<TramaMonitoreoModel> a =
+        await Get.find<MainService>().getAllMonitorPorEnviar(0, 0, o);
+
+    /// Evaluar que todos los monitoreos de la lista tengan el estado
+    /// POR ENVIAR
+
+    if (a.isEmpty) {
+      loading.value = false;
+      throw ThrowCustom(
+        type: 'W',
+        msg:
+            'No se encontraron registros con estados: ${TramaMonitoreoModel.sEstadoPEN}',
+      );
+    }
+
+    bool isOk = true;
+    a.forEach((o) {
+      if (o.estadoMonitoreo != TramaMonitoreoModel.sEstadoPEN) {
+        isOk = false;
+      }
+    });
+
+    if (isOk == true) {
+      List<TramaMonitoreoModel> aError;
+      try {
+        aError = await Get.find<MainService>().sendAllMonitoreo(a, []);
+      } catch (oError) {
+        loading.value = false;
+        throw ThrowCustom(
+          type: 'E',
+          msg: oError.toString(),
         );
       }
 
-      loading.value = true;
-
-      List<TramaMonitoreoModel> a =
-          await Get.find<MainService>().getAllMonitorPorEnviar(0, 0, o);
-
-      /// Evaluar que todos los monitoreos de la lista tengan el estado
-      /// POR ENVIAR
-      bool isOk = true;
-      a.forEach((o) {
-        if (o.estadoMonitoreo != TramaMonitoreoModel.sEstadoPEN) {
-          isOk = false;
-        }
-      });
-
-      if (isOk == true) {
-        final aError = await Get.find<MainService>().sendAllMonitoreo(a, []);
-
-        /// Retornar registros que generar error al enviarse al servidor
-        loading.value = false;
-        return aError;
-      }
-
-      throw Exception(
-        'Imposible enviar documentos al servidor debido a que tienen estados diferentes a : ${TramaMonitoreoModel.sEstadoPEN}',
-      );
-    } catch (oError) {
+      /// Retornar registros que generar error al enviarse al servidor
       loading.value = false;
-      return Future.error(
-        oError.toString(),
-      );
+
+      if (aError.isEmpty) {
+        throw ThrowCustom(
+          type: 'E',
+          msg:
+              '¡Algo salió mal!. hay registros que no se pudieron enviar al servidor.',
+          obj: aError,
+        );
+      } else {
+        throw ThrowCustom(
+          type: 'S',
+          msg: 'Todos los registros se enviaron al servidor con éxito.',
+          obj: aError,
+        );
+      }
     }
+
+    loading.value = false;
+    throw ThrowCustom(
+      type: 'E',
+      msg:
+          'Imposible enviar documentos al servidor debido a que tienen estados diferentes a : ${TramaMonitoreoModel.sEstadoPEN}',
+    );
   }
 
   Future<bool> deleteMonitor(

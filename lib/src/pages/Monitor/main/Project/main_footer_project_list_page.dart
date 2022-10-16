@@ -8,6 +8,7 @@ import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_list_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/project_detail_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
+import 'package:actividades_pais/util/throw-exception.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -192,19 +193,33 @@ class ListaProyectos extends StatelessWidget {
   final TramaProyectoModel oProyecto;
 
   void sendMonitoreoPorEnviarByProject() async {
-    List<TramaMonitoreoModel> aError =
-        await mainController.sendMonitoreoByProyecto(oProyecto);
-    if (aError.isNotEmpty) {
+    try {
+      List<TramaMonitoreoModel> aError =
+          await mainController.sendMonitoreoByProyecto(oProyecto);
+      if (aError.isNotEmpty) {
+        mostrarAlerta(
+          context,
+          'Error!',
+          'Existen documentos que no se puedieron enviar, verifique que todo los datos sean correctos.',
+        );
+      } else {
+        mostrarAlerta(
+          context,
+          'Success!',
+          'Se enviaron los registros correctamente.',
+        );
+      }
+    } catch (oError) {
+      var sTitle = "Alerta";
+      var sMessage = oError.toString();
+      if (oError is ThrowCustom) {
+        sTitle = oError.typeText!;
+        sMessage = oError.msg!;
+      }
       mostrarAlerta(
         context,
-        'Error',
-        'Existen documentos que no se puedieron enviar, verifique que todo los datos sean correctos.',
-      );
-    } else {
-      mostrarAlerta(
-        context,
-        'Success',
-        'Se enviaron los registros correctamente.',
+        sTitle,
+        sMessage,
       );
     }
   }

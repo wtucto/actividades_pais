@@ -520,12 +520,17 @@ class DatabasePnPais {
     TramaMonitoreoModel o,
   ) async {
     final db = await instance.database;
-    final id = await db.insert(
-      tableNameTramaMonitoreos,
-      o.toJson(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    return o.copy(id: id);
+    if (o.id! > 0) {
+      await updateMonitoreo(o);
+      return o.copy(id: o.id);
+    } else {
+      final id = await db.insert(
+        tableNameTramaMonitoreos,
+        o.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      return o.copy(id: id);
+    }
   }
 
   Future<int> updateMonitoreo(
