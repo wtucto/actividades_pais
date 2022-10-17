@@ -36,9 +36,9 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
   @override
   void initState() {
     loadPreferences();
-    super.initState();
     readJson(offset);
     handleNext();
+    super.initState();
   }
 
   @override
@@ -319,8 +319,7 @@ class ListaProyectos extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) {
                               return MonitoringDetailNewEditPage(
-                                datoProyecto: oProyecto,
-                              );
+                                  datoProyecto: oProyecto, statusM: "CREATE");
                             },
                           ),
                         );
@@ -380,7 +379,11 @@ class ListaProyectos extends StatelessWidget {
                     const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () async {
-                        sendMonitoreoPorEnviarByProject();
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => MonitorList(
+                              datoProyecto: oProyecto, estadoM: 'PE'),
+                        ));
+                        // sendMonitoreoPorEnviarByProject();
                       },
                       child: AnimatedContainer(
                         height: 35,

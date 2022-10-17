@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
@@ -9,9 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MonitorList extends StatefulWidget {
-  const MonitorList({Key? key, this.datoProyecto}) : super(key: key);
+  const MonitorList({Key? key, this.datoProyecto, this.estadoM})
+      : super(key: key);
 
   final TramaProyectoModel? datoProyecto;
+  final String? estadoM;
 
   static _MonitorListState of(BuildContext context) {
     return context.findAncestorStateOfType<_MonitorListState>()!;
@@ -30,8 +34,11 @@ class _MonitorListState extends State<MonitorList> {
 
   @override
   void initState() {
-    loadData(context);
     super.initState();
+    if (mounted) {
+      loadData(context);
+      setState(() {});
+    }
   }
 
   void show() {
@@ -52,30 +59,13 @@ class _MonitorListState extends State<MonitorList> {
     try {
       if (widget.datoProyecto != null) {
         _oProject = widget.datoProyecto!;
-        aMonResp =
-            await mainController.getAllMonitoreoByProyecto(_oProject, 0, 0);
-
-        ///Comentar: Data solo para pruebas
-        // TramaMonitoreoModel o1 = TramaMonitoreoModel();
-        // o1.idMonitoreo = "122_IDE_01-10-2022";
-        // o1.actividadPartidaEjecutada = "Cimentación";
-        // o1.estadoMonitoreo = "INCOMPLETO";
-        // o1.fechaMonitoreo = "01-10-2022";
-        // o1.estadoAvance = "Reinicio";
-        // o1.avanceFisicoAcumulado = 1;
-        // o1.nivelRiesgo = "Alto";
-        // aMonResp.add(o1);
-
-        ///Comentar: Data solo para pruebas
-        // TramaMonitoreoModel o3 = TramaMonitoreoModel();
-        // o3.idMonitoreo = "124_IDE_01-10-2022";
-        // o3.actividadPartidaEjecutada = "obras Exteriores";
-        // o3.estadoMonitoreo = "ENVIADO";
-        // o3.fechaMonitoreo = "01-10-2022";
-        // o3.estadoAvance = "Por iniciar";
-        // o3.avanceFisicoAcumulado = 1;
-        // o3.nivelRiesgo = "Medio Alto";
-        // aMonResp.add(o3);
+        if (widget.estadoM == 'PE') {
+          aMonResp =
+              await mainController.getAllMonitorPorEnviar(0, 0, _oProject);
+        } else {
+          aMonResp =
+              await mainController.getAllMonitoreoByProyecto(_oProject, 0, 0);
+        }
       } else {
         isResume = true;
         aMonResp = await mainController.getAllMonitorPorEnviar(
@@ -88,17 +78,6 @@ class _MonitorListState extends State<MonitorList> {
       mostrarAlerta(
           context!, "Warning!", "No se encontraron registros para mostrar.");
     }
-
-    ///Comentar: Data solo para pruebas
-    // TramaMonitoreoModel o2 = TramaMonitoreoModel();
-    // o2.idMonitoreo = "123_IDE_01-10-2022";
-    // o2.actividadPartidaEjecutada = "Muros y Columnas";
-    // o2.estadoMonitoreo = "POR ENVIAR";
-    // o2.fechaMonitoreo = "01-10-2022";
-    // o2.estadoAvance = "Ejecución";
-    // o2.avanceFisicoAcumulado = 1;
-    // o2.nivelRiesgo = "Muy Alto";
-    // aMonResp.add(o2);
 
     setState(() {});
   }
@@ -274,6 +253,24 @@ class _ListaMonitoresState extends State<ListaMonitores> {
           ),
           child: Column(
             children: [
+              Container(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          widget.oMonitoreo[index].tambo!,
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 37, 71, 194),
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Row(
                 children: [
                   Chip(

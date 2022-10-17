@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
@@ -16,7 +18,9 @@ SharedPreferences? _prefs;
 
 class MonitoringDetailNewEditPage extends StatefulWidget {
   TramaProyectoModel? datoProyecto;
-  MonitoringDetailNewEditPage({Key? key, this.datoProyecto}) : super(key: key);
+  final String? statusM;
+  MonitoringDetailNewEditPage({Key? key, this.datoProyecto, this.statusM})
+      : super(key: key);
 
   @override
   _MonitoringDetailNewEditPageState createState() =>
@@ -80,9 +84,14 @@ class _MonitoringDetailNewEditPageState
 
   @override
   void initState() {
-    loadData(context);
     super.initState();
+    if (mounted) {
+      loadData(context);
+      setState(() {});
+    }
   }
+
+  loadPreferences() async {}
 
   Future<void> loadData(BuildContext context) async {
     try {
@@ -102,6 +111,27 @@ class _MonitoringDetailNewEditPageState
       _latitud.text = oMonitoreo.latitud!;
       _statusMonitor = oMonitoreo.estadoMonitoreo;
     });
+  }
+
+  getDataMonitor(TramaMonitoreoModel m) {
+    setState(() {
+      titleMonitor = m.tambo!;
+      _idMonitor.text = m.idMonitoreo!;
+      _statusMonitor = m.estadoMonitoreo;
+      _dateMonitor.text = m.fechaMonitoreo!;
+      _statusAdvance = m.estadoAvance;
+      _advanceFEA.text = m.avanceFisicoAcumulado.toString();
+      _advanceFEA.text = m.avanceFisicoAcumulado.toString();
+      _dateObra.text = m.fechaTerminoEstimado!;
+      _longitud.text = m.longitud!;
+      _latitud.text = m.latitud!;
+      _statusMonitor = m.estadoMonitoreo;
+    });
+  }
+
+  int getItemLista(List<String> lista, String nameLista) {
+    int valorID = lista.indexOf(nameLista);
+    return valorID;
   }
 
   @override
@@ -481,6 +511,7 @@ class _MonitoringDetailNewEditPageState
                       }
 
                       idM = dataSave.id!;
+                      getDataMonitor(dataSave);
                     } catch (ex) {
                       // ignore: use_build_context_synchronously
                       AnimatedSnackBar.rectangle(
