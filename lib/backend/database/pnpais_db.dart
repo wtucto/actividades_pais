@@ -520,7 +520,7 @@ class DatabasePnPais {
     TramaMonitoreoModel o,
   ) async {
     final db = await instance.database;
-    if (o.id! > 0) {
+    if (o.id != null && o.id! > 0) {
       await updateMonitoreo(o);
       return o.copy(id: o.id);
     } else {
