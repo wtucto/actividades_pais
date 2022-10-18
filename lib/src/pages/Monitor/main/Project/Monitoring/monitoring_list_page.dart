@@ -5,9 +5,9 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
+import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -182,42 +182,29 @@ class _MonitorListState extends State<MonitorList> {
         return FloatingActionButton(
             heroTag: null,
             onPressed: () async {
-              //alert
-              Widget cancelButton = ElevatedButton(
-                child: const Text("Cancelar"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              );
-              Widget continueButton = ElevatedButton(
-                child: const Text("Continuar"),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  BusyIndicator.show(context);
-                  String sMsg = await syncMonitor(context, aMonResp);
-                  BusyIndicator.hide(context);
-                  if (sMsg != "") {
-                    await Future.delayed(const Duration(milliseconds: 100));
-                    mostrarAlerta(context, "Error!", sMsg);
-                  } else {
-                    showSnackbar(
-                      success: true,
-                      text: 'Monitor Enviado Correctamente',
-                    );
-                    setState(() {});
-                  }
-                },
-              );
-              // set up the AlertDialog
-              AlertDialog alert = AlertDialog(
-                title: const Text("Información"),
-                content: const Text("¿Esta Seguro de enviar?"),
-                actions: [
-                  cancelButton,
-                  continueButton,
-                ],
-              );
-              // show the dialog
+              final alert = AlertQuestion(
+                  title: "Información",
+                  message: "¿Está Seguro de Enviar Monitores?",
+                  onNegativePressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  onPostivePressed: () async {
+                    Navigator.of(context).pop();
+                    BusyIndicator.show(context);
+                    String sMsg = await syncMonitor(context, aMonResp);
+                    BusyIndicator.hide(context);
+                    if (sMsg != "") {
+                      await Future.delayed(const Duration(milliseconds: 100));
+                      mostrarAlerta(context, "Error!", sMsg);
+                    } else {
+                      showSnackbar(
+                        success: true,
+                        text: 'Monitor Enviado Correctamente',
+                      );
+                      setState(() {});
+                    }
+                  });
+
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -484,21 +471,37 @@ class _ListaMonitoresState extends State<ListaMonitores> {
                   if (isUpdate(widget.oMonitoreo[index].estadoMonitoreo!))
                     GestureDetector(
                       onTap: () async {
-                        BusyIndicator.show(context);
-                        String sMsg = await syncMonitor(
-                            context, [widget.oMonitoreo[index]]);
-                        BusyIndicator.hide(context);
-                        if (sMsg != "") {
-                          await Future.delayed(
-                              const Duration(milliseconds: 100));
-                          mostrarAlerta(context, "Error!", sMsg);
-                        } else {
-                          showSnackbar(
-                            success: true,
-                            text: 'Monitor Enviado Correctamente',
-                          );
-                          setState(() {});
-                        }
+                        final alert = AlertQuestion(
+                            title: "Información",
+                            message: "¿Está Seguro de Enviar Monitoreo?",
+                            onNegativePressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            onPostivePressed: () async {
+                              Navigator.of(context).pop();
+                              BusyIndicator.show(context);
+                              String sMsg = await syncMonitor(
+                                  context, [widget.oMonitoreo[index]]);
+                              BusyIndicator.hide(context);
+                              if (sMsg != "") {
+                                await Future.delayed(
+                                    const Duration(milliseconds: 100));
+                                mostrarAlerta(context, "Error!", sMsg);
+                              } else {
+                                showSnackbar(
+                                  success: true,
+                                  text: 'Monitor Enviado Correctamente',
+                                );
+                                setState(() {});
+                              }
+                            });
+
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return alert;
+                          },
+                        );
                       },
                       child: AnimatedContainer(
                         height: 35,
@@ -604,31 +607,46 @@ class _ListaMonitoresState extends State<ListaMonitores> {
                             widget.oMonitoreo[index].estadoMonitoreo!))
                           GestureDetector(
                             onTap: () async {
-                              BusyIndicator.show(context);
-                              bool res = await mainController
-                                  .deleteMonitor(widget.oMonitoreo[index]);
-                              if (res) {
-                                BusyIndicator.hide(context);
-                                showSnackbar(
-                                  success: true,
-                                  text: 'Monitor Eliminado Correctamente',
-                                );
-                                widget.oMonitoreo.removeAt(index);
-                                setState(() {
-                                  // loadData(context);
-                                });
-                                // aMonResp.setState(() {});
-                              } else {
-                                // ignore: use_build_context_synchronously
-                                AnimatedSnackBar.rectangle(
-                                  'Error',
-                                  'No se pudo Enviar Monitore',
-                                  type: AnimatedSnackBarType.error,
-                                  brightness: Brightness.light,
-                                  mobileSnackBarPosition:
-                                      MobileSnackBarPosition.top,
-                                ).show(context);
-                              }
+                              final alert = AlertQuestion(
+                                  title: "Información",
+                                  message:
+                                      "¿Está Seguro de Eliminar Monitoreo?",
+                                  onNegativePressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  onPostivePressed: () async {
+                                    Navigator.of(context).pop();
+                                    BusyIndicator.show(context);
+                                    bool res =
+                                        await mainController.deleteMonitor(
+                                            widget.oMonitoreo[index]);
+                                    BusyIndicator.hide(context);
+                                    if (res) {
+                                      showSnackbar(
+                                        success: true,
+                                        text: 'Monitor Eliminado Correctamente',
+                                      );
+                                      widget.oMonitoreo.removeAt(index);
+                                      setState(() {});
+                                    } else {
+                                      // ignore: use_build_context_synchronously
+                                      AnimatedSnackBar.rectangle(
+                                        'Error',
+                                        'No se pudo Enviar Monitore',
+                                        type: AnimatedSnackBarType.error,
+                                        brightness: Brightness.light,
+                                        mobileSnackBarPosition:
+                                            MobileSnackBarPosition.top,
+                                      ).show(context);
+                                    }
+                                  });
+
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return alert;
+                                },
+                              );
                             },
                             child: AnimatedContainer(
                               height: 35,
