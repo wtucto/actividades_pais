@@ -8,6 +8,9 @@ import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_list_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/project_detail_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/Project/report/report_dto.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/Project/report/report_project.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/components/fab.dart';
 import 'package:actividades_pais/util/throw-exception.dart';
 import 'package:flutter/material.dart';
 
@@ -25,8 +28,12 @@ class MainFooterProjectPage extends StatefulWidget {
   _MainFooterProjectPageState createState() => _MainFooterProjectPageState();
 }
 
-class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
+class _MainFooterProjectPageState extends State<MainFooterProjectPage>
+    with TickerProviderStateMixin<MainFooterProjectPage> {
   List<TramaProyectoModel> aProyecto = [];
+
+  Animation<double>? _animation;
+  AnimationController? _controller;
 
   ScrollController scrollController = ScrollController();
   bool loading = true;
@@ -36,10 +43,18 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
 
   @override
   void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 260),
+    );
+    final curvedAnimation =
+        CurvedAnimation(curve: Curves.easeInOut, parent: _controller!);
+    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
+
     loadPreferences();
+    super.initState();
     readJson(offset);
     handleNext();
-    super.initState();
   }
 
   @override
@@ -117,11 +132,10 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
       body: RefreshIndicator(
         onRefresh: () async {
           await Future.delayed(Duration(seconds: 2));
-          // ignore: use_build_context_synchronously
           Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => super.widget));
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => super.widget),
+          );
         },
         child: aProyecto.isNotEmpty
             ? Column(
@@ -179,16 +193,68 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
                 ),
               ),
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      // floatingActionButton: FloatingActionButton(
-      //   child: Icon(Icons.add),
-      //   backgroundColor: Colors.blue,
-      //   onPressed: () {
-      //     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      //       return MonitoringDetailNewEditPage();
-      //     }));
-      //   },
-      // ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: ExpandedAnimationFab(
+        items: [
+          FabItem(
+            "Nuevo Monitoreo",
+            Icons.add_to_queue,
+            onPress: () {
+              _controller!.reverse();
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return MonitoringDetailNewEditPage(
+                      datoProyecto: null,
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+          FabItem(
+            "Reporte",
+            Icons.cloud_upload_rounded,
+            onPress: () {
+              _controller!.reverse();
+              final oDataPdf = ReportDto(
+                customer: 'David Thomas',
+                address: '123 Fake St\r\nBermuda Triangle',
+                items: [
+                  TramaMonitoreoModel.empty(),
+                  TramaMonitoreoModel.empty(),
+                  TramaMonitoreoModel.empty(),
+                ],
+                name: 'Test 001 PDF',
+              );
+
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (builder) => ReportProjectPage(dataPdf: oDataPdf),
+                ),
+              );
+            },
+          ),
+        ],
+        animation: _animation!,
+        onPress: () {
+          if (_controller!.isCompleted) {
+            _controller!.reverse();
+          } else {
+            _controller!.forward();
+          }
+        },
+      ),
+      /*
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: Colors.blue,
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return MonitoringDetailNewEditPage();
+          }));
+        },
+      ),*/
     );
   }
 }
@@ -358,7 +424,7 @@ class ListaProyectos extends StatelessWidget {
                         ),
                         child: const Center(
                           child: Icon(
-                            Icons.add_box,
+                            Icons.add_to_queue,
                             color: Color.fromARGB(255, 56, 54, 54),
                           ),
                         ),
@@ -419,7 +485,7 @@ class ListaProyectos extends StatelessWidget {
                                     .withAlpha(20)),
                         child: const Center(
                           child: Icon(
-                            Icons.upload,
+                            Icons.cloud_upload_rounded,
                             color: Color.fromARGB(255, 38, 173, 108),
                           ),
                         ),

@@ -419,7 +419,7 @@ class _ListaMonitoresState extends State<ListaMonitores> {
                         ),
                         child: const Center(
                           child: Icon(
-                            Icons.upload,
+                            Icons.cloud_upload_rounded,
                             color: Color.fromARGB(255, 38, 173, 108),
                           ),
                         ),
@@ -559,16 +559,14 @@ class _ListaMonitoresState extends State<ListaMonitores> {
                         const SizedBox(width: 10),
                       ],
                     ),
-                    Expanded(
-                      child: Text(
-                        widget.oMonitoreo[index].idMonitoreo!,
-                        style: const TextStyle(
-                          color: Color.fromARGB(255, 13, 0, 255),
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    Text(
+                      widget.oMonitoreo[index].idMonitoreo!,
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 13, 0, 255),
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
                       ),
-                    )
+                    ),
                   ],
                 ),
               )

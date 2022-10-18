@@ -14,16 +14,13 @@ class AppBarPegaso extends StatefulWidget {
   _AppBarPegasoState createState() => _AppBarPegasoState();
 }
 
-const datoUt = "";
-const nombre = "JUANITO";
-
 class _AppBarPegasoState extends State<AppBarPegaso> {
   Widget text() {
     return Container(
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Padding(
           padding: EdgeInsets.only(
-            top: 20,
+            top: 30,
           ),
           child: Column(
             //   crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,8 +38,8 @@ class _AppBarPegasoState extends State<AppBarPegaso> {
                           borderRadius: BorderRadius.circular(8.0),
                           child: Image.asset(
                             'assets/paislogo.png',
-                            width: 110.0,
-                            height: 100.0,
+                            width: 100.0,
+                            height: 90.0,
                             fit: BoxFit.fill,
                           ),
                         ),

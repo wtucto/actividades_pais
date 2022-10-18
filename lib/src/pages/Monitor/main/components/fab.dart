@@ -19,7 +19,7 @@ class FabMenuItem extends StatelessWidget {
     return MaterialButton(
       shape: StadiumBorder(),
       padding: EdgeInsets.only(top: 8, bottom: 8, left: 24, right: 16),
-      color: Color.fromARGB(255, 219, 219, 234),
+      color: Color.fromARGB(255, 216, 216, 248),
       splashColor: Colors.grey.withOpacity(0.1),
       highlightColor: Colors.grey.withOpacity(0.1),
       elevation: 0,
@@ -31,7 +31,7 @@ class FabMenuItem extends StatelessWidget {
         children: <Widget>[
           Text(item.title),
           SizedBox(width: 8),
-          Icon(item.icon, color: LightColors.indigo),
+          Icon(item.icon, color: LightColors.blue),
         ],
       ),
     );
@@ -90,7 +90,7 @@ class ExpandedAnimationFab extends AnimatedWidget {
           ),
         ),
         FloatingActionButton(
-          backgroundColor: LightColors.indigo,
+          backgroundColor: LightColors.blue,
           child: AnimatedIcon(
             icon: AnimatedIcons.menu_close,
             progress: _animation,

@@ -54,7 +54,7 @@ class _MainFooterAllOptionPageState extends State<MainFooterAllOptionPage>
           ],
         ),
       ),
-      drawer: Drawer(
+      /*drawer: Drawer(
         child: Material(
           textStyle: const TextStyle(color: Colors.white, fontSize: 16),
           child: Container(
@@ -121,23 +121,40 @@ class _MainFooterAllOptionPageState extends State<MainFooterAllOptionPage>
             ),
           ),
         ),
-      ),
-      /*floatingActionButton: ExpandedAnimationFab(
+      ),*/
+      /*floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: ExpandedAnimationFab(
         items: [
           FabItem(
-            "Option 1",
-            Icons.folder,
+            "Nuevo Monitoreo",
+            Icons.add_to_queue,
             onPress: () {
               _controller!.reverse();
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return MonitoringDetailNewEditPage(
+                      datoProyecto: null,
+                    );
+                  },
+                ),
+              );
             },
           ),
-          FabItem(
-            "Option 2",
-            Icons.settings,
+          /*FabItem(
+            "Enviar Monitoreos",
+            Icons.cloud_upload_rounded,
             onPress: () {
               _controller!.reverse();
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return MonitoringDetailNewEditPage();
+                  },
+                ),
+              );
             },
-          ),
+          ),*/
         ],
         animation: _animation!,
         onPress: () {

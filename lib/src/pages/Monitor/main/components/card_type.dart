@@ -17,7 +17,7 @@ class CardType extends StatelessWidget {
         ),
         decoration: ShapeDecoration(
           shape: StadiumBorder(),
-          color: Colors.white.withOpacity(0.2),
+          color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.2),
         ),
         child: Text(
           label,
@@ -25,7 +25,7 @@ class CardType extends StatelessWidget {
             fontSize: large ? 12 : 8,
             height: 0.8,
             fontWeight: large ? FontWeight.bold : FontWeight.normal,
-            color: Colors.white,
+            color: Color.fromARGB(255, 34, 34, 34),
           ),
         ),
       ),

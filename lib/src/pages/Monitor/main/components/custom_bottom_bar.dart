@@ -26,7 +26,7 @@ class CustomBottomBar extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(
-              Icons.upload_sharp,
+              Icons.cloud_upload_rounded,
               color: iconColor,
             ),
             iconSize: 30,

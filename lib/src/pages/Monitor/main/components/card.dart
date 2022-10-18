@@ -56,9 +56,9 @@ class TiteCard extends StatelessWidget {
                   homeOption.name,
                   style: TextStyle(
                     fontSize: 14,
-                    height: 0.7,
+                    height: 0.9,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 17, 17, 17),
                   ),
                 ),
               ),
