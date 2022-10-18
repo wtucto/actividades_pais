@@ -170,17 +170,45 @@ class _MonitoringDetailNewEditPageState
       _dateObra.text = m.fechaTerminoEstimado!;
       _longitud.text = m.longitud!;
       _latitud.text = m.latitud!;
-      if (m.imgActividad != null && m.imgActividad != "") {
-        controller.itemsImagesAll
-            .addAll({_imgPartidaEjecutada: m.imgActividad!.split(",")});
+
+      List<String?> listaImage = [];
+      listaImage.addAll([
+        m.imgActividad,
+        m.imgActividad1,
+        m.imgActividad2,
+        m.imgActividad3,
+        m.imgActividad4
+      ]);
+      for (var item in listaImage) {
+        if (item != null && item != "") {
+          controller.itemsImagesAll
+              .addAll({_imgPartidaEjecutada: item.split(",")});
+        }
       }
-      if (m.imgProblema != null && m.imgProblema != "") {
-        controller.itemsImagesAll
-            .addAll({_imgProblemaIdentificado: m.imgProblema!.split(",")});
+
+      listaImage = [];
+      listaImage.addAll([
+        m.imgProblema,
+        m.imgProblema1,
+        m.imgProblema2,
+        m.imgProblema3,
+        m.imgProblema4
+      ]);
+      for (var item in listaImage) {
+        if (item != null && item != "") {
+          controller.itemsImagesAll
+              .addAll({_imgProblemaIdentificado: item.split(",")});
+        }
       }
-      if (m.imgRiesgo != null && m.imgRiesgo != "") {
-        controller.itemsImagesAll
-            .addAll({_imgRiesgoIdentificado: m.imgRiesgo!.split(",")});
+
+      listaImage = [];
+      listaImage.addAll(
+          [m.imgRiesgo, m.imgRiesgo, m.imgRiesgo, m.imgRiesgo, m.imgRiesgo]);
+      for (var item in listaImage) {
+        if (item != null && item != "") {
+          controller.itemsImagesAll
+              .addAll({_imgRiesgoIdentificado: item.split(",")});
+        }
       }
     });
   }

@@ -48,7 +48,7 @@ class _MainFooterAllOptionPageState extends State<MainFooterAllOptionPage>
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
             MainFooterProjectPage(),
-            MonitorList(),
+            MonitorList(estadoM: "ALL"),
             MainFooterSettingPage(),
             // GalleryPage(),
           ],

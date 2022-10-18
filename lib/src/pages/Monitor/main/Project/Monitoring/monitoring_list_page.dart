@@ -56,6 +56,34 @@ class _MonitorListState extends State<MonitorList> {
     });
   }
 
+  Future<String> syncMonitor(
+      BuildContext context, List<TramaMonitoreoModel> a) async {
+    String sMsg = "";
+    try {
+      List<TramaMonitoreoModel> aResp = await mainController.sendMonitoreo(a);
+
+      if (aResp.length > 0) {
+        sMsg =
+            'Hay registros que no se pudieron enviar al servidor porque generaron un error: ${aResp.length}';
+      }
+    } catch (oError) {
+      sMsg = '¡Ups! Algo salió mal, vuelve a intentarlo mas tarde.';
+    }
+    //throw Exception('¡Ups! Algo salió mal, vuelve a intentarlo mas tarde.');
+    return sMsg;
+  }
+
+  void showSnackbar({required bool success, required String text}) {
+    AnimatedSnackBar.rectangle(
+      'I'.tr,
+      text,
+      type:
+          success ? AnimatedSnackBarType.success : AnimatedSnackBarType.warning,
+      brightness: Brightness.light,
+      mobileSnackBarPosition: MobileSnackBarPosition.top,
+    ).show(context);
+  }
+
   Future<void> loadData(BuildContext context) async {
     try {
       if (widget.datoProyecto != null) {
@@ -86,52 +114,91 @@ class _MonitorListState extends State<MonitorList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            'MonitoringListTitle'.tr,
-            style: const TextStyle(
-              color: Color(0xfffefefe),
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-              fontSize: 18.0,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        appBar: AppBar(
+          title: Center(
+            child: Text(
+              'MonitoringListTitle'.tr,
+              style: const TextStyle(
+                color: Color(0xfffefefe),
+                fontWeight: FontWeight.w600,
+                fontStyle: FontStyle.normal,
+                fontSize: 18.0,
+              ),
             ),
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: CustomSearchMonitor(aMonResp),
+                );
+              },
+            ),
+          ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: CustomSearchMonitor(aMonResp),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Container(
-        child: aMonResp.isNotEmpty
-            ? ListaMonitores(context: context, oMonitoreo: aMonResp)
-            : Container(
-                padding: const EdgeInsets.all(20),
-                width: MediaQuery.of(context).size.width,
-                decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 245, 246, 248)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      "No existe Monitores, Verificar su conexión",
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                      textAlign: TextAlign.center,
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await Future.delayed(Duration(seconds: 2));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => super.widget),
+            );
+          },
+          child: Container(
+            child: aMonResp.isNotEmpty
+                ? ListaMonitores(context: context, oMonitoreo: aMonResp)
+                : Container(
+                    padding: const EdgeInsets.all(20),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 245, 246, 248)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text(
+                          "No existe Monitores",
+                          style: TextStyle(color: Colors.black, fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-      ),
-    );
+                  ),
+          ),
+        ),
+        floatingActionButton: _getFAB(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked);
+  }
+
+  Widget _getFAB() {
+    if (aMonResp.isEmpty || widget.estadoM == null) {
+      return Container();
+    } else {
+      if (widget.estadoM == "PE" || widget.estadoM == "ALL") {
+        return FloatingActionButton(
+            onPressed: () async {
+              BusyIndicator.show(context);
+              String sMsg = await syncMonitor(context, aMonResp);
+              BusyIndicator.hide(context);
+              if (sMsg != "") {
+                await Future.delayed(const Duration(milliseconds: 100));
+                mostrarAlerta(context, "Error!", sMsg);
+              } else {
+                showSnackbar(
+                  success: true,
+                  text: 'Monitor Enviado Correctamente',
+                );
+                setState(() {});
+              }
+            },
+            child: const Icon(Icons.cloud_upload_rounded));
+      } else {
+        return Container();
+      }
+    }
   }
 }
 
