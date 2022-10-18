@@ -7,6 +7,7 @@ import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -179,20 +180,50 @@ class _MonitorListState extends State<MonitorList> {
     } else {
       if (widget.estadoM == "PE" || widget.estadoM == "ALL") {
         return FloatingActionButton(
+            heroTag: null,
             onPressed: () async {
-              BusyIndicator.show(context);
-              String sMsg = await syncMonitor(context, aMonResp);
-              BusyIndicator.hide(context);
-              if (sMsg != "") {
-                await Future.delayed(const Duration(milliseconds: 100));
-                mostrarAlerta(context, "Error!", sMsg);
-              } else {
-                showSnackbar(
-                  success: true,
-                  text: 'Monitor Enviado Correctamente',
-                );
-                setState(() {});
-              }
+              //alert
+              Widget cancelButton = ElevatedButton(
+                child: const Text("Cancelar"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              );
+              Widget continueButton = ElevatedButton(
+                child: const Text("Continuar"),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  BusyIndicator.show(context);
+                  String sMsg = await syncMonitor(context, aMonResp);
+                  BusyIndicator.hide(context);
+                  if (sMsg != "") {
+                    await Future.delayed(const Duration(milliseconds: 100));
+                    mostrarAlerta(context, "Error!", sMsg);
+                  } else {
+                    showSnackbar(
+                      success: true,
+                      text: 'Monitor Enviado Correctamente',
+                    );
+                    setState(() {});
+                  }
+                },
+              );
+              // set up the AlertDialog
+              AlertDialog alert = AlertDialog(
+                title: const Text("Información"),
+                content: const Text("¿Esta Seguro de enviar?"),
+                actions: [
+                  cancelButton,
+                  continueButton,
+                ],
+              );
+              // show the dialog
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return alert;
+                },
+              );
             },
             child: const Icon(Icons.cloud_upload_rounded));
       } else {
