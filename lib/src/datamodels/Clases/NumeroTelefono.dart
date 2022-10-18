@@ -30,12 +30,12 @@ class NumerosTelef {
   factory NumerosTelef.fromJson(Map<String, dynamic> parsedJson) =>
       new NumerosTelef(
           numeroTelefono: parsedJson['numeroTelefono'],
-          idNumeroTelefono: parsedJson['id']);
+          idNumeroTelefono: parsedJson['idNumeroTelefono']);
 
   NumerosTelef.fromMap(Map<String, dynamic> map) {
     numeroTelefono = map['numeroTelefono'];
     //  idUsuario = map['idUsuario'];
-    idNumeroTelefono = map['id'];
+    idNumeroTelefono = map['idNumeroTelefono'];
   }
 }
 

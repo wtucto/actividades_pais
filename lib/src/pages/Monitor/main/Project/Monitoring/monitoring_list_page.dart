@@ -628,6 +628,7 @@ class _ListaMonitoresState extends State<ListaMonitores> {
                     ),
                     Expanded(
                       child: Text(
+                        textAlign: TextAlign.right,
                         widget.oMonitoreo[index].idMonitoreo!,
                         style: const TextStyle(
                           color: Color.fromARGB(255, 13, 0, 255),
