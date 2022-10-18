@@ -33,6 +33,7 @@ class _MonitoringDetailNewEditPageState
     extends State<MonitoringDetailNewEditPage> {
   final _formKey = GlobalKey<FormState>();
   final _idMonitor = TextEditingController();
+  final _cuiCtr = TextEditingController();
   final _dateMonitor = TextEditingController();
   final _advanceFEA = TextEditingController();
   final _advanceFEP = TextEditingController();
@@ -121,6 +122,7 @@ class _MonitoringDetailNewEditPageState
         _snip = widget.datoProyecto?.numSnip;
         _ciu = widget.datoProyecto?.cui;
         _tambo = widget.datoProyecto?.tambo;
+        _cuiCtr.text = oMonitoreo.cui!;
         _idMonitor.text = oMonitoreo.idMonitoreo!;
         _dateMonitor.text = oMonitoreo.fechaMonitoreo!;
         titleMonitor = oMonitoreo.tambo! == "" ? 'MONITOR' : oMonitoreo.tambo!;
@@ -257,6 +259,15 @@ class _MonitoringDetailNewEditPageState
         child: ListView(
           padding: const EdgeInsets.all(32.0),
           children: [
+            /**
+               * CODIGO UNICO DE PROYECTO
+              */
+            TextFormField(
+              controller: _cuiCtr,
+              decoration: const InputDecoration(labelText: 'CUI *'),
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+              enabled: _enabledF,
+            ),
             /**
                * ID MONITOREO
               */
