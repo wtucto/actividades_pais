@@ -9,10 +9,12 @@ class MyImageMultiple extends StatefulWidget {
     Key? key,
     required this.controller,
     required this.nameField,
+    required this.enabled,
   }) : super(key: key);
 
   final ImageController controller;
   final String nameField;
+  final bool? enabled;
 
   @override
   _MyImageMultipleState createState() => _MyImageMultipleState();
@@ -63,24 +65,26 @@ class _MyImageMultipleState extends State<MyImageMultiple> {
                         height: double.infinity,
                         fit: BoxFit.cover,
                       ),
-                      Positioned(
-                        right: -2,
-                        top: -2,
-                        child: InkWell(
-                          child: const Icon(
-                            Icons.remove_circle,
-                            size: 30,
-                            color: Colors.red,
-                          ),
-                          onTap: () async {
-                            await widget.controller.removeMultipleImage(
-                              itemsImagePath[index],
-                              widget.nameField,
-                            );
-                            setState(() {});
-                          },
-                        ),
-                      ),
+                      widget.enabled!
+                          ? Positioned(
+                              right: -2,
+                              top: -2,
+                              child: InkWell(
+                                child: const Icon(
+                                  Icons.remove_circle,
+                                  size: 30,
+                                  color: Colors.red,
+                                ),
+                                onTap: () async {
+                                  await widget.controller.removeMultipleImage(
+                                    itemsImagePath[index],
+                                    widget.nameField,
+                                  );
+                                  setState(() {});
+                                },
+                              ),
+                            )
+                          : Container(),
                     ],
                   ),
                 );

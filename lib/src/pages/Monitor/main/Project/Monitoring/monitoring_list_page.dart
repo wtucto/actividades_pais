@@ -389,16 +389,17 @@ class _ListaMonitoresState extends State<ListaMonitores> {
                         BusyIndicator.show(context);
                         String sMsg = await syncMonitor(
                             context, [widget.oMonitoreo[index]]);
-
-                        // setState(() {
-                        //   loadData(context);
-                        // });
-
                         BusyIndicator.hide(context);
                         if (sMsg != "") {
                           await Future.delayed(
                               const Duration(milliseconds: 100));
                           mostrarAlerta(context, "Error!", sMsg);
+                        } else {
+                          showSnackbar(
+                            success: true,
+                            text: 'Monitor Enviado Correctamente',
+                          );
+                          setState(() {});
                         }
                       },
                       child: AnimatedContainer(
@@ -471,9 +472,11 @@ class _ListaMonitoresState extends State<ListaMonitores> {
                         const SizedBox(width: 10),
                         GestureDetector(
                           onTap: () {
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //   builder: (context) => MonitoringDetailNewEditPage(),
-                            // ));
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => MonitoringDetailNewEditPage(
+                                  datoMonitor: widget.oMonitoreo[index],
+                                  statusM: 'LECTURA'),
+                            ));
                           },
                           child: AnimatedContainer(
                             height: 35,

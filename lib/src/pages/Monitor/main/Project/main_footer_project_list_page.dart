@@ -179,16 +179,16 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
                 ),
               ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Colors.blue,
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return MonitoringDetailNewEditPage();
-          }));
-        },
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(Icons.add),
+      //   backgroundColor: Colors.blue,
+      //   onPressed: () {
+      //     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      //       return MonitoringDetailNewEditPage();
+      //     }));
+      //   },
+      // ),
     );
   }
 }

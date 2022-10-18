@@ -50,6 +50,7 @@ class _MonitoringDetailNewEditPageState
   static final _itemAlternSolucion = TramaMonitoreoModel.aAlternativaSolucion;
   static final _itemRiesgo = TramaMonitoreoModel.aRiesgoIdentificado;
 
+  bool _enabledF = true;
   int idM = 0;
   String titleMonitor = "";
   String fechaMonitoreo = DateFormat("yyyy-MM-dd").format(DateTime.now());
@@ -97,6 +98,10 @@ class _MonitoringDetailNewEditPageState
       if (widget.statusM == "UPDATE") {
         getDataMonitor(widget.datoMonitor!);
       }
+      if (widget.statusM == "LECTURA") {
+        _enabledF = false;
+        getDataMonitor(widget.datoMonitor!);
+      }
 
       setState(() {});
     }
@@ -111,23 +116,25 @@ class _MonitoringDetailNewEditPageState
             await mainController.buildNewMonitor(widget.datoProyecto!.cui!);
       }
     } catch (oError) {}
-
-    setState(() {
-      _snip = widget.datoProyecto?.numSnip;
-      _ciu = widget.datoProyecto?.cui;
-      _tambo = widget.datoProyecto?.tambo;
-      _idMonitor.text = oMonitoreo.idMonitoreo!;
-      _dateMonitor.text = oMonitoreo.fechaMonitoreo!;
-      titleMonitor = oMonitoreo.tambo! == "" ? 'MONITOR' : oMonitoreo.tambo!;
-      _advanceFEA.text = oMonitoreo.avanceFisicoAcumulado.toString();
-      _dateObra.text = oMonitoreo.fechaTerminoEstimado!;
-      _longitud.text = oMonitoreo.longitud!;
-      _latitud.text = oMonitoreo.latitud!;
-      _statusMonitor = oMonitoreo.estadoMonitoreo;
-    });
+    try {
+      setState(() {
+        _snip = widget.datoProyecto?.numSnip;
+        _ciu = widget.datoProyecto?.cui;
+        _tambo = widget.datoProyecto?.tambo;
+        _idMonitor.text = oMonitoreo.idMonitoreo!;
+        _dateMonitor.text = oMonitoreo.fechaMonitoreo!;
+        titleMonitor = oMonitoreo.tambo! == "" ? 'MONITOR' : oMonitoreo.tambo!;
+        _advanceFEA.text = oMonitoreo.avanceFisicoAcumulado.toString();
+        _dateObra.text = oMonitoreo.fechaTerminoEstimado!;
+        _longitud.text = oMonitoreo.longitud!;
+        _latitud.text = oMonitoreo.latitud!;
+        _statusMonitor = oMonitoreo.estadoMonitoreo;
+      });
+    } catch (error) {}
   }
 
   getDataMonitor(TramaMonitoreoModel m) {
+    controller.itemsImagesAll = {};
     setState(() {
       titleMonitor = m.tambo!;
       idM = m.id!;
@@ -163,10 +170,18 @@ class _MonitoringDetailNewEditPageState
       _dateObra.text = m.fechaTerminoEstimado!;
       _longitud.text = m.longitud!;
       _latitud.text = m.latitud!;
-
-      // imgActividad: imgPE,
-      // imgProblema: imgPI,
-      // imgRiesgo: imgRI,
+      if (m.imgActividad != null && m.imgActividad != "") {
+        controller.itemsImagesAll
+            .addAll({_imgPartidaEjecutada: m.imgActividad!.split(",")});
+      }
+      if (m.imgProblema != null && m.imgProblema != "") {
+        controller.itemsImagesAll
+            .addAll({_imgProblemaIdentificado: m.imgProblema!.split(",")});
+      }
+      if (m.imgRiesgo != null && m.imgRiesgo != "") {
+        controller.itemsImagesAll
+            .addAll({_imgRiesgoIdentificado: m.imgRiesgo!.split(",")});
+      }
     });
   }
 
@@ -221,6 +236,7 @@ class _MonitoringDetailNewEditPageState
               controller: _idMonitor,
               decoration: const InputDecoration(labelText: 'Id Monitoreo *'),
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+              enabled: _enabledF,
             ),
             /**
                * ESTADO MONITOREO
@@ -266,6 +282,7 @@ class _MonitoringDetailNewEditPageState
               decoration: const InputDecoration(
                 labelText: '% Avance Fisico Estimado Acumulado *',
               ),
+              enabled: _enabledF,
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             ),
 
@@ -300,19 +317,23 @@ class _MonitoringDetailNewEditPageState
               decoration: const InputDecoration(
                 labelText: '% Avance Fisico Acumulado Partida *',
               ),
+              enabled: _enabledF,
               // validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             ),
             /**
              * Fotos de la Partida Ejecutada(Obligatorio) 
             */
-            OutlinedButton.icon(
-              label: const Text('Fotos de la Partida Ejecutada *'),
-              icon: const Icon(Icons.image),
-              onPressed: () async {
-                await controller.selectMultipleImage(_imgPartidaEjecutada);
-                setState(() {});
-              },
-            ),
+            _enabledF
+                ? OutlinedButton.icon(
+                    label: const Text('Fotos de la Partida Ejecutada *'),
+                    icon: const Icon(Icons.image),
+                    onPressed: () async {
+                      await controller
+                          .selectMultipleImage(_imgPartidaEjecutada);
+                      setState(() {});
+                    },
+                  )
+                : Container(),
             myExpansionPanelListethod(_imgPartidaEjecutada, expandedPE),
 
             /**
@@ -322,6 +343,7 @@ class _MonitoringDetailNewEditPageState
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.newline,
               controller: _obsMonitor,
+              enabled: _enabledF,
               decoration: const InputDecoration(labelText: 'Observaciones'),
               // validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             ),
@@ -339,14 +361,17 @@ class _MonitoringDetailNewEditPageState
             /**
              * Foto del Problema Identificado (Opcional)
              */
-            OutlinedButton.icon(
-              label: const Text('Foto del Problema Identificado'),
-              icon: const Icon(Icons.image),
-              onPressed: () async {
-                await controller.selectMultipleImage(_imgProblemaIdentificado);
-                setState(() {});
-              },
-            ),
+            _enabledF
+                ? OutlinedButton.icon(
+                    label: const Text('Foto del Problema Identificado'),
+                    icon: const Icon(Icons.image),
+                    onPressed: () async {
+                      await controller
+                          .selectMultipleImage(_imgProblemaIdentificado);
+                      setState(() {});
+                    },
+                  )
+                : Container(),
             myExpansionPanelListethod(_imgProblemaIdentificado, expandedPI),
             /**
              * ALTERNATIVA DE SOLUCION
@@ -373,14 +398,17 @@ class _MonitoringDetailNewEditPageState
             /**
              * Foto del Riesgo Identificado (Opcional)
              */
-            OutlinedButton.icon(
-              label: const Text('Foto del Riesgo Identificado'),
-              icon: const Icon(Icons.image),
-              onPressed: () async {
-                await controller.selectMultipleImage(_imgRiesgoIdentificado);
-                setState(() {});
-              },
-            ),
+            _enabledF
+                ? OutlinedButton.icon(
+                    label: const Text('Foto del Riesgo Identificado'),
+                    icon: const Icon(Icons.image),
+                    onPressed: () async {
+                      await controller
+                          .selectMultipleImage(_imgRiesgoIdentificado);
+                      setState(() {});
+                    },
+                  )
+                : Container(),
             myExpansionPanelListethod(_imgRiesgoIdentificado, expandedRI),
             /**
             * NIVEL DE RIESGO
@@ -404,7 +432,7 @@ class _MonitoringDetailNewEditPageState
                   //icon: Icon(Icons.calendar_today), //icon of text field
                   labelText: 'Fecha Termino Obra *' //label text of field
                   ),
-
+              enabled: _enabledF,
               readOnly:
                   true, //set it true, so that user will not able to edit text
               onTap: () async {
@@ -437,6 +465,7 @@ class _MonitoringDetailNewEditPageState
             TextFormField(
               controller: _longitud,
               decoration: const InputDecoration(labelText: 'Longitud *'),
+              enabled: _enabledF,
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             ),
             /**
@@ -445,183 +474,49 @@ class _MonitoringDetailNewEditPageState
             TextFormField(
               controller: _latitud,
               decoration: const InputDecoration(labelText: 'Latitud *'),
+              enabled: _enabledF,
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             ),
             /**
              * Botones
              */
             const SizedBox(height: 32),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color.fromARGB(255, 12, 124, 205),
-                    onPrimary: Colors.white,
-                    shadowColor: const Color.fromARGB(255, 53, 53, 53),
-                    elevation: 5,
-                  ),
-                  onPressed: () async {
-                    String imgPE = "";
-                    String imgPI = "";
-                    String imgRI = "";
-                    BusyIndicator.show(context);
-                    controller.itemsImagesAll.forEach((key, items) {
-                      if (key == _imgPartidaEjecutada) {
-                        imgPE = items.join(",");
-                      }
-                      if (key == _imgProblemaIdentificado) {
-                        imgPI = items.join(",");
-                      }
-                      if (key == _imgRiesgoIdentificado) {
-                        imgRI = items.join(",");
-                      }
-                    });
-                    _prefs = await SharedPreferences.getInstance();
-                    UserModel oUser = UserModel(
-                      nombres: _prefs!.getString("nombres") ?? "",
-                      codigo: _prefs!.getString("codigo") ?? "",
-                      rol: _prefs!.getString("rol") ?? "",
-                    );
-                    try {
-                      TramaMonitoreoModel dataSave = await mainController
-                          .saveMonitoreo(TramaMonitoreoModel(
-                        id: idM,
-                        isEdit: 1,
-                        createdTime: DateTime.now(),
-                        snip: _snip,
-                        cui: _ciu,
-                        latitud: _latitud.text,
-                        longitud: _longitud.text,
-                        tambo: _tambo,
-                        fechaTerminoEstimado: _dateObra.text,
-                        actividadPartidaEjecutada:
-                            _valuePartidaEje!.toUpperCase() ==
-                                    "SELECCIONE UNA OPCIÓN"
-                                ? ""
-                                : _valuePartidaEje!,
-                        alternativaSolucion:
-                            _valueAlternSolucion!.toUpperCase() ==
-                                    "SELECCIONE UNA OPCIÓN"
-                                ? ""
-                                : _valueAlternSolucion!,
-                        avanceFisicoAcumulado: double.parse(
-                            _advanceFEA.text == "" ? "0" : _advanceFEA.text),
-                        avanceFisicoPartida: double.parse(
-                            _advanceFEP.text == "" ? "0" : _advanceFEP.text),
-                        estadoAvance: _statusAdvance!.toUpperCase() ==
-                                "SELECCIONE UNA OPCIÓN"
-                            ? ""
-                            : _statusAdvance!,
-                        estadoMonitoreo: _statusMonitor!.toUpperCase() ==
-                                "SELECCIONE UNA OPCIÓN"
-                            ? ""
-                            : _statusMonitor!,
-                        fechaMonitoreo: _dateMonitor.text,
-                        idMonitoreo: _idMonitor.text,
-                        idUsuario: oUser.codigo,
-                        imgActividad: imgPE,
-                        imgProblema: imgPI,
-                        imgRiesgo: imgRI,
-                        observaciones: _obsMonitor.text,
-                        problemaIdentificado: _valueProblemaIO!.toUpperCase() ==
-                                "SELECCIONE UNA OPCIÓN"
-                            ? ""
-                            : _valueProblemaIO!,
-                        riesgoIdentificado: _valueRiesgo!.toUpperCase() ==
-                                "SELECCIONE UNA OPCIÓN"
-                            ? ""
-                            : _valueRiesgo!,
-                        nivelRiesgo: _valueNivelRiesgo!.toUpperCase() ==
-                                "SELECCIONE UNA OPCIÓN"
-                            ? ""
-                            : _valueNivelRiesgo!,
-                        rol: oUser.rol,
-                        usuario: oUser.nombres,
-                      ));
-                      if (idM == 0) {
-                        showSnackbar(
-                          success: true,
-                          text: 'Datos Guardados Correctamente',
-                        );
-                      } else {
-                        showSnackbar(
-                          success: true,
-                          text: 'Datos Actualizados Correctamente',
-                        );
-                      }
-
-                      getDataMonitor(dataSave);
-                    } catch (ex) {
-                      // ignore: use_build_context_synchronously
-                      AnimatedSnackBar.rectangle(
-                        'Error',
-                        ex.toString(),
-                        type: AnimatedSnackBarType.error,
-                        brightness: Brightness.light,
-                        mobileSnackBarPosition: MobileSnackBarPosition.top,
-                      ).show(context);
-                    }
-                    BusyIndicator.hide(context);
-                  },
-                  child: Container(
-                    height: 50,
-                    width: width / 3.5,
-                    child: Center(
-                      child: Text(
-                        'SaveData'.tr,
-                        style: const TextStyle(
-                          color: Color(0xfffefefe),
-                          fontWeight: FontWeight.w600,
-                          fontStyle: FontStyle.normal,
-                          fontSize: 20.0,
+            _enabledF
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color.fromARGB(255, 12, 124, 205),
+                          onPrimary: Colors.white,
+                          shadowColor: const Color.fromARGB(255, 53, 53, 53),
+                          elevation: 5,
                         ),
-                      ),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color.fromARGB(255, 1, 173, 130),
-                    onPrimary: Colors.white,
-                    shadowColor: const Color.fromARGB(255, 53, 53, 53),
-                    elevation: 5,
-                  ),
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      String imgPE = "";
-                      String imgPI = "";
-                      String imgRI = "";
-                      BusyIndicator.show(context);
-                      controller.itemsImagesAll.forEach((key, items) {
-                        if (key == _imgPartidaEjecutada) {
-                          imgPE = items.join(",");
-                        }
-                        if (key == _imgProblemaIdentificado) {
-                          imgPI = items.join(",");
-                        }
-                        if (key == _imgRiesgoIdentificado) {
-                          imgRI = items.join(",");
-                        }
-                      });
-                      _prefs = await SharedPreferences.getInstance();
-                      UserModel oUser = UserModel(
-                        nombres: _prefs!.getString("nombres") ?? "",
-                        codigo: _prefs!.getString("codigo") ?? "",
-                        rol: _prefs!.getString("rol") ?? "",
-                      );
-                      if (imgPE == "") {
-                        showSnackbar(
-                          success: false,
-                          text:
-                              'Debe ingresar una imagen de la partida Ejecutada',
-                        );
-                        BusyIndicator.hide(context);
-                      } else {
-                        try {
-                          List<TramaMonitoreoModel> dataSend =
-                              await mainController.sendMonitoreo([
-                            TramaMonitoreoModel(
+                        onPressed: () async {
+                          String imgPE = "";
+                          String imgPI = "";
+                          String imgRI = "";
+                          BusyIndicator.show(context);
+                          controller.itemsImagesAll.forEach((key, items) {
+                            if (key == _imgPartidaEjecutada) {
+                              imgPE = items.join(",");
+                            }
+                            if (key == _imgProblemaIdentificado) {
+                              imgPI = items.join(",");
+                            }
+                            if (key == _imgRiesgoIdentificado) {
+                              imgRI = items.join(",");
+                            }
+                          });
+                          _prefs = await SharedPreferences.getInstance();
+                          UserModel oUser = UserModel(
+                            nombres: _prefs!.getString("nombres") ?? "",
+                            codigo: _prefs!.getString("codigo") ?? "",
+                            rol: _prefs!.getString("rol") ?? "",
+                          );
+                          try {
+                            TramaMonitoreoModel dataSave = await mainController
+                                .saveMonitoreo(TramaMonitoreoModel(
                               id: idM,
                               isEdit: 1,
                               createdTime: DateTime.now(),
@@ -629,7 +524,7 @@ class _MonitoringDetailNewEditPageState
                               cui: _ciu,
                               latitud: _latitud.text,
                               longitud: _longitud.text,
-                              tambo: widget.datoProyecto?.tambo,
+                              tambo: _tambo,
                               fechaTerminoEstimado: _dateObra.text,
                               actividadPartidaEjecutada:
                                   _valuePartidaEje!.toUpperCase() ==
@@ -679,72 +574,220 @@ class _MonitoringDetailNewEditPageState
                                   : _valueNivelRiesgo!,
                               rol: oUser.rol,
                               usuario: oUser.nombres,
-                            )
-                          ]);
-
-                          BusyIndicator.hide(context);
-                          getDataMonitor(dataSend[0]);
-                          if (dataSend.isEmpty) {
+                            ));
                             if (idM == 0) {
                               showSnackbar(
                                 success: true,
-                                text: 'Datos Enviados Correctamente',
+                                text: 'Datos Guardados Correctamente',
                               );
                             } else {
                               showSnackbar(
                                 success: true,
-                                text: 'Datos Enviados Correctamente',
+                                text: 'Datos Actualizados Correctamente',
                               );
                             }
-                          } else {
+
+                            getDataMonitor(dataSave);
+                          } catch (ex) {
                             // ignore: use_build_context_synchronously
                             AnimatedSnackBar.rectangle(
                               'Error',
-                              'No se pudo enviar el monitor',
+                              ex.toString(),
                               type: AnimatedSnackBarType.error,
                               brightness: Brightness.light,
                               mobileSnackBarPosition:
                                   MobileSnackBarPosition.top,
                             ).show(context);
                           }
-                        } catch (ex) {
                           BusyIndicator.hide(context);
-                          // ignore: use_build_context_synchronously
-                          AnimatedSnackBar.rectangle(
-                            'Error',
-                            ex.toString(),
-                            type: AnimatedSnackBarType.error,
-                            brightness: Brightness.light,
-                            mobileSnackBarPosition: MobileSnackBarPosition.top,
-                          ).show(context);
-                        }
-                      }
-                    } else {
-                      showSnackbar(
-                        success: false,
-                        text: 'RequiredFields'.tr,
-                      );
-                    }
-                  },
-                  child: Container(
-                    height: 50,
-                    width: width / 3.5,
-                    child: Center(
-                      child: Text(
-                        'SendData'.tr,
-                        style: const TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          letterSpacing: 1.5,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'OpenSans',
+                        },
+                        child: Container(
+                          height: 50,
+                          width: width / 3.5,
+                          child: Center(
+                            child: Text(
+                              'SaveData'.tr,
+                              style: const TextStyle(
+                                color: Color(0xfffefefe),
+                                fontWeight: FontWeight.w600,
+                                fontStyle: FontStyle.normal,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                )
-              ],
-            ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color.fromARGB(255, 1, 173, 130),
+                          onPrimary: Colors.white,
+                          shadowColor: const Color.fromARGB(255, 53, 53, 53),
+                          elevation: 5,
+                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            String imgPE = "";
+                            String imgPI = "";
+                            String imgRI = "";
+                            BusyIndicator.show(context);
+                            controller.itemsImagesAll.forEach((key, items) {
+                              if (key == _imgPartidaEjecutada) {
+                                imgPE = items.join(",");
+                              }
+                              if (key == _imgProblemaIdentificado) {
+                                imgPI = items.join(",");
+                              }
+                              if (key == _imgRiesgoIdentificado) {
+                                imgRI = items.join(",");
+                              }
+                            });
+                            _prefs = await SharedPreferences.getInstance();
+                            UserModel oUser = UserModel(
+                              nombres: _prefs!.getString("nombres") ?? "",
+                              codigo: _prefs!.getString("codigo") ?? "",
+                              rol: _prefs!.getString("rol") ?? "",
+                            );
+                            if (imgPE == "") {
+                              showSnackbar(
+                                success: false,
+                                text:
+                                    'Debe ingresar una imagen de la partida Ejecutada',
+                              );
+                              BusyIndicator.hide(context);
+                            } else {
+                              try {
+                                List<TramaMonitoreoModel> dataSend =
+                                    await mainController.sendMonitoreo([
+                                  TramaMonitoreoModel(
+                                    id: idM,
+                                    isEdit: 1,
+                                    createdTime: DateTime.now(),
+                                    snip: _snip,
+                                    cui: _ciu,
+                                    latitud: _latitud.text,
+                                    longitud: _longitud.text,
+                                    tambo: widget.datoProyecto?.tambo,
+                                    fechaTerminoEstimado: _dateObra.text,
+                                    actividadPartidaEjecutada:
+                                        _valuePartidaEje!.toUpperCase() ==
+                                                "SELECCIONE UNA OPCIÓN"
+                                            ? ""
+                                            : _valuePartidaEje!,
+                                    alternativaSolucion:
+                                        _valueAlternSolucion!.toUpperCase() ==
+                                                "SELECCIONE UNA OPCIÓN"
+                                            ? ""
+                                            : _valueAlternSolucion!,
+                                    avanceFisicoAcumulado: double.parse(
+                                        _advanceFEA.text == ""
+                                            ? "0"
+                                            : _advanceFEA.text),
+                                    avanceFisicoPartida: double.parse(
+                                        _advanceFEP.text == ""
+                                            ? "0"
+                                            : _advanceFEP.text),
+                                    estadoAvance:
+                                        _statusAdvance!.toUpperCase() ==
+                                                "SELECCIONE UNA OPCIÓN"
+                                            ? ""
+                                            : _statusAdvance!,
+                                    estadoMonitoreo:
+                                        _statusMonitor!.toUpperCase() ==
+                                                "SELECCIONE UNA OPCIÓN"
+                                            ? ""
+                                            : _statusMonitor!,
+                                    fechaMonitoreo: _dateMonitor.text,
+                                    idMonitoreo: _idMonitor.text,
+                                    idUsuario: oUser.codigo,
+                                    imgActividad: imgPE,
+                                    imgProblema: imgPI,
+                                    imgRiesgo: imgRI,
+                                    observaciones: _obsMonitor.text,
+                                    problemaIdentificado:
+                                        _valueProblemaIO!.toUpperCase() ==
+                                                "SELECCIONE UNA OPCIÓN"
+                                            ? ""
+                                            : _valueProblemaIO!,
+                                    riesgoIdentificado:
+                                        _valueRiesgo!.toUpperCase() ==
+                                                "SELECCIONE UNA OPCIÓN"
+                                            ? ""
+                                            : _valueRiesgo!,
+                                    nivelRiesgo:
+                                        _valueNivelRiesgo!.toUpperCase() ==
+                                                "SELECCIONE UNA OPCIÓN"
+                                            ? ""
+                                            : _valueNivelRiesgo!,
+                                    rol: oUser.rol,
+                                    usuario: oUser.nombres,
+                                  )
+                                ]);
+
+                                BusyIndicator.hide(context);
+                                getDataMonitor(dataSend[0]);
+                                if (dataSend.isEmpty) {
+                                  if (idM == 0) {
+                                    showSnackbar(
+                                      success: true,
+                                      text: 'Datos Enviados Correctamente',
+                                    );
+                                  } else {
+                                    showSnackbar(
+                                      success: true,
+                                      text: 'Datos Enviados Correctamente',
+                                    );
+                                  }
+                                } else {
+                                  // ignore: use_build_context_synchronously
+                                  AnimatedSnackBar.rectangle(
+                                    'Error',
+                                    'No se pudo enviar el monitor',
+                                    type: AnimatedSnackBarType.error,
+                                    brightness: Brightness.light,
+                                    mobileSnackBarPosition:
+                                        MobileSnackBarPosition.top,
+                                  ).show(context);
+                                }
+                              } catch (ex) {
+                                BusyIndicator.hide(context);
+                                // ignore: use_build_context_synchronously
+                                AnimatedSnackBar.rectangle(
+                                  'Error',
+                                  ex.toString(),
+                                  type: AnimatedSnackBarType.error,
+                                  brightness: Brightness.light,
+                                  mobileSnackBarPosition:
+                                      MobileSnackBarPosition.top,
+                                ).show(context);
+                              }
+                            }
+                          } else {
+                            showSnackbar(
+                              success: false,
+                              text: 'RequiredFields'.tr,
+                            );
+                          }
+                        },
+                        child: Container(
+                          height: 50,
+                          width: width / 3.5,
+                          child: Center(
+                            child: Text(
+                              'SendData'.tr,
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 255, 255, 255),
+                                letterSpacing: 1.5,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'OpenSans',
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                : Row(),
           ],
         ),
       ),
@@ -782,7 +825,9 @@ class _MonitoringDetailNewEditPageState
                   shrinkWrap: true,
                   children: [
                     MyImageMultiple(
-                        controller: controller, nameField: fieldNameImage),
+                        controller: controller,
+                        nameField: fieldNameImage,
+                        enabled: _enabledF),
                   ],
                 ),
               ),
@@ -812,34 +857,36 @@ class _MonitoringDetailNewEditPageState
           : null,
       items:
           items.map((e) => DropdownMenuItem(child: Text(e), value: e)).toList(),
-      onChanged: (val) async {
-        setState(() {
-          switch (code) {
-            case "DDOW0001":
-              _statusMonitor = val;
-              break;
-            case "DDOW0002":
-              _statusAdvance = val;
-              break;
-            case "DDOW0003":
-              _valuePartidaEje = val;
-              break;
-            case "DDOW0004":
-              _valueProblemaIO = val;
-              break;
-            case "DDOW0005":
-              _valueAlternSolucion = val;
-              break;
-            case "DDOW0006":
-              _valueRiesgo = val;
-              break;
-            case "DDOW0007":
-              _valueNivelRiesgo = val;
-              break;
-            default:
-          }
-        });
-      },
+      onChanged: _enabledF
+          ? (val) async {
+              setState(() {
+                switch (code) {
+                  case "DDOW0001":
+                    _statusMonitor = val;
+                    break;
+                  case "DDOW0002":
+                    _statusAdvance = val;
+                    break;
+                  case "DDOW0003":
+                    _valuePartidaEje = val;
+                    break;
+                  case "DDOW0004":
+                    _valueProblemaIO = val;
+                    break;
+                  case "DDOW0005":
+                    _valueAlternSolucion = val;
+                    break;
+                  case "DDOW0006":
+                    _valueRiesgo = val;
+                    break;
+                  case "DDOW0007":
+                    _valueNivelRiesgo = val;
+                    break;
+                  default:
+                }
+              });
+            }
+          : null,
     );
   }
 
