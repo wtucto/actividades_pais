@@ -4,6 +4,7 @@ import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -437,6 +438,12 @@ class _ListaMonitoresState extends State<ListaMonitores> {
                           GestureDetector(
                             onTap: () {
                               //Navigator.of(context).push(MaterialPageRoute( builder: (context) => MonitorList(datoProyecto: _oProject), ));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    MonitoringDetailNewEditPage(
+                                        datoMonitor: widget.oMonitoreo[index],
+                                        statusM: 'UPDATE'),
+                              ));
                             },
                             child: AnimatedContainer(
                               height: 35,

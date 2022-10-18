@@ -18,8 +18,10 @@ SharedPreferences? _prefs;
 
 class MonitoringDetailNewEditPage extends StatefulWidget {
   TramaProyectoModel? datoProyecto;
+  TramaMonitoreoModel? datoMonitor;
   final String? statusM;
-  MonitoringDetailNewEditPage({Key? key, this.datoProyecto, this.statusM})
+  MonitoringDetailNewEditPage(
+      {Key? key, this.datoProyecto, this.statusM, this.datoMonitor})
       : super(key: key);
 
   @override
@@ -51,6 +53,9 @@ class _MonitoringDetailNewEditPageState
   int idM = 0;
   String titleMonitor = "";
   String fechaMonitoreo = DateFormat("yyyy-MM-dd").format(DateTime.now());
+  String? _ciu = "";
+  String? _snip = "";
+  String? _tambo = "";
 
   TramaMonitoreoModel oMonitoreo = TramaMonitoreoModel.empty();
 
@@ -86,7 +91,13 @@ class _MonitoringDetailNewEditPageState
   void initState() {
     super.initState();
     if (mounted) {
-      loadData(context);
+      if (widget.statusM == "CREATE") {
+        loadData(context);
+      }
+      if (widget.statusM == "UPDATE") {
+        getDataMonitor(widget.datoMonitor!);
+      }
+
       setState(() {});
     }
   }
@@ -102,6 +113,9 @@ class _MonitoringDetailNewEditPageState
     } catch (oError) {}
 
     setState(() {
+      _snip = widget.datoProyecto?.numSnip;
+      _ciu = widget.datoProyecto?.cui;
+      _tambo = widget.datoProyecto?.tambo;
       _idMonitor.text = oMonitoreo.idMonitoreo!;
       _dateMonitor.text = oMonitoreo.fechaMonitoreo!;
       titleMonitor = oMonitoreo.tambo! == "" ? 'MONITOR' : oMonitoreo.tambo!;
@@ -116,16 +130,43 @@ class _MonitoringDetailNewEditPageState
   getDataMonitor(TramaMonitoreoModel m) {
     setState(() {
       titleMonitor = m.tambo!;
+      idM = m.id!;
+      _ciu = m.cui;
+      _snip = m.snip;
+      _tambo = m.tambo;
       _idMonitor.text = m.idMonitoreo!;
-      _statusMonitor = m.estadoMonitoreo;
+      _statusMonitor =
+          m.estadoMonitoreo == "" ? "Seleccione una opción" : m.estadoMonitoreo;
       _dateMonitor.text = m.fechaMonitoreo!;
-      _statusAdvance = m.estadoAvance;
       _advanceFEA.text = m.avanceFisicoAcumulado.toString();
-      _advanceFEA.text = m.avanceFisicoAcumulado.toString();
+      _statusAdvance =
+          m.estadoAvance == "" ? "Seleccione una opción" : m.estadoAvance;
+      _valuePartidaEje = m.actividadPartidaEjecutada == ""
+          ? "Seleccione una opción"
+          : m.actividadPartidaEjecutada;
+
+      _advanceFEP.text = m.avanceFisicoPartida.toString();
+      _obsMonitor.text = m.observaciones!;
+
+      _valueProblemaIO = m.problemaIdentificado == ""
+          ? "Seleccione una opción"
+          : m.problemaIdentificado;
+      _valueAlternSolucion = m.alternativaSolucion == ""
+          ? "Seleccione una opción"
+          : m.alternativaSolucion;
+      _valueRiesgo = m.riesgoIdentificado == ""
+          ? "Seleccione una opción"
+          : m.riesgoIdentificado;
+      _valueNivelRiesgo =
+          m.nivelRiesgo == "" ? "Seleccione una opción" : m.nivelRiesgo;
+
       _dateObra.text = m.fechaTerminoEstimado!;
       _longitud.text = m.longitud!;
       _latitud.text = m.latitud!;
-      _statusMonitor = m.estadoMonitoreo;
+
+      // imgActividad: imgPE,
+      // imgProblema: imgPI,
+      // imgRiesgo: imgRI,
     });
   }
 
@@ -448,11 +489,11 @@ class _MonitoringDetailNewEditPageState
                         id: idM,
                         isEdit: 1,
                         createdTime: DateTime.now(),
-                        snip: widget.datoProyecto?.numSnip,
-                        cui: widget.datoProyecto?.cui,
+                        snip: _snip,
+                        cui: _ciu,
                         latitud: _latitud.text,
                         longitud: _longitud.text,
-                        tambo: widget.datoProyecto?.tambo,
+                        tambo: _tambo,
                         fechaTerminoEstimado: _dateObra.text,
                         actividadPartidaEjecutada:
                             _valuePartidaEje!.toUpperCase() ==
@@ -465,7 +506,7 @@ class _MonitoringDetailNewEditPageState
                                 ? ""
                                 : _valueAlternSolucion!,
                         avanceFisicoAcumulado: double.parse(
-                            _advanceFEP.text == "" ? "0" : _advanceFEP.text),
+                            _advanceFEA.text == "" ? "0" : _advanceFEA.text),
                         avanceFisicoPartida: double.parse(
                             _advanceFEP.text == "" ? "0" : _advanceFEP.text),
                         estadoAvance: _statusAdvance!.toUpperCase() ==
@@ -510,7 +551,6 @@ class _MonitoringDetailNewEditPageState
                         );
                       }
 
-                      idM = dataSave.id!;
                       getDataMonitor(dataSave);
                     } catch (ex) {
                       // ignore: use_build_context_synchronously
@@ -585,8 +625,8 @@ class _MonitoringDetailNewEditPageState
                               id: idM,
                               isEdit: 1,
                               createdTime: DateTime.now(),
-                              snip: widget.datoProyecto?.numSnip,
-                              cui: widget.datoProyecto?.cui,
+                              snip: _snip,
+                              cui: _ciu,
                               latitud: _latitud.text,
                               longitud: _longitud.text,
                               tambo: widget.datoProyecto?.tambo,
@@ -602,9 +642,9 @@ class _MonitoringDetailNewEditPageState
                                       ? ""
                                       : _valueAlternSolucion!,
                               avanceFisicoAcumulado: double.parse(
-                                  _advanceFEP.text == ""
+                                  _advanceFEA.text == ""
                                       ? "0"
-                                      : _advanceFEP.text),
+                                      : _advanceFEA.text),
                               avanceFisicoPartida: double.parse(
                                   _advanceFEP.text == ""
                                       ? "0"
@@ -643,7 +683,7 @@ class _MonitoringDetailNewEditPageState
                           ]);
 
                           BusyIndicator.hide(context);
-                          //  idM = dataSend[0].id!;
+                          getDataMonitor(dataSend[0]);
                           if (dataSend.isEmpty) {
                             if (idM == 0) {
                               showSnackbar(

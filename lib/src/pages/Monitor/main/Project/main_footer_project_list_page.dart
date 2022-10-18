@@ -12,6 +12,7 @@ import 'package:actividades_pais/util/throw-exception.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences? _prefs;
@@ -113,61 +114,71 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage> {
           ),
         ],
       ),
-      body: aProyecto.isNotEmpty
-          ? Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(10),
-                    controller: scrollController,
-                    itemCount: aProyecto.length,
-                    itemBuilder: (context, index) {
-                      return ListaProyectos(
-                        context: context,
-                        oProyecto: aProyecto[index],
-                      );
-                    },
-                  ),
-                ),
-                if (loading == true)
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      top: 10,
-                      bottom: 40,
-                    ),
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                if (isEndPagination == true)
-                  Container(
-                    padding: const EdgeInsets.only(
-                      top: 10,
-                      bottom: 10,
-                    ),
-                    color: Colors.blue,
-                    child: const Center(
-                      child: Text('Has obtenido todo el contenido.'),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await Future.delayed(Duration(seconds: 2));
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => super.widget));
+        },
+        child: aProyecto.isNotEmpty
+            ? Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(10),
+                      controller: scrollController,
+                      itemCount: aProyecto.length,
+                      itemBuilder: (context, index) {
+                        return ListaProyectos(
+                          context: context,
+                          oProyecto: aProyecto[index],
+                        );
+                      },
                     ),
                   ),
-              ],
-            )
-          : Container(
-              padding: const EdgeInsets.all(20),
-              width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 245, 246, 248)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
-                    'No existe nigún proyecto asignado, Verificar su conexión',
-                    style: TextStyle(color: Colors.black, fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
+                  if (loading == true)
+                    const Padding(
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 40,
+                      ),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  if (isEndPagination == true)
+                    Container(
+                      padding: const EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
+                      ),
+                      color: Colors.blue,
+                      child: const Center(
+                        child: Text('Has obtenido todo el contenido.'),
+                      ),
+                    ),
                 ],
+              )
+            : Container(
+                padding: const EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width,
+                decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 245, 246, 248)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      'No existe nigún proyecto asignado, Verificar su conexión',
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
-            ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -249,14 +260,21 @@ class ListaProyectos extends StatelessWidget {
               Expanded(
                 child: Row(children: [
                   Container(
-                    width: 60,
-                    height: 60,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Icon(
-                        Icons.content_paste_go_sharp,
-                        size: 20.0,
-                        color: Colors.brown[900],
+                    // width: 60,
+                    // height: 60,
+                    child: Padding(
+                      padding: const EdgeInsets.all(1.0),
+                      child: CircularPercentIndicator(
+                        radius: 30.0,
+                        lineWidth: 5.0,
+                        percent:
+                            double.parse(oProyecto.avanceFisico.toString()),
+                        center: Text(
+                          "${double.parse(oProyecto.avanceFisico.toString()) * 100}%",
+                          style: const TextStyle(
+                              fontSize: 11, fontWeight: FontWeight.bold),
+                        ),
+                        progressColor: Colors.green,
                       ),
                     ),
                   ),
