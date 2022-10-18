@@ -40,6 +40,23 @@ class MainRepository {
     return _dbPnPais.readAllProyectoByUserSearch(o, search, limit, offset);
   }
 
+  Future<List<TramaProyectoModel>> getAllProyectoByNeUser(
+    UserModel o,
+    int? limit,
+    int? offset,
+  ) async {
+    return _dbPnPais.readAllProyectoByNeUser(o, limit, offset);
+  }
+
+  Future<List<TramaProyectoModel>> getAllProyectoByNeUserSearch(
+    UserModel o,
+    String search,
+    int? limit,
+    int? offset,
+  ) async {
+    return _dbPnPais.readAllProyectoByNeUserSearch(o, search, limit, offset);
+  }
+
   Future<List<TramaProyectoModel>> getProyectoByCUI(
     String cui,
   ) async {

@@ -126,6 +126,34 @@ class MainController extends GetxController {
   }
 
   /*
+   Obtiene la lista de proyectos diferente al ROL del Usuario login
+   @UserModel o
+   */
+  Future<List<TramaProyectoModel>> getAllProyectoByNeUser(
+    UserModel o,
+    int? limit,
+    int? offset,
+  ) async {
+    return await Get.find<MainService>()
+        .getAllProyectoByNeUser(o, limit, offset);
+  }
+
+  /*
+   Obtiene la lista de proyectos diferentes al ROL del Usuario logeado y busqueda según la coincidencia
+   @UserModel o
+   @String search
+   */
+  Future<List<TramaProyectoModel>> getAllProyectoByNeUserSearch(
+    UserModel o,
+    String search,
+    int? limit,
+    int? offset,
+  ) async {
+    return await Get.find<MainService>()
+        .getAllProyectoByNeUserSearch(o, search, limit, offset);
+  }
+
+  /*
    Obtiene los datos de generales del proyecto
    @String CUI
    */

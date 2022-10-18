@@ -154,6 +154,29 @@ class MainService {
     return aFind;
   }
 
+  Future<List<TramaProyectoModel>> getAllProyectoByNeUser(
+    UserModel o,
+    int? limit,
+    int? offset,
+  ) async {
+    ///Obtiene los registros de la DB Local
+    List<TramaProyectoModel> aFind = await Get.find<MainRepository>()
+        .getAllProyectoByNeUser(o, limit, offset);
+    return aFind;
+  }
+
+  Future<List<TramaProyectoModel>> getAllProyectoByNeUserSearch(
+    UserModel o,
+    String search,
+    int? limit,
+    int? offset,
+  ) async {
+    ///Obtiene los registros de la DB Local
+    List<TramaProyectoModel> aFind = await Get.find<MainRepository>()
+        .getAllProyectoByNeUserSearch(o, search, limit, offset);
+    return aFind;
+  }
+
   Future<List<TramaProyectoModel>> getProyectoByCUI(
     String cui,
   ) async {
