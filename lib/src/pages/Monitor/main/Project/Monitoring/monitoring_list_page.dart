@@ -559,12 +559,14 @@ class _ListaMonitoresState extends State<ListaMonitores> {
                         const SizedBox(width: 10),
                       ],
                     ),
-                    Text(
-                      widget.oMonitoreo[index].idMonitoreo!,
-                      style: const TextStyle(
-                        color: Color.fromARGB(255, 13, 0, 255),
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
+                    Expanded(
+                      child: Text(
+                        widget.oMonitoreo[index].idMonitoreo!,
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 13, 0, 255),
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
