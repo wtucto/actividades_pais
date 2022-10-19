@@ -20,6 +20,43 @@ class Http {
     _logsEnabled = logsEnabled;
   }
 
+  /*
+  USO:
+  - OBJECTO
+  //var oResp = await _http.get<Map<String, dynamic>, dynamic>( '${basePathApp}listarTramaMonitoreo', method: "GET",);
+  - LISTA
+  //var oResp = await _http.get<dynamic, List<Map<String, dynamic>>>('${basePathApp}listarTramaMonitoreo', method: "GET", );
+  */
+  Future<T> get<T, K>(
+    String path, {
+    String method = "GET",
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? formData,
+    Map<String, String>? headers,
+  }) async {
+    final Response response = await _dio.request(
+      path,
+      options: Options(
+        method: method,
+        headers: headers,
+      ),
+      queryParameters: queryParameters,
+      data: formData != null ? FormData.fromMap(formData) : data,
+    );
+
+    if (response.statusCode == 200) {
+      final dynamic oResp = json.decode(response.data["response"]);
+      if (oResp is List) {
+        return List<K>.from(oResp) as T;
+      } else {
+        return oResp as T;
+      }
+    } else {
+      throw Exception(response);
+    }
+  }
+
   Future<HttpResponse<T>> request<T>(
     String path, {
     String method = "GET",

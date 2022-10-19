@@ -1030,12 +1030,71 @@ class SearchMonitor extends SearchDelegate<String> {
       rol: _prefs!.getString('rol') ?? '',
     );
 
-    return await mainController.getAllProyectoByUser(oUser, 0, 0);
-    // await mainController.getAllProyectoByNeUserSearch(oUser, search, 0, 0);
+    /*aProyecto = await mainController.getAllProyectoByUserSearch(
+      oUser,
+      search,
+      0,
+      0,
+    );*/
+    aProyecto = await mainController.getAllProyectoByNeUserSearch(
+      oUser,
+      search,
+      0,
+      0,
+    );
+    return aProyecto;
   }
 
   @override
   String get searchFieldLabel => 'Buscar';
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // final String searched = query;
+    return FutureBuilder(
+      future: getProyectos(query),
+      builder: (context, AsyncSnapshot<List<TramaProyectoModel>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return buildSuggestions(context);
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return ListView.builder(
+      itemCount: aProyecto.length,
+      itemBuilder: (context, index) {
+        final oProyecto = aProyecto[index];
+        return ListTile(
+          onTap: () {
+            showResults(context);
+          },
+          leading: const Icon(Icons.search),
+          title: RichText(
+            text: TextSpan(
+              text: oProyecto.tambo,
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildNoSuggestions() => const Center(
+        child: Text(
+          '¡No hay sugerencias!',
+          style: TextStyle(fontSize: 20, color: Colors.black),
+        ),
+      );
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -1061,95 +1120,5 @@ class SearchMonitor extends SearchDelegate<String> {
           close(context, '');
         },
         icon: const Icon(Icons.arrow_back));
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // List<TramaProyectoModel> aProyecto =
-    //     getProyectos("1222") as List<TramaProyectoModel>;
-    List<String> matchQuery = [];
-
-    if (query.length < 5) {
-      return buildNoSuggestions();
-    } else {
-      print(query);
-      getProyectos(query).then((o) {
-        aProyecto = o;
-        return buildSuggestionsSuccess(query);
-      }).catchError((onError) {});
-      return Container(child: Text(query));
-    }
-    // for (var item in searchMonitor) {
-    //   if ((item.idMonitoreo!).contains(query.toLowerCase()) ||
-    //       (item.estadoMonitoreo!).toLowerCase().contains(query.toLowerCase())) {
-    //     matchQuery.add('${item.idMonitoreo} - ${item.estadoMonitoreo}');
-    //   }
-    // }
-    // if (query.isEmpty || matchQuery.isEmpty) {
-    //   return buildNoSuggestions();
-    // } else {
-    //   return buildSuggestionsSuccess(matchQuery);
-    // }
-    // return Container();
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    // final String searched = query;
-    return FutureBuilder(
-      future: getProyectos(query),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return Container(
-            child: Text('ss'),
-          );
-        } else {
-          return CircularProgressIndicator();
-        }
-      },
-    );
-    // if (searched == null || !_data.contains(searched)) {
-    //   final splitted = searched.split(' - ');
-    //   for (var item in searchMonitor) {
-    //     if (item.idMonitoreo == splitted[0]) {
-    //       return Container();
-    //       //ListaMonitores(context: context, oMonitoreo: [item]);
-    //     }
-    //   }
-    // }
-    // return buildNoSuggestions();
-  }
-
-  Widget buildNoSuggestions() => const Center(
-        child: Text(
-          '¡No hay sugerencias!',
-          style: TextStyle(fontSize: 20, color: Colors.black),
-        ),
-      );
-
-  Widget buildSuggestionsSuccess(String suggestions) {
-    return ListView.builder(
-      itemCount: aProyecto.length,
-      itemBuilder: (context, index) {
-        final suggestion = aProyecto[index];
-        return ListTile(
-          onTap: () {
-            // query = suggestion;
-            showResults(context);
-          },
-          leading: const Icon(Icons.search),
-          title: RichText(
-            text: TextSpan(
-              text: 'asass',
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 }
