@@ -1030,18 +1030,17 @@ class SearchMonitor extends SearchDelegate<String> {
       rol: _prefs!.getString('rol') ?? '',
     );
 
-    /*aProyecto = await mainController.getAllProyectoByUserSearch(
-      oUser,
-      search,
-      0,
-      0,
-    );*/
+    //if (search.trim() != "") {
     aProyecto = await mainController.getAllProyectoByNeUserSearch(
       oUser,
       search,
       0,
       0,
     );
+    /*} else {
+      aProyecto = [];
+    }*/
+
     return aProyecto;
   }
 
@@ -1050,14 +1049,15 @@ class SearchMonitor extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // final String searched = query;
     return FutureBuilder(
       future: getProyectos(query),
-      builder: (context, AsyncSnapshot<List<TramaProyectoModel>> snapshot) {
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return buildSuggestions(context);
         } else {
-          return const CircularProgressIndicator();
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
       },
     );
@@ -1065,26 +1065,37 @@ class SearchMonitor extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return ListView.builder(
-      itemCount: aProyecto.length,
-      itemBuilder: (context, index) {
-        final oProyecto = aProyecto[index];
-        return ListTile(
-          onTap: () {
-            showResults(context);
-          },
-          leading: const Icon(Icons.search),
-          title: RichText(
-            text: TextSpan(
-              text: oProyecto.tambo,
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-          ),
-        );
+    return FutureBuilder(
+      future: getProyectos(query),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return ListView.builder(
+            itemCount: aProyecto.length,
+            itemBuilder: (context, index) {
+              final oProyecto = aProyecto[index];
+              return ListTile(
+                onTap: () {
+                  showResults(context);
+                },
+                leading: const Icon(Icons.search),
+                title: RichText(
+                  text: TextSpan(
+                    text: oProyecto.tambo,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
       },
     );
   }

@@ -366,7 +366,7 @@ class DatabasePnPais {
       } else {
         result = await db.query(
           tableNameTramaProyectos,
-          where: '$sWahere = ?',
+          where: '$sWahere != ?',
           whereArgs: [o.codigo],
           orderBy: orderBy,
         );
