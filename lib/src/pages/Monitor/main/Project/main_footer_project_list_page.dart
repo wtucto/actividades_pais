@@ -330,7 +330,16 @@ class ListaProyectos extends StatelessWidget {
                           style: const TextStyle(
                               fontSize: 11, fontWeight: FontWeight.bold),
                         ),
-                        progressColor: Colors.green,
+                        progressColor: ((double.parse(
+                                        oProyecto.avanceFisico.toString()) *
+                                    100) >=
+                                50
+                            ? Colors.green
+                            : (double.parse(oProyecto.avanceFisico.toString()) *
+                                        100) <=
+                                    30
+                                ? Colors.red
+                                : Colors.yellow),
                       ),
                     ),
                   ),
