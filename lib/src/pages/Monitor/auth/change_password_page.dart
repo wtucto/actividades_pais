@@ -112,10 +112,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         height: 80,
         width: width / 1.5,
         decoration: BoxDecoration(
-          gradient: mainButton3,
+          gradient: mainButton4,
           boxShadow: [
             BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.16),
+              color: Color.fromARGB(40, 211, 11, 11),
               offset: Offset(0, 5),
               blurRadius: 10.0,
             )
@@ -136,8 +136,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       ),
     );
 
+    Color colorInput = Color.fromARGB(255, 239, 237, 237);
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: Colors.black,
@@ -187,7 +188,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 16.0, vertical: 8.0),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: colorInput,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5))),
                               child: TextField(
@@ -209,7 +210,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 16.0, vertical: 8.0),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: colorInput,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5))),
                               child: TextField(
@@ -232,7 +233,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 16.0, vertical: 8.0),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: colorInput,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5))),
                               child: TextField(
