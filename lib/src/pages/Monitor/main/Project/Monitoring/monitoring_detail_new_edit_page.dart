@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 
 import 'package:get/get.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences? _prefs;
@@ -93,6 +94,7 @@ class _MonitoringDetailNewEditPageState
   @override
   void initState() {
     super.initState();
+
     if (mounted) {
       if (widget.statusM == "CREATE") {
         loadData(context);
@@ -217,10 +219,10 @@ class _MonitoringDetailNewEditPageState
     });
   }
 
-  int getItemLista(List<String> lista, String nameLista) {
-    int valorID = lista.indexOf(nameLista);
-    return valorID;
-  }
+  // int getItemLista(List<String> lista, String nameLista) {
+  //   int valorID = lista.indexOf(nameLista);
+  //   return valorID;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +232,7 @@ class _MonitoringDetailNewEditPageState
       appBar: AppBar(
         title: Center(
           child: Text(
-            titleMonitor,
+            titleMonitor == "" ? "MONITOR" : titleMonitor,
             style: const TextStyle(
               color: Color(0xfffefefe),
               fontWeight: FontWeight.w600,
@@ -243,17 +245,20 @@ class _MonitoringDetailNewEditPageState
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
-                iconSize: 30,
-                onPressed: () {
+              iconSize: 30,
+              onPressed: () {
+                if (titleMonitor == "") {
                   showSearch(
                     context: context,
                     delegate: SearchMonitor(),
                   );
-                },
-                icon: const Icon(
-                  Icons.monitor,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                )),
+                }
+              },
+              icon: Icon(
+                titleMonitor == "" ? Icons.search : Icons.monitor,
+                color: const Color.fromARGB(255, 255, 255, 255),
+              ),
+            ),
           )
         ],
       ),
@@ -1019,6 +1024,7 @@ class _MonitoringDetailNewEditPageState
 
 class SearchMonitor extends SearchDelegate<String> {
   SearchMonitor();
+
   MainController mainController = MainController();
 
   List<TramaProyectoModel> aProyecto = [];
@@ -1048,66 +1054,6 @@ class SearchMonitor extends SearchDelegate<String> {
   String get searchFieldLabel => 'Buscar';
 
   @override
-  Widget buildResults(BuildContext context) {
-    return FutureBuilder(
-      future: getProyectos(query),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return buildSuggestions(context);
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return FutureBuilder(
-      future: getProyectos(query),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return ListView.builder(
-            itemCount: aProyecto.length,
-            itemBuilder: (context, index) {
-              final oProyecto = aProyecto[index];
-              return ListTile(
-                onTap: () {
-                  showResults(context);
-                },
-                leading: const Icon(Icons.search),
-                title: RichText(
-                  text: TextSpan(
-                    text: oProyecto.tambo,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              );
-            },
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
-  }
-
-  Widget buildNoSuggestions() => const Center(
-        child: Text(
-          '¡No hay sugerencias!',
-          style: TextStyle(fontSize: 20, color: Colors.black),
-        ),
-      );
-
-  @override
   List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(
@@ -1132,4 +1078,78 @@ class SearchMonitor extends SearchDelegate<String> {
         },
         icon: const Icon(Icons.arrow_back));
   }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    if (query.isEmpty) {
+      return buildNoSuggestions();
+    } else {
+      return FutureBuilder(
+        future: getProyectos(query),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return ListView.builder(
+              itemCount: aProyecto.length,
+              itemBuilder: (context, index) {
+                final oProyecto = aProyecto[index];
+                return ListTile(
+                  onTap: () {
+                    showResults(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            MonitoringDetailNewEditPage(
+                                datoProyecto: aProyecto[index],
+                                statusM: "CREATE"),
+                      ),
+                    );
+                  },
+                  leading: const Icon(Icons.search),
+                  title: RichText(
+                    text: TextSpan(
+                      text: "${oProyecto.cui} - ${oProyecto.tambo}",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      );
+    }
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return FutureBuilder(
+      future: getProyectos(query),
+      builder: (context, snapshot) {
+        final String searched = query;
+        if (snapshot.connectionState == ConnectionState.done) {
+          return const Text('');
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  Widget buildNoSuggestions() => const Center(
+        child: Text(
+          '¡No hay sugerencias!',
+          style: TextStyle(fontSize: 20, color: Colors.black),
+        ),
+      );
 }
