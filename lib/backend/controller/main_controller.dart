@@ -36,6 +36,13 @@ class MainController extends GetxController {
     loading.value = false;
   }
 
+  Future<bool> syncLoadInitialData() async {
+    loading.value = true;
+    await loadInitialData();
+    loading.value = false;
+    return true;
+  }
+
   /*
    Obtiene la lista de Usuarios en general
    */
@@ -161,6 +168,19 @@ class MainController extends GetxController {
     String cui,
   ) async {
     return await Get.find<MainService>().getProyectoByCUI(cui);
+  }
+
+  /*
+   Obtiene la lista de Monitoreos de los proyecto que no pertencen al usuario logeado
+   @UserModel o
+   */
+  Future<List<TramaMonitoreoModel>> getAllOtherMonitoreo(
+    UserModel o,
+    int? limit,
+    int? offset,
+  ) async {
+    return await Get.find<MainService>()
+        .readAllOtherMonitoreo(o, limit, offset);
   }
 
   /*

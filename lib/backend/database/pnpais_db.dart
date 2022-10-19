@@ -205,24 +205,24 @@ class DatabasePnPais {
 
     dynamic result;
 
-    String sWahere = '';
+    String sWhere = '';
     if (o.rol == UserModel.sRolRES) {
-      sWahere = TramaProyectoFields.codResidente;
+      sWhere = TramaProyectoFields.codResidente;
     } else if (o.rol == UserModel.sRolSUP) {
-      sWahere = TramaProyectoFields.codSupervisor;
+      sWhere = TramaProyectoFields.codSupervisor;
     } else if (o.rol == UserModel.sRolCRP) {
-      sWahere = TramaProyectoFields.codCrp;
+      sWhere = TramaProyectoFields.codCrp;
     }
 
-    if (sWahere == '') return [];
+    if (sWhere == '') return [];
 
     if (limit! > 0) {
       if (search != '') {
-        sWahere =
-            '$sWahere = ? AND ((${TramaProyectoFields.cui} || " " || ${TramaProyectoFields.tambo})  LIKE ?)';
+        sWhere =
+            '$sWhere = ? AND ((${TramaProyectoFields.cui} || " " || ${TramaProyectoFields.tambo})  LIKE ?)';
         result = await db.query(
           tableNameTramaProyectos,
-          where: sWahere,
+          where: sWhere,
           whereArgs: [o.codigo, '%${search.toUpperCase()}%'],
           orderBy: orderBy,
           limit: limit,
@@ -231,7 +231,7 @@ class DatabasePnPais {
       } else {
         result = await db.query(
           tableNameTramaProyectos,
-          where: '$sWahere = ?',
+          where: '$sWhere = ?',
           whereArgs: [o.codigo],
           orderBy: orderBy,
           limit: limit,
@@ -240,18 +240,18 @@ class DatabasePnPais {
       }
     } else {
       if (search != '') {
-        sWahere =
-            '$sWahere = ? AND ((${TramaProyectoFields.cui} || " " || ${TramaProyectoFields.tambo})  LIKE ?)';
+        sWhere =
+            '$sWhere = ? AND ((${TramaProyectoFields.cui} || " " || ${TramaProyectoFields.tambo})  LIKE ?)';
         result = await db.query(
           tableNameTramaProyectos,
-          where: sWahere,
+          where: sWhere,
           whereArgs: [o.codigo, '%${search.toUpperCase()}%'],
           orderBy: orderBy,
         );
       } else {
         result = await db.query(
           tableNameTramaProyectos,
-          where: '$sWahere = ?',
+          where: '$sWhere = ?',
           whereArgs: [o.codigo],
           orderBy: orderBy,
         );
@@ -274,21 +274,21 @@ class DatabasePnPais {
 
     dynamic result;
 
-    String sWahere = '';
+    String sWhere = '';
     if (o.rol == UserModel.sRolRES) {
-      sWahere = TramaProyectoFields.codResidente;
+      sWhere = TramaProyectoFields.codResidente;
     } else if (o.rol == UserModel.sRolSUP) {
-      sWahere = TramaProyectoFields.codSupervisor;
+      sWhere = TramaProyectoFields.codSupervisor;
     } else if (o.rol == UserModel.sRolCRP) {
-      sWahere = TramaProyectoFields.codCrp;
+      sWhere = TramaProyectoFields.codCrp;
     }
 
-    if (sWahere == '') return [];
+    if (sWhere == '') return [];
 
     if (limit! > 0) {
       result = await db.query(
         tableNameTramaProyectos,
-        where: '$sWahere = ?',
+        where: '$sWhere = ?',
         whereArgs: [o.codigo],
         orderBy: orderBy,
         limit: limit,
@@ -297,7 +297,7 @@ class DatabasePnPais {
     } else {
       result = await db.query(
         tableNameTramaProyectos,
-        where: '$sWahere = ?',
+        where: '$sWhere = ?',
         whereArgs: [o.codigo],
         orderBy: orderBy,
       );
@@ -320,24 +320,24 @@ class DatabasePnPais {
 
     dynamic result;
 
-    String sWahere = '';
+    String sWhere = '';
     if (o.rol == UserModel.sRolRES) {
-      sWahere = TramaProyectoFields.codResidente;
+      sWhere = TramaProyectoFields.codResidente;
     } else if (o.rol == UserModel.sRolSUP) {
-      sWahere = TramaProyectoFields.codSupervisor;
+      sWhere = TramaProyectoFields.codSupervisor;
     } else if (o.rol == UserModel.sRolCRP) {
-      sWahere = TramaProyectoFields.codCrp;
+      sWhere = TramaProyectoFields.codCrp;
     }
 
-    if (sWahere == '') return [];
+    if (sWhere == '') return [];
 
     if (limit! > 0) {
       if (search != '') {
-        sWahere =
-            '$sWahere != ? AND ((${TramaProyectoFields.cui} || " " || ${TramaProyectoFields.tambo})  LIKE ?)';
+        sWhere =
+            '$sWhere != ? AND ((${TramaProyectoFields.cui} || " " || ${TramaProyectoFields.tambo})  LIKE ?)';
         result = await db.query(
           tableNameTramaProyectos,
-          where: sWahere,
+          where: sWhere,
           whereArgs: [o.codigo, '%${search.toUpperCase()}%'],
           orderBy: orderBy,
           limit: limit,
@@ -346,7 +346,7 @@ class DatabasePnPais {
       } else {
         result = await db.query(
           tableNameTramaProyectos,
-          where: '$sWahere != ?',
+          where: '$sWhere != ?',
           whereArgs: [o.codigo],
           orderBy: orderBy,
           limit: limit,
@@ -355,18 +355,18 @@ class DatabasePnPais {
       }
     } else {
       if (search != '') {
-        sWahere =
-            '$sWahere != ? AND ((${TramaProyectoFields.cui} || " " || ${TramaProyectoFields.tambo})  LIKE ?)';
+        sWhere =
+            '$sWhere != ? AND ((${TramaProyectoFields.cui} || " " || ${TramaProyectoFields.tambo})  LIKE ?)';
         result = await db.query(
           tableNameTramaProyectos,
-          where: sWahere,
+          where: sWhere,
           whereArgs: [o.codigo, '%${search.toUpperCase()}%'],
           orderBy: orderBy,
         );
       } else {
         result = await db.query(
           tableNameTramaProyectos,
-          where: '$sWahere != ?',
+          where: '$sWhere != ?',
           whereArgs: [o.codigo],
           orderBy: orderBy,
         );
@@ -389,21 +389,21 @@ class DatabasePnPais {
 
     dynamic result;
 
-    String sWahere = '';
+    String sWhere = '';
     if (o.rol == UserModel.sRolRES) {
-      sWahere = TramaProyectoFields.codResidente;
+      sWhere = TramaProyectoFields.codResidente;
     } else if (o.rol == UserModel.sRolSUP) {
-      sWahere = TramaProyectoFields.codSupervisor;
+      sWhere = TramaProyectoFields.codSupervisor;
     } else if (o.rol == UserModel.sRolCRP) {
-      sWahere = TramaProyectoFields.codCrp;
+      sWhere = TramaProyectoFields.codCrp;
     }
 
-    if (sWahere == '') return [];
+    if (sWhere == '') return [];
 
     if (limit! > 0) {
       result = await db.query(
         tableNameTramaProyectos,
-        where: '$sWahere != ?',
+        where: '$sWhere != ?',
         whereArgs: [o.codigo],
         orderBy: orderBy,
         limit: limit,
@@ -412,7 +412,7 @@ class DatabasePnPais {
     } else {
       result = await db.query(
         tableNameTramaProyectos,
-        where: '$sWahere != ?',
+        where: '$sWhere != ?',
         whereArgs: [o.codigo],
         orderBy: orderBy,
       );
@@ -572,6 +572,51 @@ class DatabasePnPais {
         tableNameTramaMonitoreos,
         orderBy: orderBy,
       );
+    }
+
+    if (result.length == 0) return [];
+    return result
+        .map<TramaMonitoreoModel>((json) => TramaMonitoreoModel.fromJson(json))
+        .toList();
+  }
+
+  Future<List<TramaMonitoreoModel>> readAllOtherMonitoreo(
+    UserModel o,
+    int? limit,
+    int? offset,
+  ) async {
+    final db = await instance.database;
+    final orderBy = '${TramaMonitoreoFields.idMonitoreo} ASC';
+
+    String sWhere = '';
+    if (o.rol == UserModel.sRolRES) {
+      sWhere = TramaProyectoFields.codResidente;
+    } else if (o.rol == UserModel.sRolSUP) {
+      sWhere = TramaProyectoFields.codSupervisor;
+    } else if (o.rol == UserModel.sRolCRP) {
+      sWhere = TramaProyectoFields.codCrp;
+    }
+
+    String sQuery = '''
+    
+    SELECT 
+      a.*,
+      b.${TramaProyectoFields.codResidente},
+      b.${TramaProyectoFields.codSupervisor},
+      b.${TramaProyectoFields.codCrp}
+    FROM $tableNameTramaMonitoreos AS a  
+    LEFT JOIN $tableNameTramaProyectos AS b 
+           ON b.${TramaProyectoFields.cui} = a.${TramaMonitoreoFields.cui}
+    WHERE b.$sWhere != ?
+    ORDER BY a.$orderBy
+
+    ''';
+
+    dynamic result;
+    if (limit! > 0) {
+      result = await db.rawQuery(sQuery, [o.codigo]);
+    } else {
+      result = await db.rawQuery(sQuery, [o.codigo]);
     }
 
     if (result.length == 0) return [];

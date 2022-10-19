@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: SplashPage(), //Card6(),
+        home: SplashPage(), //PdfPage(), //Card6(),
         locale: MyTraslation.locale,
         fallbackLocale: MyTraslation.fallbackLocale,
         translations: MyTraslation(),
@@ -70,15 +70,22 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
     if (cantidad == 0) {
       // providerServicios.requestSqlData();
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => LoginPage(),
+        ),
+      );
       //PantallaInicio
     } else {
       /*  Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (_) => Home_Asis()));*/
 
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (BuildContext context) => Home_Asis()));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => Home_Asis(),
+        ),
+      );
     }
   }
 

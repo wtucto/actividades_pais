@@ -186,6 +186,17 @@ class MainService {
     return aFind;
   }
 
+  Future<List<TramaMonitoreoModel>> readAllOtherMonitoreo(
+    UserModel o,
+    int? limit,
+    int? offset,
+  ) async {
+    ///Obtiene los registros de la DB Local de los monitoreos cuyo proyecto no pertence al usuario
+    List<TramaMonitoreoModel> aFind = await Get.find<MainRepository>()
+        .readAllOtherMonitoreo(o, limit, offset);
+    return aFind;
+  }
+
   Future<List<TramaMonitoreoModel>> getMonitoreoByIdMonitor(
     String idMonitoreo,
   ) async {

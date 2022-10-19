@@ -9,10 +9,12 @@ import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monit
 import 'package:actividades_pais/src/pages/Monitor/main/Project/project_detail_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/report/report_dto.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/Project/report/report_project.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/Project/report/report_project_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/components/fab.dart';
+import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/throw-exception.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -214,7 +216,7 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage>
           ),
           FabItem(
             "Reporte",
-            Icons.cloud_upload_rounded,
+            Icons.document_scanner_rounded,
             onPress: () {
               _controller!.reverse();
               final oDataPdf = ReportDto(
@@ -232,6 +234,25 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage>
                 MaterialPageRoute(
                   builder: (builder) => ReportProjectPage(dataPdf: oDataPdf),
                 ),
+              );
+            },
+          ),
+          FabItem(
+            "Sincronizar",
+            Icons.cloud_sync_rounded,
+            onPress: () async {
+              BusyIndicator.show(context);
+              await mainController.syncLoadInitialData();
+              BusyIndicator.hide(context);
+              _controller!.reverse();
+              Fluttertoast.showToast(
+                msg: 'Los registros se sincronizan con éxito',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 2,
+                backgroundColor: Color.fromARGB(255, 133, 243, 168),
+                textColor: Colors.black,
+                fontSize: 16.0,
               );
             },
           ),

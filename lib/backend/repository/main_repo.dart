@@ -63,6 +63,14 @@ class MainRepository {
     return _dbPnPais.readAProyectoByCUI(cui);
   }
 
+  Future<List<TramaMonitoreoModel>> readAllOtherMonitoreo(
+    UserModel o,
+    int? limit,
+    int? offset,
+  ) async {
+    return _dbPnPais.readAllOtherMonitoreo(o, limit, offset);
+  }
+
   Future<List<TramaMonitoreoModel>> getMonitoreoByIdMonitor(
     String idMonitoreo,
   ) async {
