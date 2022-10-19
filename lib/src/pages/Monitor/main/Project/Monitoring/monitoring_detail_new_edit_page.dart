@@ -122,6 +122,7 @@ class _MonitoringDetailNewEditPageState
       setState(() {
         _snip = widget.datoProyecto?.numSnip;
         _ciu = widget.datoProyecto?.cui;
+        _cuiCtr.text = _ciu!;
         _tambo = widget.datoProyecto?.tambo;
         _cuiCtr.text = oMonitoreo.cui!;
         _idMonitor.text = oMonitoreo.idMonitoreo!;
@@ -141,9 +142,9 @@ class _MonitoringDetailNewEditPageState
     setState(() {
       titleMonitor = m.tambo!;
       idM = m.id!;
-      _ciu = m.cui;
       _snip = m.snip;
       _tambo = m.tambo;
+      _cuiCtr.text = m.cui!;
       _idMonitor.text = m.idMonitoreo!;
       _statusMonitor =
           m.estadoMonitoreo == "" ? "Seleccione una opción" : m.estadoMonitoreo;
@@ -243,7 +244,12 @@ class _MonitoringDetailNewEditPageState
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
                 iconSize: 30,
-                onPressed: () {},
+                onPressed: () {
+                  showSearch(
+                    context: context,
+                    delegate: SearchMonitor(),
+                  );
+                },
                 icon: const Icon(
                   Icons.monitor,
                   color: Color.fromARGB(255, 255, 255, 255),
@@ -265,7 +271,12 @@ class _MonitoringDetailNewEditPageState
               */
             TextFormField(
               controller: _cuiCtr,
-              decoration: const InputDecoration(labelText: 'CUI *'),
+              decoration: const InputDecoration(
+                labelText: 'CUI *',
+                filled: true,
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              ),
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: _enabledF,
             ),
@@ -274,7 +285,9 @@ class _MonitoringDetailNewEditPageState
               */
             TextFormField(
               controller: _idMonitor,
-              decoration: const InputDecoration(labelText: 'Id Monitoreo *'),
+              decoration: const InputDecoration(
+                labelText: 'Id Monitoreo *',
+              ),
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: _enabledF,
             ),
@@ -571,7 +584,7 @@ class _MonitoringDetailNewEditPageState
                                     isEdit: 1,
                                     createdTime: DateTime.now(),
                                     snip: _snip,
-                                    cui: _ciu,
+                                    cui: _cuiCtr.text,
                                     latitud: _latitud.text,
                                     longitud: _longitud.text,
                                     tambo: _tambo,
@@ -732,7 +745,7 @@ class _MonitoringDetailNewEditPageState
                                           isEdit: 1,
                                           createdTime: DateTime.now(),
                                           snip: _snip,
-                                          cui: _ciu,
+                                          cui: _cuiCtr.text,
                                           latitud: _latitud.text,
                                           longitud: _longitud.text,
                                           tambo: widget.datoProyecto?.tambo,
@@ -998,6 +1011,143 @@ class _MonitoringDetailNewEditPageState
               },
             ),
           ],
+        );
+      },
+    );
+  }
+}
+
+class SearchMonitor extends SearchDelegate<String> {
+  SearchMonitor();
+  MainController mainController = MainController();
+
+  List<TramaProyectoModel> aProyecto = [];
+  Future<List<TramaProyectoModel>> getProyectos(String search) async {
+    _prefs = await SharedPreferences.getInstance();
+    UserModel oUser = UserModel(
+      nombres: _prefs!.getString('nombres') ?? '',
+      codigo: _prefs!.getString('codigo') ?? '',
+      rol: _prefs!.getString('rol') ?? '',
+    );
+
+    return await mainController.getAllProyectoByUser(oUser, 0, 0);
+    // await mainController.getAllProyectoByNeUserSearch(oUser, search, 0, 0);
+  }
+
+  @override
+  String get searchFieldLabel => 'Buscar';
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          if (query.isEmpty) {
+            close(context, '');
+          } else {
+            query = '';
+            showSuggestions(context);
+          }
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+        onPressed: () {
+          close(context, '');
+        },
+        icon: const Icon(Icons.arrow_back));
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // List<TramaProyectoModel> aProyecto =
+    //     getProyectos("1222") as List<TramaProyectoModel>;
+    List<String> matchQuery = [];
+
+    if (query.length < 5) {
+      return buildNoSuggestions();
+    } else {
+      print(query);
+      getProyectos(query).then((o) {
+        aProyecto = o;
+        return buildSuggestionsSuccess(query);
+      }).catchError((onError) {});
+      return Container(child: Text(query));
+    }
+    // for (var item in searchMonitor) {
+    //   if ((item.idMonitoreo!).contains(query.toLowerCase()) ||
+    //       (item.estadoMonitoreo!).toLowerCase().contains(query.toLowerCase())) {
+    //     matchQuery.add('${item.idMonitoreo} - ${item.estadoMonitoreo}');
+    //   }
+    // }
+    // if (query.isEmpty || matchQuery.isEmpty) {
+    //   return buildNoSuggestions();
+    // } else {
+    //   return buildSuggestionsSuccess(matchQuery);
+    // }
+    // return Container();
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // final String searched = query;
+    return FutureBuilder(
+      future: getProyectos(query),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return Container(
+            child: Text('ss'),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+    // if (searched == null || !_data.contains(searched)) {
+    //   final splitted = searched.split(' - ');
+    //   for (var item in searchMonitor) {
+    //     if (item.idMonitoreo == splitted[0]) {
+    //       return Container();
+    //       //ListaMonitores(context: context, oMonitoreo: [item]);
+    //     }
+    //   }
+    // }
+    // return buildNoSuggestions();
+  }
+
+  Widget buildNoSuggestions() => const Center(
+        child: Text(
+          '¡No hay sugerencias!',
+          style: TextStyle(fontSize: 20, color: Colors.black),
+        ),
+      );
+
+  Widget buildSuggestionsSuccess(String suggestions) {
+    return ListView.builder(
+      itemCount: aProyecto.length,
+      itemBuilder: (context, index) {
+        final suggestion = aProyecto[index];
+        return ListTile(
+          onTap: () {
+            // query = suggestion;
+            showResults(context);
+          },
+          leading: const Icon(Icons.search),
+          title: RichText(
+            text: TextSpan(
+              text: 'asass',
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+          ),
         );
       },
     );
