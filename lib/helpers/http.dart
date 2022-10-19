@@ -141,10 +141,10 @@ class Http {
 
   Future<HttpResponse<T>> postMultipartFile<T>(
     String path, {
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? data,
-    Map<String, dynamic>? formData,
     Map<String, String>? headers,
+    Map<String, String>? data,
+    Map<String, dynamic>? formData,
+    List<Map<String, String>>? aFile,
     T Function(dynamic data)? parser,
   }) async {
     try {
@@ -165,7 +165,6 @@ class Http {
           //method: method,
           headers: headers,
         ),
-        queryParameters: queryParameters,
         data: FormData.fromMap(data!),
       );
 
