@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
+import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
 import 'package:actividades_pais/util/alert_question.dart';
@@ -11,6 +12,9 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+SharedPreferences? _prefs;
 
 class MonitorList extends StatefulWidget {
   const MonitorList({Key? key, this.datoProyecto, this.estadoM})
@@ -98,11 +102,25 @@ class _MonitorListState extends State<MonitorList> {
         }
       } else {
         isResume = true;
-        aMonResp = await mainController.getAllMonitorPorEnviar(
-          0,
-          0,
-          TramaProyectoModel.empty(),
-        );
+        if (widget.estadoM == 'OTROS') {
+          _prefs = await SharedPreferences.getInstance();
+          UserModel oUser = UserModel(
+            nombres: _prefs!.getString("nombres") ?? "",
+            codigo: _prefs!.getString("codigo") ?? "",
+            rol: _prefs!.getString("rol") ?? "",
+          );
+          aMonResp = await mainController.getAllOtherMonitoreo(
+            oUser,
+            0,
+            0,
+          );
+        } else {
+          aMonResp = await mainController.getAllMonitorPorEnviar(
+            0,
+            0,
+            TramaProyectoModel.empty(),
+          );
+        }
       }
     } catch (oError) {
       mostrarAlerta(

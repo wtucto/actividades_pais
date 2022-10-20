@@ -9,11 +9,11 @@ import 'package:actividades_pais/src/pages/Monitor/main/Project/src/image_multip
 import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 
 import 'package:get/get.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences? _prefs;
@@ -130,13 +130,16 @@ class _MonitoringDetailNewEditPageState
         _idMonitor.text = oMonitoreo.idMonitoreo!;
         _dateMonitor.text = oMonitoreo.fechaMonitoreo!;
         titleMonitor = oMonitoreo.tambo! == "" ? 'MONITOR' : oMonitoreo.tambo!;
-        _advanceFEA.text = oMonitoreo.avanceFisicoAcumulado.toString();
+        _advanceFEA.text =
+            ((oMonitoreo.avanceFisicoAcumulado! * 100).toInt()).toString();
         _dateObra.text = oMonitoreo.fechaTerminoEstimado!;
         _longitud.text = oMonitoreo.longitud!;
         _latitud.text = oMonitoreo.latitud!;
         _statusMonitor = oMonitoreo.estadoMonitoreo;
       });
-    } catch (error) {}
+    } catch (error) {
+      print(error);
+    }
   }
 
   getDataMonitor(TramaMonitoreoModel m) {
@@ -151,14 +154,14 @@ class _MonitoringDetailNewEditPageState
       _statusMonitor =
           m.estadoMonitoreo == "" ? "Seleccione una opción" : m.estadoMonitoreo;
       _dateMonitor.text = m.fechaMonitoreo!;
-      _advanceFEA.text = m.avanceFisicoAcumulado.toString();
+      _advanceFEA.text = ((m.avanceFisicoAcumulado! * 100).toInt()).toString();
       _statusAdvance =
           m.estadoAvance == "" ? "Seleccione una opción" : m.estadoAvance;
       _valuePartidaEje = m.actividadPartidaEjecutada == ""
           ? "Seleccione una opción"
           : m.actividadPartidaEjecutada;
 
-      _advanceFEP.text = m.avanceFisicoPartida.toString();
+      _advanceFEP.text = ((m.avanceFisicoPartida! * 100).toInt()).toString();
       _obsMonitor.text = m.observaciones!;
 
       _valueProblemaIO = m.problemaIdentificado == ""
@@ -185,6 +188,7 @@ class _MonitoringDetailNewEditPageState
         m.imgActividad3,
         m.imgActividad4
       ]);
+
       for (var item in listaImage) {
         if (item != null && item != "") {
           controller.itemsImagesAll
@@ -278,12 +282,9 @@ class _MonitoringDetailNewEditPageState
               controller: _cuiCtr,
               decoration: const InputDecoration(
                 labelText: 'CUI *',
-                filled: true,
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
               ),
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-              enabled: _enabledF,
+              enabled: false,
             ),
             /**
                * ID MONITOREO
@@ -294,7 +295,7 @@ class _MonitoringDetailNewEditPageState
                 labelText: 'Id Monitoreo *',
               ),
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-              enabled: _enabledF,
+              enabled: false,
             ),
             /**
                * ESTADO MONITOREO
@@ -334,16 +335,28 @@ class _MonitoringDetailNewEditPageState
             /**
               * % AVANCE FISICO ESTIMADO ACUMULADO
               */
+
             TextFormField(
               controller: _advanceFEA,
               keyboardType: TextInputType.number,
+              maxLength: 3,
+              maxLengthEnforcement: MaxLengthEnforcement.enforced,
               decoration: const InputDecoration(
                 labelText: '% Avance Fisico Estimado Acumulado *',
               ),
               enabled: _enabledF,
-              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+              validator: (v) {
+                final intNumber = int.tryParse(v!);
+                if (intNumber != null && intNumber > 0 && intNumber <= 100) {
+                  return null;
+                }
+                return 'Ingrese el numero de 0 A 100';
+              },
+              inputFormatters: [
+                FilteringTextInputFormatter.deny(RegExp(r'[/\\]')),
+              ],
+              // inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
             ),
-
             /**
              * % ESTADO DE AVANCE
              */
@@ -604,14 +617,16 @@ class _MonitoringDetailNewEditPageState
                                                 "SELECCIONE UNA OPCIÓN"
                                             ? ""
                                             : _valueAlternSolucion!,
-                                    avanceFisicoAcumulado: double.parse(
-                                        _advanceFEA.text == ""
-                                            ? "0"
-                                            : _advanceFEA.text),
-                                    avanceFisicoPartida: double.parse(
-                                        _advanceFEP.text == ""
-                                            ? "0"
-                                            : _advanceFEP.text),
+                                    avanceFisicoAcumulado: (double.parse(
+                                            _advanceFEA.text == ""
+                                                ? "0"
+                                                : _advanceFEA.text) /
+                                        100),
+                                    avanceFisicoPartida: (double.parse(
+                                            _advanceFEP.text == ""
+                                                ? "0"
+                                                : _advanceFEP.text) /
+                                        100),
                                     estadoAvance:
                                         _statusAdvance!.toUpperCase() ==
                                                 "SELECCIONE UNA OPCIÓN"
@@ -753,7 +768,7 @@ class _MonitoringDetailNewEditPageState
                                           cui: _cuiCtr.text,
                                           latitud: _latitud.text,
                                           longitud: _longitud.text,
-                                          tambo: widget.datoProyecto?.tambo,
+                                          tambo: _tambo,
                                           fechaTerminoEstimado: _dateObra.text,
                                           actividadPartidaEjecutada:
                                               _valuePartidaEje!.toUpperCase() ==
@@ -766,14 +781,16 @@ class _MonitoringDetailNewEditPageState
                                                       "SELECCIONE UNA OPCIÓN"
                                                   ? ""
                                                   : _valueAlternSolucion!,
-                                          avanceFisicoAcumulado: double.parse(
-                                              _advanceFEA.text == ""
-                                                  ? "0"
-                                                  : _advanceFEA.text),
-                                          avanceFisicoPartida: double.parse(
-                                              _advanceFEP.text == ""
-                                                  ? "0"
-                                                  : _advanceFEP.text),
+                                          avanceFisicoAcumulado: (double.parse(
+                                                  _advanceFEA.text == ""
+                                                      ? "0"
+                                                      : _advanceFEA.text) /
+                                              100),
+                                          avanceFisicoPartida: (double.parse(
+                                                  _advanceFEP.text == ""
+                                                      ? "0"
+                                                      : _advanceFEP.text) /
+                                              100),
                                           estadoAvance:
                                               _statusAdvance!.toUpperCase() ==
                                                       "SELECCIONE UNA OPCIÓN"

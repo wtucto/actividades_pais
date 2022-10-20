@@ -187,7 +187,7 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
                     Text(
-                      'No existe nigún proyecto asignado, Verificar su conexión',
+                      'No existe nigún proyecto asignado',
                       style: TextStyle(color: Colors.black, fontSize: 16),
                       textAlign: TextAlign.center,
                     ),
@@ -208,6 +208,22 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage>
                   builder: (context) {
                     return MonitoringDetailNewEditPage(
                       datoProyecto: null,
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+          FabItem(
+            "Otros Monitoreos",
+            Icons.remove_red_eye,
+            onPress: () {
+              _controller!.reverse();
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const MonitorList(
+                      estadoM: 'OTROS',
                     );
                   },
                 ),
