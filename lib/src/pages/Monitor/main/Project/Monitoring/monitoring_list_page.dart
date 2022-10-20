@@ -69,7 +69,7 @@ class _MonitorListState extends State<MonitorList> {
 
       if (aResp.length > 0) {
         sMsg =
-            'Hay registros que no se pudieron enviar al servidor porque generaron un error: ${aResp.length}';
+            'Error al enviar el Monitoreo, verifica que los datos sean correctos y vuelve a intentarlo más tarde, código de Monitoreo: ${aResp[0].idMonitoreo}';
       }
     } catch (oError) {
       sMsg = '¡Ups! Algo salió mal, vuelve a intentarlo mas tarde.';
@@ -309,7 +309,7 @@ class _ListaMonitoresState extends State<ListaMonitores> {
 
       if (aResp.length > 0) {
         sMsg =
-            'Hay registros que no se pudieron enviar al servidor porque generaron un error: ${aResp.length}';
+            'Error al enviar el Monitoreo, verifica que los datos sean correctos y vuelve a intentarlo más tarde, código de Monitoreo: ${aResp[0].idMonitoreo}';
       }
     } catch (oError) {
       sMsg = '¡Ups! Algo salió mal, vuelve a intentarlo mas tarde.';
@@ -428,7 +428,8 @@ class _ListaMonitoresState extends State<ListaMonitores> {
                                     ),
                                   ),
                                   Text(
-                                    '${widget.oMonitoreo[index].avanceFisicoAcumulado!}%',
+                                    "${((widget.oMonitoreo[index].avanceFisicoAcumulado! * 100)).toString()}%",
+                                    // '${widget.oMonitoreo[index].avanceFisicoAcumulado!}%',
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,

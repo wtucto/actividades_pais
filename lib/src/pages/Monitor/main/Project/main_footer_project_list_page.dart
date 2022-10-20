@@ -227,29 +227,29 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage>
               );
             },
           ),
-          FabItem(
-            "Reporte",
-            Icons.document_scanner_rounded,
-            onPress: () {
-              _controller!.reverse();
-              final oDataPdf = ReportDto(
-                customer: 'David Thomas',
-                address: '123 Fake St\r\nBermuda Triangle',
-                items: [
-                  TramaMonitoreoModel.empty(),
-                  TramaMonitoreoModel.empty(),
-                  TramaMonitoreoModel.empty(),
-                ],
-                name: 'Test 001 PDF',
-              );
+          // FabItem(
+          //   "Reporte",
+          //   Icons.document_scanner_rounded,
+          //   onPress: () {
+          //     _controller!.reverse();
+          //     final oDataPdf = ReportDto(
+          //       customer: 'David Thomas',
+          //       address: '123 Fake St\r\nBermuda Triangle',
+          //       items: [
+          //         TramaMonitoreoModel.empty(),
+          //         TramaMonitoreoModel.empty(),
+          //         TramaMonitoreoModel.empty(),
+          //       ],
+          //       name: 'Test 001 PDF',
+          //     );
 
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (builder) => ReportProjectPage(dataPdf: oDataPdf),
-                ),
-              );
-            },
-          ),
+          //     Navigator.of(context).push(
+          //       MaterialPageRoute(
+          //         builder: (builder) => ReportProjectPage(dataPdf: oDataPdf),
+          //       ),
+          //     );
+          //   },
+          // ),
           FabItem(
             "Sincronizar",
             Icons.cloud_sync_rounded,
