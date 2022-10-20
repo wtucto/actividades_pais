@@ -46,7 +46,7 @@ class _MainFooterAllOptionPageState extends State<MainFooterAllOptionPage>
         child: TabBarView(
           controller: bottomTabController,
           physics: NeverScrollableScrollPhysics(),
-          children: <Widget>[
+          children: const [
             MainFooterProjectPage(),
             MonitorList(estadoM: "ALL"),
             MainFooterSettingPage(),

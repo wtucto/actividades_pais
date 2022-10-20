@@ -42,8 +42,9 @@ class _MonitorListState extends State<MonitorList> {
   void initState() {
     super.initState();
     if (mounted) {
-      loadData(context);
-      setState(() {});
+      setState(() {
+        loadData(context);
+      });
     }
   }
 
@@ -132,6 +133,9 @@ class _MonitorListState extends State<MonitorList> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      loadData(context);
+    });
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         appBar: AppBar(
@@ -152,7 +156,7 @@ class _MonitorListState extends State<MonitorList> {
               onPressed: () {
                 showSearch(
                   context: context,
-                  delegate: CustomSearchMonitor(aMonResp),
+                  delegate: CustomSearchMonitor(aMonResp, widget.estadoM),
                 );
               },
             ),
@@ -161,7 +165,9 @@ class _MonitorListState extends State<MonitorList> {
         body: RefreshIndicator(
           onRefresh: () async {
             await Future.delayed(Duration(seconds: 2));
-            setState(() {});
+            setState(() {
+              loadData(context);
+            });
           },
           child: Container(
             child: aMonResp.isNotEmpty
@@ -428,7 +434,7 @@ class _ListaMonitoresState extends State<ListaMonitores> {
                                     ),
                                   ),
                                   Text(
-                                    "${((widget.oMonitoreo[index].avanceFisicoAcumulado! * 100)).toString()}%",
+                                    "${((widget.oMonitoreo[index].avanceFisicoAcumulado! * 100).toStringAsFixed(2)).toString()}%",
                                     // '${widget.oMonitoreo[index].avanceFisicoAcumulado!}%',
                                     style: const TextStyle(
                                       color: Colors.black,
@@ -714,7 +720,8 @@ class _ListaMonitoresState extends State<ListaMonitores> {
 
 class CustomSearchMonitor extends SearchDelegate<String> {
   List<TramaMonitoreoModel> searchMonitor;
-  CustomSearchMonitor(this.searchMonitor);
+  String? statusM;
+  CustomSearchMonitor(this.searchMonitor, this.statusM);
   final List<int> _data =
       List<int>.generate(100001, (int i) => i).reversed.toList();
 
@@ -751,9 +758,22 @@ class CustomSearchMonitor extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     List<String> matchQuery = [];
     for (var item in searchMonitor) {
-      if ((item.idMonitoreo!).contains(query.toLowerCase()) ||
-          (item.estadoMonitoreo!).toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add('${item.idMonitoreo} - ${item.estadoMonitoreo}');
+      if (statusM == "OTROS") {
+        if ((item.tambo!).toLowerCase().contains(query.toLowerCase()) ||
+            (item.idMonitoreo!).contains(query.toLowerCase()) ||
+            (item.estadoMonitoreo!)
+                .toLowerCase()
+                .contains(query.toLowerCase())) {
+          matchQuery.add(
+              '${item.idMonitoreo} - ${item.tambo} -${item.estadoMonitoreo}');
+        }
+      } else {
+        if ((item.idMonitoreo!).contains(query.toLowerCase()) ||
+            (item.estadoMonitoreo!)
+                .toLowerCase()
+                .contains(query.toLowerCase())) {
+          matchQuery.add('${item.idMonitoreo} - ${item.estadoMonitoreo}');
+        }
       }
     }
     if (query.isEmpty || matchQuery.isEmpty) {

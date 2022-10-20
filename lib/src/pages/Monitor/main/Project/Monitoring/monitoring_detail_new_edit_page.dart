@@ -4,9 +4,9 @@ import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/Project/main_footer_project_list_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/src/image_controller.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/src/image_multiple.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/main_footer_all_option.dart';
 import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
@@ -132,7 +132,8 @@ class _MonitoringDetailNewEditPageState
         _dateMonitor.text = oMonitoreo.fechaMonitoreo!;
         titleMonitor = oMonitoreo.tambo! == "" ? 'MONITOR' : oMonitoreo.tambo!;
         _advanceFEA.text =
-            ((oMonitoreo.avanceFisicoAcumulado! * 100).toInt()).toString();
+            ((oMonitoreo.avanceFisicoAcumulado! * 100).toStringAsFixed(2))
+                .toString();
         _dateObra.text = oMonitoreo.fechaTerminoEstimado!;
         _longitud.text = oMonitoreo.longitud!;
         _latitud.text = oMonitoreo.latitud!;
@@ -155,14 +156,16 @@ class _MonitoringDetailNewEditPageState
       _statusMonitor =
           m.estadoMonitoreo == "" ? "Seleccione una opción" : m.estadoMonitoreo;
       _dateMonitor.text = m.fechaMonitoreo!;
-      _advanceFEA.text = ((m.avanceFisicoAcumulado! * 100).toInt()).toString();
+      _advanceFEA.text =
+          ((m.avanceFisicoAcumulado! * 100).toStringAsFixed(2)).toString();
       _statusAdvance =
           m.estadoAvance == "" ? "Seleccione una opción" : m.estadoAvance;
       _valuePartidaEje = m.actividadPartidaEjecutada == ""
           ? "Seleccione una opción"
           : m.actividadPartidaEjecutada;
 
-      _advanceFEP.text = ((m.avanceFisicoPartida! * 100).toInt()).toString();
+      _advanceFEP.text =
+          ((m.avanceFisicoPartida! * 100).toStringAsFixed(2)).toString();
       _obsMonitor.text = m.observaciones!;
 
       _valueProblemaIO = m.problemaIdentificado == ""
@@ -245,11 +248,15 @@ class _MonitoringDetailNewEditPageState
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          const MainFooterProjectPage(),
+                          MainFooterAllOptionPage(),
                     ))
               }
             else
-              {Navigator.of(context).pop()}
+              {
+                Navigator.pop(context, () {
+                  setState(() {});
+                }),
+              }
           },
         ),
         title: Center(
@@ -357,7 +364,7 @@ class _MonitoringDetailNewEditPageState
             TextFormField(
               controller: _advanceFEA,
               keyboardType: TextInputType.number,
-              maxLength: 5,
+              maxLength: 6,
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
               decoration: const InputDecoration(
                 labelText: '% Avance Fisico Estimado Acumulado *',
@@ -398,7 +405,7 @@ class _MonitoringDetailNewEditPageState
                */
             TextFormField(
               controller: _advanceFEP,
-              maxLength: 5,
+              maxLength: 6,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 labelText: '% Avance Fisico Acumulado Partida *',

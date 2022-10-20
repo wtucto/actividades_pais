@@ -53,7 +53,6 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage>
         CurvedAnimation(curve: Curves.easeInOut, parent: _controller!);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
 
-    loadPreferences();
     super.initState();
     readJson(offset);
     handleNext();
@@ -64,8 +63,6 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage>
     scrollController.removeListener(() async {});
     super.dispose();
   }
-
-  loadPreferences() async {}
 
   Future<void> readJson(paraOffset) async {
     if (!isEndPagination) {
@@ -131,66 +128,71 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage>
           ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await Future.delayed(Duration(seconds: 2));
-          setState(() {});
-        },
-        child: aProyecto.isNotEmpty
-            ? Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      padding: const EdgeInsets.all(10),
-                      controller: scrollController,
-                      itemCount: aProyecto.length,
-                      itemBuilder: (context, index) {
-                        return ListaProyectos(
-                          context: context,
-                          oProyecto: aProyecto[index],
-                        );
-                      },
-                    ),
-                  ),
-                  if (loading == true)
-                    const Padding(
-                      padding: EdgeInsets.only(
-                        top: 10,
-                        bottom: 40,
-                      ),
-                      child: Center(
-                        child: CircularProgressIndicator(),
+      body: Container(
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await Future.delayed(Duration(seconds: 2));
+            setState(() {
+              isEndPagination = false;
+              readJson(offset);
+            });
+          },
+          child: aProyecto.isNotEmpty
+              ? Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        padding: const EdgeInsets.all(10),
+                        controller: scrollController,
+                        itemCount: aProyecto.length,
+                        itemBuilder: (context, index) {
+                          return ListaProyectos(
+                            context: context,
+                            oProyecto: aProyecto[index],
+                          );
+                        },
                       ),
                     ),
-                  if (isEndPagination == true)
-                    Container(
-                      padding: const EdgeInsets.only(
-                        top: 10,
-                        bottom: 10,
+                    if (loading == true)
+                      const Padding(
+                        padding: EdgeInsets.only(
+                          top: 10,
+                          bottom: 40,
+                        ),
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
                       ),
-                      color: Colors.blue,
-                      child: const Center(
-                        child: Text('Has obtenido todo el contenido.'),
+                    if (isEndPagination == true)
+                      Container(
+                        padding: const EdgeInsets.only(
+                          top: 10,
+                          bottom: 10,
+                        ),
+                        color: Colors.blue,
+                        child: const Center(
+                          child: Text('Has obtenido todo el contenido.'),
+                        ),
                       ),
-                    ),
-                ],
-              )
-            : Container(
-                padding: const EdgeInsets.all(20),
-                width: MediaQuery.of(context).size.width,
-                decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 245, 246, 248)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      'No existe nigún proyecto asignado',
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                      textAlign: TextAlign.center,
-                    ),
                   ],
+                )
+              : Container(
+                  padding: const EdgeInsets.all(20),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 245, 246, 248)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        'No existe nigún proyecto asignado',
+                        style: TextStyle(color: Colors.black, fontSize: 16),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: ExpandedAnimationFab(

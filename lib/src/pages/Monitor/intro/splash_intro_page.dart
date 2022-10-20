@@ -74,33 +74,34 @@ class _SplashPageState extends State<SplashPage>
 
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/Monitor/backgroundLoadPage.png'),
           fit: BoxFit.cover,
         ),
       ),
       child: Container(
-        decoration: BoxDecoration(color: transparentWite),
+        decoration: const BoxDecoration(color: transparentWite),
         child: SafeArea(
-          child: new Scaffold(
+          child: Scaffold(
             body: Column(
               children: <Widget>[
                 Expanded(
                   child: Opacity(
                       opacity: opacity.value,
-                      child: new Image.asset('assets/Monitor/logo.png')),
+                      child: Image.asset('assets/Monitor/logo.png')),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: RichText(
                     text: TextSpan(
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                         children: [
                           TextSpan(text: 'DevelopByText'.tr),
                           TextSpan(
                               text: 'CompanyTag'.tr,
-                              style: TextStyle(fontWeight: FontWeight.bold))
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold))
                         ]),
                   ),
                 )
