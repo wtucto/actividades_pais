@@ -62,6 +62,7 @@ class MainService {
 
       for (var oMonit in a) {
         /// (1)...
+        String estadoMonitoreo = oMonit.estadoMonitoreo!;
         oMonit.estadoMonitoreo = TramaMonitoreoModel.sEstadoENV;
 
         if (isOnlines) {
@@ -78,6 +79,8 @@ class MainService {
               aResp.add(oSend);
             }
           } catch (oError) {
+            oMonit.estadoMonitoreo = estadoMonitoreo;
+
             /// (4)...
             aError.add(oMonit);
 
@@ -86,6 +89,7 @@ class MainService {
           }
         } else {
           /// (4)...
+          oMonit.estadoMonitoreo = estadoMonitoreo;
           aNoConect.add(oMonit);
         }
       }
