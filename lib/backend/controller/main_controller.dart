@@ -247,22 +247,20 @@ class MainController extends GetxController {
 
     loading.value = true;
 
-    double avanceFisicoAcumulado = double.parse(o.avanceFisicoAcumulado != ""
-            ? o.avanceFisicoAcumulado.toString()
-            : "0") *
-        100;
+    double avanceFisicoAcumulado =
+        parseDouble(o.avanceFisicoAcumulado.toString()) * 100;
 
-    double avanceFisicoPartida = double.parse(o.avanceFisicoPartida != ""
-            ? o.avanceFisicoPartida.toString()
-            : "0") *
-        100;
+    double avanceFisicoPartida =
+        parseDouble(o.avanceFisicoPartida.toString()) * 100;
 
     if (!(avanceFisicoAcumulado >= 0 && avanceFisicoAcumulado <= 100)) {
+      loading.value = false;
       return Future.error(
         'Imposible guardar monitoreo valores aceptados en avance físico acumulado es de 0 a 100 (%)',
       );
     }
     if (!(avanceFisicoPartida >= 0 && avanceFisicoPartida <= 100)) {
+      loading.value = false;
       return Future.error(
         'Imposible guardar monitoreo valores aceptados en avance físico de partida es de 0 a 100 (%)',
       );
@@ -602,6 +600,14 @@ class MainController extends GetxController {
   bool isNumeric(dynamic s) {
     final numericRegex = RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$');
     return numericRegex.hasMatch(s);
+  }
+
+  double parseDouble(String number) {
+    try {
+      return double.parse(number);
+    } catch (oError) {
+      return 0;
+    }
   }
 }
 /**
