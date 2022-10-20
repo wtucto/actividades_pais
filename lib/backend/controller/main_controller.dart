@@ -247,6 +247,27 @@ class MainController extends GetxController {
 
     loading.value = true;
 
+    double avanceFisicoAcumulado = double.parse(o.avanceFisicoAcumulado != ""
+            ? o.avanceFisicoAcumulado.toString()
+            : "0") *
+        100;
+
+    double avanceFisicoPartida = double.parse(o.avanceFisicoPartida != ""
+            ? o.avanceFisicoPartida.toString()
+            : "0") *
+        100;
+
+    if (!(avanceFisicoAcumulado >= 0 && avanceFisicoAcumulado <= 100)) {
+      return Future.error(
+        'Imposible guardar monitoreo valores aceptados en avance físico acumulado es de 0 a 100 (%)',
+      );
+    }
+    if (!(avanceFisicoPartida >= 0 && avanceFisicoPartida <= 100)) {
+      return Future.error(
+        'Imposible guardar monitoreo valores aceptados en avance físico de partida es de 0 a 100 (%)',
+      );
+    }
+
     if (o.estadoMonitoreo!.trim().toUpperCase() ==
         TramaMonitoreoModel.sEstadoENV) {
       loading.value = false;
