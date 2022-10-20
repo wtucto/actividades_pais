@@ -4,6 +4,7 @@ import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/src/pages/Monitor/main/Project/main_footer_project_list_page.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/src/image_controller.dart';
 import 'package:actividades_pais/src/pages/Monitor/main/Project/src/image_multiple.dart';
 import 'package:actividades_pais/util/alert_question.dart';
@@ -96,7 +97,7 @@ class _MonitoringDetailNewEditPageState
     super.initState();
 
     if (mounted) {
-      if (widget.statusM == "CREATE") {
+      if (widget.statusM == "CREATE" || widget.statusM == "SEARCH") {
         loadData(context);
       }
       if (widget.statusM == "UPDATE") {
@@ -234,6 +235,23 @@ class _MonitoringDetailNewEditPageState
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back,
+              color: Color.fromARGB(255, 255, 255, 255)),
+          onPressed: () => {
+            if (widget.statusM == "SEARCH")
+              {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          const MainFooterProjectPage(),
+                    ))
+              }
+            else
+              {Navigator.of(context).pop()}
+          },
+        ),
         title: Center(
           child: Text(
             titleMonitor == "" ? "MONITOR" : titleMonitor,
@@ -1118,7 +1136,7 @@ class SearchMonitor extends SearchDelegate<String> {
                         builder: (BuildContext context) =>
                             MonitoringDetailNewEditPage(
                                 datoProyecto: aProyecto[index],
-                                statusM: "CREATE"),
+                                statusM: "SEARCH"),
                       ),
                     );
                   },
