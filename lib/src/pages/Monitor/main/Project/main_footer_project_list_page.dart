@@ -134,10 +134,7 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage>
       body: RefreshIndicator(
         onRefresh: () async {
           await Future.delayed(Duration(seconds: 2));
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (BuildContext context) => super.widget),
-          );
+          setState(() {});
         },
         child: aProyecto.isNotEmpty
             ? Column(
