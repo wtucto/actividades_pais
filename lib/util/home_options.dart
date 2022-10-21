@@ -7,6 +7,7 @@ class HomeOptions {
     this.types = const [],
     required this.image,
     required this.color,
+    this.aOnPress = const [],
   });
 
   final Color color;
@@ -14,4 +15,5 @@ class HomeOptions {
   final String code;
   final String name;
   final List<String> types;
+  final List<VoidCallback> aOnPress;
 }

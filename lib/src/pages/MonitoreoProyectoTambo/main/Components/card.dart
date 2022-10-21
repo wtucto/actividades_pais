@@ -32,10 +32,19 @@ class TiteCard extends StatelessWidget {
         .map(
           (type) => Hero(
             tag: homeOption.name + type,
-            child: CardType(capitalizeFirstChar(type)),
+            child: CardType(
+              capitalizeFirstChar(type),
+            ),
           ),
         )
-        .expand((item) => [item, SizedBox(height: 6)]);
+        .expand(
+          (item) => [
+            item,
+            const SizedBox(height: 6),
+          ],
+        );
+
+    if (homeOption.aOnPress.isNotEmpty) {}
 
     return widgetTypes.take(widgetTypes.length - 1).toList();
   }
@@ -54,7 +63,7 @@ class TiteCard extends StatelessWidget {
                 color: Colors.transparent,
                 child: Text(
                   homeOption.name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     height: 0.9,
                     fontWeight: FontWeight.bold,
@@ -63,7 +72,7 @@ class TiteCard extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ..._buildTypes(),
           ],
         ),
@@ -109,14 +118,14 @@ class TiteCard extends StatelessWidget {
         final itemHeight = constrains.maxHeight;
 
         return Container(
-          padding: EdgeInsets.all(0),
+          padding: const EdgeInsets.all(0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
                 color: homeOption.color.withOpacity(0.12),
                 blurRadius: 15,
-                offset: Offset(0, 8),
+                offset: const Offset(0, 8),
               ),
             ],
           ),
