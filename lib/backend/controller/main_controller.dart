@@ -35,10 +35,17 @@ class MainController extends GetxController {
   }
 
   Future<bool> syncLoadInitialData() async {
-    loading.value = true;
-    await loadInitialData();
-    loading.value = false;
-    return true;
+    if (await Get.find<MainService>().isOnline()) {
+      loading.value = true;
+      await loadInitialData();
+      loading.value = false;
+      return true;
+    } else {
+      throw ThrowCustom(
+        type: 'E',
+        msg: 'No se puede sincronizar, verifique su conexión.',
+      );
+    }
   }
 
   /*

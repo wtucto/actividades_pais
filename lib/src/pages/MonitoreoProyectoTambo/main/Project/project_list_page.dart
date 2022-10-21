@@ -260,18 +260,37 @@ class _ProjectListPageState extends State<ProjectListPage>
             Icons.cloud_sync_rounded,
             onPress: () async {
               BusyIndicator.show(context);
-              await mainController.syncLoadInitialData();
+              try {
+                await mainController.syncLoadInitialData();
+                Fluttertoast.showToast(
+                  msg: 'Los registros se sincronizan con éxito',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 2,
+                  backgroundColor: Color.fromARGB(255, 133, 243, 168),
+                  textColor: Colors.black,
+                  fontSize: 16.0,
+                );
+              } catch (oError) {
+                var sMessage = oError.toString();
+                if (oError is ThrowCustom) {
+                  sMessage = oError.msg!;
+                }
+
+                Fluttertoast.showToast(
+                  msg: sMessage,
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 2,
+                  backgroundColor: Color.fromARGB(255, 252, 95, 74),
+                  textColor: Colors.black,
+                  fontSize: 16.0,
+                );
+              }
+
               BusyIndicator.hide(context);
+
               _controller!.reverse();
-              Fluttertoast.showToast(
-                msg: 'Los registros se sincronizan con éxito',
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 2,
-                backgroundColor: Color.fromARGB(255, 133, 243, 168),
-                textColor: Colors.black,
-                fontSize: 16.0,
-              );
             },
           ),
         ],

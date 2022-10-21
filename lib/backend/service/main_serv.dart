@@ -197,14 +197,11 @@ class MainService {
           _log.e('Error al ingresar proyectos a la Base de Datos');
         }
       }
+
+      _log.i('Nuevos proyectos cargados: ${aNewProject.length}');
     }
 
-    _log.i('Nuevos proyectos cargados: ${aNewProject.length}');
-
-    /// Obtiene y retorna todos los registros almacenados en la DB local
-    List<TramaProyectoModel> aDbExist =
-        await Get.find<MainRepository>().getAllProyectoDb(limit, offset);
-    return aDbExist;
+    return aNewProject;
   }
 
   /// MONITOREO
@@ -212,7 +209,7 @@ class MainService {
     int? limit,
     int? offset,
   ) async {
-    List<TramaMonitoreoModel> aNewProject = [];
+    List<TramaMonitoreoModel> aNewMonitoreo = [];
     if (await isOnline()) {
       List<TramaMonitoreoModel> aDb =
           await Get.find<MainRepository>().getAllMonitoreoDb(limit, offset);
@@ -245,18 +242,15 @@ class MainService {
         TramaMonitoreoModel? response =
             await Get.find<MainRepository>().insertMonitorDb(oApi);
         if (response != null) {
-          aNewProject.add(response!);
+          aNewMonitoreo.add(response!);
         } else {
           _log.e('Error al ingresar monitoreo a la Base de Datos');
         }
       }
+      _log.i('Nuevos monitoreos cargados: ${aNewMonitoreo.length}');
     }
 
-    _log.i('Nuevos monitoreos cargados: ${aNewProject.length}');
-
-    List<TramaMonitoreoModel> aDbExist =
-        await Get.find<MainRepository>().getAllMonitoreoDb(limit, offset);
-    return aDbExist;
+    return aNewMonitoreo;
   }
 
   Future<List<TramaMonitoreoModel>> getAllMonitorPorEnviar(
@@ -328,13 +322,9 @@ class MainService {
           _log.e('Error al ingresar usuario a la Base de Datos');
         }
       }
+      _log.i('Nuevos usuarios cargados: ${aNewLoadUser.length}');
     }
-
-    _log.i('Nuevos usuarios cargados: ${aNewLoadUser.length}');
-
-    List<UserModel> aDbExist =
-        await Get.find<MainRepository>().getAllUserDb(limit, offset);
-    return aDbExist;
+    return aNewLoadUser;
   }
 
   Future<UserModel> getUserByCode(

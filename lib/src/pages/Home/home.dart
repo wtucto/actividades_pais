@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/card.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/main_footer_all_option.dart';
-import 'package:actividades_pais/util/Colors.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/log.dart';
 import 'package:actividades_pais/util/responsive.dart';
@@ -240,7 +240,7 @@ class _HomePagePais extends State<HomePagePais> {
         name: "TileAppRegister".tr,
         types: const ["Usuario"],
         image: icon0,
-        color: LightColors.lightTeal,
+        color: lightTeal,
       ));
     } else {
       if (tipoPlataforma == 'TAMBO') {
@@ -249,7 +249,7 @@ class _HomePagePais extends State<HomePagePais> {
           name: "TileIntervencion".tr,
           types: const ["Ver"],
           image: icon4,
-          color: LightColors.lightBlue,
+          color: lightBlue,
         ));
       } else {
         if (tipoPlataforma == 'PIAS' &&
@@ -264,7 +264,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: "TilePias".tr,
             types: const ["Ver"],
             image: sImagePias,
-            color: LightColors.lightBlue,
+            color: lightBlue,
           ));
         }
       }
@@ -275,7 +275,7 @@ class _HomePagePais extends State<HomePagePais> {
       name: "TileBitacoraRegister".tr,
       types: const ["Ver"],
       image: icon6,
-      color: LightColors.lightBlue,
+      color: lightBlue,
     ));
 
     aHomeOptions.add(HomeOptions(
@@ -283,7 +283,7 @@ class _HomePagePais extends State<HomePagePais> {
       name: "TileProyectTambo".tr,
       types: const ["Ver"],
       image: icon5,
-      color: LightColors.lightBlue,
+      color: lightBlue,
     ));
 
     List listPages = [
