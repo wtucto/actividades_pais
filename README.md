@@ -90,6 +90,15 @@ Runtime version: 11.0.13+0-b1751.21-8125866 aarch64
 
     flutter run
 
+## PASOS CREAR APP IOS
+flutter build apk --release
+flutter build ipa --release
+
+DOCS: 
+ - https://www.youtube.com/watch?v=fU9w4IJ8XeM
+ - https://stackoverflow.com/questions/5499125/how-to-create-ipa-file-using-xcode
+
+
 
 
 

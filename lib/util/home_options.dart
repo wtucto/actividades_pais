@@ -1,4 +1,3 @@
-import 'package:actividades_pais/util/Colors.dart';
 import 'package:flutter/material.dart';
 
 class HomeOptions {

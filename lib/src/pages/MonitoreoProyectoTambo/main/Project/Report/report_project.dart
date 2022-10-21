@@ -1,5 +1,5 @@
-import 'package:actividades_pais/src/pages/Monitor/main/Project/report/pdf/pdf_preview_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/Project/report/report_dto.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/report_dto.dart';
 import 'package:flutter/material.dart';
 
 class ReportProjectPage extends StatelessWidget {

@@ -36,22 +36,3 @@ abstract class DependencyInjection {
     GetIt.instance.registerSingleton<PnPaisApi>(pnPaisApi);
   }
 }
-
-/**
- * SAMPLE USE:
-
-
-
-final pnPaisApi = GetIt.instance<PnPaisApi>();
-final response = await pnPaisApi.register(
-  username: _username,
-  email: _email,
-  password: _password,
-);
-
-if(response != null) {
-  print(response.data);
-} else {
-  print(response.error.message);
-}
- */

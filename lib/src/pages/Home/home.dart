@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/components/card.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/main_footer_all_option.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/card.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/main_footer_all_option.dart';
 import 'package:actividades_pais/util/Colors.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/log.dart';

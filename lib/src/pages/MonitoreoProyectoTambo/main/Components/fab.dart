@@ -1,4 +1,4 @@
-import 'package:actividades_pais/util/Colors.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
 
 class FabItem {
@@ -31,7 +31,7 @@ class FabMenuItem extends StatelessWidget {
         children: <Widget>[
           Text(item.title),
           SizedBox(width: 8),
-          Icon(item.icon, color: LightColors.blue),
+          Icon(item.icon, color: lightBlue),
         ],
       ),
     );
@@ -90,7 +90,7 @@ class ExpandedAnimationFab extends AnimatedWidget {
           ),
         ),
         FloatingActionButton(
-          backgroundColor: LightColors.blue,
+          backgroundColor: lightBlue,
           child: AnimatedIcon(
             icon: AnimatedIcons.menu_close,
             progress: _animation,

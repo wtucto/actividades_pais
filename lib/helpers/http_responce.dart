@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class HttpResponse<T> {
   final T? data;
   final dynamic error;
@@ -19,12 +17,13 @@ class HttpResponse<T> {
     required dynamic data,
   }) =>
       HttpResponse(
-          data: null,
-          error: HttpError(
-            statusCode: statusCode,
-            message: message,
-            data: data,
-          ));
+        data: null,
+        error: HttpError(
+          statusCode: statusCode,
+          message: message,
+          data: data,
+        ),
+      );
 }
 
 class HttpError {

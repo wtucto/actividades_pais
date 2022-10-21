@@ -5,7 +5,7 @@ import 'package:actividades_pais/backend/repository/main_repo.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/helpers/dependecy_injection.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
-import 'package:actividades_pais/src/pages/Monitor/intro/splash_intro_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/intro/splash_intro_page.dart';
 import 'package:actividades_pais/resource/Internationalization.dart';
 
 import 'package:flutter/material.dart';

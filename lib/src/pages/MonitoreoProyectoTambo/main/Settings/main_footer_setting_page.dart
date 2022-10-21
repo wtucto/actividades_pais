@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/settings/faq_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/settings/settings_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/settings/legal_about_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/faq_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/settings_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/legal_about_page.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -63,21 +63,22 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 16.0),
                   decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8),
-                        topRight: Radius.circular(8),
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(8),
-                      ),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 4,
-                          spreadRadius: 1,
-                          offset: Offset(0, 1),
-                        )
-                      ]),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8),
+                      bottomLeft: Radius.circular(8),
+                      bottomRight: Radius.circular(8),
+                    ),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 4,
+                        spreadRadius: 1,
+                        offset: Offset(0, 1),
+                      )
+                    ],
+                  ),
                   height: 150,
                   child: Center(
                     child: Row(

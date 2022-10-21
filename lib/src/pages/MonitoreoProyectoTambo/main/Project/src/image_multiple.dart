@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:actividades_pais/src/pages/Monitor/main/Project/src/image_controller.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/src/image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

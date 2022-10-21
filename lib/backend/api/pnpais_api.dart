@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:actividades_pais/backend/model/dto/trama_monitoreo_response_api.dart';
+import 'package:actividades_pais/backend/model/dto/trama_monitoreo_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/helpers/http.dart';
@@ -9,13 +9,13 @@ import 'package:actividades_pais/helpers/http_responce.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 
 class PnPaisApi {
-  final String basePathApp = "/api-pnpais/app/";
   final Http _http;
+  final String basePathApp = "/api-pnpais/app/";
 
   static String username = "username";
   static String password = "password";
   static String basicAuth =
-      'Basic ' + base64.encode(utf8.encode('${username}:${password}'));
+      'Basic ${base64.encode(utf8.encode('$username:$password'))}';
 
   Map<String, String> headers = {
     HttpHeaders.authorizationHeader: basicAuth,
@@ -27,7 +27,6 @@ class PnPaisApi {
     return await _http.request<List<UserModel>>(
       '${basePathApp}listarUsuariosApp',
       method: "GET",
-      //headers: headers,
       parser: (data) {
         return (data as List).map((e) => UserModel.fromJson(e)).toList();
       },
@@ -38,7 +37,6 @@ class PnPaisApi {
     return await _http.request<List<TramaProyectoModel>>(
       '${basePathApp}listarTramaproyecto',
       method: "GET",
-      //headers: headers,
       parser: (data) {
         return (data as List)
             .map((e) => TramaProyectoModel.fromJson(e))
@@ -51,7 +49,6 @@ class PnPaisApi {
     return await _http.request<List<TramaMonitoreoModel>>(
       '${basePathApp}listarTramaMonitoreo',
       method: "GET",
-      //headers: headers,
       parser: (data) {
         return (data as List)
             .map((e) => TramaMonitoreoModel.fromJson(e))
@@ -66,24 +63,21 @@ class PnPaisApi {
     List<Map<String, String>> aFile = [];
 
     if (oBody.imgActividad != '') {
-      final aImgActividad =
-          oBody.imgActividad!.split(','); // Notice the whitespace after colon
+      final aImgActividad = oBody.imgActividad!.split(',');
       for (var oValue in aImgActividad) {
         aFile.add({TramaMonitoreoFields.imgActividad: oValue.trim()});
       }
     }
 
     if (oBody.imgProblema != '') {
-      final aImgProblema =
-          oBody.imgProblema!.split(','); // Notice the whitespace after colon
+      final aImgProblema = oBody.imgProblema!.split(',');
       for (var oValue in aImgProblema) {
         aFile.add({TramaMonitoreoFields.imgProblema: oValue.trim()});
       }
     }
 
     if (oBody.imgRiesgo != '') {
-      final aImgRiesgo =
-          oBody.imgRiesgo!.split(','); // Notice the whitespace after colon
+      final aImgRiesgo = oBody.imgRiesgo!.split(',');
       for (var oValue in aImgRiesgo) {
         aFile.add({TramaMonitoreoFields.imgRiesgo: oValue.trim()});
       }
@@ -98,17 +92,4 @@ class PnPaisApi {
       },
     );
   }
-
-  /*Future<HttpResponse<TramaMonitoreoModel>> insertarMonitoreo({
-    required TramaMonitoreoModel oBody,
-  }) {
-    return _http.request<TramaMonitoreoModel>(
-      '${basePathApp}insertarMonitoreo',
-      method: "POST",
-      data: TramaMonitoreoModel.toJsonObject(oBody),
-      parser: (data) {
-        return TramaMonitoreoModel.fromJson(data);
-      },
-    );
-  }*/
 }

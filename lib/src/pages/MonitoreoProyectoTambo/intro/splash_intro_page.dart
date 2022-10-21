@@ -27,11 +27,12 @@ class _SplashPageState extends State<SplashPage>
     InternetConnectionChecker().onStatusChange.listen((status) {
       final connected = status == InternetConnectionStatus.connected;
       showSimpleNotification(
-          Text(connected ? 'ConnectOnline'.tr : 'ConnectOffline'.tr));
+        Text(connected ? 'ConnectOnline'.tr : 'ConnectOffline'.tr),
+      );
     });
 
     controller = AnimationController(
-      duration: Duration(milliseconds: 2500),
+      duration: const Duration(milliseconds: 2500),
       vsync: this,
     );
     opacity = Tween<double>(
@@ -60,15 +61,22 @@ class _SplashPageState extends State<SplashPage>
 
     if (cantidad == 0) {
       // providerServicios.requestSqlData();
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => LoginPage(),
+        ),
+      );
       //PantallaInicio
     } else {
       /*  Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (_) => Home_Asis()));*/
 
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (BuildContext context) => Home_Asis()));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => Home_Asis(),
+        ),
+      );
     }
   }
 
@@ -88,21 +96,23 @@ class _SplashPageState extends State<SplashPage>
               children: <Widget>[
                 Expanded(
                   child: Opacity(
-                      opacity: opacity.value,
-                      child: Image.asset('assets/Monitor/logo.png')),
+                    opacity: opacity.value,
+                    child: Image.asset('assets/Monitor/logo.png'),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: RichText(
                     text: TextSpan(
-                        style: const TextStyle(color: Colors.black),
-                        children: [
-                          TextSpan(text: 'DevelopByText'.tr),
-                          TextSpan(
-                              text: 'CompanyTag'.tr,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold))
-                        ]),
+                      style: const TextStyle(color: Colors.black),
+                      children: [
+                        TextSpan(text: 'DevelopByText'.tr),
+                        TextSpan(
+                          text: 'CompanyTag'.tr,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
                   ),
                 )
               ],

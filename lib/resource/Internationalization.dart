@@ -2,20 +2,17 @@ import "package:get/get.dart";
 import "package:flutter/material.dart";
 
 class MyTraslation extends Translations {
-  static final locale = Locale("es", "ES");
-  static final fallbackLocale = Locale("en", "US");
+  static const locale = Locale("es", "ES");
+  static const fallbackLocale = Locale("en", "US");
 
-  static final Langs = ["Español", "English"];
+  static const Langs = ["Español", "English"];
   static final locales = [
-    Locale("es", "ES"),
-    Locale("en", "US"),
+    locale,
+    fallbackLocale,
   ];
 
   @override
-  // TODO: implement keys
   Map<String, Map<String, String>> get keys => {
-        //"es_ES": es,
-        //"en_US": en,
         "es_ES": {
           "Account": "Cuenta",
           "AppDescrip": "Monitoreo de proyectos Tambos",
@@ -201,6 +198,30 @@ class MyTraslation extends Translations {
           "Yes": "Yes",
           "welcome": "Welcome!",
           "EmptyData": "No Data!",
+          "FldProyect001": "CÓDIGO ÚNICO DEL PROYECTO",
+          "FldProyect002": "CÓDIGO DE SNIP",
+          "FldProyect003": "LATITUD DE LA UBICACIÓN DEL PROYECTO",
+          "FldProyect004": "LONGITUD DE LA UBICACIÓN DEL PROYECTO",
+          "FldProyect005": "NOMBRE DEL DEPARTAMENTO DEL UBIGEO DEL PROYECTO",
+          "FldProyect006": "NOMBRE DE LA PROVINCIA DEL UBIGEO DEL PROYECTO",
+          "FldProyect007": "NOMBRE DEL DISTRITO DEL UBIGEO DEL PROYECTO",
+          "FldProyect008": "NOMBRE DEL PROYECTO",
+          "FldProyect009": "NOMBRE DEL CENTRO POBLADO DEL UBIGEO DEL PROYECTO",
+          "FldProyect010": "ESTADO DEL PROYECTO",
+          "FldProyect011": "SUB ESTADO DEL PROYECTO",
+          "FldProyect012": "ESTADO DE SANEAMIENTO DEL PROYECTO",
+          "FldProyect013": "MODALIDAD DE CONTRATACIÓN DEL PROYECTO",
+          "FldProyect014": "FECHA DE INICIO DEL PROYECTO",
+          "FldProyect015": "FECHA DE TÉRMINO ESTIMADO DEL PROYECTO",
+          "FldProyect016": "MONTO DE INVERSIÓN DEL PROYECTO",
+          "FldProyect017": "COSTO EJECUTADO ACUMULADO DEL PROYECTO",
+          "FldProyect018": "COSTO ESTIMADO FINAL DEL PROYECTO",
+          "FldProyect019": "% AVANCE FÍSICO ACUMULADO",
+          "FldProyect020": "NOMBRE DEL RESIDENTE",
+          "FldProyect021": "NOMBRE DEL SUPERVISOR",
+          "FldProyect022": "NOMBRE DEL COORDINADOR REGIONAL DEL PROYECTO",
+          "FldProyect023": "CÓDIGO DEL RESIDENTE",
+          "FldProyect024": "CÓDIGO DEL SUPERVISOR",
         },
       };
 
@@ -216,11 +237,3 @@ class MyTraslation extends Translations {
     return Get.locale!;
   }
 }
-
-/**
- * 
- Text("LoggedIn".trParams({
-  "name": "Jhon",
-  "email": "jhon@example.com"
-  }));
- */

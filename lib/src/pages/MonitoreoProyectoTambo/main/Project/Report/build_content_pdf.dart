@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:actividades_pais/src/pages/Monitor/main/Project/report/report_dto.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/report_dto.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:flutter/services.dart' show rootBundle;

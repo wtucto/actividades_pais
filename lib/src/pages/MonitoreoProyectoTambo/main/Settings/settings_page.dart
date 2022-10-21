@@ -3,8 +3,8 @@ import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/custom_background.dart';
 import 'package:flutter/material.dart';
 
-import 'package:actividades_pais/src/pages/Monitor/main/settings/change_language_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/auth/change_password_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/change_language_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/auth/change_password_page.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

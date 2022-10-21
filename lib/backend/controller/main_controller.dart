@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
 class MainController extends GetxController {
-  Logger _log = Logger();
+  final Logger _log = Logger();
 
   final loading = false.obs;
   final users = <UserModel>[].obs;
@@ -28,8 +28,6 @@ class MainController extends GetxController {
    */
   Future<void> loadInitialData() async {
     loading.value = true;
-    /*final serv = Get.put(MainService());
-    users.value = await serv.loadAllUser();*/
     proyectos.value = await Get.find<MainService>().loadAllProyecto(0, 0);
     moniteos.value = await Get.find<MainService>().loadAllMonitoreo(0, 0);
     users.value = await Get.find<MainService>().loadAllUser(0, 0);
@@ -41,19 +39,6 @@ class MainController extends GetxController {
     await loadInitialData();
     loading.value = false;
     return true;
-  }
-
-  /*
-   Obtiene la lista de Usuarios en general
-   */
-  Future<void> getAllUser(
-    int? limit,
-    int? offset,
-  ) async {
-    if (loading.isTrue) return;
-    loading.value = true;
-    final newUser = await Get.find<MainService>().getAllUser(limit, offset);
-    loading.value = false;
   }
 
   /*
@@ -81,7 +66,7 @@ class MainController extends GetxController {
   }
 
   /*
-   Actualiza datos del Usuario
+   Inserta / Actualiza datos del Usuario
    @UserModel o
    */
   Future<UserModel> insertUser(UserModel o) async {
@@ -93,28 +78,6 @@ class MainController extends GetxController {
         oError.toString(),
       );
     }
-  }
-
-  /*
-   Obtiene la lista de Proyectos en general
-   */
-  Future<List<TramaProyectoModel>> getAllProyecto(
-    int? limit,
-    int? offset,
-  ) async {
-    return await Get.find<MainService>().getAllProyecto(limit, offset);
-  }
-
-  /*
-   Obtiene la lista de proyectos segun el ROL del Usuario
-   @UserModel o
-   */
-  Future<List<TramaProyectoModel>> getAllProyectoByUser(
-    UserModel o,
-    int? limit,
-    int? offset,
-  ) async {
-    return await Get.find<MainService>().getAllProyectoByUser(o, limit, offset);
   }
 
   /*
@@ -133,19 +96,6 @@ class MainController extends GetxController {
   }
 
   /*
-   Obtiene la lista de proyectos diferente al ROL del Usuario login
-   @UserModel o
-   */
-  Future<List<TramaProyectoModel>> getAllProyectoByNeUser(
-    UserModel o,
-    int? limit,
-    int? offset,
-  ) async {
-    return await Get.find<MainService>()
-        .getAllProyectoByNeUser(o, limit, offset);
-  }
-
-  /*
    Obtiene la lista de proyectos diferentes al ROL del Usuario logeado y busqueda según la coincidencia
    @UserModel o
    @String search
@@ -161,16 +111,6 @@ class MainController extends GetxController {
   }
 
   /*
-   Obtiene los datos de generales del proyecto
-   @String CUI
-   */
-  Future<List<TramaProyectoModel>> getProyectoById(
-    String cui,
-  ) async {
-    return await Get.find<MainService>().getProyectoByCUI(cui);
-  }
-
-  /*
    Obtiene la lista de Monitoreos de los proyecto que no pertencen al usuario logeado
    @UserModel o
    */
@@ -181,16 +121,6 @@ class MainController extends GetxController {
   ) async {
     return await Get.find<MainService>()
         .readAllOtherMonitoreo(o, limit, offset);
-  }
-
-  /*
-   Obtiene la lista de Monitoreos en general
-   */
-  Future<List<TramaMonitoreoModel>> getAllMonitor(
-    int? limit,
-    int? offset,
-  ) async {
-    return await Get.find<MainService>().getAllMonitoreo(limit, offset);
   }
 
   /*
@@ -304,7 +234,7 @@ class MainController extends GetxController {
     try {
       List<TramaProyectoModel> aSearh =
           await Get.find<MainService>().getProyectoByCUI(o.cui!);
-      if (aSearh != null && aSearh.length > 0) {
+      if (aSearh != null && aSearh.isNotEmpty) {
         TramaProyectoModel oProyecto = aSearh[0];
         if (o.snip!.trim() == '') {
           o.snip = oProyecto.numSnip;
@@ -516,7 +446,7 @@ class MainController extends GetxController {
   ) async {
     DateFormat oDFormat = DateFormat('yyyy-MM-dd');
     DateFormat oDFormat2 = DateFormat('HHmmss');
-    DateTime _now = DateTime.now();
+    DateTime now = DateTime.now();
     TramaMonitoreoModel o = TramaMonitoreoModel.empty();
 
     /*
@@ -536,12 +466,12 @@ class MainController extends GetxController {
 
       List<TramaProyectoModel> aSearh =
           await Get.find<MainService>().getProyectoByCUI(cui);
-      if (aSearh != null && aSearh.length > 0) {
+      if (aSearh != null && aSearh.isNotEmpty) {
         TramaProyectoModel oProyecto = aSearh[0];
 
         String idBuild = '<CUI>_<IDE>_<FECHA_MONITOREO>';
         idBuild = idBuild.replaceAll('<CUI>', oProyecto.cui!);
-        idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
+        idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(now));
         idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
         o.idMonitoreo = idBuild;
 
@@ -574,7 +504,7 @@ class MainController extends GetxController {
       } else {
         String idBuild = '<CUI>_<IDE>_<FECHA_MONITOREO>';
         idBuild = idBuild.replaceAll('<CUI>', cui);
-        idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
+        idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(now));
         idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
         o.idMonitoreo = idBuild;
         o.cui = cui;
@@ -610,12 +540,3 @@ class MainController extends GetxController {
     }
   }
 }
-/**
- * @override
-  Widget build(BuildContext context) {
-    ...
-  final controller = Get.put(MainController()); // Se ejecuta loadInitialData();
-
-  return Scaffold(...
-
- */

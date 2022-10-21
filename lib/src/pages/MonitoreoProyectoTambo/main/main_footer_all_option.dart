@@ -1,14 +1,14 @@
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/components/fab.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_list_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_list_page.dart';
 import 'package:flutter/material.dart';
-import 'components/custom_bottom_bar.dart';
+import 'Components/custom_bottom_bar.dart';
 
 import 'package:actividades_pais/custom_background.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/Project/main_footer_project_list_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/settings/main_footer_setting_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/gallery/gallery_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/project_list_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_detail_form_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/main_footer_setting_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/gallery/gallery_page.dart';
 
 class MainFooterAllOptionPage extends StatefulWidget {
   @override
@@ -47,7 +47,7 @@ class _MainFooterAllOptionPageState extends State<MainFooterAllOptionPage>
           controller: bottomTabController,
           physics: NeverScrollableScrollPhysics(),
           children: const [
-            MainFooterProjectPage(),
+            ProjectListPage(),
             MonitorList(estadoM: "ALL"),
             MainFooterSettingPage(),
             // GalleryPage(),

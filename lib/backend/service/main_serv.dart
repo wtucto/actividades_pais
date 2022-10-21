@@ -7,27 +7,12 @@ import 'package:actividades_pais/backend/repository/main_repo.dart';
 import 'package:logger/logger.dart';
 
 class MainService {
-  Logger _log = Logger();
+  final Logger _log = Logger();
 
-  /// Returns `true` si existe conexion a internet por wifi.
+  /// Returns `true` si existe conexion a internet por wifi/Mobile.
   Future<bool> isOnline() async {
     bool isDeviceConnected = await CheckConnection.isOnlineWifiMobile();
     return isDeviceConnected;
-  }
-
-  /// SYNC
-  Future syncAllMonitoreoByStatusPorEnviar(
-    int? limit,
-    int? offset,
-  ) async {
-    /// Obtiene todos los registros de la DB Local cuyo estado esten en: POR ENVIAR
-    await getAllMonitorPorEnviar(
-      limit,
-      offset,
-      TramaProyectoModel.empty(),
-    ).then((a) async {
-      await sendAllMonitoreo(a, []);
-    });
   }
 
   /*
@@ -99,7 +84,7 @@ class MainService {
          * Metodo recursivo: Solo reintentar los registros que no se enviaron
          * por perdida de conexión despues de 3 segundos
          */
-        await Future.delayed(Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 3));
         sendAllMonitoreo(aNoConect, aError);
       }
 
@@ -111,41 +96,6 @@ class MainService {
     }
   }
 
-  /// PROYECTO
-  Future<List<TramaProyectoModel>> getAllProyectoByUser(
-    UserModel o,
-    int? limit,
-    int? offset,
-  ) async {
-    ///Obtiene los registros de la DB Local
-    List<TramaProyectoModel> aFind =
-        await Get.find<MainRepository>().getAllProyectoByUser(o, limit, offset);
-
-    /*
-    if (aDb.length > 0) {
-      TramaProyectoModel? oDataFind;
-      try {
-        aDb.forEach((a) {
-          bool isOk = false;
-          if (o.rol == UserModel.sRolRES) {
-            if (a.codResidente == o.codigo) isOk = true;
-          } else if (o.rol == UserModel.sRolSUP) {
-            if (a.codSupervisor == o.codigo) isOk = true;
-          } else if (o.rol == UserModel.sRolCRP) {
-            if (a.codCrp == o.codigo) isOk = true;
-          }
-          if (isOk) {
-            aFind.add(a);
-          }
-        });
-      } catch (oError) {
-        _log.e(oError);
-      }
-    }
-    */
-    return aFind;
-  }
-
   Future<List<TramaProyectoModel>> getAllProyectoByUserSearch(
     UserModel o,
     String search,
@@ -155,17 +105,6 @@ class MainService {
     ///Obtiene los registros de la DB Local
     List<TramaProyectoModel> aFind = await Get.find<MainRepository>()
         .getAllProyectoByUserSearch(o, search, limit, offset);
-    return aFind;
-  }
-
-  Future<List<TramaProyectoModel>> getAllProyectoByNeUser(
-    UserModel o,
-    int? limit,
-    int? offset,
-  ) async {
-    ///Obtiene los registros de la DB Local
-    List<TramaProyectoModel> aFind = await Get.find<MainRepository>()
-        .getAllProyectoByNeUser(o, limit, offset);
     return aFind;
   }
 
@@ -210,13 +149,6 @@ class MainService {
     return aFind;
   }
 
-  Future<List<TramaProyectoModel>> getAllProyecto(
-    int? limit,
-    int? offset,
-  ) async {
-    return await Get.find<MainRepository>().getAllProyectoDb(limit, offset);
-  }
-
   Future<List<TramaProyectoModel>> loadAllProyecto(
     int? limit,
     int? offset,
@@ -241,7 +173,7 @@ class MainService {
        * (2) - caso contrario se procede a registrar a la DB local.
        */
       for (TramaProyectoModel oApi in aApi) {
-        if (aDb.length > 0) {
+        if (aDb.isNotEmpty) {
           TramaProyectoModel? oDataFind;
           try {
             oDataFind = aDb.firstWhere((o) => o.cui == oApi.cui,
@@ -288,7 +220,7 @@ class MainService {
           await Get.find<MainRepository>().getAllMonitoreoApi();
 
       for (TramaMonitoreoModel oApi in aApi) {
-        if (aDb.length > 0) {
+        if (aDb.isNotEmpty) {
           TramaMonitoreoModel? oDataFind;
           try {
             oDataFind = aDb.firstWhere((o) => o.idMonitoreo == oApi.idMonitoreo,
@@ -327,14 +259,6 @@ class MainService {
     return aDbExist;
   }
 
-  Future<List<TramaMonitoreoModel>> getAllMonitoreo(
-    int? limit,
-    int? offset,
-  ) async {
-    //if (await isOnline()) {}
-    return await Get.find<MainRepository>().getAllMonitoreoDb(limit, offset);
-  }
-
   Future<List<TramaMonitoreoModel>> getAllMonitorPorEnviar(
     int? limit,
     int? offset,
@@ -355,32 +279,6 @@ class MainService {
         .getAllMonitoreoByIdProyectoDb(o, limit, offset);
 
     return aFind;
-  }
-
-  Future<List<TramaMonitoreoModel>> getAllSyncMonitoreo(
-    int? limit,
-    int? offset,
-  ) async {
-    List<TramaMonitoreoModel> aFilter = [];
-    List<TramaMonitoreoModel> aDb =
-        await Get.find<MainRepository>().getAllMonitoreoDb(limit, offset);
-
-    for (TramaMonitoreoModel oDb in aDb) {
-      if (aDb.length > 0) {
-        TramaMonitoreoModel? oFilter;
-        try {
-          oFilter = aDb.firstWhere(
-              (o) => o.estadoMonitoreo == TramaMonitoreoModel.sEstadoPEN,
-              orElse: () => TramaMonitoreoModel.empty());
-        } catch (oError) {
-          _log.e(oError);
-        }
-        if (oFilter != null || oFilter!.id == 0) {
-          continue;
-        }
-      }
-    }
-    return aFilter;
   }
 
   Future<TramaMonitoreoModel> insertMonitorDb(
@@ -439,15 +337,6 @@ class MainService {
     return aDbExist;
   }
 
-  Future<List<UserModel>> getAllUser(
-    int? limit,
-    int? offset,
-  ) async {
-    List<UserModel> aDbExist =
-        await Get.find<MainRepository>().getAllUserDb(limit, offset);
-    return aDbExist;
-  }
-
   Future<UserModel> getUserByCode(
     String codigo,
   ) async {
@@ -459,22 +348,6 @@ class MainService {
     }
     return Future.error(
       'Usuario incorrecto, vuelve a intentarlo mas tarde.',
-    );
-  }
-
-  Future<UserModel> getUserLogin(
-    String codigo,
-    String clave,
-  ) async {
-    try {
-      List<UserModel> oUserLogin =
-          await Get.find<MainRepository>().readEditUser(codigo, clave);
-      return oUserLogin[0];
-    } catch (oError) {
-      _log.e(oError);
-    }
-    return Future.error(
-      'Usuario y/o Clave incorrecto, vuelve a intentarlo mas tarde.',
     );
   }
 }

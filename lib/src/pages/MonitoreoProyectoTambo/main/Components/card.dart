@@ -1,4 +1,4 @@
-import 'package:actividades_pais/src/pages/Monitor/main/components/card_type.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/card_type.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:flutter/material.dart';
 

@@ -5,12 +5,10 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_list_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/Project/project_detail_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/Project/Monitoring/monitoring_detail_new_edit_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/Project/report/report_dto.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/Project/report/report_project_page.dart';
-import 'package:actividades_pais/src/pages/Monitor/main/components/fab.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_list_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/project_detail_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_detail_form_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/throw-exception.dart';
 import 'package:flutter/material.dart';
@@ -23,15 +21,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 SharedPreferences? _prefs;
 MainController mainController = MainController();
 
-class MainFooterProjectPage extends StatefulWidget {
-  const MainFooterProjectPage({Key? key}) : super(key: key);
+class ProjectListPage extends StatefulWidget {
+  const ProjectListPage({Key? key}) : super(key: key);
 
   @override
-  _MainFooterProjectPageState createState() => _MainFooterProjectPageState();
+  _ProjectListPageState createState() => _ProjectListPageState();
 }
 
-class _MainFooterProjectPageState extends State<MainFooterProjectPage>
-    with TickerProviderStateMixin<MainFooterProjectPage> {
+class _ProjectListPageState extends State<ProjectListPage>
+    with TickerProviderStateMixin<ProjectListPage> {
   List<TramaProyectoModel> aProyecto = [];
 
   Animation<double>? _animation;
@@ -78,7 +76,12 @@ class _MainFooterProjectPageState extends State<MainFooterProjectPage>
       );
 
       final List<TramaProyectoModel> response =
-          await mainController.getAllProyectoByUser(oUser, limit, offset);
+          await mainController.getAllProyectoByUserSearch(
+        oUser,
+        '',
+        limit,
+        offset,
+      );
       if (response.length == 0) {
         isEndPagination = true;
       } else {

@@ -8,7 +8,7 @@ class DatabasePnPais {
   static final DatabasePnPais instance = DatabasePnPais._init();
 
   static Database? _database;
-  static final _version = 1;
+  static const _version = 1;
 
   final createTable = 'CREATE TABLE';
   final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
@@ -18,10 +18,6 @@ class DatabasePnPais {
   final notNull = 'NOT NULL';
   final sLimit = "LIMIT [limit]";
   final sOffset = "OFFSET [offset]";
-
-  /*String limitOffset = '$sLimit $sOffset';
-    limitOffset = limitOffset.replaceAll("[limit]", "1");
-    limitOffset = limitOffset.replaceAll("[offset]", "1");*/
 
   DatabasePnPais._init();
 
@@ -146,13 +142,16 @@ class DatabasePnPais {
       )
     ''');
 
-    /*var tableNames = (await db
+    /*
+    var tableNames = (await db
           .query('sqlite_master', where: 'type = ?', whereArgs: ['table']))
       .map((row) => row['name'] as String)
       .toList(growable: false);*/
+    /*
     (await db.query('sqlite_master', columns: ['type', 'name'])).forEach((row) {
       print(row.values);
     });
+    */
   }
 
   Future _upgradeDB(
@@ -264,51 +263,6 @@ class DatabasePnPais {
         .toList();
   }
 
-  Future<List<TramaProyectoModel>> readAllProyectoByUser(
-    UserModel o,
-    int? limit,
-    int? offset,
-  ) async {
-    final db = await instance.database;
-    final orderBy = '${TramaProyectoFields.numSnip} ASC';
-
-    dynamic result;
-
-    String sWhere = '';
-    if (o.rol == UserModel.sRolRES) {
-      sWhere = TramaProyectoFields.codResidente;
-    } else if (o.rol == UserModel.sRolSUP) {
-      sWhere = TramaProyectoFields.codSupervisor;
-    } else if (o.rol == UserModel.sRolCRP) {
-      sWhere = TramaProyectoFields.codCrp;
-    }
-
-    if (sWhere == '') return [];
-
-    if (limit! > 0) {
-      result = await db.query(
-        tableNameTramaProyectos,
-        where: '$sWhere = ?',
-        whereArgs: [o.codigo],
-        orderBy: orderBy,
-        limit: limit,
-        offset: offset,
-      );
-    } else {
-      result = await db.query(
-        tableNameTramaProyectos,
-        where: '$sWhere = ?',
-        whereArgs: [o.codigo],
-        orderBy: orderBy,
-      );
-    }
-
-    if (result.length == 0) return [];
-    return result
-        .map<TramaProyectoModel>((json) => TramaProyectoModel.fromJson(json))
-        .toList();
-  }
-
   Future<List<TramaProyectoModel>> readAllProyectoByNeUserSearch(
     UserModel o,
     String search,
@@ -379,51 +333,6 @@ class DatabasePnPais {
         .toList();
   }
 
-  Future<List<TramaProyectoModel>> readAllProyectoByNeUser(
-    UserModel o,
-    int? limit,
-    int? offset,
-  ) async {
-    final db = await instance.database;
-    final orderBy = '${TramaProyectoFields.numSnip} ASC';
-
-    dynamic result;
-
-    String sWhere = '';
-    if (o.rol == UserModel.sRolRES) {
-      sWhere = TramaProyectoFields.codResidente;
-    } else if (o.rol == UserModel.sRolSUP) {
-      sWhere = TramaProyectoFields.codSupervisor;
-    } else if (o.rol == UserModel.sRolCRP) {
-      sWhere = TramaProyectoFields.codCrp;
-    }
-
-    if (sWhere == '') return [];
-
-    if (limit! > 0) {
-      result = await db.query(
-        tableNameTramaProyectos,
-        where: '$sWhere != ?',
-        whereArgs: [o.codigo],
-        orderBy: orderBy,
-        limit: limit,
-        offset: offset,
-      );
-    } else {
-      result = await db.query(
-        tableNameTramaProyectos,
-        where: '$sWhere != ?',
-        whereArgs: [o.codigo],
-        orderBy: orderBy,
-      );
-    }
-
-    if (result.length == 0) return [];
-    return result
-        .map<TramaProyectoModel>((json) => TramaProyectoModel.fromJson(json))
-        .toList();
-  }
-
   Future<List<TramaProyectoModel>> readAProyectoByCUI(
     String sId,
   ) async {
@@ -458,24 +367,6 @@ class DatabasePnPais {
         .toList();
   }
 
-  Future<TramaProyectoModel> readProyectoByIdLoc(
-    int i,
-  ) async {
-    final db = await instance.database;
-    final maps = await db.query(
-      tableNameTramaProyectos,
-      columns: TramaProyectoFields.values,
-      where: '${TramaProyectoFields.id} = ?',
-      whereArgs: [i],
-    );
-
-    if (maps.isNotEmpty) {
-      return TramaProyectoModel.fromJson(maps.first);
-    } else {
-      throw Exception('ID $i not found');
-    }
-  }
-
   Future<TramaProyectoModel> insertProyecto(
     TramaProyectoModel o,
   ) async {
@@ -486,29 +377,6 @@ class DatabasePnPais {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     return o.copy(id: id);
-  }
-
-  Future<int> updateProyecto(
-    TramaProyectoModel o,
-  ) async {
-    final db = await instance.database;
-    return db.update(
-      tableNameTramaProyectos,
-      o.toJson(),
-      where: '${TramaProyectoFields.id} = ?',
-      whereArgs: [o.id],
-    );
-  }
-
-  Future<int> deleteProyecto(
-    int i,
-  ) async {
-    final db = await instance.database;
-    return await db.delete(
-      tableNameTramaProyectos,
-      where: '${TramaProyectoFields.id} = ?',
-      whereArgs: [i],
-    );
   }
 
   /// MONITOREO
@@ -658,24 +526,6 @@ class DatabasePnPais {
         .toList();
   }
 
-  Future<TramaProyectoModel> readMonitoreo(
-    int i,
-  ) async {
-    final db = await instance.database;
-    final maps = await db.query(
-      tableNameTramaMonitoreos,
-      columns: TramaMonitoreoFields.values,
-      where: '${TramaMonitoreoFields.id} = ?',
-      whereArgs: [i],
-    );
-
-    if (maps.isNotEmpty) {
-      return TramaProyectoModel.fromJson(maps.first);
-    } else {
-      throw Exception('ID $i not found');
-    }
-  }
-
   Future<TramaMonitoreoModel> insertMonitoreo(
     TramaMonitoreoModel o,
   ) async {
@@ -723,8 +573,6 @@ class DatabasePnPais {
     int? offset,
   ) async {
     final db = await instance.database;
-
-    //SELECT * FROM $tableNameUsers ORDER BY ASC
     final orderBy = '${UserFields.time} ASC';
     dynamic result;
     if (limit! > 0) {
@@ -763,47 +611,6 @@ class DatabasePnPais {
     }
   }
 
-  Future<UserModel> readUser(
-    int i,
-  ) async {
-    final db = await instance.database;
-    final maps = await db.query(
-      tableNameUsers,
-      columns: UserFields.values,
-      where: '${UserFields.id} = ?',
-      whereArgs: [i],
-    );
-
-    if (maps.isNotEmpty) {
-      return UserModel.fromJson(maps.first);
-    } else {
-      throw Exception('ID $i not found');
-    }
-  }
-
-  Future<List<UserModel>> readEditUser(
-    bool b,
-  ) async {
-    List<UserModel> aResp = [];
-    final db = await instance.database;
-    final maps = await db.query(
-      tableNameUsers,
-      columns: UserFields.values,
-      where: '${UserFields.isEdit} = ?',
-      whereArgs: [b],
-    );
-
-    if (maps.isNotEmpty) {
-      for (var o in maps) {
-        aResp.add(UserModel.fromJson(o));
-      }
-    } else {
-      throw Exception('ID $b not found');
-    }
-
-    return aResp;
-  }
-
   Future<UserModel> insertUser(
     UserModel o,
   ) async {
@@ -825,17 +632,6 @@ class DatabasePnPais {
       o.toJson(),
       where: '${UserFields.id} = ?',
       whereArgs: [o.id],
-    );
-  }
-
-  Future<int> deleteUser(
-    int i,
-  ) async {
-    final db = await instance.database;
-    return await db.delete(
-      tableNameUsers,
-      where: '${UserFields.id} = ?',
-      whereArgs: [i],
     );
   }
 
