@@ -1,14 +1,10 @@
-import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_list_page.dart';
 import 'package:flutter/material.dart';
 import 'Components/custom_bottom_bar.dart';
 
 import 'package:actividades_pais/custom_background.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/project_list_page.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_detail_form_page.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/main_footer_setting_page.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/gallery/gallery_page.dart';
 
 class MainFooterAllOptionPage extends StatefulWidget {
   @override
@@ -45,126 +41,14 @@ class _MainFooterAllOptionPageState extends State<MainFooterAllOptionPage>
         painter: MainBackground(),
         child: TabBarView(
           controller: bottomTabController,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           children: const [
             ProjectListPage(),
             MonitorList(estadoM: "ALL"),
             MainFooterSettingPage(),
-            // GalleryPage(),
           ],
         ),
       ),
-      /*drawer: Drawer(
-        child: Material(
-          textStyle: const TextStyle(color: Colors.white, fontSize: 16),
-          child: Container(
-            color: const Color(0xFF5B4382),
-            padding: const EdgeInsets.all(20),
-            child: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //----------------------------
-                  // Drawer title
-                  //----------------------------
-                  Row(
-                    children: const [
-                      Icon(
-                        Icons.settings_outlined,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                      Text(
-                        ' Settings',
-                        style: TextStyle(
-                          fontSize: 26,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Divider(height: 40),
-                  //----------------------------
-                  // Visible Items Control
-                  //----------------------------
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.visibility_rounded,
-                        color: Colors.white,
-                        size: 16,
-                      ),
-                      const Text(
-                        ' Visible items',
-                        style: TextStyle(),
-                      ),
-                      Expanded(
-                        child: Slider(
-                          value: 8,
-                          min: 2,
-                          max: 15,
-                          divisions: 15,
-                          label: '8',
-                          activeColor: Colors.deepPurple[200],
-                          inactiveColor: Colors.deepPurple[400],
-                          onChanged: (value) {
-                            setState(() {
-                              //_visibleItems = value.toInt();
-                            });
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                  const Divider(height: 40),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),*/
-      /*floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: ExpandedAnimationFab(
-        items: [
-          FabItem(
-            "Nuevo Monitoreo",
-            Icons.add_to_queue,
-            onPress: () {
-              _controller!.reverse();
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return MonitoringDetailNewEditPage(
-                      datoProyecto: null,
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-          /*FabItem(
-            "Enviar Monitoreos",
-            Icons.cloud_upload_rounded,
-            onPress: () {
-              _controller!.reverse();
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return MonitoringDetailNewEditPage();
-                  },
-                ),
-              );
-            },
-          ),*/
-        ],
-        animation: _animation!,
-        onPress: () {
-          if (_controller!.isCompleted) {
-            _controller!.reverse();
-          } else {
-            _controller!.forward();
-          }
-        },
-      ),*/
     );
   }
 }
