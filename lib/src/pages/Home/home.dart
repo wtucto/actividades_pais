@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:actividades_pais/src/pages/Intervenciones/PrestacionServicios/new_intervencion.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/card.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/main_footer_all_option.dart';
 import 'package:actividades_pais/util/Constants.dart';
@@ -231,10 +232,15 @@ class _HomePagePais extends State<HomePagePais> {
             ),
             CupertinoActionSheetAction(
               onPressed: () async {
-                Navigator.pop(context);
                 /*
-                  AQUI MOSTRAR FORMULARIOS PARA INTERVENCIONES
+                 FORMULARIOS PARA INTERVENCIONES
                 */
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => IntervencionCreate(),
+                  ),
+                );
               },
               child: const Text('Creación de Intervenciones'),
             ),

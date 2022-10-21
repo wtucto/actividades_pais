@@ -117,7 +117,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
+            children: const [
               Text(
                 'Iniciando... ',
                 textAlign: TextAlign.center,
