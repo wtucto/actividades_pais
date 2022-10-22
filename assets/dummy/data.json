@@ -1,0 +1,287 @@
+{
+  "lista-tipo-gobierno": [
+    {
+      "id_tipo_gobierno": 1,
+      "nombre": "GOBIERNO CENTRAL",
+      "abreviatura": "GC        "
+    },
+    {
+      "id_tipo_gobierno": 2,
+      "nombre": "GOBIERNO REGIONAL",
+      "abreviatura": "GL        "
+    },
+    {
+      "id_tipo_gobierno": 3,
+      "nombre": "GOBIERNO LOCAL",
+      "abreviatura": "GR        "
+    },
+    {
+      "id_tipo_gobierno": 4,
+      "nombre": "ORGANISMOS AUTONOMOS",
+      "abreviatura": "OA        "
+    },
+    {
+      "id_tipo_gobierno": 5,
+      "nombre": "COOPERACION INTERNACIONAL",
+      "abreviatura": "CI        "
+    },
+    {
+      "id_tipo_gobierno": 6,
+      "nombre": "ONG",
+      "abreviatura": "ONG       "
+    },
+    {
+      "id_tipo_gobierno": 7,
+      "nombre": "ORGANIZACIONES CIVILES",
+      "abreviatura": "OC        "
+    },
+    {
+      "id_tipo_gobierno": 8,
+      "nombre": "ORGANIZACIONES RELIGIOSAS",
+      "abreviatura": "OR        "
+    },
+    {
+      "id_tipo_gobierno": 9,
+      "nombre": "SECTOR PRIVADO",
+      "abreviatura": "SP        "
+    },
+    {
+      "id_tipo_gobierno": 10,
+      "nombre": "UNIVERSIDADES",
+      "abreviatura": "U         "
+    },
+    {
+      "id_tipo_gobierno": 12,
+      "nombre": "IAL",
+      "abreviatura": "IAL       "
+    },
+    {
+      "id_tipo_gobierno": 13,
+      "nombre": "IAR",
+      "abreviatura": "IAR       "
+    }
+  ],
+
+  "lista-sector": [
+    {
+      "id_sector": 21,
+      "nombre_sector": "MEF"
+    },
+    {
+      "id_sector": 22,
+      "nombre_sector": "MIDIS"
+    },
+    {
+      "id_sector": 23,
+      "nombre_sector": "MIMP"
+    },
+    {
+      "id_sector": 24,
+      "nombre_sector": "MIDAGRI"
+    },
+    {
+      "id_sector": 25,
+      "nombre_sector": "MINAM"
+    },
+    {
+      "id_sector": 26,
+      "nombre_sector": "MINCETUR"
+    },
+    {
+      "id_sector": 27,
+      "nombre_sector": "MINDEF"
+    },
+    {
+      "id_sector": 28,
+      "nombre_sector": "MINEDU"
+    },
+    {
+      "id_sector": 29,
+      "nombre_sector": "MINEM"
+    },
+    {
+      "id_sector": 30,
+      "nombre_sector": "MININTER"
+    },
+    {
+      "id_sector": 31,
+      "nombre_sector": "MINCU"
+    },
+    {
+      "id_sector": 32,
+      "nombre_sector": "MRREE"
+    },
+    {
+      "id_sector": 34,
+      "nombre_sector": "MINJUS"
+    },
+    {
+      "id_sector": 35,
+      "nombre_sector": "MINSA"
+    },
+    {
+      "id_sector": 36,
+      "nombre_sector": "MTC"
+    },
+    {
+      "id_sector": 37,
+      "nombre_sector": "MTPE"
+    },
+    {
+      "id_sector": 38,
+      "nombre_sector": "MVCS"
+    },
+    {
+      "id_sector": 44,
+      "nombre_sector": "PCM"
+    },
+    {
+      "id_sector": 46,
+      "nombre_sector": "PRODUCE"
+    }
+  ],
+
+  "lista-programa": [
+    {
+      "id_entidad": 3,
+      "nombre_programa": "ABRIGATE PERU"
+    },
+    {
+      "id_entidad": 24,
+      "nombre_programa": "CONADIS"
+    },
+    {
+      "id_entidad": 83,
+      "nombre_programa": "INABIF"
+    },
+    {
+      "id_entidad": 133,
+      "nombre_programa": "PROGRAMA NACIONAL CONTRA LA VIOLENCIA FAMILIAR Y SEXUAL"
+    },
+    {
+      "id_entidad": 196,
+      "nombre_programa": "VIDA DIGNA"
+    },
+    {
+      "id_entidad": 197,
+      "nombre_programa": "YACHAY"
+    },
+    {
+      "id_entidad": 230,
+      "nombre_programa": "CENTRO EMERGENCIA MUJER (CEM)"
+    },
+    {
+      "id_entidad": 356,
+      "nombre_programa": "ESTRATEGIA RURAL"
+    },
+    {
+      "id_entidad": 360,
+      "nombre_programa": "CEDIF (CENTRO DE DESARROLLO INTEGRAL DE LA FAMILIA)"
+    },
+    {
+      "id_entidad": 376,
+      "nombre_programa": "MINISTERIO DE LA MUJER Y POBLACIONES VULNERABLES"
+    },
+    {
+      "id_entidad": 392,
+      "nombre_programa": "DIRECCION DE DESPLAZADOS Y CULTURA DE PAZ"
+    },
+    {
+      "id_entidad": 420,
+      "nombre_programa": "SERVICIOS JUGUEMOS "
+    }
+  ],
+
+  "lista-tipo-documento": [
+    {
+      "id_documeto_evento": 1,
+      "descripcion": "ACTA"
+    },
+    {
+      "id_documeto_evento": 2,
+      "descripcion": "INFORME"
+    },
+    {
+      "id_documeto_evento": 3,
+      "descripcion": "HOJA DE RUTA"
+    },
+    {
+      "id_documeto_evento": 4,
+      "descripcion": "PROGRAMACION INTERINSTITUCIONAL"
+    },
+    {
+      "id_documeto_evento": 5,
+      "descripcion": "PLAN DE TRABAJO"
+    },
+    {
+      "id_documeto_evento": 6,
+      "descripcion": "DOCUMENTO EXTERNO"
+    },
+    {
+      "id_documeto_evento": 7,
+      "descripcion": "POR CONFIRMAR"
+    }
+  ],
+
+  "lista-articulacion-orientada": [
+    {
+      "id_articulacion_orientada": 1,
+      "descripcion": "LUCHA CONTRA LA ANEMIA Y DCI"
+    },
+    {
+      "id_articulacion_orientada": 2,
+      "descripcion": "PROGRAMACION DE CARAVANA"
+    },
+    {
+      "id_articulacion_orientada": 3,
+      "descripcion": "EJECUCIÓN DE INTERVENCION MULTISECTORIAL"
+    },
+    {
+      "id_articulacion_orientada": 4,
+      "descripcion": "PLAN MULTISECTORIAL ANTE HELADAS Y FRIAJE"
+    },
+    {
+      "id_articulacion_orientada": 5,
+      "descripcion": "INTERVENCIÓN EN PLATAFORMA DE SERVICIOS"
+    },
+    {
+      "id_articulacion_orientada": 6,
+      "descripcion": "ELABORACIÓN DE PLAN TRABAJO"
+    },
+    {
+      "id_articulacion_orientada": 7,
+      "descripcion": "FIRMA DE CONVENIO"
+    },
+    {
+      "id_articulacion_orientada": 8,
+      "descripcion": "MESA REGIONAL"
+    },
+    {
+      "id_articulacion_orientada": 9,
+      "descripcion": "GESTIÓN DEL RIESGO DE DESASTRES"
+    },
+    {
+      "id_articulacion_orientada": 11,
+      "descripcion": "ASISTENCIA TÉCNICA IAR / ESPACIOS DE ARTICULACIÓN REGIONAL - AGENDA HAMBRE 0"
+    },
+    {
+      "id_articulacion_orientada": 12,
+      "descripcion": "PLANES DE TRABAJO REGIONAL - AGENDA HAMBRE 0"
+    },
+    {
+      "id_articulacion_orientada": 13,
+      "descripcion": "ASISTENCIA TÉCNICA PLAN DE TRABAJO EN TEMAS PRODUCTIVOS – IAR- HAMBRE 0"
+    }
+  ],
+
+  "accion": [
+    {
+      "id_accion": 1,
+      "accion": "Coordinación con entidades"
+    },
+    {
+      "id_accion": 2,
+      "accion": "Articulación - Plan de trabajo"
+    }
+  ]
+}
