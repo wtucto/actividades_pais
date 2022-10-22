@@ -58,7 +58,7 @@ class MainService {
               /// (2)...
               TramaMonitoreoModel? oSend = oResp;
               oSend.id = oMonit.id;
-              await Get.find<MainRepository>().updateMonitoreoDb(oSend);
+              await Get.find<MainRepository>().insertMonitorDb(oSend);
 
               /// (3)...
               aResp.add(oSend);
@@ -233,7 +233,7 @@ class MainService {
                */
               oApi.id = oDataFind.id;
               oApi.isEdit = 0;
-              await Get.find<MainRepository>().updateMonitoreoDb(oApi);
+              await Get.find<MainRepository>().insertMonitorDb(oApi);
             }
             continue;
           }
