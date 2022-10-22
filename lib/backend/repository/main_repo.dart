@@ -1,6 +1,8 @@
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
 import 'package:actividades_pais/backend/model/dto/trama_monitoreo_response_api_dto.dart';
+import 'package:actividades_pais/backend/model/listar_programa_intervenciones_model.dart';
+import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
@@ -144,6 +146,37 @@ class MainRepository {
     TramaMonitoreoModel o,
   ) async {
     return await _dbPnPais.insertMonitoreo(o);
+  }
+
+  Future<List<ProgramacionIntervencionesModel>> getProgramaIntervencionDb(
+    String? id,
+    int? limit,
+    int? offset,
+  ) async {
+    return _dbPnPais.readProgramaIntervencion(
+      id,
+      limit,
+      offset,
+    );
+  }
+
+  Future<ProgramacionIntervencionesModel> insertProgramaIntervencionDb(
+    ProgramacionIntervencionesModel o,
+  ) async {
+    return await _dbPnPais.insertProgramaIntervencion(o);
+  }
+
+  Future<RegistroEntidadActividadModel> insertRegistroEntidadActividadDb(
+    RegistroEntidadActividadModel o,
+  ) async {
+    return await _dbPnPais.insertRegistroEntidadActividad(o);
+  }
+
+  Future<List<RegistroEntidadActividadModel>>
+      insertRegistroEntidadActividadMasiveDb(
+    List<RegistroEntidadActividadModel> a,
+  ) async {
+    return await _dbPnPais.insertRegistroEntidadActividadMasive(a);
   }
 
   Future<TramaMonitoreoModel> insertarMonitoreo(

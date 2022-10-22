@@ -1,3 +1,4 @@
+import 'package:actividades_pais/backend/model/listar_programa_intervenciones_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
@@ -286,6 +287,35 @@ class MainService {
   ) async {
     final result = await Get.find<MainRepository>().deleteMonitorDb(o);
     return result;
+  }
+
+  Future<List<ProgramacionIntervencionesModel>> getAllProgramaIntervencion(
+    String id,
+    int? limit,
+    int? offset,
+  ) async {
+    ///Obtiene los registros de la DB Local
+    List<ProgramacionIntervencionesModel> aFind =
+        await Get.find<MainRepository>()
+            .getProgramaIntervencionDb(id, limit, offset);
+
+    return aFind;
+  }
+
+  Future<ProgramacionIntervencionesModel> insertProgramaIntervencionDb(
+    ProgramacionIntervencionesModel o,
+  ) async {
+    var oProgResp =
+        await Get.find<MainRepository>().insertProgramaIntervencionDb(o);
+
+    if (o.registroEntidadActividades!.isNotEmpty) {
+      var aActResp = await Get.find<MainRepository>()
+          .insertRegistroEntidadActividadMasiveDb(
+              o.registroEntidadActividades!);
+      oProgResp.registroEntidadActividades = aActResp;
+    }
+
+    return oProgResp;
   }
 
   /// USUARIO APP

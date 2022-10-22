@@ -790,6 +790,19 @@ class DatabasePnPais {
     }
   }
 
+  Future<List<RegistroEntidadActividadModel>>
+      insertRegistroEntidadActividadMasive(
+    List<RegistroEntidadActividadModel> a,
+  ) async {
+    var result = await insertMasive(
+        tableNameRegistroEntidadActividad, a, RegistroEntidadActividadFields);
+
+    return result
+        .map<RegistroEntidadActividadModel>(
+            (json) => RegistroEntidadActividadModel.fromJson(json))
+        .toList();
+  }
+
   Future<int> updateRegistroEntidadActividad(
     RegistroEntidadActividadModel o,
   ) async {

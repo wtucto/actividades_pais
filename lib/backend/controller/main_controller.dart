@@ -1,3 +1,4 @@
+import 'package:actividades_pais/backend/model/listar_programa_intervenciones_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
@@ -273,6 +274,41 @@ class MainController extends GetxController {
     }
 
     final oResp = await Get.find<MainService>().insertMonitorDb(o);
+    loading.value = false;
+
+    return oResp;
+  }
+
+  /*
+   Obtiene la lista de Programacion por ID o general
+   @String idProgramacionIntervenciones
+   */
+  Future<List<ProgramacionIntervencionesModel>> getAllProgramacion(
+    String idProgramacionIntervenciones,
+    int? limit,
+    int? offset,
+  ) async {
+    return await Get.find<MainService>().getAllProgramaIntervencion(
+      idProgramacionIntervenciones,
+      limit,
+      offset,
+    );
+  }
+
+  /*
+   Guardar/Actualizar nuevo Programacion y valida campos
+   @ProgramacionIntervencionesModel o
+   */
+  Future<ProgramacionIntervencionesModel> saveProgramaIntervencion(
+    ProgramacionIntervencionesModel o,
+  ) async {
+    if (loading.isTrue) {
+      return Future.error(
+        'Ya hay un proceso en ejecución, espere a que finalice.',
+      );
+    }
+
+    final oResp = await Get.find<MainService>().insertProgramaIntervencionDb(o);
     loading.value = false;
 
     return oResp;
