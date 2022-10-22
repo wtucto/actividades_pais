@@ -1,3 +1,5 @@
+import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
+import 'package:actividades_pais/backend/model/listar_programa_intervenciones_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
@@ -139,6 +141,51 @@ class DatabasePnPais {
       ${TramaProyectoFields.codResidente} $textType,
       ${TramaProyectoFields.codSupervisor} $textType,
       ${TramaProyectoFields.codCrp} $textType
+      )
+    ''');
+
+    await db.execute('''
+    $createTable $tableNameProgramacionIntervenciones ( 
+      $constFields,
+
+      ${ProgramacionIntervencionesFields.idProgramacionIntervenciones} $textType,
+      ${ProgramacionIntervencionesFields.adjuntarArchivo} $textType,
+      ${ProgramacionIntervencionesFields.anio} $textType,
+      ${ProgramacionIntervencionesFields.convenio} $textType,
+      ${ProgramacionIntervencionesFields.descripcionDelEvento} $textType,
+      ${ProgramacionIntervencionesFields.detalleNecesidades} $textType,
+      ${ProgramacionIntervencionesFields.documentoQueAcreditaElEvento} $textType,
+      ${ProgramacionIntervencionesFields.dondeSeRealizoElEvento} $textType,
+      ${ProgramacionIntervencionesFields.fecha} $textType,
+      ${ProgramacionIntervencionesFields.horaFin} $textType,
+      ${ProgramacionIntervencionesFields.horaInicio} $textType,
+      ${ProgramacionIntervencionesFields.laIntervencionRespondeAUnConvenio} $textType,
+      ${ProgramacionIntervencionesFields.laIntervencionesPerteneceA} $textType,
+      ${ProgramacionIntervencionesFields.ndePersonasConvocadasAParticiparEnElEvento} $textType,
+      ${ProgramacionIntervencionesFields.nplanDeTrabajo} $textType,
+      ${ProgramacionIntervencionesFields.perteneceAUnPlanDeTrabajo} $textType,
+      ${ProgramacionIntervencionesFields.plataforma} $textType,
+      ${ProgramacionIntervencionesFields.progrmacionParaOtroTambio} $textType,
+      ${ProgramacionIntervencionesFields.tipoAccion} $textType,
+      ${ProgramacionIntervencionesFields.tipoPlanDeTrabajo} $textType,
+      ${ProgramacionIntervencionesFields.unidadTerritoria} $textType
+      )
+    ''');
+
+    await db.execute('''
+    $createTable $tableNameRegistroEntidadActividad ( 
+      $constFields,
+
+      ${RegistroEntidadActividadFields.idRegistroEntidadesYActividades} $textType,
+      ${RegistroEntidadActividadFields.idProgramacionIntervenciones} $textType,
+      ${RegistroEntidadActividadFields.categoria} $textType,
+      ${RegistroEntidadActividadFields.descripcionDeLaActividadProgramada} $textType,
+      ${RegistroEntidadActividadFields.programa} $textType,
+      ${RegistroEntidadActividadFields.sector} $textType,
+      ${RegistroEntidadActividadFields.servicio} $textType,
+      ${RegistroEntidadActividadFields.subCategoria} $textType,
+      ${RegistroEntidadActividadFields.tipoActividad} $textType,
+      ${RegistroEntidadActividadFields.tipoDeUsuario} $textType
       )
     ''');
 
@@ -635,9 +682,162 @@ class DatabasePnPais {
     );
   }
 
+  Future<List<ProgramacionIntervencionesModel>> readProgramaIntervencion(
+    String? id,
+    int? limit,
+    int? offset,
+  ) async {
+    final db = await instance.database;
+    final orderBy = '${ProgramacionIntervencionesFields.time} ASC';
+    dynamic result;
+
+    if (id != "") {
+      result = await db.query(
+        tableNameProgramacionIntervenciones,
+        columns: ProgramacionIntervencionesFields.values,
+        where:
+            '${ProgramacionIntervencionesFields.idProgramacionIntervenciones} = ?',
+        whereArgs: [id],
+      );
+
+      if (result.length >= 0) {
+        var aRegAct = await db.query(
+          tableNameRegistroEntidadActividad,
+          columns: RegistroEntidadActividadFields.values,
+          where:
+              '${RegistroEntidadActividadFields.idProgramacionIntervenciones} = ?',
+          whereArgs: [id],
+        );
+
+        if (aRegAct.length >= 0) {
+          result.map<ProgramacionIntervencionesModel>((json) {
+            json[ProgramacionIntervencionesFields.registroEntidadActividades] =
+                aRegAct
+                    .where(
+                      (e) => (e[RegistroEntidadActividadFields
+                              .idProgramacionIntervenciones] ==
+                          json[ProgramacionIntervencionesFields
+                              .idProgramacionIntervenciones]),
+                    )
+                    .toList();
+          });
+        }
+      }
+    } else if (limit! > 0) {
+      result = await db.query(
+        tableNameProgramacionIntervenciones,
+        orderBy: orderBy,
+        limit: limit,
+        offset: offset,
+      );
+    } else {
+      result = await db.query(
+        tableNameProgramacionIntervenciones,
+        orderBy: orderBy,
+      );
+    }
+
+    if (result.length == 0) return [];
+    return result
+        .map<ProgramacionIntervencionesModel>(
+            (json) => ProgramacionIntervencionesModel.fromJson(json))
+        .toList();
+  }
+
+  Future<ProgramacionIntervencionesModel> insertProgramaIntervencion(
+    ProgramacionIntervencionesModel o,
+  ) async {
+    final db = await instance.database;
+    if (o.id != null && o.id! > 0) {
+      await updateProgramaIntervencion(o);
+      return o.copy(id: o.id);
+    } else {
+      final id = await db.insert(
+        tableNameProgramacionIntervenciones,
+        o.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      return o.copy(id: id);
+    }
+  }
+
+  Future<int> updateProgramaIntervencion(
+    ProgramacionIntervencionesModel o,
+  ) async {
+    final db = await instance.database;
+    return db.update(
+      tableNameProgramacionIntervenciones,
+      o.toJson(),
+      where: '${ProgramacionIntervencionesFields.id} = ?',
+      whereArgs: [o.id],
+    );
+  }
+
+  Future<RegistroEntidadActividadModel> insertRegistroEntidadActividad(
+    RegistroEntidadActividadModel o,
+  ) async {
+    final db = await instance.database;
+    if (o.id != null && o.id! > 0) {
+      await updateRegistroEntidadActividad(o);
+      return o.copy(id: o.id);
+    } else {
+      final id = await db.insert(
+        tableNameRegistroEntidadActividad,
+        o.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      return o.copy(id: id);
+    }
+  }
+
+  Future<int> updateRegistroEntidadActividad(
+    RegistroEntidadActividadModel o,
+  ) async {
+    final db = await instance.database;
+    return db.update(
+      tableNameRegistroEntidadActividad,
+      o.toJson(),
+      where: '${RegistroEntidadActividadFields.id} = ?',
+      whereArgs: [o.id],
+    );
+  }
+
+  Future<List<dynamic>> insertMasive(
+    String table,
+    List<dynamic> aObject,
+    dynamic oFiel,
+  ) async {
+    List<dynamic> listRes = [];
+
+    final db = await instance.database;
+    await db.transaction((txn) async {
+      aObject.forEach((o) async {
+        if (o.id != null && o.id! > 0) {
+          txn.update(
+            table,
+            o.toJson(),
+            where: '${oFiel.id} = ?',
+            whereArgs: [o.id],
+          );
+          var iRes = o.copy(id: o.id);
+          listRes.add(iRes);
+        } else {
+          var iRes = await txn.insert(
+            table,
+            o.toJson(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+          listRes.add(iRes);
+        }
+      });
+    });
+
+    return listRes;
+  }
+
   Future close() async {
     /**
-     * extends State<NotesPage> { ...
+     extends State<NotesPage> { ...
      @override
       void dispose() {
         DatabasePnPais.instance.close();

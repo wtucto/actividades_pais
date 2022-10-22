@@ -146,12 +146,6 @@ class MainRepository {
     return await _dbPnPais.insertMonitoreo(o);
   }
 
-  Future<int> updateMonitoreoDb(
-    TramaMonitoreoModel o,
-  ) async {
-    return await _dbPnPais.updateMonitoreo(o);
-  }
-
   Future<TramaMonitoreoModel> insertarMonitoreo(
     TramaMonitoreoModel o,
   ) async {
