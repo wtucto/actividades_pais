@@ -16,11 +16,93 @@ class MainService {
     return isDeviceConnected;
   }
 
+/*
+  Enviar los registros de Programacion a la Base de datos central mediante el 
+  API REST.
+
+  @ProgramacionIntervencionesModel a : Listado de Programaciones para enviar registros a la nube
+  @ProgramacionIntervencionesModel e : Listado de Programaciones que fallaron al enviar
+                           (Parametro solo valido para el metodo recursivo)
+
+  CONSIDERACIONES:
+  - Los estados de la Programacion deben de tener el estado: POR ENVIAR
+
+  SECUENCIAS:
+    LOOP ... 
+      (1) - Se envia el registros de Programacion al API REST 
+      (2) - Si el envio es correcto, se actualiza el registro en la DB Local al estado
+        ENVIADO
+      (3) - Responder con todos los registros enviados a la API REST
+      (4) - Responder con todos los registros que generaron Error en la API REST
+    END LOOP.
+  */
+  Future<List<ProgramacionIntervencionesModel>> sendAllProgramaIntervencion(
+    List<ProgramacionIntervencionesModel> a,
+    List<ProgramacionIntervencionesModel>? e,
+  ) async {
+    bool isOnlines = await isOnline();
+    if (isOnlines) {
+      List<ProgramacionIntervencionesModel> aResp = [];
+      List<ProgramacionIntervencionesModel> aError = e ?? [];
+      List<ProgramacionIntervencionesModel> aNoConect = [];
+
+      for (var oMonit in a) {
+        /// (1)...
+        String estadoMonitoreo = oMonit.estadoProgramacion!;
+        oMonit.estadoProgramacion = ProgramacionIntervencionesModel.sEstadoPEN;
+
+        if (isOnlines) {
+          try {
+            final oResp = await Get.find<MainRepository>()
+                .insertProgramaIntervencion(oMonit);
+            if (oResp.idProgramacionIntervenciones != "") {
+              /// (2)...
+              ProgramacionIntervencionesModel? oSend = oResp;
+              oSend.id = oMonit.id;
+              await Get.find<MainRepository>()
+                  .insertProgramaIntervencionDb(oSend);
+
+              /// (3)...
+              aResp.add(oSend);
+            }
+          } catch (oError) {
+            oMonit.estadoProgramacion = estadoMonitoreo;
+
+            /// (4)...
+            aError.add(oMonit);
+
+            ///Si falla volver a consultar si existe conexión
+            isOnlines = await isOnline();
+          }
+        } else {
+          /// (4)...
+          oMonit.estadoProgramacion = estadoMonitoreo;
+          aNoConect.add(oMonit);
+        }
+      }
+
+      if (aNoConect.length > 0) {
+        /**
+         * Metodo recursivo: Solo reintentar los registros que no se enviaron
+         * por perdida de conexión despues de 3 segundos
+         */
+        await Future.delayed(const Duration(seconds: 3));
+        sendAllProgramaIntervencion(aNoConect, aError);
+      }
+
+      return aError;
+    } else {
+      return Future.error(
+        '¡Ups! Algo salió mal, verifica tu conexión a Internet.',
+      );
+    }
+  }
+
   /*
   Enviar los registros de monitoreo a la Base de datos central mediante el 
   API REST.
 
-  @TramaMonitoreoModel a : Listado de Monitoreos para enviar registros a la nuve
+  @TramaMonitoreoModel a : Listado de Monitoreos para enviar registros a la nube
   @TramaMonitoreoModel e : Listado de Monitoreos que fallaron al enviar
                            (Parametro solo valido para el metodo recursivo)
 
@@ -162,7 +244,7 @@ class MainService {
       List<TramaProyectoModel> aDb =
           await Get.find<MainRepository>().getAllProyectoDb(limit, offset);
 
-      ///Obtiene los registros de la nuve consumiento la API REST
+      ///Obtiene los registros de la nube consumiento la API REST
       List<TramaProyectoModel> aApi =
           await Get.find<MainRepository>().getAllProyectoApi();
 
@@ -229,7 +311,7 @@ class MainService {
           if (oDataFind != null || oDataFind!.id == 0) {
             if (oDataFind.estadoMonitoreo != TramaMonitoreoModel.sEstadoENV) {
               /*
-                Si el estado del monitoreo en la nuve es diferente a la data local, 
+                Si el estado del monitoreo en la nube es diferente a la data local, 
                 se actualiza el registro local.
                */
               oApi.id = oDataFind.id;
@@ -318,11 +400,18 @@ class MainService {
     return oProgResp;
   }
 
+  Future<int> deleteProgramaIntervencionDb(
+    ProgramacionIntervencionesModel o,
+  ) async {
+    final result =
+        await Get.find<MainRepository>().deleteProgramaIntervencionDb(o);
+    return result;
+  }
+
   /// USUARIO APP
 
   Future<UserModel> insertUserDb(UserModel o) async {
     UserModel? response = await Get.find<MainRepository>().insertUserDb(o);
-
     return response;
   }
 

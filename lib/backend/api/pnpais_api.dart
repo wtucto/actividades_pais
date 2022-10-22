@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:actividades_pais/backend/model/dto/trama_monitoreo_response_api_dto.dart';
+import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
+import 'package:actividades_pais/backend/model/listar_programa_intervenciones_model.dart';
+import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/helpers/http.dart';
@@ -57,7 +59,46 @@ class PnPaisApi {
     );
   }
 
-  Future<HttpResponse<TramaMonitoreoRespApiDto>> insertarMonitoreo({
+  Future<HttpResponse<TramaRespApiDto>> insertProgramaIntervencion({
+    required ProgramacionIntervencionesModel oBody,
+  }) async {
+    List<Map<String, String>> aFile = [];
+
+    if (oBody.adjuntarArchivo != '') {
+      final aImgActividad = oBody.adjuntarArchivo!.split(',');
+      for (var oValue in aImgActividad) {
+        aFile.add(
+            {ProgramacionIntervencionesFields.adjuntarArchivo: oValue.trim()});
+      }
+    }
+
+    var prog = ProgramacionIntervencionesModel.toJsonObjectApi(oBody);
+
+    var aAct = (oBody.registroEntidadActividades as List)
+        .map((e) => RegistroEntidadActividadModel.toJsonObjectApi(e))
+        .toList();
+
+    var aActFormat = await formDataList(
+      aAct,
+      ProgramacionIntervencionesFields.registroEntidadActividades,
+    );
+
+    var oBodyFormData = {
+      ...prog,
+      ...aActFormat,
+    };
+
+    return _http.postMultipartFile2<TramaRespApiDto>(
+      '${basePathApp}insertarProgramaIntervenciones',
+      data: oBodyFormData,
+      aFile: aFile,
+      parser: (data) {
+        return TramaRespApiDto.fromJson(data);
+      },
+    );
+  }
+
+  Future<HttpResponse<TramaRespApiDto>> insertarMonitoreo({
     required TramaMonitoreoModel oBody,
   }) {
     List<Map<String, String>> aFile = [];
@@ -83,13 +124,29 @@ class PnPaisApi {
       }
     }
 
-    return _http.postMultipartFile2<TramaMonitoreoRespApiDto>(
+    return _http.postMultipartFile2<TramaRespApiDto>(
       '${basePathApp}insertarMonitoreo',
       data: TramaMonitoreoModel.toJsonObjectApi(oBody),
       aFile: aFile,
       parser: (data) {
-        return TramaMonitoreoRespApiDto.fromJson(data);
+        return TramaRespApiDto.fromJson(data);
       },
     );
+  }
+
+  Future<Map<String, String>> formDataList(
+    List<Map<String, String>> a,
+    String field,
+  ) async {
+    var index = 0;
+    Map<String, String> mapFormData = {};
+    for (var o in a) {
+      o.forEach((key, value) {
+        mapFormData.putIfAbsent('$field[$index].$key', () => value);
+      });
+      index++;
+    }
+
+    return mapFormData;
   }
 }

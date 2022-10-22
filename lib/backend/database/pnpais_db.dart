@@ -613,6 +613,17 @@ class DatabasePnPais {
     );
   }
 
+  Future<int> deleteProgramaIntervencionDb(
+    int i,
+  ) async {
+    final db = await instance.database;
+    return await db.delete(
+      tableNameProgramacionIntervenciones,
+      where: '${ProgramacionIntervencionesFields.id} = ?',
+      whereArgs: [i],
+    );
+  }
+
   /// USUARIO APP
 
   Future<List<UserModel>> readAllUser(

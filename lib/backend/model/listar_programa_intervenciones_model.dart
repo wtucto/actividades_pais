@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
+import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 
 String tableNameProgramacionIntervenciones = 'listar_programa_intervenciones';
 
@@ -36,6 +37,7 @@ class ProgramacionIntervencionesFields {
   static String isEdit = 'isEdit';
   static String time = 'time';
 
+  static String estadoProgramacion = 'estadoProgramacion';
   static String idProgramacionIntervenciones = "idProgramacionIntervenciones";
   static String adjuntarArchivo = "adjuntarArchivo";
   static String anio = "anio";
@@ -65,10 +67,20 @@ class ProgramacionIntervencionesFields {
 class ProgramacionIntervencionesModel {
   static const sOptDropdownDefault = 'Seleccione una opción';
 
+  static const sEstadoINC = 'INCOMPLETO';
+  static const sEstadoPEN = 'POR ENVIAR';
+  static const sEstadoENV = 'ENVIADO';
+  static final List<String> aEstadoProgramacion = [
+    sEstadoINC,
+    sEstadoPEN,
+    sEstadoENV,
+  ];
+
   int? id = 0;
   int? isEdit = 0;
   DateTime? createdTime = null;
 
+  String? estadoProgramacion = '';
   String? idProgramacionIntervenciones = '';
   String? adjuntarArchivo = '';
   String? anio = '';
@@ -98,6 +110,7 @@ class ProgramacionIntervencionesModel {
     this.id,
     this.isEdit,
     this.createdTime,
+    this.estadoProgramacion,
     this.adjuntarArchivo,
     this.anio,
     this.convenio,
@@ -126,6 +139,7 @@ class ProgramacionIntervencionesModel {
     int? id,
     int? isEdit,
     DateTime? createdTime,
+    String? estadoProgramacion,
     String? adjuntarArchivo,
     String? anio,
     String? convenio,
@@ -152,6 +166,7 @@ class ProgramacionIntervencionesModel {
         id: id ?? this.id,
         isEdit: isEdit ?? this.isEdit,
         createdTime: createdTime ?? this.createdTime,
+        estadoProgramacion: estadoProgramacion ?? this.estadoProgramacion,
         adjuntarArchivo: adjuntarArchivo ?? this.adjuntarArchivo,
         anio: anio ?? this.anio,
         convenio: convenio ?? this.convenio,
@@ -194,6 +209,8 @@ class ProgramacionIntervencionesModel {
             ? DateTime.parse(
                 json[ProgramacionIntervencionesFields.time] as String)
             : null,
+        estadoProgramacion: _getString(
+            json[ProgramacionIntervencionesFields.estadoProgramacion]),
         adjuntarArchivo:
             _getString(json[ProgramacionIntervencionesFields.adjuntarArchivo]),
         anio: _getString(json[ProgramacionIntervencionesFields.anio]),
@@ -243,7 +260,7 @@ class ProgramacionIntervencionesModel {
         //ProgramacionIntervencionesFields.id: id,
         ProgramacionIntervencionesFields.isEdit: isEdit,
         //ProgramacionIntervencionesFields.time: createdTime.toIso8601String(),
-
+        ProgramacionIntervencionesFields.estadoProgramacion: estadoProgramacion,
         ProgramacionIntervencionesFields.adjuntarArchivo: adjuntarArchivo,
         ProgramacionIntervencionesFields.anio: anio,
         ProgramacionIntervencionesFields.convenio: convenio,

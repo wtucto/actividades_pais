@@ -315,7 +315,70 @@ class MainController extends GetxController {
   }
 
   /*
-    Enviar registros a la nuve
+    Elimina el registro mediante el ID de la DB local
+  */
+  Future<bool> deleteProgramaIntervencion(
+    ProgramacionIntervencionesModel o,
+  ) async {
+    final result =
+        await Get.find<MainService>().deleteProgramaIntervencionDb(o);
+    return result == 1;
+  }
+
+  /*
+    Enviar registros a la nube
+    - Validar que todos los campos requeridos esten completos
+    - Validar que el estado esta en: POR ENVIAR
+    - Validar que se encuentre con conexion a internet
+  */
+  Future<List<ProgramacionIntervencionesModel>> sendProgramaIntervencion(
+    List<ProgramacionIntervencionesModel> a,
+  ) async {
+    try {
+      if (loading.isTrue) {
+        return Future.error(
+          'Ya hay un proceso en ejecución, espere a que finalice.',
+        );
+      }
+
+      loading.value = true;
+
+      /// Evaluar que todos los monitoreos de la lista tengan el estado
+      /// POR ENVIAR
+      bool isOk = true;
+      a.forEach((o) {
+        if (o.estadoProgramacion !=
+            ProgramacionIntervencionesModel.sEstadoPEN) {
+          isOk = false;
+        }
+      });
+
+      if (isOk == true) {
+        final aResp =
+            await Get.find<MainService>().sendAllProgramaIntervencion(a, []);
+        /*if (aResp.length > 0) {
+        return Future.error(
+          'Hay registros que no se pudieron enviar al servidor porque generaron un error: ${aResp.length}',
+        );
+      }*/
+        /// Retornar registros que generar error al enviarse al servidor
+        loading.value = false;
+        return aResp;
+      }
+
+      throw Exception(
+        'Imposible enviar documentos al servidor debido a que tienen estados diferentes a : ${ProgramacionIntervencionesModel.sEstadoPEN}',
+      );
+    } catch (oError) {
+      loading.value = false;
+      return Future.error(
+        oError.toString(),
+      );
+    }
+  }
+
+  /*
+    Enviar registros a la nube
     - Validar que todos los campos requeridos esten completos
     - Validar que el estado esta en: POR ENVIAR
     - Validar que se encuentre con conexion a internet

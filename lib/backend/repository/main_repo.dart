@@ -1,6 +1,6 @@
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
-import 'package:actividades_pais/backend/model/dto/trama_monitoreo_response_api_dto.dart';
+import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/listar_programa_intervenciones_model.dart';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
@@ -191,6 +191,27 @@ class MainRepository {
     }
 
     return o;
+  }
+
+  Future<ProgramacionIntervencionesModel> insertProgramaIntervencion(
+    ProgramacionIntervencionesModel o,
+  ) async {
+    final response = await _pnPaisApi.insertProgramaIntervencion(oBody: o);
+    if (response.error != null) {
+      _log.e(response.error.message);
+      return Future.error(
+        response.error.message,
+      );
+    }
+
+    return o;
+  }
+
+  Future<int> deleteProgramaIntervencionDb(
+    ProgramacionIntervencionesModel o,
+  ) async {
+    final result = await _dbPnPais.deleteProgramaIntervencionDb(o.id!);
+    return result;
   }
 
   Future<int> deleteMonitorDb(
