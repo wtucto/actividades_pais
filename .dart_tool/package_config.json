@@ -183,7 +183,7 @@
     },
     {
       "name": "dbus",
-      "rootUri": "file:///E:/src/flutter/.pub-cache/hosted/pub.dartlang.org/dbus-0.7.8",
+      "rootUri": "file:///E:/src/flutter/.pub-cache/hosted/pub.dartlang.org/dbus-0.7.4",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -207,9 +207,9 @@
     },
     {
       "name": "ffi",
-      "rootUri": "file:///E:/src/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-2.0.1",
+      "rootUri": "file:///E:/src/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.2.1",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.12"
     },
     {
       "name": "file",
@@ -464,6 +464,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "open_file",
+      "rootUri": "file:///E:/src/flutter/.pub-cache/hosted/pub.dartlang.org/open_file-3.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "overlay_support",
       "rootUri": "file:///E:/src/flutter/.pub-cache/hosted/pub.dartlang.org/overlay_support-2.0.1",
       "packageUri": "lib/",
@@ -531,9 +537,9 @@
     },
     {
       "name": "path_provider_windows",
-      "rootUri": "file:///E:/src/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.1.3",
+      "rootUri": "file:///E:/src/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-2.0.7",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.12"
     },
     {
       "name": "pdf",
@@ -783,7 +789,7 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///E:/src/flutter/.pub-cache/hosted/pub.dartlang.org/win32-3.0.0",
+      "rootUri": "file:///E:/src/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.6.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -812,7 +818,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2022-10-18T05:38:46.140391Z",
+  "generated": "2022-10-22T04:53:37.981803Z",
   "generator": "pub",
   "generatorVersion": "2.18.2"
 }
