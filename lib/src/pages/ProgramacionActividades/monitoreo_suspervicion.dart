@@ -82,6 +82,66 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                 }
               },
             ),
+            /**
+             * Tablas
+             */
+            const SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "REGISTRO DE ACTIVIDADES:",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add_to_queue),
+                  color: const Color.fromARGB(255, 69, 90, 210),
+                  onPressed: () async {
+                    // await _showMyDialog(
+                    //   context,
+                    //   "REGISTRO DE ACTIVIDADES",
+                    // );
+                  },
+                  // color: Colors.pink,
+                ),
+              ],
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  sortColumnIndex: 2,
+                  sortAscending: true,
+                  headingRowColor: MaterialStateProperty.all(Colors.green[100]),
+                  columnSpacing: 40,
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      right: BorderSide(
+                        color: Colors.grey,
+                        width: 0.5,
+                      ),
+                    ),
+                  ),
+                  columns: const [
+                    DataColumn(label: Text("Tambo")),
+                    DataColumn(label: Text("Ubicación")),
+                    DataColumn(label: Text("Fecha")),
+                    DataColumn(label: Text("Horario")),
+                    DataColumn(label: Text("Descripción")),
+                  ],
+                  rows: const [
+                    DataRow(selected: true, cells: [
+                      DataCell(Text("Admin")),
+                      DataCell(Text("Publico")),
+                      DataCell(Text("Alta")),
+                      DataCell(Text("Alta")),
+                      DataCell(Text("Alta")),
+                    ]),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

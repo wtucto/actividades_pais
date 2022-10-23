@@ -2,6 +2,9 @@ import 'dart:async';
 import 'package:actividades_pais/src/pages/Intervenciones/PrestacionServicios/new_intervencion.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/card.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/main_footer_all_option.dart';
+import 'package:actividades_pais/src/pages/ProgramacionActividades/actividadesPnpais.dart';
+import 'package:actividades_pais/src/pages/ProgramacionActividades/cordinacion_articulacion.dart';
+import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_suspervicion.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/responsive.dart';
@@ -226,7 +229,7 @@ class _HomePagePais extends State<HomePagePais> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => IntervencionCreate(),
+                    builder: (context) => CordinacionArticulacion(),
                   ),
                 );
               },
@@ -240,7 +243,7 @@ class _HomePagePais extends State<HomePagePais> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => IntervencionCreate(),
+                    builder: (context) => MonitoreoSupervicion(),
                   ),
                 );
               },
@@ -254,7 +257,7 @@ class _HomePagePais extends State<HomePagePais> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => IntervencionCreate(),
+                    builder: (context) => ActividadesPnpais(),
                   ),
                 );
               },
