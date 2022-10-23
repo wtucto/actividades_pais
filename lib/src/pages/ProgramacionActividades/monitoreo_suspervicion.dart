@@ -1,7 +1,9 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
+import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -20,12 +22,22 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
   final _dateFecha = TextEditingController();
   List<DataRow> dataRows = [];
   late List<RegistroEntidadActividadModel> lisData = [];
-  int index = 0;
 
   @override
   void initState() {
     super.initState();
     setState(() {});
+  }
+
+  void showSnackbar({required bool success, required String text}) {
+    AnimatedSnackBar.rectangle(
+      'I'.tr,
+      text,
+      type:
+          success ? AnimatedSnackBarType.success : AnimatedSnackBarType.warning,
+      brightness: Brightness.light,
+      mobileSnackBarPosition: MobileSnackBarPosition.top,
+    ).show(context);
   }
 
   @override
@@ -80,11 +92,8 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                     lastDate: DateTime(2101));
 
                 if (pickedDate != null) {
-                  print(pickedDate);
                   String formattedDate =
                       DateFormat('dd/MM/yyyy').format(pickedDate);
-                  print(formattedDate);
-
                   setState(() {
                     _dateFecha.text = formattedDate;
                   });
@@ -106,10 +115,12 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                   icon: const Icon(Icons.add_to_queue),
                   color: const Color.fromARGB(255, 69, 90, 210),
                   onPressed: () async {
-                    await _showMyDialog(
-                      context,
-                      "AGREGAR TAMBO",
-                    );
+                    if (_formKey.currentState!.validate()) {
+                      await _showMyDialog(
+                        context,
+                        "AGREGAR TAMBO",
+                      );
+                    }
                   },
                   // color: Colors.pink,
                 ),
@@ -154,15 +165,38 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
               children: [
                 ElevatedButton(
                   onPressed: () async {
-                    BusyIndicator.show(context);
-                    ProgramacionActividadModel oProg =
-                        ProgramacionActividadModel.empty();
-                    oProg.fecha = _dateFecha.text;
-                    oProg.registroEntidadActividades = lisData;
-
-                    final response =
-                        await controller.saveProgramaIntervencion(oProg);
-                    BusyIndicator.hide(context);
+                    if (_formKey.currentState!.validate()) {
+                      try {
+                        if (lisData.isEmpty) {
+                          showSnackbar(
+                            success: false,
+                            text: 'Debe llenar La tabla de Actividades',
+                          );
+                        } else {
+                          BusyIndicator.show(context);
+                          ProgramacionActividadModel oProg =
+                              ProgramacionActividadModel.empty();
+                          oProg.fecha = _dateFecha.text;
+                          oProg.registroEntidadActividades = lisData;
+                          final response =
+                              await controller.saveProgramaIntervencion(oProg);
+                          BusyIndicator.hide(context);
+                          showSnackbar(
+                            success: true,
+                            text: 'Datos Enviados Correctamente',
+                          );
+                        }
+                      } catch (ex) {
+                        BusyIndicator.hide(context);
+                        AnimatedSnackBar.rectangle(
+                          'Error',
+                          ex.toString(),
+                          type: AnimatedSnackBarType.error,
+                          brightness: Brightness.light,
+                          mobileSnackBarPosition: MobileSnackBarPosition.top,
+                        ).show(context);
+                      }
+                    }
                   },
                   child: Container(
                     height: 50,
@@ -182,7 +216,15 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    primary: Color.fromARGB(255, 237, 82, 68),
+                    onPrimary: Colors.white,
+                    shadowColor: const Color.fromARGB(255, 53, 53, 53),
+                    elevation: 5,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                   child: Container(
                     height: 50,
                     width: width / 3.5,
@@ -375,11 +417,14 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                           lisData.add(data);
 
                           dataRows.add(DataRow(cells: [
-                            DataCell(Text(_tambo.text)),
-                            DataCell(Text(_departamento.text)),
-                            DataCell(Text(_dateFecha.text)),
-                            DataCell(Text(_timeInicio.text)),
-                            DataCell(Text(_actividad.text)),
+                            DataCell(Text(data.tambo!)),
+                            DataCell(Text(
+                                "${data.distrito!}/${data.provincia!}/${data.departamento!}")),
+                            DataCell(Text(data.fecha!)),
+                            DataCell(
+                                Text("${data.horaInicio!} - ${data.horaFin!}")),
+                            DataCell(
+                                Text(data.descripcionDeLaActividadProgramada!)),
                             // DataCell(
                             //   GestureDetector(
                             //     onTap: () {
@@ -393,8 +438,9 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                             //   ),
                             // ),
                           ]));
-                          index++;
                         });
+                        _formKey1.currentState?.reset();
+                        Navigator.of(context).pop();
                       }
                     },
                     style: ButtonStyle(

@@ -1,3 +1,7 @@
+import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
+import 'package:actividades_pais/util/busy-indicator.dart';
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
@@ -10,19 +14,46 @@ class ActividadesPnpais extends StatefulWidget {
 }
 
 class _ActividadesPnpaisState extends State<ActividadesPnpais> {
+  MainController controller = MainController();
   final _formKey = GlobalKey<FormState>();
   final _dateFecha = TextEditingController();
   final _timeInicio = TextEditingController();
   final _timeFinal = TextEditingController();
   final _descripcion = TextEditingController();
 
-  static final _itemTipoActividad = ["Seleccionar", "User1", "User2"];
+  static final _itemTipoActividad = [
+    "Seleccionar Opción",
+    "Revisión de Intervenciones (INTRANET)",
+    "Reunión mensual",
+    "Asistencia a reuniones PN PAIS",
+    "Elaboracion de informes",
+    "Induccion/capacitacion",
+    "Asistencia tecnica",
+    "Atencion a publico y autoridades",
+    "Entrevista CAS",
+    "Asistencia a espacios de articulación",
+    "Actividades con enlace MIDIS",
+    "Auditorias",
+    "Recepción de tambos",
+    "Asistencia técnica a caravanas",
+  ];
   String? _valueTipoActidad = _itemTipoActividad[0];
 
   @override
   void initState() {
     super.initState();
     setState(() {});
+  }
+
+  void showSnackbar({required bool success, required String text}) {
+    AnimatedSnackBar.rectangle(
+      'I'.tr,
+      text,
+      type:
+          success ? AnimatedSnackBarType.success : AnimatedSnackBarType.warning,
+      brightness: Brightness.light,
+      mobileSnackBarPosition: MobileSnackBarPosition.top,
+    ).show(context);
   }
 
   @override
@@ -58,7 +89,7 @@ class _ActividadesPnpaisState extends State<ActividadesPnpais> {
       ),
       body: Form(
         key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
+        // autovalidateMode: AutovalidateMode.onUserInteraction,
         child: ListView(
           padding: const EdgeInsets.only(left: 32.0, right: 32.0, top: 32.0),
           children: [
@@ -177,7 +208,38 @@ class _ActividadesPnpaisState extends State<ActividadesPnpais> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      try {
+                        BusyIndicator.show(context);
+                        ProgramacionActividadModel oProg =
+                            ProgramacionActividadModel.empty();
+                        oProg.id = 0;
+                        oProg.fecha = _dateFecha.text;
+                        oProg.horaInicio = _timeInicio.text;
+                        oProg.horaFin = _timeFinal.text;
+                        oProg.tipoActividad = _valueTipoActidad;
+                        oProg.descripcionActividad = _descripcion.text;
+                        final response =
+                            await controller.saveProgramaIntervencion(oProg);
+                        BusyIndicator.hide(context);
+                        showSnackbar(
+                          success: true,
+                          text: 'Datos Enviados Correctamente',
+                        );
+                        _formKey.currentState?.reset();
+                      } catch (ex) {
+                        BusyIndicator.hide(context);
+                        AnimatedSnackBar.rectangle(
+                          'Error',
+                          ex.toString(),
+                          type: AnimatedSnackBarType.error,
+                          brightness: Brightness.light,
+                          mobileSnackBarPosition: MobileSnackBarPosition.top,
+                        ).show(context);
+                      }
+                    }
+                  },
                   child: Container(
                     height: 50,
                     width: width / 3.5,
@@ -196,7 +258,15 @@ class _ActividadesPnpaisState extends State<ActividadesPnpais> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    primary: Color.fromARGB(255, 237, 82, 68),
+                    onPrimary: Colors.white,
+                    shadowColor: const Color.fromARGB(255, 53, 53, 53),
+                    elevation: 5,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                   child: Container(
                     height: 50,
                     width: width / 3.5,
