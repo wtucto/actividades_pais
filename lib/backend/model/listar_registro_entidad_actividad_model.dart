@@ -7,9 +7,17 @@ class RegistroEntidadActividadFields {
     id,
     isEdit,
     time,
+    categoria,
     idRegistroEntidadesYActividades,
     idProgramacionIntervenciones,
-    categoria,
+    tambo,
+    distrito,
+    provincia,
+    departamento,
+    fecha,
+    horaInicio,
+    horaFin,
+    descripcion,
     descripcionDeLaActividadProgramada,
     programa,
     sector,
@@ -26,7 +34,6 @@ class RegistroEntidadActividadFields {
   static String idRegistroEntidadesYActividades =
       'idRegistroEntidadesYActividades';
   static String idProgramacionIntervenciones = 'idProgramacionIntervenciones';
-
   static String tambo = 'tambo';
   static String distrito = 'distrito';
   static String provincia = 'provincia';
@@ -37,7 +44,6 @@ class RegistroEntidadActividadFields {
   static String descripcion = 'descripcion';
   static String descripcionDeLaActividadProgramada =
       'descripcionDeLaActividadProgramada';
-
   static String programa = 'programa';
   static String sector = 'sector';
   static String servicio = 'servicio';

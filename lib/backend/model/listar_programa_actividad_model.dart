@@ -10,6 +10,7 @@ class ProgramacionActividadFields {
     id,
     isEdit,
     time,
+    estadoProgramacion,
     idProgramacionIntervenciones,
     adjuntarArchivo,
     anio,

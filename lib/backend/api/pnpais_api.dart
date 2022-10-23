@@ -88,7 +88,7 @@ class PnPaisApi {
     };
 
     return _http.postMultipartFile2<TramaRespApiDto>(
-      'http://localhost:8075${basePathApp}insertarProgramacionActividad',
+      '${basePathApp}insertarProgramacionActividad',
       data: oBodyFormData,
       aFile: aFile,
       parser: (data) {

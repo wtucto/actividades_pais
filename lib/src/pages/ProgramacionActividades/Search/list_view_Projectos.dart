@@ -18,8 +18,11 @@ class ListViewProgramacion extends StatelessWidget {
 
   void sendProgramaIntervencion() async {
     try {
+      var aProg = await mainController.getAllProgramacion(
+          oProgramacion.idProgramacionIntervenciones!, 0, 0);
+
       List<ProgramacionActividadModel> aError =
-          await mainController.sendProgramaIntervencion([oProgramacion]);
+          await mainController.sendProgramaIntervencion(aProg);
       if (aError.isNotEmpty) {
         mostrarAlerta(
           context,

@@ -8,6 +8,9 @@ abstract class DependencyInjection {
   static void initialize(String sAmbiente) {
     String baseUrl = "";
     switch (sAmbiente) {
+      case "DEV_LOC":
+        baseUrl = "http://localhost:8075";
+        break;
       case "DEV":
         baseUrl = "https://backend.pais.gob.pe:8075";
         break;
