@@ -135,6 +135,7 @@ class _HomePagePais extends State<HomePagePais> {
     String icon4 = 'assets/icons/icon_intervencion.png';
     String icon5 = 'assets/icons/icon_monitoring.png';
     String icon6 = 'assets/icons/icon_registration.png';
+    String icon7 = 'assets/icons/icon_activity.png';
 
     List<HomeOptions> aHomeOptions = [];
 
@@ -202,11 +203,10 @@ class _HomePagePais extends State<HomePagePais> {
 
     aHomeOptions.add(
       HomeOptions(
-        //Solo para pruebas (ELIMINAR)
-        code: 'OPT1003',
-        name: 'TileIntervencion'.tr,
+        code: 'OPT1006',
+        name: 'TileProgramacionActividad'.tr,
         types: const ['Ver'],
-        image: icon4,
+        image: icon7,
         color: lightBlue,
       ),
     );
@@ -214,26 +214,14 @@ class _HomePagePais extends State<HomePagePais> {
       showCupertinoModalPopup<void>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-          title: const Text('INTERVENCIONES'),
-          message: const Text('Seleccione una opción'),
+          title: Text('TileProgramacionActividad'.tr),
+          message: Text('SelectOption'.tr),
           actions: <CupertinoActionSheetAction>[
             CupertinoActionSheetAction(
               //isDefaultAction: true,
               onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        Intervenciones(snip, unidadTerritorial),
-                  ),
-                );
-              },
-              child: const Text('Ejecución de Intervenciones'),
-            ),
-            CupertinoActionSheetAction(
-              onPressed: () async {
                 /*
-                 FORMULARIOS PARA INTERVENCIONES
+                 COORDINACIÓN Y ARTICULACIÓN
                 */
                 Navigator.push(
                   context,
@@ -242,7 +230,35 @@ class _HomePagePais extends State<HomePagePais> {
                   ),
                 );
               },
-              child: const Text('Creación de Intervenciones'),
+              child: Text('TileCordArticulacion'.tr),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () async {
+                /*
+                 MONITOREO Y SUPERVISIÓN
+                */
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => IntervencionCreate(),
+                  ),
+                );
+              },
+              child: Text('TileMinitoreoSuper'.tr),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () async {
+                /*
+                 ACTIVIDADES PNPAIS
+                */
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => IntervencionCreate(),
+                  ),
+                );
+              },
+              child: Text('TileActividadPnpais'.tr),
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
@@ -307,7 +323,13 @@ class _HomePagePais extends State<HomePagePais> {
                           );
                           break;
                         case 'OPT1003':
-                          _intervencionOptions(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  Intervenciones(snip, unidadTerritorial),
+                            ),
+                          );
                           break;
                         case 'OPT1004':
                           Navigator.push(
@@ -335,6 +357,9 @@ class _HomePagePais extends State<HomePagePais> {
                             builder: (_) => MainFooterAllOptionPage(),
                           ),
                         );
+                        break;
+                      case 'OPT1006':
+                        _intervencionOptions(context);
                         break;
                       default:
                     }
