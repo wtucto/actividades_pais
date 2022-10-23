@@ -1,5 +1,5 @@
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
-import 'package:actividades_pais/backend/model/listar_programa_intervenciones_model.dart';
+import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
@@ -148,27 +148,27 @@ class DatabasePnPais {
     $createTable $tableNameProgramacionIntervenciones ( 
       $constFields,
 
-      ${ProgramacionIntervencionesFields.idProgramacionIntervenciones} $textType,
-      ${ProgramacionIntervencionesFields.adjuntarArchivo} $textType,
-      ${ProgramacionIntervencionesFields.anio} $textType,
-      ${ProgramacionIntervencionesFields.convenio} $textType,
-      ${ProgramacionIntervencionesFields.descripcionDelEvento} $textType,
-      ${ProgramacionIntervencionesFields.detalleNecesidades} $textType,
-      ${ProgramacionIntervencionesFields.documentoQueAcreditaElEvento} $textType,
-      ${ProgramacionIntervencionesFields.dondeSeRealizoElEvento} $textType,
-      ${ProgramacionIntervencionesFields.fecha} $textType,
-      ${ProgramacionIntervencionesFields.horaFin} $textType,
-      ${ProgramacionIntervencionesFields.horaInicio} $textType,
-      ${ProgramacionIntervencionesFields.laIntervencionRespondeAUnConvenio} $textType,
-      ${ProgramacionIntervencionesFields.laIntervencionesPerteneceA} $textType,
-      ${ProgramacionIntervencionesFields.ndePersonasConvocadasAParticiparEnElEvento} $textType,
-      ${ProgramacionIntervencionesFields.nplanDeTrabajo} $textType,
-      ${ProgramacionIntervencionesFields.perteneceAUnPlanDeTrabajo} $textType,
-      ${ProgramacionIntervencionesFields.plataforma} $textType,
-      ${ProgramacionIntervencionesFields.progrmacionParaOtroTambio} $textType,
-      ${ProgramacionIntervencionesFields.tipoAccion} $textType,
-      ${ProgramacionIntervencionesFields.tipoPlanDeTrabajo} $textType,
-      ${ProgramacionIntervencionesFields.unidadTerritoria} $textType
+      ${ProgramacionActividadFields.idProgramacionIntervenciones} $textType,
+      ${ProgramacionActividadFields.adjuntarArchivo} $textType,
+      ${ProgramacionActividadFields.anio} $textType,
+      ${ProgramacionActividadFields.convenio} $textType,
+      ${ProgramacionActividadFields.descripcionDelEvento} $textType,
+      ${ProgramacionActividadFields.detalleNecesidades} $textType,
+      ${ProgramacionActividadFields.documentoQueAcreditaElEvento} $textType,
+      ${ProgramacionActividadFields.dondeSeRealizoElEvento} $textType,
+      ${ProgramacionActividadFields.fecha} $textType,
+      ${ProgramacionActividadFields.horaFin} $textType,
+      ${ProgramacionActividadFields.horaInicio} $textType,
+      ${ProgramacionActividadFields.laIntervencionRespondeAUnConvenio} $textType,
+      ${ProgramacionActividadFields.laIntervencionesPerteneceA} $textType,
+      ${ProgramacionActividadFields.ndePersonasConvocadasAParticiparEnElEvento} $textType,
+      ${ProgramacionActividadFields.nplanDeTrabajo} $textType,
+      ${ProgramacionActividadFields.perteneceAUnPlanDeTrabajo} $textType,
+      ${ProgramacionActividadFields.plataforma} $textType,
+      ${ProgramacionActividadFields.progrmacionParaOtroTambio} $textType,
+      ${ProgramacionActividadFields.tipoAccion} $textType,
+      ${ProgramacionActividadFields.tipoPlanDeTrabajo} $textType,
+      ${ProgramacionActividadFields.unidadTerritoria} $textType
       )
     ''');
 
@@ -619,7 +619,7 @@ class DatabasePnPais {
     final db = await instance.database;
     return await db.delete(
       tableNameProgramacionIntervenciones,
-      where: '${ProgramacionIntervencionesFields.id} = ?',
+      where: '${ProgramacionActividadFields.id} = ?',
       whereArgs: [i],
     );
   }
@@ -693,21 +693,21 @@ class DatabasePnPais {
     );
   }
 
-  Future<List<ProgramacionIntervencionesModel>> readProgramaIntervencion(
+  Future<List<ProgramacionActividadModel>> readProgramaIntervencion(
     String? id,
     int? limit,
     int? offset,
   ) async {
     final db = await instance.database;
-    final orderBy = '${ProgramacionIntervencionesFields.time} ASC';
+    final orderBy = '${ProgramacionActividadFields.time} ASC';
     dynamic result;
 
     if (id != "") {
       result = await db.query(
         tableNameProgramacionIntervenciones,
-        columns: ProgramacionIntervencionesFields.values,
+        columns: ProgramacionActividadFields.values,
         where:
-            '${ProgramacionIntervencionesFields.idProgramacionIntervenciones} = ?',
+            '${ProgramacionActividadFields.idProgramacionIntervenciones} = ?',
         whereArgs: [id],
       );
 
@@ -721,13 +721,13 @@ class DatabasePnPais {
         );
 
         if (aRegAct.length >= 0) {
-          result.map<ProgramacionIntervencionesModel>((json) {
-            json[ProgramacionIntervencionesFields.registroEntidadActividades] =
+          result.map<ProgramacionActividadModel>((json) {
+            json[ProgramacionActividadFields.registroEntidadActividades] =
                 aRegAct
                     .where(
                       (e) => (e[RegistroEntidadActividadFields
                               .idProgramacionIntervenciones] ==
-                          json[ProgramacionIntervencionesFields
+                          json[ProgramacionActividadFields
                               .idProgramacionIntervenciones]),
                     )
                     .toList();
@@ -750,13 +750,13 @@ class DatabasePnPais {
 
     if (result.length == 0) return [];
     return result
-        .map<ProgramacionIntervencionesModel>(
-            (json) => ProgramacionIntervencionesModel.fromJson(json))
+        .map<ProgramacionActividadModel>(
+            (json) => ProgramacionActividadModel.fromJson(json))
         .toList();
   }
 
-  Future<ProgramacionIntervencionesModel> insertProgramaIntervencion(
-    ProgramacionIntervencionesModel o,
+  Future<ProgramacionActividadModel> insertProgramaIntervencion(
+    ProgramacionActividadModel o,
   ) async {
     final db = await instance.database;
     if (o.id != null && o.id! > 0) {
@@ -773,13 +773,13 @@ class DatabasePnPais {
   }
 
   Future<int> updateProgramaIntervencion(
-    ProgramacionIntervencionesModel o,
+    ProgramacionActividadModel o,
   ) async {
     final db = await instance.database;
     return db.update(
       tableNameProgramacionIntervenciones,
       o.toJson(),
-      where: '${ProgramacionIntervencionesFields.id} = ?',
+      where: '${ProgramacionActividadFields.id} = ?',
       whereArgs: [o.id],
     );
   }

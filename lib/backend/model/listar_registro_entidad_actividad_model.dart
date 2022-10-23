@@ -28,6 +28,16 @@ class RegistroEntidadActividadFields {
   static String idRegistroEntidadesYActividades =
       'idRegistroEntidadesYActividades';
   static String idProgramacionIntervenciones = 'idProgramacionIntervenciones';
+
+  static String tambo = 'tambo';
+  static String distrito = 'distrito';
+  static String provincia = 'provincia';
+  static String departamento = 'departamento';
+  static String fecha = 'fecha';
+  static String horaInicio = 'horaInicio';
+  static String horaFin = 'horaFin';
+  static String descripcion = 'descripcion';
+
   static String programa = 'programa';
   static String sector = 'sector';
   static String servicio = 'servicio';
@@ -45,6 +55,16 @@ class RegistroEntidadActividadModel {
 
   String? idRegistroEntidadesYActividades = '';
   String? idProgramacionIntervenciones = '';
+
+  String? tambo = '';
+  String? distrito = '';
+  String? provincia = '';
+  String? departamento = '';
+  String? fecha = '';
+  String? horaInicio = '';
+  String? horaFin = '';
+  String? descripcion = '';
+
   String? categoria = '';
   String? descripcionDeLaActividadProgramada = '';
   String? programa = '';
@@ -64,6 +84,14 @@ class RegistroEntidadActividadModel {
     this.descripcionDeLaActividadProgramada,
     this.idRegistroEntidadesYActividades,
     this.idProgramacionIntervenciones,
+    this.tambo,
+    this.distrito,
+    this.provincia,
+    this.departamento,
+    this.fecha,
+    this.horaInicio,
+    this.horaFin,
+    this.descripcion,
     this.programa,
     this.sector,
     this.servicio,
@@ -80,6 +108,14 @@ class RegistroEntidadActividadModel {
     String? descripcionDeLaActividadProgramada,
     String? idRegistroEntidadesYActividades,
     String? idProgramacionIntervenciones,
+    String? tambo,
+    String? distrito,
+    String? provincia,
+    String? departamento,
+    String? fecha,
+    String? horaInicio,
+    String? horaFin,
+    String? descripcion,
     String? programa,
     String? sector,
     String? servicio,
@@ -99,6 +135,14 @@ class RegistroEntidadActividadModel {
             this.idRegistroEntidadesYActividades,
         idProgramacionIntervenciones:
             idProgramacionIntervenciones ?? this.idProgramacionIntervenciones,
+        tambo: tambo ?? this.tambo,
+        distrito: distrito ?? this.distrito,
+        provincia: provincia ?? this.provincia,
+        departamento: departamento ?? this.departamento,
+        fecha: fecha ?? this.fecha,
+        horaInicio: horaInicio ?? this.horaInicio,
+        horaFin: horaFin ?? this.horaFin,
+        descripcion: descripcion ?? this.descripcion,
         programa: programa ?? this.programa,
         sector: sector ?? this.sector,
         servicio: servicio ?? this.servicio,
@@ -124,6 +168,16 @@ class RegistroEntidadActividadModel {
             RegistroEntidadActividadFields.idRegistroEntidadesYActividades]),
         idProgramacionIntervenciones: _getString(
             json[RegistroEntidadActividadFields.idProgramacionIntervenciones]),
+        tambo: _getString(json[RegistroEntidadActividadFields.tambo]),
+        distrito: _getString(json[RegistroEntidadActividadFields.distrito]),
+        provincia: _getString(json[RegistroEntidadActividadFields.provincia]),
+        departamento:
+            _getString(json[RegistroEntidadActividadFields.departamento]),
+        fecha: _getString(json[RegistroEntidadActividadFields.fecha]),
+        horaInicio: _getString(json[RegistroEntidadActividadFields.horaInicio]),
+        horaFin: _getString(json[RegistroEntidadActividadFields.horaFin]),
+        descripcion:
+            _getString(json[RegistroEntidadActividadFields.descripcion]),
         programa: _getString(json[RegistroEntidadActividadFields.programa]),
         sector: _getString(json[RegistroEntidadActividadFields.sector]),
         servicio: _getString(json[RegistroEntidadActividadFields.servicio]),
@@ -139,6 +193,15 @@ class RegistroEntidadActividadModel {
         //ProgramacionIntervencionesFields.id: id,
         RegistroEntidadActividadFields.isEdit: isEdit,
         //ProgramacionIntervencionesFields.time: createdTime.toIso8601String(),
+
+        RegistroEntidadActividadFields.tambo: tambo,
+        RegistroEntidadActividadFields.distrito: distrito,
+        RegistroEntidadActividadFields.provincia: provincia,
+        RegistroEntidadActividadFields.departamento: departamento,
+        RegistroEntidadActividadFields.fecha: fecha,
+        RegistroEntidadActividadFields.horaInicio: horaInicio,
+        RegistroEntidadActividadFields.horaFin: horaFin,
+        RegistroEntidadActividadFields.descripcion: descripcion,
 
         RegistroEntidadActividadFields.categoria: categoria,
         RegistroEntidadActividadFields.descripcionDeLaActividadProgramada:
@@ -157,6 +220,14 @@ class RegistroEntidadActividadModel {
 
   static Map<String, dynamic> toJsonObject(RegistroEntidadActividadModel o) {
     return {
+      RegistroEntidadActividadFields.tambo: o.tambo,
+      RegistroEntidadActividadFields.distrito: o.distrito,
+      RegistroEntidadActividadFields.provincia: o.provincia,
+      RegistroEntidadActividadFields.departamento: o.departamento,
+      RegistroEntidadActividadFields.fecha: o.fecha,
+      RegistroEntidadActividadFields.horaInicio: o.horaInicio,
+      RegistroEntidadActividadFields.horaFin: o.horaFin,
+      RegistroEntidadActividadFields.descripcion: o.descripcion,
       RegistroEntidadActividadFields.categoria: o.categoria,
       RegistroEntidadActividadFields.descripcionDeLaActividadProgramada:
           o.descripcionDeLaActividadProgramada,
@@ -175,6 +246,14 @@ class RegistroEntidadActividadModel {
 
   static Map<String, String> toJsonObjectApi(RegistroEntidadActividadModel o) {
     return {
+      RegistroEntidadActividadFields.tambo: o.tambo as String,
+      RegistroEntidadActividadFields.distrito: o.distrito as String,
+      RegistroEntidadActividadFields.provincia: o.provincia as String,
+      RegistroEntidadActividadFields.departamento: o.departamento as String,
+      RegistroEntidadActividadFields.fecha: o.fecha as String,
+      RegistroEntidadActividadFields.horaInicio: o.horaInicio as String,
+      RegistroEntidadActividadFields.horaFin: o.horaFin as String,
+      RegistroEntidadActividadFields.descripcion: o.descripcion as String,
       RegistroEntidadActividadFields.categoria: o.categoria as String,
       RegistroEntidadActividadFields.descripcionDeLaActividadProgramada:
           o.descripcionDeLaActividadProgramada as String,

@@ -1,4 +1,4 @@
-import 'package:actividades_pais/backend/model/listar_programa_intervenciones_model.dart';
+import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
@@ -283,7 +283,7 @@ class MainController extends GetxController {
    Obtiene la lista de Programacion por ID o general
    @String idProgramacionIntervenciones
    */
-  Future<List<ProgramacionIntervencionesModel>> getAllProgramacion(
+  Future<List<ProgramacionActividadModel>> getAllProgramacion(
     String idProgramacionIntervenciones,
     int? limit,
     int? offset,
@@ -299,8 +299,8 @@ class MainController extends GetxController {
    Guardar/Actualizar nuevo Programacion y valida campos
    @ProgramacionIntervencionesModel o
    */
-  Future<ProgramacionIntervencionesModel> saveProgramaIntervencion(
-    ProgramacionIntervencionesModel o,
+  Future<ProgramacionActividadModel> saveProgramaIntervencion(
+    ProgramacionActividadModel o,
   ) async {
     if (loading.isTrue) {
       return Future.error(
@@ -318,7 +318,7 @@ class MainController extends GetxController {
     Elimina el registro mediante el ID de la DB local
   */
   Future<bool> deleteProgramaIntervencion(
-    ProgramacionIntervencionesModel o,
+    ProgramacionActividadModel o,
   ) async {
     final result =
         await Get.find<MainService>().deleteProgramaIntervencionDb(o);
@@ -331,8 +331,8 @@ class MainController extends GetxController {
     - Validar que el estado esta en: POR ENVIAR
     - Validar que se encuentre con conexion a internet
   */
-  Future<List<ProgramacionIntervencionesModel>> sendProgramaIntervencion(
-    List<ProgramacionIntervencionesModel> a,
+  Future<List<ProgramacionActividadModel>> sendProgramaIntervencion(
+    List<ProgramacionActividadModel> a,
   ) async {
     try {
       if (loading.isTrue) {
@@ -347,8 +347,7 @@ class MainController extends GetxController {
       /// POR ENVIAR
       bool isOk = true;
       a.forEach((o) {
-        if (o.estadoProgramacion !=
-            ProgramacionIntervencionesModel.sEstadoPEN) {
+        if (o.estadoProgramacion != ProgramacionActividadModel.sEstadoPEN) {
           isOk = false;
         }
       });
@@ -367,7 +366,7 @@ class MainController extends GetxController {
       }
 
       throw Exception(
-        'Imposible enviar documentos al servidor debido a que tienen estados diferentes a : ${ProgramacionIntervencionesModel.sEstadoPEN}',
+        'Imposible enviar documentos al servidor debido a que tienen estados diferentes a : ${ProgramacionActividadModel.sEstadoPEN}',
       );
     } catch (oError) {
       loading.value = false;

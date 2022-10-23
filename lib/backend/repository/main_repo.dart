@@ -1,7 +1,7 @@
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
 import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
-import 'package:actividades_pais/backend/model/listar_programa_intervenciones_model.dart';
+import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
@@ -148,7 +148,7 @@ class MainRepository {
     return await _dbPnPais.insertMonitoreo(o);
   }
 
-  Future<List<ProgramacionIntervencionesModel>> getProgramaIntervencionDb(
+  Future<List<ProgramacionActividadModel>> getProgramaIntervencionDb(
     String? id,
     int? limit,
     int? offset,
@@ -160,8 +160,8 @@ class MainRepository {
     );
   }
 
-  Future<ProgramacionIntervencionesModel> insertProgramaIntervencionDb(
-    ProgramacionIntervencionesModel o,
+  Future<ProgramacionActividadModel> insertProgramaIntervencionDb(
+    ProgramacionActividadModel o,
   ) async {
     return await _dbPnPais.insertProgramaIntervencion(o);
   }
@@ -193,8 +193,8 @@ class MainRepository {
     return o;
   }
 
-  Future<ProgramacionIntervencionesModel> insertProgramaIntervencion(
-    ProgramacionIntervencionesModel o,
+  Future<ProgramacionActividadModel> insertProgramaIntervencion(
+    ProgramacionActividadModel o,
   ) async {
     final response = await _pnPaisApi.insertProgramaIntervencion(oBody: o);
     if (response.error != null) {
@@ -208,7 +208,7 @@ class MainRepository {
   }
 
   Future<int> deleteProgramaIntervencionDb(
-    ProgramacionIntervencionesModel o,
+    ProgramacionActividadModel o,
   ) async {
     final result = await _dbPnPais.deleteProgramaIntervencionDb(o.id!);
     return result;

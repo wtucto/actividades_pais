@@ -1,4 +1,4 @@
-import 'package:actividades_pais/backend/model/listar_programa_intervenciones_model.dart';
+import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
@@ -36,20 +36,20 @@ class MainService {
       (4) - Responder con todos los registros que generaron Error en la API REST
     END LOOP.
   */
-  Future<List<ProgramacionIntervencionesModel>> sendAllProgramaIntervencion(
-    List<ProgramacionIntervencionesModel> a,
-    List<ProgramacionIntervencionesModel>? e,
+  Future<List<ProgramacionActividadModel>> sendAllProgramaIntervencion(
+    List<ProgramacionActividadModel> a,
+    List<ProgramacionActividadModel>? e,
   ) async {
     bool isOnlines = await isOnline();
     if (isOnlines) {
-      List<ProgramacionIntervencionesModel> aResp = [];
-      List<ProgramacionIntervencionesModel> aError = e ?? [];
-      List<ProgramacionIntervencionesModel> aNoConect = [];
+      List<ProgramacionActividadModel> aResp = [];
+      List<ProgramacionActividadModel> aError = e ?? [];
+      List<ProgramacionActividadModel> aNoConect = [];
 
       for (var oMonit in a) {
         /// (1)...
         String estadoMonitoreo = oMonit.estadoProgramacion!;
-        oMonit.estadoProgramacion = ProgramacionIntervencionesModel.sEstadoPEN;
+        oMonit.estadoProgramacion = ProgramacionActividadModel.sEstadoPEN;
 
         if (isOnlines) {
           try {
@@ -57,7 +57,7 @@ class MainService {
                 .insertProgramaIntervencion(oMonit);
             if (oResp.idProgramacionIntervenciones != "") {
               /// (2)...
-              ProgramacionIntervencionesModel? oSend = oResp;
+              ProgramacionActividadModel? oSend = oResp;
               oSend.id = oMonit.id;
               await Get.find<MainRepository>()
                   .insertProgramaIntervencionDb(oSend);
@@ -371,21 +371,20 @@ class MainService {
     return result;
   }
 
-  Future<List<ProgramacionIntervencionesModel>> getAllProgramaIntervencion(
+  Future<List<ProgramacionActividadModel>> getAllProgramaIntervencion(
     String id,
     int? limit,
     int? offset,
   ) async {
     ///Obtiene los registros de la DB Local
-    List<ProgramacionIntervencionesModel> aFind =
-        await Get.find<MainRepository>()
-            .getProgramaIntervencionDb(id, limit, offset);
+    List<ProgramacionActividadModel> aFind = await Get.find<MainRepository>()
+        .getProgramaIntervencionDb(id, limit, offset);
 
     return aFind;
   }
 
-  Future<ProgramacionIntervencionesModel> insertProgramaIntervencionDb(
-    ProgramacionIntervencionesModel o,
+  Future<ProgramacionActividadModel> insertProgramaIntervencionDb(
+    ProgramacionActividadModel o,
   ) async {
     var oProgResp =
         await Get.find<MainRepository>().insertProgramaIntervencionDb(o);
@@ -401,7 +400,7 @@ class MainService {
   }
 
   Future<int> deleteProgramaIntervencionDb(
-    ProgramacionIntervencionesModel o,
+    ProgramacionActividadModel o,
   ) async {
     final result =
         await Get.find<MainRepository>().deleteProgramaIntervencionDb(o);

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
-import 'package:actividades_pais/backend/model/listar_programa_intervenciones_model.dart';
+import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
@@ -60,19 +60,18 @@ class PnPaisApi {
   }
 
   Future<HttpResponse<TramaRespApiDto>> insertProgramaIntervencion({
-    required ProgramacionIntervencionesModel oBody,
+    required ProgramacionActividadModel oBody,
   }) async {
     List<Map<String, String>> aFile = [];
 
     if (oBody.adjuntarArchivo != '') {
       final aImgActividad = oBody.adjuntarArchivo!.split(',');
       for (var oValue in aImgActividad) {
-        aFile.add(
-            {ProgramacionIntervencionesFields.adjuntarArchivo: oValue.trim()});
+        aFile.add({ProgramacionActividadFields.adjuntarArchivo: oValue.trim()});
       }
     }
 
-    var prog = ProgramacionIntervencionesModel.toJsonObjectApi(oBody);
+    var prog = ProgramacionActividadModel.toJsonObjectApi(oBody);
 
     var aAct = (oBody.registroEntidadActividades as List)
         .map((e) => RegistroEntidadActividadModel.toJsonObjectApi(e))
@@ -80,7 +79,7 @@ class PnPaisApi {
 
     var aActFormat = await formDataList(
       aAct,
-      ProgramacionIntervencionesFields.registroEntidadActividades,
+      ProgramacionActividadFields.registroEntidadActividades,
     );
 
     var oBodyFormData = {
@@ -89,7 +88,7 @@ class PnPaisApi {
     };
 
     return _http.postMultipartFile2<TramaRespApiDto>(
-      '${basePathApp}insertarProgramaIntervenciones',
+      '${basePathApp}insertarProgramacionActividad',
       data: oBodyFormData,
       aFile: aFile,
       parser: (data) {
