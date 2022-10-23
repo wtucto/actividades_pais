@@ -155,12 +155,13 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                 ElevatedButton(
                   onPressed: () async {
                     BusyIndicator.show(context);
-                    final response = await controller
-                        .saveProgramaIntervencion(ProgramacionActividadModel(
-                      id: 0,
-                      fecha: _dateFecha.text,
-                      registroEntidadActividades: lisData!,
-                    ));
+                    ProgramacionActividadModel oProg =
+                        ProgramacionActividadModel.empty();
+                    oProg.fecha = _dateFecha.text;
+                    oProg.registroEntidadActividades = lisData;
+
+                    final response =
+                        await controller.saveProgramaIntervencion(oProg);
                     BusyIndicator.hide(context);
                   },
                   child: Container(
@@ -358,19 +359,19 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey1.currentState!.validate()) {
-                        ;
                         setState(() {
                           RegistroEntidadActividadModel data =
-                              RegistroEntidadActividadModel(
-                                  tambo: _tambo.text,
-                                  distrito: _distrito.text,
-                                  provincia: _provincia.text,
-                                  departamento: _departamento.text,
-                                  fecha: _dateFecha.text,
-                                  horaInicio: _timeInicio.text,
-                                  horaFin: _timeFinal.text,
-                                  descripcionDeLaActividadProgramada:
-                                      _actividad.text);
+                              RegistroEntidadActividadModel.empty();
+                          data.tambo = _tambo.text;
+                          data.distrito = _distrito.text;
+                          data.provincia = _provincia.text;
+                          data.departamento = _departamento.text;
+                          data.fecha = _dateFecha.text;
+                          data.horaInicio = _timeInicio.text;
+                          data.horaFin = _timeFinal.text;
+                          data.descripcionDeLaActividadProgramada =
+                              _actividad.text;
+
                           lisData.add(data);
 
                           dataRows.add(DataRow(cells: [

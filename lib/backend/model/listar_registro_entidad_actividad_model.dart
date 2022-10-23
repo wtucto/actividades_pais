@@ -23,8 +23,6 @@ class RegistroEntidadActividadFields {
   static String isEdit = 'isEdit';
   static String time = 'time';
   static String categoria = 'categoria';
-  static String descripcionDeLaActividadProgramada =
-      'descripcionDeLaActividadProgramada';
   static String idRegistroEntidadesYActividades =
       'idRegistroEntidadesYActividades';
   static String idProgramacionIntervenciones = 'idProgramacionIntervenciones';
@@ -37,6 +35,8 @@ class RegistroEntidadActividadFields {
   static String horaInicio = 'horaInicio';
   static String horaFin = 'horaFin';
   static String descripcion = 'descripcion';
+  static String descripcionDeLaActividadProgramada =
+      'descripcionDeLaActividadProgramada';
 
   static String programa = 'programa';
   static String sector = 'sector';
