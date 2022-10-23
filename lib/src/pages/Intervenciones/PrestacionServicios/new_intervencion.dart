@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +23,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
   final _numPlanTrabajo = TextEditingController();
   final _detalleNecesidades = TextEditingController();
 
-  static final _itemUnidadTerritorial = ["Selecionar", "Unidad"];
+  static final _itemUnidadTerritorial = ["Seleccionar"];
   static final _itemPlataforma = ["Selecionar", "Plataforma"];
   static final _itemIntervencion = ["Seleccionar", "UNO", "DOS"];
   static final _itemConvenio = ["Seleccionar", "UNO", "DOS"];
@@ -49,8 +48,16 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
   @override
   void initState() {
     super.initState();
+    // readJson();
     setState(() {});
   }
+
+  // Future<void> readJson() async {
+  //   final String response =
+  //       await rootBundle.loadString('assets/dummy/data.json');
+  //   Map<String, dynamic> data = await json.decode(response);
+  //   itemUnidadTerritorial = data['lista-tipo-gobierno'];
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +94,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: ListView(
-          padding: const EdgeInsets.all(32.0),
+          padding: const EdgeInsets.only(left: 32.0, right: 32.0),
           children: [
             CheckboxListTile(
               contentPadding: const EdgeInsets.all(0.0),
@@ -103,42 +110,43 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
             /**
              * Unidad Territorial
              */
-            DropdownButtonFormField(
-              decoration:
-                  const InputDecoration(labelText: "Unidad Territorial"),
-              value: _valueUniTerritorial,
-              onChanged: (String? value) {
-                setState(() {
-                  _valueUniTerritorial = value!;
-                });
-              },
-              items: _itemUnidadTerritorial
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-            /**
-             * Plataforma
-             */
-            DropdownButtonFormField(
-              decoration: const InputDecoration(labelText: "Plataforma"),
-              value: _valuePlataforma,
-              onChanged: (String? value) {
-                setState(() {
-                  _valuePlataforma = value!;
-                });
-              },
-              items:
-                  _itemPlataforma.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
+            _chekIPOtambo!
+                ? DropdownButtonFormField(
+                    decoration:
+                        const InputDecoration(labelText: "Unidad Territorial"),
+                    value: _valueUniTerritorial,
+                    onChanged: (value) {
+                      setState(() {
+                        _valueUniTerritorial = value!;
+                      });
+                    },
+                    items: _itemUnidadTerritorial
+                        .map<DropdownMenuItem<String>>((value) {
+                      return DropdownMenuItem<String>(
+                        value: value[0],
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  )
+                : Center(),
+            _chekIPOtambo!
+                ? DropdownButtonFormField(
+                    decoration: const InputDecoration(labelText: "Plataforma"),
+                    value: _valuePlataforma,
+                    onChanged: (String? value) {
+                      setState(() {
+                        _valuePlataforma = value!;
+                      });
+                    },
+                    items: _itemPlataforma
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  )
+                : Center(),
             /**
              * Fecha de Intervenciones
              */
@@ -343,7 +351,12 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
                 IconButton(
                   icon: const Icon(Icons.add_to_queue),
                   color: Color.fromARGB(255, 69, 90, 210),
-                  onPressed: () {},
+                  onPressed: () async {
+                    await _showMyDialog(
+                      context,
+                      "REGISTRO DE ENTIDADES",
+                    );
+                  },
                 ),
               ],
             ),
@@ -526,7 +539,10 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
                   icon: const Icon(Icons.add_to_queue),
                   color: const Color.fromARGB(255, 69, 90, 210),
                   onPressed: () async {
-                    await _showMyDialog(context);
+                    await _showMyDialog(
+                      context,
+                      "REGISTRO DE ACTIVIDADES",
+                    );
                   },
                   // color: Colors.pink,
                 ),
@@ -683,88 +699,20 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
   String? _valueSector = _itemSector[0];
   String? _valuePrograma = _itemPrograma[0];
 
-  Future<void> _showMyDialog(BuildContext context) async {
+  Future<void> _showMyDialog(BuildContext context, String? title) async {
     return showDialog<void>(
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
-          title: const Text('REGITRO DE ACTIVIDADES'),
+          title: Text(title!),
           content: Form(
             key: _formKey1,
             child: Card(
               color: Colors.transparent,
               elevation: 0.0,
-              child: Column(
-                children: [
-                  /**
-                   * Usuario
-                   */
-                  DropdownButtonFormField(
-                    decoration: const InputDecoration(labelText: "Usuario"),
-                    value: _valueUsuario,
-                    isDense: true,
-                    isExpanded: true,
-                    validator: (value) =>
-                        value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
-                            ? 'Requerido *'
-                            : null,
-                    onChanged: (String? value) {
-                      setState(() {
-                        _valueUsuario = value!;
-                      });
-                    },
-                    items: _itemUsuario
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                  /**
-                   * Sector
-                   */
-                  DropdownButtonFormField(
-                    decoration: const InputDecoration(labelText: "Sector"),
-                    value: _valueSector,
-                    isDense: true,
-                    isExpanded: true,
-                    onChanged: (String? value) {
-                      setState(() {
-                        _valueSector = value!;
-                      });
-                    },
-                    items: _itemSector
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                  /**
-                   * Programa
-                   */
-                  DropdownButtonFormField(
-                    decoration: const InputDecoration(labelText: "Programa"),
-                    value: _valuePrograma,
-                    isDense: true,
-                    isExpanded: true,
-                    onChanged: (String? value) {
-                      setState(() {
-                        _valuePrograma = value!;
-                      });
-                    },
-                    items: _itemPrograma
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
+              child: title == 'REGISTRO DE ACTIVIDADES'
+                  ? regitroActividades()
+                  : regitroEntidades(),
             ),
           ),
           actions: [
@@ -800,6 +748,289 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
           ],
         );
       },
+    );
+  }
+
+  static final _itemTipoUser = [
+    "SELECCIONE UNA OPCIÓN",
+    "User1 User1 User1 User1 User1 User1 User1",
+    "User2"
+  ];
+  static final _itemESector = ["Seleccionar", "User1", "User2"];
+  static final _itemEPrograma = ["Seleccionar", "User1", "User2"];
+  static final _itemECategoria = ["Seleccionar", "User1", "User2"];
+  static final _itemSubCategoria = ["Seleccionar", "User1", "User2"];
+  static final _itemTActividad = ["Seleccionar", "User1", "User2"];
+  static final _itemServicio = ["Seleccionar", "User1", "User2"];
+  final _descripcionE = TextEditingController();
+
+  String? _valueTipoUser = _itemTipoUser[0];
+  String? _valueESector = _itemESector[0];
+  String? _valueEPrograma = _itemEPrograma[0];
+  String? _valueECategoria = _itemECategoria[0];
+  String? _valueSubCategoria = _itemSubCategoria[0];
+  String? _valueTActividad = _itemTActividad[0];
+  String? _valueServico = _itemServicio[0];
+
+  Column regitroEntidades() {
+    return Column(
+      children: [
+        /**
+        * Usuario
+        */
+        DropdownButtonFormField(
+          decoration: const InputDecoration(labelText: "Tipo Usuario"),
+          value: _valueTipoUser,
+          isDense: true,
+          isExpanded: true,
+          validator: (value) => value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
+              ? 'Requerido *'
+              : null,
+          onChanged: (String? value) {
+            setState(() {
+              _valueTipoUser = value!;
+            });
+          },
+          items: _itemTipoUser.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: TextStyle(fontSize: 12),
+              ),
+            );
+          }).toList(),
+        ),
+        /**
+        * Sector
+        */
+        DropdownButtonFormField(
+          decoration: const InputDecoration(labelText: "Sector"),
+          value: _valueESector,
+          isDense: true,
+          isExpanded: true,
+          onChanged: (String? value) {
+            setState(() {
+              _valueESector = value!;
+            });
+          },
+          items: _itemESector.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: TextStyle(fontSize: 12),
+              ),
+            );
+          }).toList(),
+        ),
+        /**
+        * Programa
+        */
+        DropdownButtonFormField(
+          decoration: const InputDecoration(labelText: "Programa"),
+          value: _valueEPrograma,
+          isDense: true,
+          isExpanded: true,
+          onChanged: (String? value) {
+            setState(() {
+              _valueEPrograma = value!;
+            });
+          },
+          items: _itemEPrograma.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: TextStyle(fontSize: 12),
+              ),
+            );
+          }).toList(),
+        ),
+        /**
+         * Categoria
+         */
+        DropdownButtonFormField(
+          decoration: const InputDecoration(labelText: "Categoria"),
+          value: _valueECategoria,
+          isDense: true,
+          isExpanded: true,
+          onChanged: (String? value) {
+            setState(() {
+              _valueECategoria = value!;
+            });
+          },
+          items: _itemECategoria.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: TextStyle(fontSize: 12),
+              ),
+            );
+          }).toList(),
+        ),
+        /**
+         * Sub Categoria
+         */
+        DropdownButtonFormField(
+          decoration: const InputDecoration(labelText: "Sub Categoria"),
+          value: _valueSubCategoria,
+          isDense: true,
+          isExpanded: true,
+          onChanged: (String? value) {
+            setState(() {
+              _valueSubCategoria = value!;
+            });
+          },
+          items:
+              _itemSubCategoria.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: TextStyle(fontSize: 12),
+              ),
+            );
+          }).toList(),
+        ),
+        /**
+         * Tipo Actividad
+         */
+        DropdownButtonFormField(
+          decoration: const InputDecoration(labelText: "Tipo Actividad"),
+          value: _valueTActividad,
+          isDense: true,
+          isExpanded: true,
+          onChanged: (String? value) {
+            setState(() {
+              _valueTActividad = value!;
+            });
+          },
+          items: _itemTActividad.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: TextStyle(fontSize: 12),
+              ),
+            );
+          }).toList(),
+        ),
+        /**
+         * Servicio
+         */
+        DropdownButtonFormField(
+          decoration: const InputDecoration(labelText: "Servicio"),
+          value: _valueServico,
+          isDense: true,
+          isExpanded: true,
+          onChanged: (String? value) {
+            setState(() {
+              _valueServico = value!;
+            });
+          },
+          items: _itemServicio.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: TextStyle(fontSize: 12),
+              ),
+            );
+          }).toList(),
+        ),
+        /**
+         * Descripción de Actividad Programada
+         */
+        TextFormField(
+          controller: _descripcionE,
+          decoration: const InputDecoration(
+            labelText: 'Descripción de Actividad Programada',
+          ),
+          validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          enabled: true,
+        ),
+      ],
+    );
+  }
+
+  Column regitroActividades() {
+    return Column(
+      children: [
+        /**
+        * Usuario
+        */
+        DropdownButtonFormField(
+          decoration: const InputDecoration(labelText: "Usuario"),
+          value: _valueUsuario,
+          isDense: true,
+          isExpanded: true,
+          validator: (value) => value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
+              ? 'Requerido *'
+              : null,
+          onChanged: (String? value) {
+            setState(() {
+              _valueUsuario = value!;
+            });
+          },
+          items: _itemUsuario.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: TextStyle(fontSize: 12),
+              ),
+            );
+          }).toList(),
+        ),
+        /**
+                 * Sector
+                 */
+        DropdownButtonFormField(
+          decoration: const InputDecoration(labelText: "Sector"),
+          value: _valueSector,
+          isDense: true,
+          isExpanded: true,
+          onChanged: (String? value) {
+            setState(() {
+              _valueSector = value!;
+            });
+          },
+          items: _itemSector.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: TextStyle(fontSize: 12),
+              ),
+            );
+          }).toList(),
+        ),
+        /**
+                 * Programa
+                 */
+        DropdownButtonFormField(
+          decoration: const InputDecoration(labelText: "Programa"),
+          value: _valuePrograma,
+          isDense: true,
+          isExpanded: true,
+          onChanged: (String? value) {
+            setState(() {
+              _valuePrograma = value!;
+            });
+          },
+          items: _itemPrograma.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: TextStyle(fontSize: 12),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }
