@@ -176,6 +176,9 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                           BusyIndicator.show(context);
                           ProgramacionActividadModel oProg =
                               ProgramacionActividadModel.empty();
+                          oProg.programacionActividades =
+                              ProgramacionActividadModel
+                                  .sprogActividadMinitoreoSuper;
                           oProg.fecha = _dateFecha.text;
                           oProg.registroEntidadActividades = lisData;
                           final response =

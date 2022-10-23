@@ -108,15 +108,16 @@ class ListViewProgramacion extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            oProgramacion.estadoProgramacion!,
+                            oProgramacion.programacionActividades!,
                             style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500),
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            oProgramacion.programacionActividades!,
+                            oProgramacion.fecha!,
                             style: TextStyle(
                               color: Colors.grey[500],
                             ),
@@ -127,28 +128,6 @@ class ListViewProgramacion extends StatelessWidget {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {},
-                child: AnimatedContainer(
-                  height: 35,
-                  padding: const EdgeInsets.all(5),
-                  duration: const Duration(milliseconds: 300),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: const Color.fromARGB(255, 179, 177, 177),
-                        width: 1.0,
-                        style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.grey.shade200,
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.dynamic_feed,
-                      color: Color.fromARGB(255, 85, 84, 84),
-                    ),
-                  ),
-                ),
-              )
             ],
           ),
           const SizedBox(height: 20),

@@ -1,3 +1,7 @@
+import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
+import 'package:actividades_pais/util/busy-indicator.dart';
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
@@ -11,6 +15,7 @@ class CordinacionArticulacion extends StatefulWidget {
 }
 
 class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
+  MainController controller = MainController();
   final _formKey = GlobalKey<FormState>();
   final _dateFecha = TextEditingController();
   final _timeInicio = TextEditingController();
@@ -37,6 +42,17 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
   void initState() {
     super.initState();
     setState(() {});
+  }
+
+  void showSnackbar({required bool success, required String text}) {
+    AnimatedSnackBar.rectangle(
+      'I'.tr,
+      text,
+      type:
+          success ? AnimatedSnackBarType.success : AnimatedSnackBarType.warning,
+      brightness: Brightness.light,
+      mobileSnackBarPosition: MobileSnackBarPosition.top,
+    ).show(context);
   }
 
   @override
@@ -320,7 +336,48 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      try {
+                        BusyIndicator.show(context);
+                        ProgramacionActividadModel oProg =
+                            ProgramacionActividadModel.empty();
+                        oProg.programacionActividades =
+                            ProgramacionActividadModel
+                                .sprogActividadCordArticulacion;
+                        oProg.fecha = _dateFecha.text;
+                        oProg.horaInicio = _timeInicio.text;
+                        oProg.horaFin = _timeFinal.text;
+                        oProg.accion = _valueAccion;
+
+                        oProg.tipoUsuario = _valueTipoUsuario;
+                        oProg.sector = _valueSector;
+                        oProg.programa = _valuePrograma;
+                        oProg.documentoQueAcreditaElEvento = _valueAcredita;
+                        oProg.dondeSeRealizoElEvento = _valueEvento;
+                        oProg.articulacionOrientadaA = _valueArOri;
+                        oProg.descripcionDelEvento = _descripcionEvento.text;
+
+                        final response =
+                            await controller.saveProgramaIntervencion(oProg);
+                        BusyIndicator.hide(context);
+                        showSnackbar(
+                          success: true,
+                          text: 'Datos Enviados Correctamente',
+                        );
+                        _formKey.currentState?.reset();
+                      } catch (ex) {
+                        BusyIndicator.hide(context);
+                        AnimatedSnackBar.rectangle(
+                          'Error',
+                          ex.toString(),
+                          type: AnimatedSnackBarType.error,
+                          brightness: Brightness.light,
+                          mobileSnackBarPosition: MobileSnackBarPosition.top,
+                        ).show(context);
+                      }
+                    }
+                  },
                   child: Container(
                     height: 50,
                     width: width / 3.5,
@@ -339,6 +396,12 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                   ),
                 ),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Color.fromARGB(255, 237, 82, 68),
+                    onPrimary: Colors.white,
+                    shadowColor: const Color.fromARGB(255, 53, 53, 53),
+                    elevation: 5,
+                  ),
                   onPressed: () {},
                   child: Container(
                     height: 50,

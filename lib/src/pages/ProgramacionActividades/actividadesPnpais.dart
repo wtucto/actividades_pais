@@ -214,7 +214,9 @@ class _ActividadesPnpaisState extends State<ActividadesPnpais> {
                         BusyIndicator.show(context);
                         ProgramacionActividadModel oProg =
                             ProgramacionActividadModel.empty();
-                        oProg.id = 0;
+                        oProg.programacionActividades =
+                            ProgramacionActividadModel
+                                .sprogActividadActividadPnpais;
                         oProg.fecha = _dateFecha.text;
                         oProg.horaInicio = _timeInicio.text;
                         oProg.horaFin = _timeFinal.text;
