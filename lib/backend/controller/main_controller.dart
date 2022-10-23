@@ -312,10 +312,13 @@ class MainController extends GetxController {
     DateFormat oDFormat2 = DateFormat('HHmmss');
     DateTime _now = DateTime.now();
 
-    String idBuild = '<FECHA>_<IDE>';
-    idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
-    idBuild = idBuild.replaceAll('<FECHA>', oDFormat.format(_now));
-    o.idProgramacionIntervenciones = idBuild;
+    if (o.id == null || o.id! <= 0) {
+      o.estadoProgramacion = ProgramacionActividadModel.sEstadoPEN;
+      String idBuild = '<FECHA>_<IDE>';
+      idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
+      idBuild = idBuild.replaceAll('<FECHA>', oDFormat.format(_now));
+      o.idProgramacionIntervenciones = idBuild;
+    }
 
     final oResp = await Get.find<MainService>().insertProgramaIntervencionDb(o);
     loading.value = false;

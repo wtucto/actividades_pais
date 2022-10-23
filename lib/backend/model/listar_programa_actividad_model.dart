@@ -315,9 +315,12 @@ class ProgramacionActividadModel {
             _getString(json[ProgramacionActividadFields.tipoPlanDeTrabajo]),
         unidadTerritoria:
             _getString(json[ProgramacionActividadFields.unidadTerritoria]),
-        registroEntidadActividades: parseList(
-            json[ProgramacionActividadFields.registroEntidadActividades]
-                as List<RegistroEntidadActividadModel>),
+        registroEntidadActividades:
+            json[ProgramacionActividadFields.registroEntidadActividades] != null
+                ? parseList(
+                    json[ProgramacionActividadFields.registroEntidadActividades]
+                        as List<RegistroEntidadActividadModel>)
+                : [],
       );
 
   Map<String, dynamic> toJson() => {
