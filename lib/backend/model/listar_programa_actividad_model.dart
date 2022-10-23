@@ -315,9 +315,12 @@ class ProgramacionActividadModel {
             _getString(json[ProgramacionActividadFields.tipoPlanDeTrabajo]),
         unidadTerritoria:
             _getString(json[ProgramacionActividadFields.unidadTerritoria]),
-        registroEntidadActividades: parseList(
-            json[ProgramacionActividadFields.registroEntidadActividades]
-                as List),
+        registroEntidadActividades:
+            json[ProgramacionActividadFields.registroEntidadActividades] != null
+                ? parseList(
+                    json[ProgramacionActividadFields.registroEntidadActividades]
+                        as List<RegistroEntidadActividadModel>)
+                : [],
       );
 
   Map<String, dynamic> toJson() => {
@@ -483,7 +486,7 @@ class ProgramacionActividadModel {
     return json.encode(dyn);
   }
 
-  static List<RegistroEntidadActividadModel> parseList(List a) {
+  static List<RegistroEntidadActividadModel> parseList(List<dynamic> a) {
     if (a == null) return [];
 
     List<RegistroEntidadActividadModel> aListFormat = a

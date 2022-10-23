@@ -825,10 +825,13 @@ class DatabasePnPais {
     var result = await insertMasive(
         tableNameRegistroActividadEntidad, a, RegistroEntidadActividadFields);
 
-    return result
-        .map<RegistroEntidadActividadModel>(
-            (json) => RegistroEntidadActividadModel.fromJson(json))
-        .toList();
+    List<RegistroEntidadActividadModel> aResp = [];
+    result.forEach((element) {
+      aResp.add(element);
+    });
+
+    //result.cast<RegistroEntidadActividadModel>()
+    return aResp;
   }
 
   Future<int> updateRegistroEntidadActividad(
@@ -860,15 +863,16 @@ class DatabasePnPais {
             where: '${oFiel.id} = ?',
             whereArgs: [o.id],
           );
-          var iRes = o.copy(id: o.id);
-          listRes.add(iRes);
+          var oRep = o.copy(id: o.id);
+          listRes.add(oRep);
         } else {
-          var iRes = await txn.insert(
+          var id = await txn.insert(
             table,
             o.toJson(),
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
-          listRes.add(iRes);
+          var oRep = o.copy(id: id);
+          listRes.add(oRep);
         }
       });
     });
