@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'package:actividades_pais/src/pages/Intervenciones/PrestacionServicios/new_intervencion.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/card.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/main_footer_all_option.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/actividadesPnpais.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/cordinacion_articulacion.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_suspervicion.dart';
+import 'package:actividades_pais/src/pages/ProgramacionActividades/programacion_list_page.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/responsive.dart';
@@ -262,6 +262,20 @@ class _HomePagePais extends State<HomePagePais> {
                 );
               },
               child: Text('TileActividadPnpais'.tr),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () async {
+                /*
+                 ACTIVIDADES PNPAIS
+                */
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProgramacionListPage(),
+                  ),
+                );
+              },
+              child: Text('TileProgramaciones'.tr),
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
