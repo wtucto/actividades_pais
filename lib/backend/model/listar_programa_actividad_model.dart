@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 
-String tableNameProgramacionIntervenciones = 'listar_programa_intervenciones';
+String tableNameProgramacionActividad = 'listar_programa_actividad';
 
 class ProgramacionActividadFields {
   static final List<String> values = [

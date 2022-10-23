@@ -145,20 +145,29 @@ class DatabasePnPais {
     ''');
 
     await db.execute('''
-    $createTable $tableNameProgramacionIntervenciones ( 
+    $createTable $tableNameProgramacionActividad ( 
       $constFields,
 
       ${ProgramacionActividadFields.idProgramacionIntervenciones} $textType,
+      ${ProgramacionActividadFields.estadoProgramacion} $textType,
+      ${ProgramacionActividadFields.programacionActividades} $textType,
+      ${ProgramacionActividadFields.accion} $textType,
+      ${ProgramacionActividadFields.tipoUsuario} $textType,
+      ${ProgramacionActividadFields.sector} $textType,
+      ${ProgramacionActividadFields.programa} $textType,
+      ${ProgramacionActividadFields.tipoActividad} $textType,
+      ${ProgramacionActividadFields.descripcionActividad} $textType,
+      ${ProgramacionActividadFields.articulacionOrientadaA} $textType,
+      ${ProgramacionActividadFields.fecha} $textType,
+      ${ProgramacionActividadFields.horaInicio} $textType,
+      ${ProgramacionActividadFields.horaFin} $textType,
+      ${ProgramacionActividadFields.descripcionDelEvento} $textType,
+      ${ProgramacionActividadFields.documentoQueAcreditaElEvento} $textType,
+      ${ProgramacionActividadFields.dondeSeRealizoElEvento} $textType,
       ${ProgramacionActividadFields.adjuntarArchivo} $textType,
       ${ProgramacionActividadFields.anio} $textType,
       ${ProgramacionActividadFields.convenio} $textType,
-      ${ProgramacionActividadFields.descripcionDelEvento} $textType,
       ${ProgramacionActividadFields.detalleNecesidades} $textType,
-      ${ProgramacionActividadFields.documentoQueAcreditaElEvento} $textType,
-      ${ProgramacionActividadFields.dondeSeRealizoElEvento} $textType,
-      ${ProgramacionActividadFields.fecha} $textType,
-      ${ProgramacionActividadFields.horaFin} $textType,
-      ${ProgramacionActividadFields.horaInicio} $textType,
       ${ProgramacionActividadFields.laIntervencionRespondeAUnConvenio} $textType,
       ${ProgramacionActividadFields.laIntervencionesPerteneceA} $textType,
       ${ProgramacionActividadFields.ndePersonasConvocadasAParticiparEnElEvento} $textType,
@@ -173,11 +182,19 @@ class DatabasePnPais {
     ''');
 
     await db.execute('''
-    $createTable $tableNameRegistroEntidadActividad ( 
+    $createTable $tableNameRegistroActividadEntidad ( 
       $constFields,
 
       ${RegistroEntidadActividadFields.idRegistroEntidadesYActividades} $textType,
       ${RegistroEntidadActividadFields.idProgramacionIntervenciones} $textType,
+      ${RegistroEntidadActividadFields.tambo} $textType,
+      ${RegistroEntidadActividadFields.distrito} $textType,
+      ${RegistroEntidadActividadFields.provincia} $textType,
+      ${RegistroEntidadActividadFields.departamento} $textType,
+      ${RegistroEntidadActividadFields.fecha} $textType,
+      ${RegistroEntidadActividadFields.horaInicio} $textType,
+      ${RegistroEntidadActividadFields.horaFin} $textType,
+      ${RegistroEntidadActividadFields.descripcion} $textType,
       ${RegistroEntidadActividadFields.categoria} $textType,
       ${RegistroEntidadActividadFields.descripcionDeLaActividadProgramada} $textType,
       ${RegistroEntidadActividadFields.programa} $textType,
@@ -618,7 +635,7 @@ class DatabasePnPais {
   ) async {
     final db = await instance.database;
     return await db.delete(
-      tableNameProgramacionIntervenciones,
+      tableNameProgramacionActividad,
       where: '${ProgramacionActividadFields.id} = ?',
       whereArgs: [i],
     );
@@ -704,7 +721,7 @@ class DatabasePnPais {
 
     if (id != "") {
       result = await db.query(
-        tableNameProgramacionIntervenciones,
+        tableNameProgramacionActividad,
         columns: ProgramacionActividadFields.values,
         where:
             '${ProgramacionActividadFields.idProgramacionIntervenciones} = ?',
@@ -713,7 +730,7 @@ class DatabasePnPais {
 
       if (result.length >= 0) {
         var aRegAct = await db.query(
-          tableNameRegistroEntidadActividad,
+          tableNameRegistroActividadEntidad,
           columns: RegistroEntidadActividadFields.values,
           where:
               '${RegistroEntidadActividadFields.idProgramacionIntervenciones} = ?',
@@ -736,14 +753,14 @@ class DatabasePnPais {
       }
     } else if (limit! > 0) {
       result = await db.query(
-        tableNameProgramacionIntervenciones,
+        tableNameProgramacionActividad,
         orderBy: orderBy,
         limit: limit,
         offset: offset,
       );
     } else {
       result = await db.query(
-        tableNameProgramacionIntervenciones,
+        tableNameProgramacionActividad,
         orderBy: orderBy,
       );
     }
@@ -764,7 +781,7 @@ class DatabasePnPais {
       return o.copy(id: o.id);
     } else {
       final id = await db.insert(
-        tableNameProgramacionIntervenciones,
+        tableNameProgramacionActividad,
         o.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
@@ -777,7 +794,7 @@ class DatabasePnPais {
   ) async {
     final db = await instance.database;
     return db.update(
-      tableNameProgramacionIntervenciones,
+      tableNameProgramacionActividad,
       o.toJson(),
       where: '${ProgramacionActividadFields.id} = ?',
       whereArgs: [o.id],
@@ -793,7 +810,7 @@ class DatabasePnPais {
       return o.copy(id: o.id);
     } else {
       final id = await db.insert(
-        tableNameRegistroEntidadActividad,
+        tableNameRegistroActividadEntidad,
         o.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
@@ -806,7 +823,7 @@ class DatabasePnPais {
     List<RegistroEntidadActividadModel> a,
   ) async {
     var result = await insertMasive(
-        tableNameRegistroEntidadActividad, a, RegistroEntidadActividadFields);
+        tableNameRegistroActividadEntidad, a, RegistroEntidadActividadFields);
 
     return result
         .map<RegistroEntidadActividadModel>(
@@ -819,7 +836,7 @@ class DatabasePnPais {
   ) async {
     final db = await instance.database;
     return db.update(
-      tableNameRegistroEntidadActividad,
+      tableNameRegistroActividadEntidad,
       o.toJson(),
       where: '${RegistroEntidadActividadFields.id} = ?',
       whereArgs: [o.id],

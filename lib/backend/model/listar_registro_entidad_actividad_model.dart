@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-String tableNameRegistroEntidadActividad = 'listar_registro_entidad_actividad';
+String tableNameRegistroActividadEntidad = 'listar_registro_actividad_entidad';
 
 class RegistroEntidadActividadFields {
   static final List<String> values = [
@@ -55,7 +55,6 @@ class RegistroEntidadActividadModel {
 
   String? idRegistroEntidadesYActividades = '';
   String? idProgramacionIntervenciones = '';
-
   String? tambo = '';
   String? distrito = '';
   String? provincia = '';
@@ -64,7 +63,6 @@ class RegistroEntidadActividadModel {
   String? horaInicio = '';
   String? horaFin = '';
   String? descripcion = '';
-
   String? categoria = '';
   String? descripcionDeLaActividadProgramada = '';
   String? programa = '';
