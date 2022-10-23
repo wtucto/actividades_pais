@@ -728,7 +728,12 @@ class DatabasePnPais {
         whereArgs: [id],
       );
 
-      if (result.length >= 0) {
+      if (result.length > 0) {
+        var aProg = result
+            .map<ProgramacionActividadModel>(
+                (json) => ProgramacionActividadModel.fromJson(json))
+            .toList();
+
         var aRegAct = await db.query(
           tableNameRegistroActividadEntidad,
           columns: RegistroEntidadActividadFields.values,
@@ -737,19 +742,23 @@ class DatabasePnPais {
           whereArgs: [id],
         );
 
-        if (aRegAct.length >= 0) {
-          result.map<ProgramacionActividadModel>((json) {
-            json[ProgramacionActividadFields.registroEntidadActividades] =
-                aRegAct
-                    .where(
-                      (e) => (e[RegistroEntidadActividadFields
-                              .idProgramacionIntervenciones] ==
-                          json[ProgramacionActividadFields
-                              .idProgramacionIntervenciones]),
-                    )
-                    .toList();
-          });
+        if (aRegAct.length > 0) {
+          var aFormat = aRegAct
+              .map<RegistroEntidadActividadModel>(
+                  (json) => RegistroEntidadActividadModel.fromJson(json))
+              .toList();
+
+          for (var oProg in aProg) {
+            oProg.registroEntidadActividades = aFormat
+                .where(
+                  (e) => (e.idProgramacionIntervenciones ==
+                      oProg.idProgramacionIntervenciones),
+                )
+                .toList();
+          }
         }
+
+        return aProg;
       }
     } else if (limit! > 0) {
       result = await db.query(
