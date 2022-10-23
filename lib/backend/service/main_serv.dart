@@ -390,6 +390,11 @@ class MainService {
         await Get.find<MainRepository>().insertProgramaIntervencionDb(o);
 
     if (o.registroEntidadActividades!.isNotEmpty) {
+      o.registroEntidadActividades!.forEach((object) {
+        object.idProgramacionIntervenciones =
+            oProgResp.idProgramacionIntervenciones;
+      });
+
       var aActResp = await Get.find<MainRepository>()
           .insertRegistroEntidadActividadMasiveDb(
               o.registroEntidadActividades!);
