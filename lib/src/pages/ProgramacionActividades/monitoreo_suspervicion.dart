@@ -1,3 +1,8 @@
+import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
+import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
+import 'package:actividades_pais/util/busy-indicator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
@@ -10,8 +15,12 @@ class MonitoreoSupervicion extends StatefulWidget {
 }
 
 class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
+  MainController controller = MainController();
   final _formKey = GlobalKey<FormState>();
   final _dateFecha = TextEditingController();
+  List<DataRow> dataRows = [];
+  late List<RegistroEntidadActividadModel> lisData = [];
+  int index = 0;
 
   @override
   void initState() {
@@ -97,10 +106,10 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                   icon: const Icon(Icons.add_to_queue),
                   color: const Color.fromARGB(255, 69, 90, 210),
                   onPressed: () async {
-                    // await _showMyDialog(
-                    //   context,
-                    //   "REGISTRO DE ACTIVIDADES",
-                    // );
+                    await _showMyDialog(
+                      context,
+                      "AGREGAR TAMBO",
+                    );
                   },
                   // color: Colors.pink,
                 ),
@@ -111,40 +120,294 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
-                  sortColumnIndex: 2,
-                  sortAscending: true,
-                  headingRowColor: MaterialStateProperty.all(Colors.green[100]),
-                  columnSpacing: 40,
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      right: BorderSide(
-                        color: Colors.grey,
-                        width: 0.5,
+                    sortColumnIndex: 2,
+                    sortAscending: true,
+                    headingRowColor:
+                        MaterialStateProperty.all(Colors.green[100]),
+                    columnSpacing: 40,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        right: BorderSide(
+                          color: Colors.grey,
+                          width: 0.5,
+                        ),
+                      ),
+                    ),
+                    columns: const [
+                      DataColumn(label: Text("Tambo")),
+                      DataColumn(label: Text("Ubicación")),
+                      DataColumn(label: Text("Fecha")),
+                      DataColumn(label: Text("Horario")),
+                      DataColumn(label: Text("Descripción")),
+                      // DataColumn(label: Text("")),
+                    ],
+                    rows: dataRows),
+              ),
+            ),
+
+            /**
+             * Bonones De Control
+             */
+            const SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    BusyIndicator.show(context);
+                    final response = await controller
+                        .saveProgramaIntervencion(ProgramacionActividadModel(
+                      id: 0,
+                      fecha: _dateFecha.text,
+                      registroEntidadActividades: lisData!,
+                    ));
+                    BusyIndicator.hide(context);
+                  },
+                  child: Container(
+                    height: 50,
+                    width: width / 3.5,
+                    child: const Center(
+                      child: Text(
+                        'Guardar',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          letterSpacing: 1.5,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'OpenSans',
+                        ),
                       ),
                     ),
                   ),
-                  columns: const [
-                    DataColumn(label: Text("Tambo")),
-                    DataColumn(label: Text("Ubicación")),
-                    DataColumn(label: Text("Fecha")),
-                    DataColumn(label: Text("Horario")),
-                    DataColumn(label: Text("Descripción")),
-                  ],
-                  rows: const [
-                    DataRow(selected: true, cells: [
-                      DataCell(Text("Admin")),
-                      DataCell(Text("Publico")),
-                      DataCell(Text("Alta")),
-                      DataCell(Text("Alta")),
-                      DataCell(Text("Alta")),
-                    ]),
-                  ],
                 ),
-              ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Container(
+                    height: 50,
+                    width: width / 3.5,
+                    child: const Center(
+                      child: Text(
+                        'Cancelar',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          letterSpacing: 1.5,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'OpenSans',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  final _formKey1 = GlobalKey<FormState>();
+  final _timeInicio = TextEditingController();
+  final _timeFinal = TextEditingController();
+  final _tambo = TextEditingController();
+  final _distrito = TextEditingController();
+  final _provincia = TextEditingController();
+  final _departamento = TextEditingController();
+  final _actividad = TextEditingController();
+
+  Column regitroEntidades() {
+    return Column(
+      children: [
+        /**
+        * Tambo
+        */
+        TextFormField(
+          controller: _tambo,
+          decoration: const InputDecoration(
+            labelText: 'Tambo',
+          ),
+          validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          enabled: true,
+        ),
+        /**
+         * Distrito
+         */
+        TextFormField(
+          controller: _distrito,
+          decoration: const InputDecoration(
+            labelText: 'Distrito',
+          ),
+          validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          enabled: true,
+        ),
+        /**
+         * Provincia
+         */
+        TextFormField(
+          controller: _provincia,
+          decoration: const InputDecoration(
+            labelText: 'Provincia',
+          ),
+          validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          enabled: true,
+        ),
+        /**
+         * Departamento
+         */
+        TextFormField(
+          controller: _departamento,
+          decoration: const InputDecoration(
+            labelText: 'Departamento',
+          ),
+          validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          enabled: true,
+        ),
+        /**
+             * Hora de Inicio
+             */
+        TextFormField(
+          controller: _timeInicio,
+          validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          decoration: const InputDecoration(labelText: "Hora Inicio"),
+          readOnly: true,
+          onTap: () async {
+            TimeOfDay? pickedTime = await showTimePicker(
+              initialTime: TimeOfDay.now(),
+              context: context,
+            );
+            if (pickedTime != null) {
+              DateTime parsedTime =
+                  DateFormat.jm().parse(pickedTime.format(context).toString());
+              String formattedTime = DateFormat('HH:mm:ss').format(parsedTime);
+              setState(() {
+                _timeInicio.text = formattedTime;
+              });
+            }
+          },
+        ),
+        /**
+             * Hora Final
+             */
+        TextFormField(
+          controller: _timeFinal,
+          validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          decoration: const InputDecoration(labelText: "Hora Final"),
+          readOnly: true,
+          onTap: () async {
+            TimeOfDay? pickedTime = await showTimePicker(
+              initialTime: TimeOfDay.now(),
+              context: context,
+            );
+            if (pickedTime != null) {
+              DateTime parsedTime =
+                  DateFormat.jm().parse(pickedTime.format(context).toString());
+              String formattedTime = DateFormat('HH:mm:ss').format(parsedTime);
+              setState(() {
+                _timeFinal.text = formattedTime;
+              });
+            }
+          },
+        ),
+        /**
+         * Actividad a realizar en el tambo / en la fecha
+         */
+        TextFormField(
+          controller: _actividad,
+          decoration: const InputDecoration(
+            labelText: 'Actividad a realizar en el tambo / en la fecha',
+          ),
+          validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          enabled: true,
+        ),
+      ],
+    );
+  }
+
+  Future<void> _showMyDialog(BuildContext context, String? title) async {
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title!),
+          content: Form(
+            key: _formKey1,
+            child: Card(
+              color: Colors.transparent,
+              elevation: 0.0,
+              child: regitroEntidades(),
+            ),
+          ),
+          actions: [
+            Container(
+              padding: const EdgeInsets.all(5.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.red),
+                    ),
+                    child: const Text("Cancelar"),
+                  ),
+                  const Padding(padding: EdgeInsets.all(10)),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey1.currentState!.validate()) {
+                        ;
+                        setState(() {
+                          RegistroEntidadActividadModel data =
+                              RegistroEntidadActividadModel(
+                                  tambo: _tambo.text,
+                                  distrito: _distrito.text,
+                                  provincia: _provincia.text,
+                                  departamento: _departamento.text,
+                                  fecha: _dateFecha.text,
+                                  horaInicio: _timeInicio.text,
+                                  horaFin: _timeFinal.text,
+                                  descripcionDeLaActividadProgramada:
+                                      _actividad.text);
+                          lisData.add(data);
+
+                          dataRows.add(DataRow(cells: [
+                            DataCell(Text(_tambo.text)),
+                            DataCell(Text(_departamento.text)),
+                            DataCell(Text(_dateFecha.text)),
+                            DataCell(Text(_timeInicio.text)),
+                            DataCell(Text(_actividad.text)),
+                            // DataCell(
+                            //   GestureDetector(
+                            //     onTap: () {
+                            //     },
+                            //     child: const Center(
+                            //       child: Icon(
+                            //         Icons.delete,
+                            //         color: Color.fromARGB(255, 230, 51, 35),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                          ]));
+                          index++;
+                        });
+                      }
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          const Color.fromARGB(255, 26, 155, 86)),
+                    ),
+                    child: const Text("Guardar"),
+                  ),
+                ],
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }
