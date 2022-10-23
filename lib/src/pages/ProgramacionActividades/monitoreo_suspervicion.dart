@@ -178,7 +178,7 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                               ProgramacionActividadModel.empty();
                           oProg.fecha = _dateFecha.text;
                           oProg.registroEntidadActividades = lisData;
-                          final response =
+                          ProgramacionActividadModel response =
                               await controller.saveProgramaIntervencion(oProg);
                           BusyIndicator.hide(context);
                           showSnackbar(
