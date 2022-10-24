@@ -1,13 +1,13 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
-import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
 class MonitoreoSupervicion extends StatefulWidget {
   const MonitoreoSupervicion({super.key});
@@ -22,7 +22,7 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
   final _dateFecha = TextEditingController();
   List<DataRow> dataRows = [];
   late List<RegistroEntidadActividadModel> lisData = [];
-
+  var uuid = Uuid();
   @override
   void initState() {
     super.initState();
@@ -150,7 +150,7 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                       DataColumn(label: Text("Fecha")),
                       DataColumn(label: Text("Horario")),
                       DataColumn(label: Text("Descripción")),
-                      // DataColumn(label: Text("")),
+                      DataColumn(label: Text("")),
                     ],
                     rows: dataRows),
               ),
@@ -261,6 +261,7 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
   final _provincia = TextEditingController();
   final _departamento = TextEditingController();
   final _actividad = TextEditingController();
+  int index = 0;
 
   Column regitroEntidades() {
     return Column(
@@ -404,43 +405,46 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey1.currentState!.validate()) {
+                        RegistroEntidadActividadModel data =
+                            RegistroEntidadActividadModel.empty();
+                        data.idRegistroEntidadesYActividades = uuid.v4();
+                        data.tambo = _tambo.text;
+                        data.distrito = _distrito.text;
+                        data.provincia = _provincia.text;
+                        data.departamento = _departamento.text;
+                        data.fecha = _dateFecha.text;
+                        data.horaInicio = _timeInicio.text;
+                        data.horaFin = _timeFinal.text;
+                        data.descripcionDeLaActividadProgramada =
+                            _actividad.text;
+
+                        lisData.add(data);
                         setState(() {
-                          RegistroEntidadActividadModel data =
-                              RegistroEntidadActividadModel.empty();
-                          data.tambo = _tambo.text;
-                          data.distrito = _distrito.text;
-                          data.provincia = _provincia.text;
-                          data.departamento = _departamento.text;
-                          data.fecha = _dateFecha.text;
-                          data.horaInicio = _timeInicio.text;
-                          data.horaFin = _timeFinal.text;
-                          data.descripcionDeLaActividadProgramada =
-                              _actividad.text;
-
-                          lisData.add(data);
-
-                          dataRows.add(DataRow(cells: [
-                            DataCell(Text(data.tambo!)),
-                            DataCell(Text(
-                                "${data.distrito!}/${data.provincia!}/${data.departamento!}")),
-                            DataCell(Text(data.fecha!)),
-                            DataCell(
-                                Text("${data.horaInicio!} - ${data.horaFin!}")),
-                            DataCell(
-                                Text(data.descripcionDeLaActividadProgramada!)),
-                            // DataCell(
-                            //   GestureDetector(
-                            //     onTap: () {
-                            //     },
-                            //     child: const Center(
-                            //       child: Icon(
-                            //         Icons.delete,
-                            //         color: Color.fromARGB(255, 230, 51, 35),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                          ]));
+                          dataRows.add(
+                            DataRow(
+                              key: ValueKey(
+                                  data.idRegistroEntidadesYActividades),
+                              cells: [
+                                DataCell(Text(data.tambo!)),
+                                DataCell(Text(
+                                    "${data.distrito!}/${data.provincia!}/${data.departamento!}")),
+                                DataCell(Text(data.fecha!)),
+                                DataCell(Text(
+                                    "${data.horaInicio!} - ${data.horaFin!}")),
+                                DataCell(Text(
+                                    data.descripcionDeLaActividadProgramada!)),
+                                DataCell(
+                                  const Icon(
+                                    Icons.delete,
+                                    color: Color.fromARGB(255, 230, 51, 35),
+                                  ),
+                                  onTap: () {
+                                    setState(() {});
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
                         });
                         _formKey1.currentState?.reset();
                         Navigator.of(context).pop();
