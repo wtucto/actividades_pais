@@ -8,6 +8,7 @@ import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/M
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Search/project_search.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_detail_form_page.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
+import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/throw-exception.dart';
 import 'package:flutter/material.dart';
@@ -271,6 +272,7 @@ class _ProjectListPageState extends State<ProjectListPage>
                   textColor: Colors.black,
                   fontSize: 16.0,
                 );
+                Navigator.of(context).pop();
               } catch (oError) {
                 var sMessage = oError.toString();
                 if (oError is ThrowCustom) {
@@ -291,6 +293,61 @@ class _ProjectListPageState extends State<ProjectListPage>
               BusyIndicator.hide(context);
 
               _controller!.reverse();
+            },
+          ),
+          FabItem(
+            "Eliminar Data",
+            Icons.cleaning_services_sharp,
+            onPress: () async {
+              _controller!.reverse();
+              final alert = AlertQuestion(
+                title: "Alerta!",
+                message:
+                    "¿Está Seguro de eliminar todos los registros locales?",
+                onNegativePressed: () {
+                  Navigator.of(context).pop();
+                },
+                onPostivePressed: () async {
+                  Navigator.of(context).pop();
+                  BusyIndicator.show(context);
+                  try {
+                    await mainController.deleteAllData();
+                    BusyIndicator.hide(context);
+                    Fluttertoast.showToast(
+                      msg: 'Los registros se eliminaron con éxito',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 2,
+                      backgroundColor: Color.fromARGB(255, 133, 243, 168),
+                      textColor: Colors.black,
+                      fontSize: 16.0,
+                    );
+                    Navigator.of(context).pop();
+                  } catch (oError) {
+                    var sMessage = oError.toString();
+                    if (oError is ThrowCustom) {
+                      sMessage = oError.msg!;
+                    }
+
+                    Fluttertoast.showToast(
+                      msg: sMessage,
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 2,
+                      backgroundColor: Color.fromARGB(255, 252, 95, 74),
+                      textColor: Colors.black,
+                      fontSize: 16.0,
+                    );
+                  }
+                },
+              );
+
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return alert;
+                },
+              );
             },
           ),
         ],

@@ -218,6 +218,14 @@ class DatabasePnPais {
     */
   }
 
+  Future deleteAllData() async {
+    final db = await instance.database;
+    db.execute("DELETE FROM $tableNameRegistroActividadEntidad");
+    db.execute("DELETE FROM $tableNameProgramacionActividad");
+    db.execute("DELETE FROM $tableNameTramaProyectos");
+    db.execute("DELETE FROM $tableNameTramaMonitoreos");
+  }
+
   Future _upgradeDB(
     Database db,
     int oldversion,

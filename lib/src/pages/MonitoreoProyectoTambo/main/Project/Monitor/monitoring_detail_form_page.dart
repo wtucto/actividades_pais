@@ -138,7 +138,9 @@ class _MonitoringDetailNewEditPageState
         _dateObra.text = oMonitoreo.fechaTerminoEstimado!;
         _longitud.text = oMonitoreo.longitud!;
         _latitud.text = oMonitoreo.latitud!;
-        _statusMonitor = oMonitoreo.estadoMonitoreo;
+        if (oMonitoreo.estadoMonitoreo != "") {
+          _statusMonitor = oMonitoreo.estadoMonitoreo;
+        }
       });
     } catch (error) {
       print(error);

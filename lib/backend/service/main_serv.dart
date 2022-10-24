@@ -463,4 +463,8 @@ class MainService {
       'Usuario incorrecto, vuelve a intentarlo mas tarde.',
     );
   }
+
+  Future deleteAllData() async {
+    return await Get.find<MainRepository>().deleteAllData();
+  }
 }

@@ -49,6 +49,11 @@ class MainController extends GetxController {
     }
   }
 
+  Future<bool> deleteAllData() async {
+    await Get.find<MainService>().deleteAllData();
+    return true;
+  }
+
   /*
    Obtiene los datos del usuario
    @String codigo
@@ -367,11 +372,7 @@ class MainController extends GetxController {
       if (isOk == true) {
         final aResp =
             await Get.find<MainService>().sendAllProgramaIntervencion(a, []);
-        /*if (aResp.length > 0) {
-        return Future.error(
-          'Hay registros que no se pudieron enviar al servidor porque generaron un error: ${aResp.length}',
-        );
-      }*/
+
         /// Retornar registros que generar error al enviarse al servidor
         loading.value = false;
         return aResp;
@@ -417,11 +418,7 @@ class MainController extends GetxController {
 
       if (isOk == true) {
         final aResp = await Get.find<MainService>().sendAllMonitoreo(a, []);
-        /*if (aResp.length > 0) {
-        return Future.error(
-          'Hay registros que no se pudieron enviar al servidor porque generaron un error: ${aResp.length}',
-        );
-      }*/
+
         /// Retornar registros que generar error al enviarse al servidor
         loading.value = false;
         return aResp;
@@ -438,6 +435,12 @@ class MainController extends GetxController {
     }
   }
 
+  /*
+    Enviar registros a la nube de todos los monitoreos de un Proyecto
+    - Validar que todos los campos requeridos esten completos
+    - Validar que el estado esta en: POR ENVIAR
+    - Validar que se encuentre con conexion a internet
+  */
   Future<List<TramaMonitoreoModel>> sendMonitoreoByProyecto(
     TramaProyectoModel? o,
   ) async {
@@ -509,6 +512,10 @@ class MainController extends GetxController {
     );
   }
 
+  /*
+    Elimina un Monitor de la base de datos Local
+    - @TramaMonitoreoModel o
+  */
   Future<bool> deleteMonitor(
     TramaMonitoreoModel o,
   ) async {
@@ -516,6 +523,10 @@ class MainController extends GetxController {
     return result == 1;
   }
 
+  /*
+    Validaciones de Monitoreo (Nuevo/Actualizar)
+    - @TramaMonitoreoModel o
+  */
   Future<bool> validateMonitor(
     TramaMonitoreoModel o,
   ) async {
@@ -558,6 +569,10 @@ class MainController extends GetxController {
     return isComplete;
   }
 
+  /*
+    Construye un nuevo Monitoreo mediante el codigo unico de proyecto
+    - @String cui
+  */
   Future<TramaMonitoreoModel> buildNewMonitor(
     String cui,
   ) async {
