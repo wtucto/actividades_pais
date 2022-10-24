@@ -21,21 +21,73 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
   final _timeInicio = TextEditingController();
   final _timeFinal = TextEditingController();
   final _descripcionEvento = TextEditingController();
+  final _evento = TextEditingController();
 
-  static final _itemAccion = ["Seleccionar", "User1", "User2"];
-  static final _itemTipoUsuario = ["SELECCIONE UNA OPCIÓN", "User1"];
-  static final _itemSector = ["Seleccionar", "User1", "User2"];
-  static final _itemPrograma = ["Seleccionar", "User1", "User2"];
-  static final _itemDocAcredita = ["Seleccionar", "User1", "User2"];
-  static final _itemEvento = ["Seleccionar", "User1", "User2"];
-  static final _itemArOri = ["Seleccionar", "User1", "User2"];
+  static final _itemAccion = [
+    "SELECCIONE UNA OPCIÓN",
+    "Coordinación con entidades",
+    "Articulación - Plan de trabajo",
+  ];
+  static final _itemTipoUsuario = [
+    "SELECCIONE UNA OPCIÓN",
+    "GOBIERNO CENTRAL",
+    "GOBIERNO REGIONAL",
+    "GOBIERNO LOCAL",
+    "ORGANISMOS AUTONOMOS",
+    "COOPERACION INTERNACIONAL",
+    "ONG",
+    "ORGANIZACIONES CIVILES",
+    "ORGANIZACIONES RELIGIOSAS",
+    "SECTOR PRIVADO",
+    "UNIVERSIDADES",
+    "IAL",
+    "IAR"
+  ];
+  static final _itemSector = [
+    "SELECCIONE UNA OPCIÓN",
+    "MEF",
+    "MIDIS",
+    "MIMP",
+    "MIDAGRI"
+  ];
+  static final _itemPrograma = [
+    "SELECCIONE UNA OPCIÓN",
+    "PROINVERSION-AGENCIA DE PROMOCION DE LA INVERSION PRIVADA",
+    "PROCOMPITE",
+    "SUPERINTENDENCIA NACIONAL DE ADUANAS Y DE ADMINISTRACION TRIBUTARIA",
+    "ORGANISMO SUPERVISOR DE LAS CONTRATACIONES DEL ESTADO"
+  ];
+  static final _itemDocAcredita = [
+    "SELECCIONE UNA OPCIÓN",
+    "ACTA",
+    "INFORME",
+    "HOJA DE RUTA",
+    "PROGRAMACION INTERINSTITUCIONAL",
+    "PLAN DE TRABAJO",
+    "DOCUMENTO EXTERNO",
+    "POR CONFIRMAR"
+  ];
+  static final _itemArOri = [
+    "SELECCIONE UNA OPCIÓN",
+    "LUCHA CONTRA LA ANEMIA Y DCI",
+    "PROGRAMACION DE CARAVANA",
+    "EJECUCIÓN DE INTERVENCION MULTISECTORIAL",
+    "PLAN MULTISECTORIAL ANTE HELADAS Y FRIAJE",
+    "INTERVENCIÓN EN PLATAFORMA DE SERVICIOS",
+    "ELABORACIÓN DE PLAN TRABAJO",
+    "FIRMA DE CONVENIO",
+    "MESA REGIONAL",
+    "GESTIÓN DEL RIESGO DE DESASTRES",
+    "ASISTENCIA TÉCNICA IAR / ESPACIOS DE ARTICULACIÓN REGIONAL",
+    "PLANES DE TRABAJO REGIONAL - AGENDA HAMBRE 0",
+    "ASISTENCIA TÉCNICA PLAN DE TRABAJO EN TEMAS PRODUCTIVOS – IAR- HAMBRE 0"
+  ];
 
   String? _valueAccion = _itemAccion[0];
   String? _valueTipoUsuario = _itemTipoUsuario[0];
   String? _valueSector = _itemSector[0];
   String? _valuePrograma = _itemPrograma[0];
   String? _valueAcredita = _itemDocAcredita[0];
-  String? _valueEvento = _itemEvento[0];
   String? _valueArOri = _itemArOri[0];
 
   @override
@@ -88,7 +140,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
       ),
       body: Form(
         key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
+        // autovalidateMode: AutovalidateMode.onUserInteraction,
         child: ListView(
           padding: const EdgeInsets.only(
               left: 32.0, right: 32.0, top: 15.0, bottom: 20.0),
@@ -169,7 +221,13 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
              */
             DropdownButtonFormField(
               decoration: const InputDecoration(labelText: "Accion"),
+              isExpanded: true,
+              isDense: false,
               value: _valueAccion,
+              validator: (value) =>
+                  value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
+                      ? 'Requerido *'
+                      : null,
               onChanged: (String? value) {
                 setState(() {
                   _valueAccion = value!;
@@ -190,7 +248,13 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
              */
             DropdownButtonFormField(
               decoration: const InputDecoration(labelText: "Tipo Usuario"),
+              isExpanded: true,
+              isDense: false,
               value: _valueTipoUsuario,
+              validator: (value) =>
+                  value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
+                      ? 'Requerido *'
+                      : null,
               onChanged: (String? value) {
                 setState(() {
                   _valueTipoUsuario = value!;
@@ -212,7 +276,13 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
              */
             DropdownButtonFormField(
               decoration: const InputDecoration(labelText: "Sector"),
+              isExpanded: true,
+              isDense: false,
               value: _valueSector,
+              validator: (value) =>
+                  value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
+                      ? 'Requerido *'
+                      : null,
               onChanged: (String? value) {
                 setState(() {
                   _valueSector = value!;
@@ -233,7 +303,13 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
              */
             DropdownButtonFormField(
               decoration: const InputDecoration(labelText: "Programa"),
+              isExpanded: true,
+              isDense: false,
               value: _valuePrograma,
+              validator: (value) =>
+                  value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
+                      ? 'Requerido *'
+                      : null,
               onChanged: (String? value) {
                 setState(() {
                   _valuePrograma = value!;
@@ -256,7 +332,13 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
             DropdownButtonFormField(
               decoration: const InputDecoration(
                   labelText: "Documento que Acredita el Evento"),
+              isExpanded: true,
+              isDense: false,
               value: _valueAcredita,
+              validator: (value) =>
+                  value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
+                      ? 'Requerido *'
+                      : null,
               onChanged: (String? value) {
                 setState(() {
                   _valueAcredita = value!;
@@ -276,24 +358,13 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
             /**
              * ¿Dónde se Realizó el Evento?
              */
-            DropdownButtonFormField(
+            TextFormField(
+              controller: _evento,
               decoration: const InputDecoration(
-                  labelText: "¿Dónde se Realizó el Evento?"),
-              value: _valueEvento,
-              onChanged: (String? value) {
-                setState(() {
-                  _valueEvento = value!;
-                });
-              },
-              items: _itemEvento.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                );
-              }).toList(),
+                labelText: '¿Dónde se Realizó el Evento?',
+              ),
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+              enabled: true,
             ),
             /**
              * Articulación Orientada A.
@@ -301,7 +372,13 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
             DropdownButtonFormField(
               decoration:
                   const InputDecoration(labelText: "Articulación Orientada A."),
+              isExpanded: true,
+              isDense: false,
               value: _valueArOri,
+              validator: (value) =>
+                  value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
+                      ? 'Requerido *'
+                      : null,
               onChanged: (String? value) {
                 setState(() {
                   _valueArOri = value!;
@@ -349,16 +426,14 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                         oProg.horaInicio = _timeInicio.text;
                         oProg.horaFin = _timeFinal.text;
                         oProg.accion = _valueAccion;
-
                         oProg.tipoUsuario = _valueTipoUsuario;
                         oProg.sector = _valueSector;
                         oProg.programa = _valuePrograma;
                         oProg.documentoQueAcreditaElEvento = _valueAcredita;
-                        oProg.dondeSeRealizoElEvento = _valueEvento;
+                        oProg.dondeSeRealizoElEvento = _evento.text;
                         oProg.articulacionOrientadaA = _valueArOri;
-                        oProg.descripcionDelEvento = _descripcionEvento.text;
-
-                        final response =
+                        oProg.descripcionDelEvento = _evento.text;
+                        ProgramacionActividadModel response =
                             await controller.saveProgramaIntervencion(oProg);
                         BusyIndicator.hide(context);
                         showSnackbar(
@@ -402,7 +477,9 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                     shadowColor: const Color.fromARGB(255, 53, 53, 53),
                     elevation: 5,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                   child: Container(
                     height: 50,
                     width: width / 3.5,

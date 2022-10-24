@@ -222,7 +222,7 @@ class _ActividadesPnpaisState extends State<ActividadesPnpais> {
                         oProg.horaFin = _timeFinal.text;
                         oProg.tipoActividad = _valueTipoActidad;
                         oProg.descripcionActividad = _descripcion.text;
-                        final response =
+                        ProgramacionActividadModel response =
                             await controller.saveProgramaIntervencion(oProg);
                         BusyIndicator.hide(context);
                         showSnackbar(
