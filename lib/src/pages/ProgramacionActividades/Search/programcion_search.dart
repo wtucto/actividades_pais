@@ -1,5 +1,5 @@
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
-import 'package:actividades_pais/src/pages/ProgramacionActividades/Search/list_view_Projectos.dart';
+import 'package:actividades_pais/src/pages/ProgramacionActividades/Search/list_view_Programacion.dart';
 import 'package:flutter/material.dart';
 
 class ProgramacionSearchDelegate extends SearchDelegate<String> {

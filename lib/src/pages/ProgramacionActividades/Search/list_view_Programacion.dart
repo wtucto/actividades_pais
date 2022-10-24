@@ -87,19 +87,16 @@ class ListViewProgramacion extends StatelessWidget {
       ),
       child: Column(
         children: [
+          Center(
+              child: Chip(
+            label: Text(oProgramacion.estadoProgramacion!),
+            backgroundColor:
+                getColorByStatus(oProgramacion.estadoProgramacion!),
+            labelStyle: const TextStyle(color: Colors.white),
+          )),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Chip(
-                    label: Text(oProgramacion.estadoProgramacion!),
-                    backgroundColor:
-                        getColorByStatus(oProgramacion.estadoProgramacion!),
-                    labelStyle: const TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
               Expanded(
                 child: Row(
                   children: [

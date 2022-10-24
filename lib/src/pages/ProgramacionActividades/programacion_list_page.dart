@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
-import 'package:actividades_pais/src/pages/ProgramacionActividades/Search/list_view_Projectos.dart';
-import 'package:actividades_pais/src/pages/ProgramacionActividades/Search/project_search.dart';
+import 'package:actividades_pais/src/pages/ProgramacionActividades/Search/list_view_Programacion.dart';
+import 'package:actividades_pais/src/pages/ProgramacionActividades/Search/programcion_search.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
