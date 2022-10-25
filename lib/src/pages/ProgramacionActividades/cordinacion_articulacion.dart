@@ -419,7 +419,9 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                         BusyIndicator.show(context);
                         ProgramacionActividadModel oProg =
                             ProgramacionActividadModel.empty();
-                        oProg.id = 0;
+                        oProg.programacionActividades =
+                            ProgramacionActividadModel
+                                .sprogActividadCordArticulacion;
                         oProg.fecha = _dateFecha.text;
                         oProg.horaInicio = _timeInicio.text;
                         oProg.horaFin = _timeFinal.text;

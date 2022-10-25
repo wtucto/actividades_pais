@@ -260,4 +260,8 @@ class MainRepository {
       return await _dbPnPais.insertUser(o);
     }
   }
+
+  Future deleteAllData() async {
+    return _dbPnPais.deleteAllData();
+  }
 }

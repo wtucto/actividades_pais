@@ -67,7 +67,7 @@ dependencies:
   encrypt: ^5.0.1
   #PDF
   pdf:
-  printing:
+  printing: ^5.9.3
   open_file: ^3.2.1
 
   #OBJECT BOX
