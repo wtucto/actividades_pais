@@ -417,34 +417,9 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                         data.horaFin = _timeFinal.text;
                         data.descripcionDeLaActividadProgramada =
                             _actividad.text;
-
                         lisData.add(data);
                         setState(() {
-                          dataRows.add(
-                            DataRow(
-                              key: ValueKey(
-                                  data.idRegistroEntidadesYActividades),
-                              cells: [
-                                DataCell(Text(data.tambo!)),
-                                DataCell(Text(
-                                    "${data.distrito!}/${data.provincia!}/${data.departamento!}")),
-                                DataCell(Text(data.fecha!)),
-                                DataCell(Text(
-                                    "${data.horaInicio!} - ${data.horaFin!}")),
-                                DataCell(Text(
-                                    data.descripcionDeLaActividadProgramada!)),
-                                DataCell(
-                                  const Icon(
-                                    Icons.delete,
-                                    color: Color.fromARGB(255, 230, 51, 35),
-                                  ),
-                                  onTap: () {
-                                    setState(() {});
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
+                          _dataRow(data);
                         });
                         _formKey1.currentState?.reset();
                         Navigator.of(context).pop();
@@ -462,6 +437,36 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
           ],
         );
       },
+    );
+  }
+
+  _dataRow(RegistroEntidadActividadModel data) {
+    dataRows.add(
+      DataRow(
+        key: ValueKey(data.idRegistroEntidadesYActividades),
+        cells: [
+          DataCell(Text(data.tambo!)),
+          DataCell(Text(
+              "${data.distrito!}/${data.provincia!}/${data.departamento!}")),
+          DataCell(Text(data.fecha!)),
+          DataCell(Text("${data.horaInicio!} - ${data.horaFin!}")),
+          DataCell(Text(data.descripcionDeLaActividadProgramada!)),
+          DataCell(
+            const Icon(
+              Icons.delete,
+              color: Color.fromARGB(255, 230, 51, 35),
+            ),
+            onTap: () {
+              setState(() {
+                lisData.removeWhere((item) =>
+                    item.idRegistroEntidadesYActividades ==
+                    data.idRegistroEntidadesYActividades);
+                dataRows.removeAt(index);
+              });
+            },
+          ),
+        ],
+      ),
     );
   }
 }
