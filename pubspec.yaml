@@ -69,6 +69,7 @@ dependencies:
   pdf:
   printing: ^5.9.3
   open_file: ^3.2.1
+  uuid: 3.0.6
 
   #OBJECT BOX
   #objectbox: ^1.6.2
@@ -168,6 +169,7 @@ flutter:
     - assets/loading_icon.gif
     #- assets/participantesIntervenciones.json
     - assets/loaderios.gif
+   
 
 
   fonts:
