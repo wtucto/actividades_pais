@@ -157,7 +157,7 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
             ),
 
             /**
-             * Bonones De Control
+             * Botones De Control
              */
             const SizedBox(height: 20.0),
             Row(

@@ -38,7 +38,7 @@ class _ProjectListPageState extends State<ProjectListPage>
   bool loading = true;
   bool isEndPagination = false;
   int offset = 0;
-  int limit = 50;
+  int limit = 15;
 
   @override
   void initState() {
@@ -137,6 +137,8 @@ class _ProjectListPageState extends State<ProjectListPage>
           onRefresh: () async {
             await Future.delayed(Duration(seconds: 2));
             setState(() {
+              aProyecto = [];
+              offset = 0;
               isEndPagination = false;
               readJson(offset);
             });
@@ -148,6 +150,7 @@ class _ProjectListPageState extends State<ProjectListPage>
                       child: ListView.builder(
                         padding: const EdgeInsets.all(10),
                         controller: scrollController,
+                        physics: const AlwaysScrollableScrollPhysics(),
                         itemCount: aProyecto.length,
                         itemBuilder: (context, index) {
                           return ListViewProjet(

@@ -33,10 +33,14 @@ class MonitorList extends StatefulWidget {
 }
 
 class _MonitorListState extends State<MonitorList> {
-  List<TramaMonitoreoModel> aMonResp = [];
-  bool _isLoading = false;
   MainController mainController = MainController();
+  List<TramaMonitoreoModel> aMonResp = [];
   late TramaProyectoModel _oProject = TramaProyectoModel.empty();
+
+  ScrollController scrollController = ScrollController();
+  bool loading = true;
+  int offset = 0;
+  int limit = 5;
   late bool isResume = false;
 
   @override
@@ -51,19 +55,19 @@ class _MonitorListState extends State<MonitorList> {
 
   void show() {
     setState(() {
-      _isLoading = true;
+      loading = true;
     });
   }
 
   void hide() {
     setState(() {
-      _isLoading = false;
+      loading = false;
     });
   }
 
   @override
   void dispose() {
-    loadData(context);
+    scrollController.removeListener(() async {});
     super.dispose();
   }
 
@@ -96,14 +100,20 @@ class _MonitorListState extends State<MonitorList> {
   }
 
   Future<void> loadData(BuildContext context) async {
+    if (mounted) {
+      setState(() {
+        loading = true;
+      });
+    }
     try {
+      List<TramaMonitoreoModel> response = [];
       if (widget.datoProyecto != null) {
         _oProject = widget.datoProyecto!;
         if (widget.estadoM == 'PE') {
-          aMonResp =
+          response =
               await mainController.getAllMonitorPorEnviar(0, 0, _oProject);
         } else {
-          aMonResp =
+          response =
               await mainController.getAllMonitoreoByProyecto(_oProject, 0, 0);
         }
       } else {
@@ -115,19 +125,22 @@ class _MonitorListState extends State<MonitorList> {
             codigo: _prefs!.getString("codigo") ?? "",
             rol: _prefs!.getString("rol") ?? "",
           );
-          aMonResp = await mainController.getAllOtherMonitoreo(
-            oUser,
-            0,
-            0,
-          );
+          response = await mainController.getAllOtherMonitoreo(oUser, 0, 0);
         } else {
-          aMonResp = await mainController.getAllMonitorPorEnviar(
+          response = await mainController.getAllMonitorPorEnviar(
             0,
             0,
             TramaProyectoModel.empty(),
           );
         }
       }
+
+      // Incrementar
+      // if (response.length != 0) {
+      //   aMonResp = aMonResp + response;
+      //   offset = offset + limit;
+      // }
+      aMonResp = response;
     } catch (oError) {
       mostrarAlerta(
           context!, "Warning!", "No se encontraron registros para mostrar.");
@@ -135,8 +148,18 @@ class _MonitorListState extends State<MonitorList> {
     if (mounted) {
       setState(() {
         loadData(context);
+        loading = false;
       });
     }
+  }
+
+  void handleNext() {
+    scrollController.addListener(() async {
+      if (scrollController.position.maxScrollExtent ==
+          scrollController.position.pixels) {
+        loadData(context);
+      }
+    });
   }
 
   @override
@@ -168,32 +191,39 @@ class _MonitorListState extends State<MonitorList> {
             ),
           ],
         ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            await Future.delayed(const Duration(seconds: 2));
-            setState(() {
-              loadData(context);
-            });
-          },
-          child: Container(
-            child: aMonResp.isNotEmpty
-                ? ListViewMonitores(context: context, oMonitoreo: aMonResp)
-                : Container(
-                    padding: const EdgeInsets.all(20),
-                    width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 245, 246, 248)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
-                          "No existe Monitores",
-                          style: TextStyle(color: Colors.black, fontSize: 16),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+        body: Container(
+          child: RefreshIndicator(
+            onRefresh: () async {
+              await Future.delayed(Duration(seconds: 2));
+              setState(() {
+                aMonResp = [];
+                offset = 0;
+                loadData(context);
+              });
+            },
+            child: Container(
+              child: aMonResp.isNotEmpty
+                  ? ListViewMonitores(
+                      context: context,
+                      oMonitoreo: aMonResp,
+                      scrollController: scrollController)
+                  : Container(
+                      padding: const EdgeInsets.all(20),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: const BoxDecoration(
+                          color: Color.fromARGB(255, 245, 246, 248)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text(
+                            "No existe Monitores",
+                            style: TextStyle(color: Colors.black, fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+            ),
           ),
         ),
         floatingActionButton: _getFAB(),

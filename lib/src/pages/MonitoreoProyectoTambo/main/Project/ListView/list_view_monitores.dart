@@ -12,10 +12,12 @@ MainController mainController = MainController();
 
 class ListViewMonitores extends StatefulWidget {
   List<TramaMonitoreoModel> oMonitoreo;
+  ScrollController? scrollController;
   ListViewMonitores({
     Key? key,
     required this.context,
     required this.oMonitoreo,
+    this.scrollController,
   }) : super(key: key);
 
   final BuildContext context;
@@ -108,7 +110,9 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
     String experienceLevelColor = "4495FF";
     return ListView.builder(
       padding: const EdgeInsets.all(10),
-      itemCount: widget.oMonitoreo.length, //widget.oMonitoreo.length,
+      controller: widget.scrollController,
+      physics: const AlwaysScrollableScrollPhysics(),
+      itemCount: widget.oMonitoreo.length,
       itemBuilder: (context, index) {
         return Container(
           padding: const EdgeInsets.all(10),
