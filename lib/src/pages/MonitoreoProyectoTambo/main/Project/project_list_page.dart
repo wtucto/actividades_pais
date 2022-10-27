@@ -111,6 +111,17 @@ class _ProjectListPageState extends State<ProjectListPage>
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back,
+              color: Color.fromARGB(255, 255, 255, 255)),
+          onPressed: () => {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => HomePagePais(),
+                ))
+          },
+        ),
         title: Center(
           child: Text(
             'ProjectListTitle'.tr,

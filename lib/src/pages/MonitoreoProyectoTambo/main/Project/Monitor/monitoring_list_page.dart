@@ -42,6 +42,7 @@ class _MonitorListState extends State<MonitorList> {
   int offset = 0;
   int limit = 5;
   late bool isResume = false;
+  String titleMonitor = "";
 
   @override
   void initState() {
@@ -164,12 +165,17 @@ class _MonitorListState extends State<MonitorList> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.estadoM == 'PE' || widget.estadoM == 'ALL') {
+      titleMonitor = 'MONITORES PENDIENTES';
+    } else {
+      titleMonitor = 'MonitoringListTitle'.tr;
+    }
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         appBar: AppBar(
           title: Center(
             child: Text(
-              'MonitoringListTitle'.tr,
+              titleMonitor,
               style: const TextStyle(
                 color: Color(0xfffefefe),
                 fontWeight: FontWeight.w600,
