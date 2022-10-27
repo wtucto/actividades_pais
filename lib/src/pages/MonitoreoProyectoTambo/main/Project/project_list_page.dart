@@ -9,7 +9,6 @@ import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/M
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Search/project_search.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_detail_form_page.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
-import 'package:actividades_pais/src/pages/configuracion/Home.dart';
 import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/throw-exception.dart';
@@ -140,7 +139,7 @@ class _ProjectListPageState extends State<ProjectListPage>
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: ProjectSearchDelegate(aProyecto),
+                delegate: ProjectSearchDelegate(),
               );
             },
           ),

@@ -20,17 +20,12 @@ class ProjetSearchOtroDelegate extends SearchDelegate<String> {
       codigo: _prefs!.getString('codigo') ?? '',
       rol: _prefs!.getString('rol') ?? '',
     );
-
-    //if (search.trim() != "") {
     aProyecto = await mainController.getAllProyectoByNeUserSearch(
       oUser,
       search,
       0,
       0,
     );
-    /*} else {
-      aProyecto = [];
-    }*/
 
     return aProyecto;
   }

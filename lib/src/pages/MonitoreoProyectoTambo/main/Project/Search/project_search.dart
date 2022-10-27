@@ -1,12 +1,33 @@
+import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
+import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/ListView/list_view_Projectos.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+SharedPreferences? _prefs;
 
 class ProjectSearchDelegate extends SearchDelegate<String> {
-  List<TramaProyectoModel> searchaProyecto;
-  ProjectSearchDelegate(this.searchaProyecto);
-  final List<int> _data =
-      List<int>.generate(100001, (int i) => i).reversed.toList();
+  ProjectSearchDelegate();
+  MainController mainController = MainController();
+
+  List<TramaProyectoModel> aProyecto = [];
+  Future<List<TramaProyectoModel>> getProyectos(String search) async {
+    _prefs = await SharedPreferences.getInstance();
+    UserModel oUser = UserModel(
+      nombres: _prefs!.getString('nombres') ?? '',
+      codigo: _prefs!.getString('codigo') ?? '',
+      rol: _prefs!.getString('rol') ?? '',
+    );
+    aProyecto = await mainController.getAllProyectoByUserSearch(
+      oUser,
+      search,
+      0,
+      0,
+    );
+
+    return aProyecto;
+  }
 
   @override
   String get searchFieldLabel => 'Buscar';
@@ -39,36 +60,39 @@ class ProjectSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var item in searchaProyecto) {
-      if ((item.cui!).contains(query.toLowerCase()) ||
-          (item.tambo!).toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add('${item.cui} - ${item.tambo}');
-      }
-    }
-    if (query.isEmpty || matchQuery.isEmpty) {
+    if (query.isEmpty) {
       return buildNoSuggestions();
     } else {
-      return buildSuggestionsSuccess(matchQuery);
+      return FutureBuilder(
+        future: getProyectos(query),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (query.isEmpty || aProyecto.isEmpty) {
+              return buildNoSuggestions();
+            } else {
+              return buildSuggestionsSuccess(aProyecto);
+            }
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      );
     }
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    final String searched = query;
-
-    if (searched == null || !_data.contains(searched)) {
-      final splitted = searched.split(' - ');
-      for (var item in searchaProyecto) {
-        if (item.cui == splitted[0]) {
-          return ListView.builder(
-            padding: const EdgeInsets.all(10),
-            itemCount: 1,
-            itemBuilder: (context, index) {
-              return ListViewProjet(context: context, oProyecto: item);
-            },
-          );
-        }
+    if (query.isNotEmpty || aProyecto.isNotEmpty) {
+      for (var item in aProyecto) {
+        return ListView.builder(
+          padding: const EdgeInsets.all(10),
+          itemCount: 1,
+          itemBuilder: (context, index) {
+            return ListViewProjet(context: context, oProyecto: item);
+          },
+        );
       }
     }
     return buildNoSuggestions();
@@ -81,10 +105,11 @@ class ProjectSearchDelegate extends SearchDelegate<String> {
         ),
       );
 
-  Widget buildSuggestionsSuccess(List<String> suggestions) => ListView.builder(
+  Widget buildSuggestionsSuccess(List<TramaProyectoModel> suggestions) =>
+      ListView.builder(
         itemCount: suggestions.length,
         itemBuilder: (context, index) {
-          final suggestion = suggestions[index];
+          final suggestion = suggestions[index].tambo.toString();
           return ListTile(
             onTap: () {
               query = suggestion;
