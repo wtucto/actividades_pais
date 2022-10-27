@@ -115,11 +115,12 @@ class _ProjectListPageState extends State<ProjectListPage>
           icon: const Icon(Icons.arrow_back,
               color: Color.fromARGB(255, 255, 255, 255)),
           onPressed: () => {
-            Navigator.push(
+            Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => HomePagePais(),
-                ))
+                ),
+                (route) => false),
           },
         ),
         title: Center(

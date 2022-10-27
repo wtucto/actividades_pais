@@ -197,9 +197,14 @@ class _MonitoringDetailNewEditPageState
       ]);
 
       for (var item in listaImage) {
-        if (item != null && item != "") {
-          controller.itemsImagesAll
-              .addAll({_imgPartidaEjecutada: item.split(",")});
+        if (!item.toString().contains("opt/uploads")) {
+          if (item != null && item != "") {
+            controller.itemsImagesAll.addAll(
+              {
+                _imgPartidaEjecutada: item.split(","),
+              },
+            );
+          }
         }
       }
 
@@ -212,19 +217,34 @@ class _MonitoringDetailNewEditPageState
         m.imgProblema4
       ]);
       for (var item in listaImage) {
-        if (item != null && item != "") {
-          controller.itemsImagesAll
-              .addAll({_imgProblemaIdentificado: item.split(",")});
+        if (!item.toString().contains("opt/uploads")) {
+          if (item != null && item != "") {
+            controller.itemsImagesAll.addAll(
+              {
+                _imgProblemaIdentificado: item.split(","),
+              },
+            );
+          }
         }
       }
 
       listaImage = [];
-      listaImage.addAll(
-          [m.imgRiesgo, m.imgRiesgo, m.imgRiesgo, m.imgRiesgo, m.imgRiesgo]);
+      listaImage.addAll([
+        m.imgRiesgo,
+        m.imgRiesgo1,
+        m.imgRiesgo2,
+        m.imgRiesgo3,
+        m.imgRiesgo4,
+      ]);
       for (var item in listaImage) {
-        if (item != null && item != "") {
-          controller.itemsImagesAll
-              .addAll({_imgRiesgoIdentificado: item.split(",")});
+        if (!item.toString().contains("opt/uploads")) {
+          if (item != null && item != "") {
+            controller.itemsImagesAll.addAll(
+              {
+                _imgRiesgoIdentificado: item.split(","),
+              },
+            );
+          }
         }
       }
     });

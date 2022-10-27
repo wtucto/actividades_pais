@@ -4,6 +4,7 @@ import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/ListView/list_view_monitores.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Search/monitor_search.dart';
@@ -166,13 +167,33 @@ class _MonitorListState extends State<MonitorList> {
   @override
   Widget build(BuildContext context) {
     if (widget.estadoM == 'PE' || widget.estadoM == 'ALL') {
-      titleMonitor = 'MONITORES PENDIENTES';
+      titleMonitor = 'MONITOREOS POR ENVIAR';
     } else {
       titleMonitor = 'MonitoringListTitle'.tr;
     }
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back,
+                color: Color.fromARGB(255, 255, 255, 255)),
+            onPressed: () => {
+              if (widget.estadoM == 'ALL')
+                {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => HomePagePais(),
+                    ),
+                    (route) => false,
+                  ),
+                }
+              else
+                {
+                  Navigator.pop(context),
+                }
+            },
+          ),
           title: Center(
             child: Text(
               titleMonitor,
