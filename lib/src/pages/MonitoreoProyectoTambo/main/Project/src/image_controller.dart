@@ -60,6 +60,48 @@ class ImageController extends GetxController {
     itemsImagesAll[nameInputImage] = listImagePath;
   }
 
+  Future imageCamera(String nameInputImage) async {
+    try {
+      var imageFile = await ImagePicker().pickImage(source: ImageSource.camera);
+      listImagePath = [];
+      int count = 0;
+      if (imageFile != null) {
+        itemsImagesAll.forEach((key, items) {
+          if (key == nameInputImage) {
+            items.forEach((entry) {
+              if (count < 4 && listImagePath.length < 4) {
+                listImagePath.add(entry);
+              }
+              count++;
+            });
+          }
+        });
+        if (count < 4) {
+          if (listImagePath.length < 4) {
+            listImagePath.add(imageFile.path);
+            itemsImagesAll.addAll({nameInputImage: listImagePath});
+          }
+        } else {
+          Get.snackbar('Error', 'Solo esta permitido 4 imaganes',
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.red,
+              colorText: Colors.white);
+        }
+      } else {
+        Get.snackbar('Error', 'Ninguna Foto Tomada',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white);
+      }
+      itemsImagesAll[nameInputImage] = listImagePath;
+    } catch (e) {
+      Get.snackbar('Error', 'Ocurrio un Problema en: $e.toString()',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    }
+  }
+
   Future<void> removeMultipleImage(String index, String nameInputImage) async {
     listImagePath = [];
     itemsImagesAll.forEach((key, items) {

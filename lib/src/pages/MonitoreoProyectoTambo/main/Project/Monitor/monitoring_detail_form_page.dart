@@ -450,8 +450,7 @@ class _MonitoringDetailNewEditPageState
                     label: const Text('Fotos de la Partida Ejecutada *'),
                     icon: const Icon(Icons.image),
                     onPressed: () async {
-                      await controller
-                          .selectMultipleImage(_imgPartidaEjecutada);
+                      await _showChoiceDialog(context, _imgPartidaEjecutada);
                       setState(() {});
                     },
                   )
@@ -488,8 +487,8 @@ class _MonitoringDetailNewEditPageState
                     label: const Text('Foto del Problema Identificado'),
                     icon: const Icon(Icons.image),
                     onPressed: () async {
-                      await controller
-                          .selectMultipleImage(_imgProblemaIdentificado);
+                      await _showChoiceDialog(
+                          context, _imgProblemaIdentificado);
                       setState(() {});
                     },
                   )
@@ -525,8 +524,7 @@ class _MonitoringDetailNewEditPageState
                     label: const Text('Foto del Riesgo Identificado'),
                     icon: const Icon(Icons.image),
                     onPressed: () async {
-                      await controller
-                          .selectMultipleImage(_imgRiesgoIdentificado);
+                      await _showChoiceDialog(context, _imgRiesgoIdentificado);
                       setState(() {});
                     },
                   )
@@ -1101,5 +1099,70 @@ class _MonitoringDetailNewEditPageState
         );
       },
     );
+  }
+
+  Future<void> _showChoiceDialog(BuildContext context, String nameImage) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(25),
+              ),
+            ),
+            title: const Text(
+              'SELECCIONAR',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(45),
+                      alignment: Alignment.topLeft,
+                      padding: EdgeInsets.all(10),
+                    ),
+                    label: const Text(
+                      'Imagen de Galeria',
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                    icon: const Icon(Icons.image),
+                    onPressed: () async {
+                      await controller.selectMultipleImage(nameImage);
+                      Navigator.of(context).pop();
+                      setState(() {});
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(45),
+                      alignment: Alignment.topLeft,
+                      padding: EdgeInsets.all(10),
+                    ),
+                    label: const Text(
+                      'Tomar una Foto',
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                    icon: const Icon(Icons.camera_alt_rounded),
+                    onPressed: () async {
+                      await controller.imageCamera(nameImage);
+                      Navigator.of(context).pop();
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
