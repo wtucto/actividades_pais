@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/ListView/list_view_Projectos.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_list_page.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Search/project_search.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_detail_form_page.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
+import 'package:actividades_pais/src/pages/configuracion/Home.dart';
 import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/throw-exception.dart';
@@ -266,6 +268,10 @@ class _ProjectListPageState extends State<ProjectListPage>
               BusyIndicator.show(context);
               try {
                 await mainController.syncLoadInitialData();
+                BusyIndicator.hide(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => HomePagePais(),
+                ));
                 Fluttertoast.showToast(
                   msg: 'Los registros se sincronizan con éxito',
                   toastLength: Toast.LENGTH_SHORT,
@@ -275,13 +281,12 @@ class _ProjectListPageState extends State<ProjectListPage>
                   textColor: Colors.black,
                   fontSize: 16.0,
                 );
-                Navigator.of(context).pop();
               } catch (oError) {
                 var sMessage = oError.toString();
                 if (oError is ThrowCustom) {
                   sMessage = oError.msg!;
                 }
-
+                BusyIndicator.hide(context);
                 Fluttertoast.showToast(
                   msg: sMessage,
                   toastLength: Toast.LENGTH_SHORT,
@@ -293,8 +298,6 @@ class _ProjectListPageState extends State<ProjectListPage>
                 );
               }
 
-              BusyIndicator.hide(context);
-
               _controller!.reverse();
             },
           ),
@@ -302,7 +305,6 @@ class _ProjectListPageState extends State<ProjectListPage>
             "Eliminar Data",
             Icons.cleaning_services_sharp,
             onPress: () async {
-              _controller!.reverse();
               final alert = AlertQuestion(
                 title: "Alerta!",
                 message:
@@ -311,11 +313,13 @@ class _ProjectListPageState extends State<ProjectListPage>
                   Navigator.of(context).pop();
                 },
                 onPostivePressed: () async {
-                  Navigator.of(context).pop();
                   BusyIndicator.show(context);
                   try {
                     await mainController.deleteAllData();
                     BusyIndicator.hide(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => HomePagePais(),
+                    ));
                     Fluttertoast.showToast(
                       msg: 'Los registros se eliminaron con éxito',
                       toastLength: Toast.LENGTH_SHORT,
@@ -325,13 +329,12 @@ class _ProjectListPageState extends State<ProjectListPage>
                       textColor: Colors.black,
                       fontSize: 16.0,
                     );
-                    Navigator.of(context).pop();
                   } catch (oError) {
                     var sMessage = oError.toString();
                     if (oError is ThrowCustom) {
                       sMessage = oError.msg!;
                     }
-
+                    BusyIndicator.hide(context);
                     Fluttertoast.showToast(
                       msg: sMessage,
                       toastLength: Toast.LENGTH_SHORT,
@@ -342,6 +345,7 @@ class _ProjectListPageState extends State<ProjectListPage>
                       fontSize: 16.0,
                     );
                   }
+                  _controller!.reverse();
                 },
               );
 
