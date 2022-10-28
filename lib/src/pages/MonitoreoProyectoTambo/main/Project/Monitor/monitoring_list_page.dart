@@ -168,6 +168,8 @@ class _MonitorListState extends State<MonitorList> {
   Widget build(BuildContext context) {
     if (widget.estadoM == 'PE' || widget.estadoM == 'ALL') {
       titleMonitor = 'MONITOREOS POR ENVIAR';
+    } else if (widget.estadoM == 'OTROS') {
+      titleMonitor = 'OTROS MONITOREOS';
     } else {
       titleMonitor = 'MonitoringListTitle'.tr;
     }
