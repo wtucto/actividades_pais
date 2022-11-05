@@ -80,7 +80,7 @@ class _ActividadesPnpaisState extends State<ActividadesPnpais> {
               iconSize: 30,
               onPressed: () {},
               icon: const Icon(
-                Icons.integration_instructions_outlined,
+                Icons.menu_open,
                 color: Color.fromARGB(255, 255, 255, 255),
               ),
             ),

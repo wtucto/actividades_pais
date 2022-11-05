@@ -214,29 +214,61 @@ class _HomePagePais extends State<HomePagePais> {
       ),
     );
     void _intervencionOptions(BuildContext context) {
-      showCupertinoModalPopup<void>(
+      showCupertinoModalPopup(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-          title: Text('TileProgramacionActividad'.tr),
-          message: Text('SelectOption'.tr),
-          actions: <CupertinoActionSheetAction>[
-            CupertinoActionSheetAction(
-              //isDefaultAction: true,
-              onPressed: () async {
+          title: Text(
+            'TileProgramacionActividad'.tr,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+            ),
+          ),
+          message: Text(
+            'SelectOption'.tr,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+            ),
+          ),
+          actions: [
+            GestureDetector(
+              onTap: () async {
                 /*
                  COORDINACIÓN Y ARTICULACIÓN
                 */
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CordinacionArticulacion(),
+                    builder: (context) => const CordinacionArticulacion(),
                   ),
                 );
               },
-              child: Text('TileCordArticulacion'.tr),
+              child: Card(
+                color: Color.fromARGB(255, 102, 106, 107),
+                elevation: 5.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.supervised_user_circle_sharp,
+                        size: 40,
+                        color: Color.fromARGB(255, 199, 196, 196),
+                      ),
+                      Expanded(
+                          child: Text(
+                        'TileCordArticulacion'.tr,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
+                      )),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            CupertinoActionSheetAction(
-              onPressed: () async {
+            GestureDetector(
+              onTap: () async {
                 /*
                  MONITOREO Y SUPERVISIÓN
                 */
@@ -247,10 +279,28 @@ class _HomePagePais extends State<HomePagePais> {
                   ),
                 );
               },
-              child: Text('TileMinitoreoSuper'.tr),
+              child: Card(
+                color: Color.fromARGB(255, 49, 132, 201),
+                elevation: 5.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(children: [
+                    const Icon(
+                      Icons.language_outlined,
+                      size: 40,
+                      color: Color.fromARGB(255, 199, 196, 196),
+                    ),
+                    Expanded(
+                        child: Text(
+                      'TileMinitoreoSuper'.tr,
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    )),
+                  ]),
+                ),
+              ),
             ),
-            CupertinoActionSheetAction(
-              onPressed: () async {
+            GestureDetector(
+              onTap: () async {
                 /*
                  ACTIVIDADES PNPAIS
                 */
@@ -261,12 +311,30 @@ class _HomePagePais extends State<HomePagePais> {
                   ),
                 );
               },
-              child: Text('TileActividadPnpais'.tr),
+              child: Card(
+                color: Color.fromARGB(255, 61, 102, 73),
+                elevation: 5.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(children: [
+                    const Icon(
+                      Icons.menu_open,
+                      size: 40,
+                      color: Color.fromARGB(255, 199, 196, 196),
+                    ),
+                    Expanded(
+                        child: Text(
+                      'TileActividadPnpais'.tr,
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    )),
+                  ]),
+                ),
+              ),
             ),
-            CupertinoActionSheetAction(
-              onPressed: () async {
+            GestureDetector(
+              onTap: () async {
                 /*
-                 ACTIVIDADES PNPAIS
+                 PROGRAMACION
                 */
                 Navigator.push(
                   context,
@@ -275,7 +343,28 @@ class _HomePagePais extends State<HomePagePais> {
                   ),
                 );
               },
-              child: Text('TileProgramaciones'.tr),
+              child: Card(
+                color: Color.fromARGB(255, 49, 132, 201),
+                elevation: 5.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.check_box,
+                        size: 40,
+                        color: Color.fromARGB(255, 199, 196, 196),
+                      ),
+                      Expanded(
+                          child: Text(
+                        'TileProgramaciones'.tr,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
+                      )),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
@@ -283,7 +372,7 @@ class _HomePagePais extends State<HomePagePais> {
             onPressed: () {
               Navigator.pop(context, 'Cancel');
             },
-            child: const Text('Cancel'),
+            child: const Text('Cancelar'),
           ),
         ),
       );

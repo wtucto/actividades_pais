@@ -48,7 +48,7 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
       appBar: AppBar(
         title: const Center(
           child: Text(
-            "MONITOREO Y SUPER",
+            "MONITOREO Y SUPER...",
             style: TextStyle(
               color: Color(0xfffefefe),
               fontWeight: FontWeight.w600,
@@ -64,7 +64,7 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
               iconSize: 30,
               onPressed: () {},
               icon: const Icon(
-                Icons.integration_instructions_outlined,
+                Icons.language_outlined,
                 color: Color.fromARGB(255, 255, 255, 255),
               ),
             ),

@@ -131,7 +131,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
               iconSize: 30,
               onPressed: () {},
               icon: const Icon(
-                Icons.integration_instructions_outlined,
+                Icons.supervised_user_circle_sharp,
                 color: Color.fromARGB(255, 255, 255, 255),
               ),
             ),
