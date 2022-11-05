@@ -226,6 +226,12 @@ class DatabasePnPais {
     db.execute("DELETE FROM $tableNameTramaMonitoreos");
   }
 
+  Future deleteMonitorByEstadoENV() async {
+    final db = await instance.database;
+    db.execute(
+        "DELETE FROM $tableNameTramaMonitoreos WHERE ${TramaMonitoreoFields.estadoMonitoreo} = '${TramaMonitoreoModel.sEstadoENV}'");
+  }
+
   Future _upgradeDB(
     Database db,
     int oldversion,
@@ -272,7 +278,8 @@ class DatabasePnPais {
     int? offset,
   ) async {
     final db = await instance.database;
-    final orderBy = '${TramaProyectoFields.numSnip} ASC';
+    final orderBy =
+        '${TramaProyectoFields.avanceFisico} ASC, ${TramaProyectoFields.numSnip} ASC';
 
     dynamic result;
 
@@ -342,7 +349,8 @@ class DatabasePnPais {
     int? offset,
   ) async {
     final db = await instance.database;
-    final orderBy = '${TramaProyectoFields.numSnip} ASC';
+    final orderBy =
+        '${TramaProyectoFields.avanceFisico} ASC, ${TramaProyectoFields.numSnip} ASC';
 
     dynamic result;
 
@@ -690,7 +698,7 @@ class DatabasePnPais {
     if (maps.isNotEmpty) {
       return UserModel.fromJson(maps.first);
     } else {
-      throw Exception('Codigo $i not found');
+      throw Exception('Codigo $i no encontrado');
     }
   }
 

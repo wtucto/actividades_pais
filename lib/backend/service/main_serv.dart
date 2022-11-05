@@ -467,4 +467,8 @@ class MainService {
   Future deleteAllData() async {
     return await Get.find<MainRepository>().deleteAllData();
   }
+
+  Future deleteAllMonitorByEstadoENV() async {
+    return await Get.find<MainRepository>().deleteAllMonitorByEstadoENV();
+  }
 }

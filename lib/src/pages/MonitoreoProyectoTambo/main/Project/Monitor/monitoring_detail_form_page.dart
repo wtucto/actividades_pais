@@ -10,6 +10,8 @@ import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/s
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/main_footer_all_option.dart';
 import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
+import 'package:actividades_pais/util/check_geolocator.dart';
+import 'package:actividades_pais/util/throw-exception.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -96,6 +98,8 @@ class _MonitoringDetailNewEditPageState
   @override
   void initState() {
     super.initState();
+
+    CheckGeolocator().check();
 
     if (mounted) {
       if (widget.statusM == "CREATE" || widget.statusM == "SEARCH") {
@@ -727,11 +731,18 @@ class _MonitoringDetailNewEditPageState
                                       );
                                     }
                                     getDataMonitor(dataSave);
-                                  } catch (error) {
+                                  } catch (oError) {
+                                    var sTitle = 'Error';
+                                    var sMessage = oError.toString();
+                                    if (oError is ThrowCustom) {
+                                      sTitle = oError.typeText!;
+                                      sMessage = oError.msg!;
+                                    }
+
                                     BusyIndicator.hide(context);
                                     AnimatedSnackBar.rectangle(
-                                      'Error',
-                                      error.toString(),
+                                      sTitle,
+                                      sMessage,
                                       type: AnimatedSnackBarType.error,
                                       brightness: Brightness.light,
                                       mobileSnackBarPosition:

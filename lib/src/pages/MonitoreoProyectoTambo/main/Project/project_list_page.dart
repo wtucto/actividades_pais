@@ -326,11 +326,13 @@ class _ProjectListPageState extends State<ProjectListPage>
                 onPostivePressed: () async {
                   BusyIndicator.show(context);
                   try {
-                    await mainController.deleteAllData();
+                    await mainController.deleteAllMonitorByEstadoENV();
                     BusyIndicator.hide(context);
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => HomePagePais(),
-                    ));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => HomePagePais(),
+                      ),
+                    );
                     Fluttertoast.showToast(
                       msg: 'Los registros se eliminaron con éxito',
                       toastLength: Toast.LENGTH_SHORT,

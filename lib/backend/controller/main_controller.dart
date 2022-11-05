@@ -29,9 +29,9 @@ class MainController extends GetxController {
    */
   Future<void> loadInitialData() async {
     loading.value = true;
+    users.value = await Get.find<MainService>().loadAllUser(0, 0);
     proyectos.value = await Get.find<MainService>().loadAllProyecto(0, 0);
     moniteos.value = await Get.find<MainService>().loadAllMonitoreo(0, 0);
-    users.value = await Get.find<MainService>().loadAllUser(0, 0);
     loading.value = false;
   }
 
@@ -51,6 +51,11 @@ class MainController extends GetxController {
 
   Future<bool> deleteAllData() async {
     await Get.find<MainService>().deleteAllData();
+    return true;
+  }
+
+  Future<bool> deleteAllMonitorByEstadoENV() async {
+    await Get.find<MainService>().deleteAllMonitorByEstadoENV();
     return true;
   }
 
@@ -276,6 +281,21 @@ class MainController extends GetxController {
       o.estadoMonitoreo = TramaMonitoreoModel.sEstadoPEN;
     } else {
       o.estadoMonitoreo = TramaMonitoreoModel.sEstadoINC;
+    }
+
+    if (o.latitud == "" || o.longitud == "") {
+      try {
+        List<Position> aPosition = await CheckGeolocator().getPosition();
+        o.latitud = aPosition[0].latitude.toString();
+        o.longitud = aPosition[0].longitude.toString();
+      } catch (oError) {
+        loading.value = false;
+        throw ThrowCustom(
+          type: 'E',
+          msg:
+              'Los permisos de ubicación están deshabilitados, vaya a Configuración de su dispositivo > Privacidad para otorgar permisos a la aplicación.',
+        );
+      }
     }
 
     final oResp = await Get.find<MainService>().insertMonitorDb(o);
@@ -624,15 +644,6 @@ class MainController extends GetxController {
               ? double.parse(oProyecto.avanceFisico.toString())
               : 0;
         }
-        try {
-          List<Position> aPosition = await CheckGeolocator().check();
-          o.latitud = aPosition[0].latitude.toString();
-          o.longitud = aPosition[0].longitude.toString();
-        } catch (oError) {
-          _log.e(
-            oError.toString(),
-          );
-        }
       } else {
         String idBuild = '<CUI>_<IDE>_<FECHA_MONITOREO>';
         idBuild = idBuild.replaceAll('<CUI>', cui);
@@ -640,6 +651,14 @@ class MainController extends GetxController {
         idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
         o.idMonitoreo = idBuild;
         o.cui = cui;
+      }
+
+      try {
+        List<Position> aPosition = await CheckGeolocator().getPosition();
+        o.latitud = aPosition[0].latitude.toString();
+        o.longitud = aPosition[0].longitude.toString();
+      } catch (oError) {
+        //_log.e(oError.toString());
       }
     } catch (oError) {
       _log.e(

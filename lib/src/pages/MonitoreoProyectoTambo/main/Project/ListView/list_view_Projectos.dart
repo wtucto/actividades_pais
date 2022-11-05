@@ -92,14 +92,19 @@ class ListViewProjet extends StatelessWidget {
                         ),
                         progressColor: ((double.parse(
                                         oProyecto.avanceFisico.toString()) *
-                                    100) >=
-                                50
-                            ? Colors.green
+                                    100) ==
+                                100
+                            ? Colors.blue
                             : (double.parse(oProyecto.avanceFisico.toString()) *
-                                        100) <=
-                                    30
-                                ? Colors.red
-                                : Colors.yellow),
+                                        100) >=
+                                    50
+                                ? Colors.green
+                                : (double.parse(oProyecto.avanceFisico
+                                                .toString()) *
+                                            100) <=
+                                        30
+                                    ? Colors.red
+                                    : Colors.yellow),
                       ),
                     ),
                   ),

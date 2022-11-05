@@ -58,6 +58,8 @@ dependencies:
   pin_code_text_field: ^1.8.0
   country_code_picker: ^2.0.2
   intl: 0.17.0
+  #PERMISION
+  permission_handler: ^10.2.0
   # Http client.
   dio: ^4.0.6
   get_it: ^7.2.0

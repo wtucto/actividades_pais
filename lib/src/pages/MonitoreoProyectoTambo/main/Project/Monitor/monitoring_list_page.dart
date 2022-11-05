@@ -10,6 +10,7 @@ import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/L
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Search/monitor_search.dart';
 import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
+import 'package:actividades_pais/util/check_geolocator.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 

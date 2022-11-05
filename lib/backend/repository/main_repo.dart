@@ -264,4 +264,8 @@ class MainRepository {
   Future deleteAllData() async {
     return _dbPnPais.deleteAllData();
   }
+
+  Future deleteAllMonitorByEstadoENV() async {
+    return _dbPnPais.deleteMonitorByEstadoENV();
+  }
 }
