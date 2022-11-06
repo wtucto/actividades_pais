@@ -331,41 +331,41 @@ class _HomePagePais extends State<HomePagePais> {
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () async {
-                /*
-                 PROGRAMACION
-                */
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProgramacionListPage(),
-                  ),
-                );
-              },
-              child: Card(
-                color: Color.fromARGB(255, 49, 132, 201),
-                elevation: 5.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.check_box,
-                        size: 40,
-                        color: Color.fromARGB(255, 199, 196, 196),
-                      ),
-                      Expanded(
-                          child: Text(
-                        'TileProgramaciones'.tr,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 16),
-                      )),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // GestureDetector(
+            //   onTap: () async {
+            //     /*
+            //      PROGRAMACION
+            //     */
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => ProgramacionListPage(),
+            //       ),
+            //     );
+            //   },
+            //   child: Card(
+            //     color: Color.fromARGB(255, 49, 132, 201),
+            //     elevation: 5.0,
+            //     child: Padding(
+            //       padding: const EdgeInsets.all(8.0),
+            //       child: Row(
+            //         children: [
+            //           const Icon(
+            //             Icons.check_box,
+            //             size: 40,
+            //             color: Color.fromARGB(255, 199, 196, 196),
+            //           ),
+            //           Expanded(
+            //               child: Text(
+            //             'TileProgramaciones'.tr,
+            //             style:
+            //                 const TextStyle(color: Colors.white, fontSize: 16),
+            //           )),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
           cancelButton: CupertinoActionSheetAction(
             isDestructiveAction: true,
