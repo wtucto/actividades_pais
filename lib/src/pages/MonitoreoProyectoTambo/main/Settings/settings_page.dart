@@ -9,10 +9,10 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatelessWidget {
-  SharedPreferences? prefs;
+  SharedPreferences? _prefs;
 
   Future<void> loadPreferences() async {
-    prefs = await SharedPreferences.getInstance();
+    _prefs = await SharedPreferences.getInstance();
   }
 
   @override
@@ -85,11 +85,14 @@ class SettingsPage extends StatelessWidget {
                             ),
                             ListTile(
                               title: Text('LogOut'.tr),
-                              leading: Image.asset('assets/icons/sign_out.png'),
+                              leading: const Icon(
+                                Icons.logout,
+                                color: Color.fromARGB(221, 104, 101, 101),
+                              ),
                               onTap: () async {
                                 await loadPreferences();
-                                if (prefs != null) {
-                                  prefs!.setString("clave", "");
+                                if (_prefs != null) {
+                                  _prefs!.setString("clave", "");
                                 }
 
                                 Navigator.pushAndRemoveUntil(

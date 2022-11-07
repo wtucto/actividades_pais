@@ -1,3 +1,4 @@
+import 'package:actividades_pais/util/throw-exception.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
@@ -11,9 +12,14 @@ class CheckGeolocator {
       var status = await Permission.location.status;
       if (status.isGranted) {
       } else if (status.isDenied) {
-        Map<Permission, PermissionStatus> status = await [
+        Map<Permission, PermissionStatus> statuses = await [
           Permission.location,
         ].request();
+
+        if (PermissionStatus.permanentlyDenied ==
+            statuses[Permission.location]) {
+          openAppSettings();
+        }
       } else if (status.isPermanentlyDenied) {
         openAppSettings();
       } else if (await Permission.location.isPermanentlyDenied) {
@@ -38,20 +44,28 @@ class CheckGeolocator {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      throw Exception('Los servicios de ubicación están deshabilitados.');
+      throw ThrowCustom(
+        type: 'E',
+        msg: 'Los servicios de ubicación están deshabilitados.',
+      );
     }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        throw Exception('Los permisos de ubicación están denegados.');
+        throw ThrowCustom(
+          type: 'E',
+          msg: 'Los permisos de ubicación están denegados.',
+        );
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      throw Exception(
-        'Los permisos de ubicación están denegados permanentemente, no podemos solicitar permisos.',
+      throw ThrowCustom(
+        type: 'E',
+        msg:
+            'Los permisos de ubicación están denegados permanentemente, no podemos solicitar permisos.',
       );
     }
 
@@ -71,11 +85,9 @@ class CheckGeolocator {
         );
       }
     } catch (oError) {
-      //openAppSettings();
+      //
     }
 
     return aPosition;
   }
-
-  //Future<void> openAppSettings() async { openAppSettings(); }
 }

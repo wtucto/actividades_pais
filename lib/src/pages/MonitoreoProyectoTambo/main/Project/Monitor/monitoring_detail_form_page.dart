@@ -84,6 +84,8 @@ class _MonitoringDetailNewEditPageState
   final String _imgRiesgoIdentificado = 'imgRiesgoIdentificado';
   List<bool> expandedRI = [false, false];
 
+  String sShowMessage = '';
+
   void showSnackbar({required bool success, required String text}) {
     AnimatedSnackBar.rectangle(
       'I'.tr,
@@ -98,8 +100,7 @@ class _MonitoringDetailNewEditPageState
   @override
   void initState() {
     super.initState();
-
-    CheckGeolocator().check();
+    checkGeolocator();
 
     if (mounted) {
       if (widget.statusM == "CREATE" || widget.statusM == "SEARCH") {
@@ -117,7 +118,24 @@ class _MonitoringDetailNewEditPageState
     }
   }
 
-  loadPreferences() async {}
+  Future<void> checkGeolocator() async {
+    try {
+      await CheckGeolocator().check();
+    } catch (oError) {
+      var sTitle = 'Error';
+      var sMessage = oError.toString();
+      if (oError is ThrowCustom) {
+        sTitle = oError.typeText!;
+        sMessage =
+            '${oError.msg!}, vaya a Configuración de su dispositivo > Privacidad para otorgar permisos a la aplicación.';
+      }
+      sShowMessage = sMessage;
+
+      setState(() {
+        sShowMessage = sMessage;
+      });
+    }
+  }
 
   Future<void> loadData(BuildContext context) async {
     try {
@@ -601,6 +619,13 @@ class _MonitoringDetailNewEditPageState
               enabled: _enabledF,
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             ),
+            const SizedBox(height: 32),
+            Text(sShowMessage,
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  color: Colors.red.withOpacity(1.0),
+                  fontWeight: FontWeight.bold,
+                )),
             /**
              * Botones
              */

@@ -1,3 +1,4 @@
+import 'package:actividades_pais/src/pages/Login/Login.dart';
 import 'package:actividades_pais/util/check_connection.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,8 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
   String usc = "";
   String usn = "";
   bool isConnec = false;
+  static const String sUrlPdf =
+      'https://www.pais.gob.pe/sismonitor/FILES/mop_midis.pdf';
 
   loadPreferences() async {
     _prefs = await SharedPreferences.getInstance();
@@ -108,11 +111,9 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
                 ListTile(
                   title: Text('Settings'.tr),
                   subtitle: Text('UserConfig'.tr),
-                  leading: Image.asset(
-                    'assets/icons/settings.png',
-                    fit: BoxFit.scaleDown,
-                    width: 30,
-                    height: 30,
+                  leading: const Icon(
+                    Icons.settings,
+                    color: Color.fromARGB(221, 104, 101, 101),
                   ),
                   trailing: const Icon(
                     Icons.chevron_right,
@@ -121,7 +122,7 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
                   onTap: () => Navigator.of(context)
                       .push(MaterialPageRoute(builder: (_) => SettingsPage())),
                 ),
-                const Divider(),
+                /*const Divider(),
                 ListTile(
                   title: Text('PrivacyPolicy'.tr),
                   subtitle: Text('Legal'.tr),
@@ -132,8 +133,8 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
                   ),
                   onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => LegalAboutPage())),
-                ),
-                const Divider(),
+                ),*/
+                /*const Divider(),
                 ListTile(
                   title: Text('FrequentlyAskedQuestions'.tr),
                   subtitle: Text('FrequentlyAskedQuestionsResp'.tr),
@@ -149,44 +150,64 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
                   ),
                   onTap: () => Navigator.of(context)
                       .push(MaterialPageRoute(builder: (_) => FaqPage())),
+                ),*/
+                const Divider(),
+                ListTile(
+                  title: const Text('Manual de Usuario'),
+                  // subtitle: Text('UserConfig'.tr),
+                  leading: const Icon(
+                    Icons.picture_as_pdf_outlined,
+                    color: Color.fromARGB(221, 104, 101, 101),
+                  ),
+                  trailing: const Icon(
+                    Icons.chevron_right,
+                    color: blue,
+                  ),
+                  onTap: () async {
+                    isConnec = await CheckConnection.isOnlineWifiMobile();
+                    if (isConnec) {
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<dynamic>(
+                          builder: (_) => const PDFViewerFromUrl(
+                            url: sUrlPdf,
+                          ),
+                        ),
+                      );
+                    } else {
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<dynamic>(
+                          builder: (_) => const PDFViewerCachedFromUrl(
+                            url: sUrlPdf,
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 ),
                 const Divider(),
                 ListTile(
-                    title: const Text('Manual de Usuario'),
-                    // subtitle: Text('UserConfig'.tr),
-                    leading: const Icon(
-                      Icons.file_open,
-                      color: Color.fromARGB(221, 104, 101, 101),
-                    ),
-                    trailing: const Icon(
-                      Icons.chevron_right,
-                      color: blue,
-                    ),
-                    onTap: () async {
-                      isConnec = await CheckConnection.isOnlineWifiMobile();
-                      if (isConnec) {
-                        // ignore: use_build_context_synchronously
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<dynamic>(
-                            builder: (_) => const PDFViewerFromUrl(
-                              url:
-                                  'https://www.pais.gob.pe/sismonitor/FILES/mop_midis.pdf',
-                            ),
-                          ),
-                        );
-                      } else {
-                        // ignore: use_build_context_synchronously
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute<dynamic>(
-                              builder: (_) => const PDFViewerCachedFromUrl(
-                                url:
-                                    'https://www.pais.gob.pe/sismonitor/FILES/mop_midis.pdf',
-                              ),
-                            ));
-                      }
-                    }),
+                  title: Text('LogOut'.tr),
+                  leading: const Icon(
+                    Icons.logout,
+                    color: Color.fromARGB(221, 104, 101, 101),
+                  ),
+                  onTap: () async {
+                    await loadPreferences();
+                    if (_prefs != null) {
+                      _prefs!.setString("clave", "");
+                    }
+
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (_) => LoginPage()),
+                      (route) => false,
+                    );
+                  },
+                ),
               ],
             ),
           ),
