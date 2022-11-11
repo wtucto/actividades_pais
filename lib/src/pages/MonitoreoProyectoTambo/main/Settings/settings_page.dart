@@ -93,6 +93,9 @@ class SettingsPage extends StatelessWidget {
                                 await loadPreferences();
                                 if (_prefs != null) {
                                   _prefs!.setString("clave", "");
+                                  _prefs!.setString("nombres", "");
+                                  _prefs!.setString("codigo", "");
+                                  _prefs!.setString("rol", "");
                                 }
 
                                 Navigator.pushAndRemoveUntil(

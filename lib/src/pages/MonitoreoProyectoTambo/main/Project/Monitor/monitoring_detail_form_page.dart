@@ -179,14 +179,14 @@ class _MonitoringDetailNewEditPageState
       _cuiCtr.text = m.cui!;
       _idMonitor.text = m.idMonitoreo!;
       _statusMonitor =
-          m.estadoMonitoreo == "" ? "Seleccione una opción" : m.estadoMonitoreo;
+          m.estadoMonitoreo == "" ? 'SelectOption'.tr : m.estadoMonitoreo;
       _dateMonitor.text = m.fechaMonitoreo!;
       _advanceFEA.text =
           ((m.avanceFisicoAcumulado! * 100).toStringAsFixed(2)).toString();
       _statusAdvance =
-          m.estadoAvance == "" ? "Seleccione una opción" : m.estadoAvance;
+          m.estadoAvance == "" ? 'SelectOption'.tr : m.estadoAvance;
       _valuePartidaEje = m.actividadPartidaEjecutada == ""
-          ? "Seleccione una opción"
+          ? 'SelectOption'.tr
           : m.actividadPartidaEjecutada;
 
       _advanceFEP.text =
@@ -194,16 +194,15 @@ class _MonitoringDetailNewEditPageState
       _obsMonitor.text = m.observaciones!;
 
       _valueProblemaIO = m.problemaIdentificado == ""
-          ? "Seleccione una opción"
+          ? 'SelectOption'.tr
           : m.problemaIdentificado;
       _valueAlternSolucion = m.alternativaSolucion == ""
-          ? "Seleccione una opción"
+          ? 'SelectOption'.tr
           : m.alternativaSolucion;
-      _valueRiesgo = m.riesgoIdentificado == ""
-          ? "Seleccione una opción"
-          : m.riesgoIdentificado;
+      _valueRiesgo =
+          m.riesgoIdentificado == "" ? 'SelectOption'.tr : m.riesgoIdentificado;
       _valueNivelRiesgo =
-          m.nivelRiesgo == "" ? "Seleccione una opción" : m.nivelRiesgo;
+          m.nivelRiesgo == "" ? 'SelectOption'.tr : m.nivelRiesgo;
 
       _dateObra.text = m.fechaTerminoEstimado!;
       _longitud.text = m.longitud!;
@@ -350,8 +349,8 @@ class _MonitoringDetailNewEditPageState
               */
             TextFormField(
               controller: _cuiCtr,
-              decoration: const InputDecoration(
-                labelText: 'CUI *',
+              decoration: InputDecoration(
+                labelText: 'FldMonitor001'.tr,
               ),
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false,
@@ -361,8 +360,8 @@ class _MonitoringDetailNewEditPageState
               */
             TextFormField(
               controller: _idMonitor,
-              decoration: const InputDecoration(
-                labelText: 'Id Monitoreo *',
+              decoration: InputDecoration(
+                labelText: 'FldMonitor002'.tr,
               ),
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false,
@@ -375,7 +374,7 @@ class _MonitoringDetailNewEditPageState
               _statusMonitor!,
               _itemStatusMonitor,
               false,
-              'Estado Monitoreo *',
+              'FldMonitor003'.tr,
               false,
             ),
             /**
@@ -385,14 +384,13 @@ class _MonitoringDetailNewEditPageState
               controller: _dateMonitor,
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false,
-              decoration: const InputDecoration(labelText: 'Fecha Monitoreo *'),
+              decoration: InputDecoration(labelText: 'FldMonitor004'.tr),
               readOnly: true,
               onTap: () async {
                 DateTime? pickedDate = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
-                    firstDate: DateTime(
-                        2000), //DateTime.now() - not to allow to choose before today.
+                    firstDate: DateTime(2000),
                     lastDate: DateTime(2101));
 
                 if (pickedDate != null) {
@@ -411,8 +409,8 @@ class _MonitoringDetailNewEditPageState
               keyboardType: TextInputType.number,
               maxLength: 6,
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
-              decoration: const InputDecoration(
-                labelText: '% Avance Fisico Estimado Acumulado *',
+              decoration: InputDecoration(
+                labelText: 'FldMonitor005'.tr,
               ),
               enabled: _enabledF,
               validator: (v) {
@@ -423,6 +421,7 @@ class _MonitoringDetailNewEditPageState
                 return 'Ingrese el numero de 0 A 100';
               },
             ),
+
             /**
              * % ESTADO DE AVANCE
              */
@@ -431,7 +430,7 @@ class _MonitoringDetailNewEditPageState
               _statusAdvance!,
               _itemStatusAdvance,
               false,
-              'Estado de Avance *',
+              'FldMonitor006'.tr,
               true,
             ),
             /**
@@ -442,7 +441,7 @@ class _MonitoringDetailNewEditPageState
               _valuePartidaEje!,
               _itemsPartidaEje,
               false,
-              'Partida Ejecutada *',
+              'FldMonitor007'.tr,
               true,
             ),
             /**
@@ -452,24 +451,17 @@ class _MonitoringDetailNewEditPageState
               controller: _advanceFEP,
               maxLength: 6,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: '% Avance Fisico Acumulado Partida *',
+              decoration: InputDecoration(
+                labelText: 'FldMonitor008'.tr,
               ),
               enabled: _enabledF,
-              // validator: (v) {
-              //   final intNumber = double.tryParse(v!);
-              //   if (intNumber != null && intNumber > 0 && intNumber <= 100) {
-              //     return null;
-              //   }
-              //   return 'Ingrese el numero de 0 A 100';
-              // },
             ),
             /**
              * Fotos de la Partida Ejecutada(Obligatorio) 
             */
             _enabledF
                 ? OutlinedButton.icon(
-                    label: const Text('Fotos de la Partida Ejecutada *'),
+                    label: Text('FldMonitor009'.tr),
                     icon: const Icon(Icons.image),
                     onPressed: () async {
                       await _showChoiceDialog(context, _imgPartidaEjecutada);
@@ -487,7 +479,7 @@ class _MonitoringDetailNewEditPageState
               textInputAction: TextInputAction.newline,
               controller: _obsMonitor,
               enabled: _enabledF,
-              decoration: const InputDecoration(labelText: 'Observaciones'),
+              decoration: InputDecoration(labelText: 'FldMonitor010'.tr),
               // validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             ),
             /**
@@ -498,7 +490,7 @@ class _MonitoringDetailNewEditPageState
               _valueProblemaIO!,
               _itemProblemaIO,
               false,
-              'Problema Indentificado en la Obra *',
+              'FldMonitor011'.tr,
               true,
             ),
             /**
@@ -506,7 +498,7 @@ class _MonitoringDetailNewEditPageState
              */
             _enabledF
                 ? OutlinedButton.icon(
-                    label: const Text('Foto del Problema Identificado'),
+                    label: Text('FldMonitor012'.tr),
                     icon: const Icon(Icons.image),
                     onPressed: () async {
                       await _showChoiceDialog(
@@ -524,7 +516,7 @@ class _MonitoringDetailNewEditPageState
               _valueAlternSolucion!,
               _itemAlternSolucion,
               false,
-              'Alternativa de Solución *',
+              'FldMonitor013'.tr,
               true,
             ),
             /**
@@ -535,7 +527,7 @@ class _MonitoringDetailNewEditPageState
               _valueRiesgo!,
               _itemRiesgo,
               false,
-              'Riesgo Identificado',
+              'FldMonitor014'.tr,
               false,
             ),
             /**
@@ -543,7 +535,7 @@ class _MonitoringDetailNewEditPageState
              */
             _enabledF
                 ? OutlinedButton.icon(
-                    label: const Text('Foto del Riesgo Identificado'),
+                    label: Text('FldMonitor015'.tr),
                     icon: const Icon(Icons.image),
                     onPressed: () async {
                       await _showChoiceDialog(context, _imgRiesgoIdentificado);
@@ -560,7 +552,7 @@ class _MonitoringDetailNewEditPageState
               _valueNivelRiesgo!,
               _itemNivelRiesgo,
               false,
-              'Nivel de Riesgo',
+              'FldMonitor016'.tr,
               false,
             ),
 
@@ -570,33 +562,21 @@ class _MonitoringDetailNewEditPageState
             TextFormField(
               controller: _dateObra,
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-              decoration: const InputDecoration(
-                  //icon: Icon(Icons.calendar_today), //icon of text field
-                  labelText: 'Fecha Termino Obra *' //label text of field
-                  ),
+              decoration: InputDecoration(labelText: 'FldMonitor017'.tr),
               enabled: _enabledF,
-              readOnly:
-                  true, //set it true, so that user will not able to edit text
+              readOnly: true,
               onTap: () async {
                 DateTime? pickedDate = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
-                    firstDate: DateTime(
-                        2000), //DateTime.now() - not to allow to choose before today.
+                    firstDate: DateTime(2000),
                     lastDate: DateTime(2101));
 
                 if (pickedDate != null) {
-                  print(
-                      pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
                   String formattedDate =
                       DateFormat('yyyy-MM-dd').format(pickedDate);
-                  print(
-                      formattedDate); //formatted date output using intl package =>  2021-03-16
-                  //you can implement different kind of Date Format here according to your requirement
-
                   setState(() {
-                    _dateObra.text =
-                        formattedDate; //set output date to TextField value.
+                    _dateObra.text = formattedDate;
                   });
                 }
               },
@@ -606,7 +586,7 @@ class _MonitoringDetailNewEditPageState
            */
             TextFormField(
               controller: _longitud,
-              decoration: const InputDecoration(labelText: 'Longitud *'),
+              decoration: InputDecoration(labelText: 'FldMonitor018'.tr),
               enabled: _enabledF,
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             ),
@@ -615,7 +595,7 @@ class _MonitoringDetailNewEditPageState
            */
             TextFormField(
               controller: _latitud,
-              decoration: const InputDecoration(labelText: 'Latitud *'),
+              decoration: InputDecoration(labelText: 'FldMonitor019'.tr),
               enabled: _enabledF,
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             ),
@@ -688,14 +668,15 @@ class _MonitoringDetailNewEditPageState
                                       fechaTerminoEstimado: _dateObra.text,
                                       actividadPartidaEjecutada:
                                           _valuePartidaEje!.toUpperCase() ==
-                                                  "SELECCIONE UNA OPCIÓN"
+                                                  ('SelectOption'.tr)
+                                                      .toUpperCase()
                                               ? ""
                                               : _valuePartidaEje!,
-                                      alternativaSolucion:
-                                          _valueAlternSolucion!.toUpperCase() ==
-                                                  "SELECCIONE UNA OPCIÓN"
-                                              ? ""
-                                              : _valueAlternSolucion!,
+                                      alternativaSolucion: _valueAlternSolucion!
+                                                  .toUpperCase() ==
+                                              ('SelectOption'.tr).toUpperCase()
+                                          ? ""
+                                          : _valueAlternSolucion!,
                                       avanceFisicoAcumulado: (double.parse(
                                               _advanceFEA.text == ""
                                                   ? "0"
@@ -706,16 +687,16 @@ class _MonitoringDetailNewEditPageState
                                                   ? "0"
                                                   : _advanceFEP.text) /
                                           100),
-                                      estadoAvance:
-                                          _statusAdvance!.toUpperCase() ==
-                                                  "SELECCIONE UNA OPCIÓN"
-                                              ? ""
-                                              : _statusAdvance!,
-                                      estadoMonitoreo:
-                                          _statusMonitor!.toUpperCase() ==
-                                                  "SELECCIONE UNA OPCIÓN"
-                                              ? ""
-                                              : _statusMonitor!,
+                                      estadoAvance: _statusAdvance!
+                                                  .toUpperCase() ==
+                                              ('SelectOption'.tr).toUpperCase()
+                                          ? ""
+                                          : _statusAdvance!,
+                                      estadoMonitoreo: _statusMonitor!
+                                                  .toUpperCase() ==
+                                              ('SelectOption'.tr).toUpperCase()
+                                          ? ""
+                                          : _statusMonitor!,
                                       fechaMonitoreo: _dateMonitor.text,
                                       idMonitoreo: _idMonitor.text,
                                       idUsuario: oUser.codigo,
@@ -723,21 +704,21 @@ class _MonitoringDetailNewEditPageState
                                       imgProblema: imgPI,
                                       imgRiesgo: imgRI,
                                       observaciones: _obsMonitor.text,
-                                      problemaIdentificado:
-                                          _valueProblemaIO!.toUpperCase() ==
-                                                  "SELECCIONE UNA OPCIÓN"
-                                              ? ""
-                                              : _valueProblemaIO!,
-                                      riesgoIdentificado:
-                                          _valueRiesgo!.toUpperCase() ==
-                                                  "SELECCIONE UNA OPCIÓN"
-                                              ? ""
-                                              : _valueRiesgo!,
-                                      nivelRiesgo:
-                                          _valueNivelRiesgo!.toUpperCase() ==
-                                                  "SELECCIONE UNA OPCIÓN"
-                                              ? ""
-                                              : _valueNivelRiesgo!,
+                                      problemaIdentificado: _valueProblemaIO!
+                                                  .toUpperCase() ==
+                                              ('SelectOption'.tr).toUpperCase()
+                                          ? ""
+                                          : _valueProblemaIO!,
+                                      riesgoIdentificado: _valueRiesgo!
+                                                  .toUpperCase() ==
+                                              ('SelectOption'.tr).toUpperCase()
+                                          ? ""
+                                          : _valueRiesgo!,
+                                      nivelRiesgo: _valueNivelRiesgo!
+                                                  .toUpperCase() ==
+                                              ('SelectOption'.tr).toUpperCase()
+                                          ? ""
+                                          : _valueNivelRiesgo!,
                                       rol: oUser.rol,
                                       usuario: oUser.nombres,
                                     ));
@@ -870,13 +851,15 @@ class _MonitoringDetailNewEditPageState
                                           fechaTerminoEstimado: _dateObra.text,
                                           actividadPartidaEjecutada:
                                               _valuePartidaEje!.toUpperCase() ==
-                                                      "SELECCIONE UNA OPCIÓN"
+                                                      ('SelectOption'.tr)
+                                                          .toUpperCase()
                                                   ? ""
                                                   : _valuePartidaEje!,
                                           alternativaSolucion:
                                               _valueAlternSolucion!
                                                           .toUpperCase() ==
-                                                      "SELECCIONE UNA OPCIÓN"
+                                                      ('SelectOption'.tr)
+                                                          .toUpperCase()
                                                   ? ""
                                                   : _valueAlternSolucion!,
                                           avanceFisicoAcumulado: (double.parse(
@@ -891,12 +874,14 @@ class _MonitoringDetailNewEditPageState
                                               100),
                                           estadoAvance:
                                               _statusAdvance!.toUpperCase() ==
-                                                      "SELECCIONE UNA OPCIÓN"
+                                                      ('SelectOption'.tr)
+                                                          .toUpperCase()
                                                   ? ""
                                                   : _statusAdvance!,
                                           estadoMonitoreo:
                                               _statusMonitor!.toUpperCase() ==
-                                                      "SELECCIONE UNA OPCIÓN"
+                                                      ('SelectOption'.tr)
+                                                          .toUpperCase()
                                                   ? ""
                                                   : _statusMonitor!,
                                           fechaMonitoreo: _dateMonitor.text,
@@ -908,17 +893,20 @@ class _MonitoringDetailNewEditPageState
                                           observaciones: _obsMonitor.text,
                                           problemaIdentificado:
                                               _valueProblemaIO!.toUpperCase() ==
-                                                      "SELECCIONE UNA OPCIÓN"
+                                                      ('SelectOption'.tr)
+                                                          .toUpperCase()
                                                   ? ""
                                                   : _valueProblemaIO!,
                                           riesgoIdentificado:
                                               _valueRiesgo!.toUpperCase() ==
-                                                      "SELECCIONE UNA OPCIÓN"
+                                                      ('SelectOption'.tr)
+                                                          .toUpperCase()
                                                   ? ""
                                                   : _valueRiesgo!,
                                           nivelRiesgo: _valueNivelRiesgo!
                                                       .toUpperCase() ==
-                                                  "SELECCIONE UNA OPCIÓN"
+                                                  ('SelectOption'.tr)
+                                                      .toUpperCase()
                                               ? ""
                                               : _valueNivelRiesgo!,
                                           rol: oUser.rol,
@@ -1025,9 +1013,9 @@ class _MonitoringDetailNewEditPageState
                 return Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-                  child: const Text(
-                    "Lista de Imagenes",
-                    style: TextStyle(fontSize: 16),
+                  child: Text(
+                    "FldMonitor020".tr,
+                    style: const TextStyle(fontSize: 16),
                   ),
                 );
               },
@@ -1062,11 +1050,12 @@ class _MonitoringDetailNewEditPageState
       isExpanded: true,
       isDense: isDense!,
       value: valueId,
-      validator: (value) => value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
-          ? isvalidad
-              ? 'Requerido *'
-              : null
-          : null,
+      validator: (value) =>
+          value!.toUpperCase() == ('SelectOption'.tr).toUpperCase()
+              ? isvalidad
+                  ? 'Required'.tr
+                  : null
+              : null,
       items:
           items.map((e) => DropdownMenuItem(child: Text(e), value: e)).toList(),
       onChanged: _enabledF
@@ -1111,7 +1100,7 @@ class _MonitoringDetailNewEditPageState
           title: Text('W'.tr),
           content: SingleChildScrollView(
             child: ListBody(
-              children: <Widget>[
+              children: [
                 Text('ConfirmationQuestion100'.tr),
               ],
             ),

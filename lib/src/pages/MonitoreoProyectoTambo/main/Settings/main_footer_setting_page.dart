@@ -3,9 +3,7 @@ import 'package:actividades_pais/util/check_connection.dart';
 import 'package:flutter/material.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/faq_page.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/settings_page.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/legal_about_page.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +28,7 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
   String usn = "";
   bool isConnec = false;
   static const String sUrlPdf =
-      'https://www.pais.gob.pe/sismonitor/FILES/mop_midis.pdf';
+      'https://www.pais.gob.pe/sismonitor/FILES/manual_usuario_.pdf';
 
   loadPreferences() async {
     _prefs = await SharedPreferences.getInstance();
