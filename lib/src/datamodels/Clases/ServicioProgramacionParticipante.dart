@@ -34,8 +34,8 @@ class ServicioProgramacionParticipante {
             json['id_programacion_participante_servicio'],
         idServicio: json['id_servicio'],
         tipo: json['tipo'],
-        idUsuario: json['idUsuario'],
-        txtIpmaq: json['txtIpmaq'],
+       // idUsuario: json['idUsuario'],
+       // txtIpmaq: json['txtIpmaq'],
       );
 
   Map<String, dynamic> toJson() {

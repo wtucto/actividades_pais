@@ -83,7 +83,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => Home_Asis(),
+          builder: (BuildContext context) => LoginPage(),
         ),
       );
     }

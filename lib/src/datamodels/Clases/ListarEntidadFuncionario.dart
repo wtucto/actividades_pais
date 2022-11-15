@@ -45,7 +45,7 @@ class ListarEntidadFuncionario {
 
   factory ListarEntidadFuncionario.fromJson(Map<String, dynamic> parsedJson) =>
       new ListarEntidadFuncionario(
-        id: parsedJson['id'],
+        //id: parsedJson['id'],
         id_accion_programacion: parsedJson['id_accion_programacion'],
         id_tipo_actividad: parsedJson['id_tipo_actividad'],
         nombre_tipo_actividad: parsedJson['nombre_tipo_actividad'],

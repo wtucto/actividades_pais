@@ -2,6 +2,10 @@
 
 import 'dart:async';
 
+import 'package:actividades_pais/main.dart';
+import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
+import 'package:actividades_pais/src/pages/configuracion/ConfiguracionInicial.dart';
+import 'package:actividades_pais/src/pages/configuracion/ResetContrasenia.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,6 +20,8 @@ import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 
+import '../configuracion/pantallainicio.dart';
+
 SharedPreferences? _prefs;
 bool? checkGuardarDatos = false;
 bool? check = false;
@@ -26,12 +32,16 @@ MainController mainController = MainController();
 class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
+
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var contador=0;
   @override
   void initState() {
     loadPreferences();
+    vaidarexUsuario();
+
     super.initState();
   }
 
@@ -46,6 +56,12 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
+  vaidarexUsuario() async {
+    var cnt= await DatabasePr.db.getAllConfigPersonal();
+    setState(() {
+      print(cnt.length);
+      contador = cnt.length;
+    });  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +118,24 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           _Form(),
-                          SizedBox(height: h / 15),
+                          SizedBox(height: h / 50),
+                          (contador==0)?
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (_) => PantallaInicio()),
+                              );
+                            },
+                            child: Text(
+                              'Registrarse en el app',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ):new Container(),
+                          SizedBox(height: h / 35),
                           const Text(
                             'Términos y condiciones de uso',
                             style: TextStyle(
@@ -130,7 +163,7 @@ class _Form extends StatefulWidget {
 
 class __FormState extends State<_Form> {
   final pnPaisApi = GetIt.instance<PnPaisApi>();
-  final emailCtrl = TextEditingController(text: "CIP_119811");
+  final emailCtrl = TextEditingController(text: "");
   final passCtrl = TextEditingController();
   final passCtrl2 = TextEditingController();
 
@@ -141,12 +174,20 @@ class __FormState extends State<_Form> {
     Future LoginUser(usn, psw, rpsw) async {
       //final listarTramaproyecto = await pnPaisApi.listarTramaproyecto();
 
-      if (usn == 'PAIS' && psw == 'PAIS') {
+      var res = await DatabasePr.db
+          .getLoginUser(dni: int.parse(usn), contrasenia: psw);
+      if(res.length>0){
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => HomePagePais()),
         );
         return;
       }
+      /*  if (usn == 'PAIS' && psw == 'PAIS') {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => HomePagePais()),
+        );
+        return;
+      }*/
 
       UserModel oUser;
       try {
@@ -240,9 +281,27 @@ class __FormState extends State<_Form> {
               textController: passCtrl2,
               isPassword: true,
             ),
+          InkWell(
+            onTap: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                    builder: (_) => ResetContrasenia()),
+              );
+            },
+            child: const Text(
+              'Olvido su contraseña?',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+          SizedBox(height: h / 50
+          ),
           BotonLog(
-            text: 'Ingrese',
+            text: 'Ingresar',
             onPressed: () {
+
               LoginUser(emailCtrl.text, passCtrl.text, passCtrl2.text);
             },
           ),

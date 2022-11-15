@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
 import 'package:http/http.dart' as http;
 import 'package:actividades_pais/src/datamodels/Clases/ConsultarTambosPiasxUnidadTerritorial.dart';
 import 'package:actividades_pais/util/app-config.dart';
@@ -19,5 +20,25 @@ class ProviderConfiguracion {
       return listadostraba.response;
     } else if (response.statusCode == 400) {}
     return List.empty();
+  }
+  Future<ConfigPersonal> buscarUsuarioApp(codigo) async{
+  print(AppConfig.urlBackndServicioSeguro +
+      '/api-pnpais/app/listarUsuariosApp');
+    http.Response response = await http.get(
+      Uri.parse(AppConfig.urlBackndServicioSeguro +
+          '/api-pnpais/app/listarUsuariosApp'),
+    );
+  print(response.body);
+  print(codigo);
+    final jsonResponse = json.decode(response.body);
+    final listadoUsuario =
+    new ListasUsuarios.fromJsonList(jsonResponse["response"]);
+    for (var i = 0; i < listadoUsuario.items.length; i++) {
+      if (listadoUsuario.items[i].codigo == codigo) {
+        print(listadoUsuario.items[i]);
+        return listadoUsuario.items[i];
+      }
+    }
+    return new ConfigPersonal();
   }
 }

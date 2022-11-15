@@ -23,6 +23,7 @@ import 'package:get/get.dart';
 import 'appbar/AppBar.dart';
 
 class HomePagePais extends StatefulWidget {
+
   static String route = '/';
 
   @override
@@ -48,7 +49,7 @@ class _HomePagePais extends State<HomePagePais> {
 
   String long = '';
   String lat = '';
-
+  String unidad= '';
   @override
   void initState() {
     super.initState();
@@ -57,20 +58,31 @@ class _HomePagePais extends State<HomePagePais> {
     mostrarTmbo();
     traerdato();
     verificargps();
+    datosParaPerfil();
+    mostrarNombre();
   }
 
   Future verificargps() async {
     bool servicestatus = await Geolocator.isLocationServiceEnabled();
-
     if (servicestatus) {
-      //print('GPS service is enabled');
     } else {
-      //print('GPS service is disabled.');
     }
   }
 
   traerdato() async {
     await ProviderDatos().verificacionpesmiso();
+  }
+
+  datosParaPerfil()async{
+    cantidadDB = 1;
+    var res = await DatabasePr.db
+        .getAllConfigPersonal();
+    if(res.length>0){
+      setState(() {
+        unidad= res[0].unidad;
+      });
+      return;
+    }
   }
 
   mostrarTmbo() async {
@@ -114,7 +126,7 @@ class _HomePagePais extends State<HomePagePais> {
       setState(() {
         _nombrePersona = abc[abc.length - 1].nombres.toUpperCase();
         _apellidosPersona =
-            '${abc[abc.length - 1].apellidoPaterno.toUpperCase()} ${abc[abc.length - 1].apellidoMaterno.toUpperCase()}';
+        '${abc[abc.length - 1].apellidoPaterno.toUpperCase()} ${abc[abc.length - 1].apellidoMaterno.toUpperCase()}';
       });
     }
   }
@@ -153,122 +165,95 @@ class _HomePagePais extends State<HomePagePais> {
         ),
       );
     } else {
-      if (tipoPlataforma == 'TAMBO') {
+      if(unidad=='UAGS'){
         aHomeOptions.add(
           HomeOptions(
-            code: 'OPT1003',
-            name: 'TileIntervencion'.tr,
+            code: 'OPT1001',
+            name: 'TileBitacoraRegister'.tr,
             types: const ['Ver'],
-            image: icon4,
+            image: icon6,
             color: lightBlue,
           ),
         );
-      } else {
-        if (tipoPlataforma == 'PIAS' &&
-            (modalidad == '1' || modalidad == '2' || modalidad == '3')) {
-          String sImagePias = modalidad == '1'
-              ? icon2
-              : modalidad == '2'
-                  ? icon3
-                  : icon1;
+        if (tipoPlataforma == 'TAMBO') {
           aHomeOptions.add(
             HomeOptions(
-              code: 'OPT1004',
-              name: 'TilePias'.tr,
+              code: 'OPT1003',
+              name: 'TileIntervencion'.tr,
               types: const ['Ver'],
-              image: sImagePias,
+              image: icon4,
               color: lightBlue,
             ),
           );
+        } else {
+          if (tipoPlataforma == 'PIAS' &&
+              (modalidad == '1' || modalidad == '2' || modalidad == '3')) {
+            String sImagePias = modalidad == '1'
+                ? icon2
+                : modalidad == '2'
+                ? icon3
+                : icon1;
+            aHomeOptions.add(
+              HomeOptions(
+                code: 'OPT1004',
+                name: 'TilePias'.tr,
+                types: const ['Ver'],
+                image: sImagePias,
+                color: lightBlue,
+              ),
+            );
+          }
         }
+        aHomeOptions.add(
+          HomeOptions(
+            code: 'OPT1006',
+            name: 'TileProgramacionActividad'.tr,
+            types: const ['Ver'],
+            image: icon7,
+            color: lightBlue,
+          ),
+        );
       }
     }
 
-    aHomeOptions.add(
-      HomeOptions(
-        code: 'OPT1001',
-        name: 'TileBitacoraRegister'.tr,
-        types: const ['Ver'],
-        image: icon6,
-        color: lightBlue,
-      ),
-    );
+    if(unidad=='UPS'){
+      aHomeOptions.add(
+        HomeOptions(
+          code: 'OPT1005',
+          name: 'TileProyectTambo'.tr,
+          types: const ['Ver'],
+          image: icon5,
+          color: lightBlue,
+        ),
+      );
 
-    aHomeOptions.add(
-      HomeOptions(
-        code: 'OPT1005',
-        name: 'TileProyectTambo'.tr,
-        types: const ['Ver'],
-        image: icon5,
-        color: lightBlue,
-      ),
-    );
+    }
 
-    aHomeOptions.add(
-      HomeOptions(
-        code: 'OPT1006',
-        name: 'TileProgramacionActividad'.tr,
-        types: const ['Ver'],
-        image: icon7,
-        color: lightBlue,
-      ),
-    );
+
     void _intervencionOptions(BuildContext context) {
-      showCupertinoModalPopup(
+      showCupertinoModalPopup<void>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-          title: Text(
-            'TileProgramacionActividad'.tr,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-            ),
-          ),
-          message: Text(
-            'SelectOption'.tr,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-            ),
-          ),
-          actions: [
-            GestureDetector(
-              onTap: () async {
+          title: Text('TileProgramacionActividad'.tr),
+          message: Text('SelectOption'.tr),
+          actions: <CupertinoActionSheetAction>[
+            CupertinoActionSheetAction(
+              //isDefaultAction: true,
+              onPressed: () async {
                 /*
                  COORDINACIÓN Y ARTICULACIÓN
                 */
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CordinacionArticulacion(),
+                    builder: (context) => CordinacionArticulacion(),
                   ),
                 );
               },
-              child: Card(
-                color: Color.fromARGB(255, 102, 106, 107),
-                elevation: 5.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.supervised_user_circle_sharp,
-                        size: 40,
-                        color: Color.fromARGB(255, 199, 196, 196),
-                      ),
-                      Expanded(
-                          child: Text(
-                        'TileCordArticulacion'.tr,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 16),
-                      )),
-                    ],
-                  ),
-                ),
-              ),
+              child: Text('TileCordArticulacion'.tr),
             ),
-            GestureDetector(
-              onTap: () async {
+            CupertinoActionSheetAction(
+              onPressed: () async {
                 /*
                  MONITOREO Y SUPERVISIÓN
                 */
@@ -279,28 +264,10 @@ class _HomePagePais extends State<HomePagePais> {
                   ),
                 );
               },
-              child: Card(
-                color: Color.fromARGB(255, 49, 132, 201),
-                elevation: 5.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(children: [
-                    const Icon(
-                      Icons.language_outlined,
-                      size: 40,
-                      color: Color.fromARGB(255, 199, 196, 196),
-                    ),
-                    Expanded(
-                        child: Text(
-                      'TileMinitoreoSuper'.tr,
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                    )),
-                  ]),
-                ),
-              ),
+              child: Text('TileMinitoreoSuper'.tr),
             ),
-            GestureDetector(
-              onTap: () async {
+            CupertinoActionSheetAction(
+              onPressed: () async {
                 /*
                  ACTIVIDADES PNPAIS
                 */
@@ -311,68 +278,29 @@ class _HomePagePais extends State<HomePagePais> {
                   ),
                 );
               },
-              child: Card(
-                color: Color.fromARGB(255, 61, 102, 73),
-                elevation: 5.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(children: [
-                    const Icon(
-                      Icons.menu_open,
-                      size: 40,
-                      color: Color.fromARGB(255, 199, 196, 196),
-                    ),
-                    Expanded(
-                        child: Text(
-                      'TileActividadPnpais'.tr,
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                    )),
-                  ]),
-                ),
-              ),
+              child: Text('TileActividadPnpais'.tr),
             ),
-            // GestureDetector(
-            //   onTap: () async {
-            //     /*
-            //      PROGRAMACION
-            //     */
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => ProgramacionListPage(),
-            //       ),
-            //     );
-            //   },
-            //   child: Card(
-            //     color: Color.fromARGB(255, 49, 132, 201),
-            //     elevation: 5.0,
-            //     child: Padding(
-            //       padding: const EdgeInsets.all(8.0),
-            //       child: Row(
-            //         children: [
-            //           const Icon(
-            //             Icons.check_box,
-            //             size: 40,
-            //             color: Color.fromARGB(255, 199, 196, 196),
-            //           ),
-            //           Expanded(
-            //               child: Text(
-            //             'TileProgramaciones'.tr,
-            //             style:
-            //                 const TextStyle(color: Colors.white, fontSize: 16),
-            //           )),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            CupertinoActionSheetAction(
+              onPressed: () async {
+                /*
+                 ACTIVIDADES PNPAIS
+                */
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProgramacionListPage(),
+                  ),
+                );
+              },
+              child: Text('TileProgramaciones'.tr),
+            ),
           ],
           cancelButton: CupertinoActionSheetAction(
             isDestructiveAction: true,
             onPressed: () {
               Navigator.pop(context, 'Cancel');
             },
-            child: const Text('Cancelar'),
+            child: const Text('Cancel'),
           ),
         ),
       );
@@ -481,7 +409,7 @@ class _HomePagePais extends State<HomePagePais> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          AppBarPegaso(
+          AppBarPais(
             datoUt: unidadTerritorial,
             plataforma: variable,
             nombre: '$_nombrePersona $_apellidosPersona',
@@ -490,21 +418,7 @@ class _HomePagePais extends State<HomePagePais> {
           listPages[currenIndex]
         ],
       ),
-      floatingActionButton: Visibility(
-        visible: _isVisible,
-        child: FloatingActionButton(
-          focusColor: Colors.amber,
-          backgroundColor: Colors.orange,
-          child: const Icon(Icons.manage_accounts),
-          onPressed: () async {
-            await Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => PantallaInicio(),
-              ),
-            );
-          },
-        ),
-      ),
+
     );
   }
 }

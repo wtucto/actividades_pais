@@ -5,6 +5,7 @@ import 'package:actividades_pais/src/datamodels/Clases/Participantes.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Provincia.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Sexo.dart';
 import 'package:actividades_pais/src/datamodels/Clases/TipoDocumento.dart';
+import 'package:actividades_pais/src/datamodels/Clases/Unidad.dart';
 import 'package:actividades_pais/src/datamodels/Clases/tipoPlataforma.dart';
 import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
 import 'package:actividades_pais/src/datamodels/Clases/LugarPrestacion.dart';
@@ -234,26 +235,26 @@ class ProviderServicios {
     return listadoDepart.items;
   }
 
-  Future<List<Participantes>> getBuscarParticipante(dni) async {
+  Future<Participantes> getBuscarParticipante(dni) async {
     String jsonString = await servicios.loadParticipantes();
+
     final jsonResponse = json.decode(jsonString);
-    final listadoDepart = new ListaParticipantesSer.fromJsonList(jsonResponse["response"]);
-    // var dni = '48400113';
+    final listadoDepart =
+    new ListaParticipantesSer.fromJsonList(jsonResponse["response"]);
     for (var i = 0; i < listadoDepart.items.length; i++) {
-      if(listadoDepart.items[i].dni==dni){
-        print(listadoDepart.items[i].primerNombre);
-        return listadoDepart.items;
+      if (listadoDepart.items[i].dni == dni) {
+        return listadoDepart.items[i];
       }
     }
 
+    return new Participantes();
+  }
+  Future<List<Unidad>> getUnidad() async {
+    await DatabasePr.db.deletesexo();
 
-    /* return jsonResponse["response"].map((json) => ParticipantesIntervenciones.fromJsonSERICIO(json)).where((user) {
-      final nameLower = user.cuenta.toLowerCase();
-      var dni = '48400113';
-      final queryLower = dni.toLowerCase();
-          print(queryLower);
-      return nameLower.contains(queryLower);
-    }).toList();*/
-    return listadoDepart.items;
+    String jsonString = await servicios.loadUnidad();
+    final jsonResponse = json.decode(jsonString);
+    final listado = new ListarUnidad.fromJsonList(jsonResponse);
+    return listado.items;
   }
 }

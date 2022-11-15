@@ -9,8 +9,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class ConfiguracionPersonal extends StatefulWidget {
+  String unidad = '';
+
+  ConfiguracionPersonal({
+    this.unidad = '',
+  });
+
   @override
   _ConfiguracionPersonal createState() => _ConfiguracionPersonal();
 }
@@ -20,17 +27,17 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
   TextEditingController _controllerApPaterno = TextEditingController();
   TextEditingController _controllerApMaterno = TextEditingController();
   TextEditingController _controllerNombres = TextEditingController();
-  TextEditingController _controllerCargo = TextEditingController();
+  TextEditingController _controllerContrasenia = TextEditingController();
+  TextEditingController _controllerfecha = TextEditingController();
+  var formatter = new DateFormat('yyyy-MM-dd');
+  DateTime? nowfec = new DateTime.now();
   Servicios servicios = new Servicios();
-  var _imeiNumber;
-
+  var _isloading = false;
   @override
   void initState() {
     setState(() {});
     super.initState();
   }
-
-  var _isloading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,17 +48,17 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
             backgroundColor: Colors.blue[800],
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Text("CONFIGURACION PERSONAL"),
               ],
             )),
         body: SingleChildScrollView(
           child: Container(
-              margin: EdgeInsets.all(25),
+              margin: const EdgeInsets.all(25),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20.0,
                   ),
                   FormularioReq().textinputdet(
@@ -59,25 +66,71 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                       _controllerNDocumento,
                       TextCapitalization.words,
                       TextInputType.number),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   FormularioReq().textinputdet(" NOMBRES", _controllerNombres,
                       TextCapitalization.words, TextInputType.text),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   FormularioReq().textinputdet(
                       " APELLIDO PATERNO",
                       _controllerApPaterno,
                       TextCapitalization.words,
                       TextInputType.text),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   FormularioReq().textinputdet(
                       " APELLIDO MATERNO",
                       _controllerApMaterno,
                       TextCapitalization.words,
                       TextInputType.text),
-                  /*   SizedBox(height: 20.0),
-                  FormularioReq().textinputdet("CARGO", _controllerCargo,
-                      TextCapitalization.words, TextInputType.text), */
-                  SizedBox(height: 25.0),
+                  const SizedBox(height: 20.0),
+                  Container(
+                    decoration: servicios.myBoxDecoration(),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Por favor ingrese dato.';
+                        }
+                      },
+                      onTap: () async {
+                        final DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: nowfec!,
+                          firstDate: DateTime(2015, 8),
+                          lastDate: DateTime(2101),
+                        );
+
+                        if (picked != null) {
+                          setState(() {
+                            _controllerfecha.text
+                                .replaceAll('', formatter.format(picked));
+                            _controllerfecha.text = formatter.format(picked);
+                          });
+                        }
+                      },
+                      textAlign: TextAlign.justify,
+                      keyboardType: TextInputType.text,
+                      textCapitalization: TextCapitalization.words,
+                      controller: _controllerfecha,
+                      enabled: true,
+                      decoration: const InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          labelText: "Fecha Nacimiento"),
+                    ),
+                  ),
+                  const SizedBox(height: 25.0),
+                  FormularioReq().textinputdet(
+                      " CONTRASEÑA",
+                      _controllerContrasenia,
+                      TextCapitalization.words,
+                      TextInputType.text),
+                  const SizedBox(height: 25.0),
                   Container(
                     decoration: servicios.myBoxDecoration(),
                     height: 50,
@@ -88,28 +141,28 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                         ),
                         child: _isloading
                             ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(
-                                    width: 24,
-                                  ),
-                                  Text(
-                                    'Registrando...',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 17, color: Colors.white),
-                                  )
-                                ],
-                              )
-                            : Text(
-                                'Guardar',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 19, color: Colors.white),
-                              ),
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: 24,
+                            ),
+                            Text(
+                              'Registrando...',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.white),
+                            )
+                          ],
+                        )
+                            : const Text(
+                          'Guardar',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 19, color: Colors.white),
+                        ),
                         onPressed: () async {
                           if (_controllerNombres.text == "" ||
                               _controllerApPaterno.text == "" ||
@@ -130,19 +183,17 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                             });
 
                             var r = ConfigPersonal(
+                                unidad: widget.unidad,
                                 nombres: _controllerNombres.text,
                                 apellidoMaterno: _controllerApMaterno.text,
                                 apellidoPaterno: _controllerApPaterno.text,
-                                cargo: _controllerCargo.text,
+                                contrasenia: _controllerContrasenia.text,
+                                fechaNacimento: _controllerfecha.text,
                                 numeroDni:
-                                    int.parse(_controllerNDocumento.text));
+                                int.parse(_controllerNDocumento.text));
 
                             await DatabasePr.db.insertConfigPersonal(r);
-
-                            var info = InfoTelefono(imei: _imeiNumber);
-
-                            await DatabasePr.db.insertInfoTel(info);
-                            await Future.delayed(Duration(seconds: 2));
+                            await Future.delayed(const Duration(seconds: 2));
 
                             setState(() {
                               _isloading = false;

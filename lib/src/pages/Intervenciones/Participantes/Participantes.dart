@@ -78,7 +78,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
   DateTime? nowfec = new DateTime.now();
   late List<ParticipanteEjecucion> listas = [];
   ServicioProgramacionParticipante participanteSr =
-      ServicioProgramacionParticipante();
+  ServicioProgramacionParticipante();
 
   @override
   void initState() {
@@ -191,106 +191,107 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 ),
                 visibilityTag
                     ? SizedBox(
-                        width: 350,
-                        child: TextButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.blue[800]),
+                  width: 350,
+                  child: TextButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                      MaterialStateProperty.all(Colors.blue[800]),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        closeTraerDni
+                            ? Image.asset(
+                          "assets/loaderios.gif",
+                          height: 40.0,
+                          width: 50.0,
+                          //color: Colors.transparent,
+                        )
+                            : new Container(),
+                        Text(
+                          nombreBoton,
+                          style: TextStyle(
+                            color: Colors
+                                .white, // this is for your text colour
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              closeTraerDni
-                                  ? Image.asset(
-                                      "assets/loaderios.gif",
-                                      height: 40.0,
-                                      width: 50.0,
-                                      //color: Colors.transparent,
-                                    )
-                                  : new Container(),
-                              Text(
-                                nombreBoton,
-                                style: TextStyle(
-                                  color: Colors
-                                      .white, // this is for your text colour
-                                ),
-                              ),
-                            ],
-                          ),
-                          onPressed: () async {
-                            setborrar();
-                            closeTraerDni = true;
-                            setState(() {});
+                        ),
+                      ],
+                    ),
+                    onPressed: () async {
+                      setborrar();
+                      closeTraerDni = true;
+                      setState(() {});
 
-                            // _fetchData(context);
-                            var usuario =
-                                await provider.getUsuarioParticipanteDni(
-                                    controllerNumeroDoc.text);
-                            if (usuario == null) {
-                              showAlertDialog(context,
-                                  "Datos no encontrados en nuestra base de datos, registrar los datos manualmente.");
+                      // _fetchData(context);
+                      var usuario =
+                      await provider.getUsuarioParticipanteDni(
+                          controllerNumeroDoc.text);
 
-                              ///_fetchData(context);
-                              closeTraerDni = false;
-                              setState(() {});
-                            } else {
-                              //_fetchData(context);
-                              closeTraerDni = false;
-                              setState(() {});
-                              if (usuario.segundoNombre != null) {
-                                controllerPrimerNombre.text =
-                                    usuario.primerNombre!;
-                                controllerSegundoNombre.text =
-                                    usuario.segundoNombre!;
-                              } else {
-                                String micadena = "${usuario.primerNombre!}";
-                                int longitud = micadena.split(' ').length;
+                      if ( usuario!.dni  == '') {
+                        showAlertDialog(context,
+                            "Datos no encontrados en nuestra base de datos, registrar los datos manualmente.");
 
-                                if (longitud == 1) {
-                                  controllerPrimerNombre.text =
-                                      usuario.primerNombre!;
-                                } else {
-                                  final datos =
-                                      usuario.primerNombre!.split(" ");
+                        ///_fetchData(context);
+                        closeTraerDni = false;
+                        setState(() {});
+                      } else {
+                        //_fetchData(context);
+                        closeTraerDni = false;
+                        setState(() {});
+                        if (usuario.segundoNombre != null) {
+                          controllerPrimerNombre.text =
+                          usuario.primerNombre!;
+                          controllerSegundoNombre.text =
+                          usuario.segundoNombre!;
+                        } else {
+                          String micadena = "${usuario.primerNombre!}";
+                          int longitud = micadena.split(' ').length;
 
-                                  controllerPrimerNombre.text = datos[0];
-                                  controllerSegundoNombre.text = datos[1];
-                                }
-                              }
+                          if (longitud == 1) {
+                            controllerPrimerNombre.text =
+                            usuario.primerNombre!;
+                          } else {
+                            final datos =
+                            usuario.primerNombre!.split(" ");
+
+                            controllerPrimerNombre.text = datos[0];
+                            controllerSegundoNombre.text = datos[1];
+                          }
+                        }
 /*  if (controllerPrimerNombre.text != "") {
                                 print("aqui");
                                 closeTraerDni = false;
                                // closeTraerDni = false;
                                 setState(() {});
                               }*/
-                              controllerApellidoPaterno.text =
-                                  usuario.apellidoPaterno!;
-                              controllerApellidoMaterno.text =
-                                  usuario.apellidoMaterno!;
+                        controllerApellidoPaterno.text =
+                        usuario.apellidoPaterno!;
+                        controllerApellidoMaterno.text =
+                        usuario.apellidoMaterno!;
 
-                              if (usuario.sexo == "1") {
-                                controllerSexo.text = "M";
-                              } else if (usuario.sexo == "2") {
-                                controllerSexo.text = "F";
-                              } else {
-                                controllerSexo.text = usuario.sexo!;
-                              }
-                              controllerfechaNacimiento.text =
-                                  usuario.fechaNacimiento!;
-                              if (usuario.fechaNacimiento != '') {
-                                controllerEdad.text = DateTime(DateTime.now()
-                                            .year -
-                                        DateTime.parse(usuario.fechaNacimiento!)
-                                            .year)
-                                    .year
-                                    .toString();
-                              }
-                            }
+                        if (usuario.sexo == "1") {
+                          controllerSexo.text = "M";
+                        } else if (usuario.sexo == "2") {
+                          controllerSexo.text = "F";
+                        } else {
+                          controllerSexo.text = usuario.sexo!;
+                        }
+                        controllerfechaNacimiento.text =
+                        usuario.fechaNacimiento!;
+                        if (usuario.fechaNacimiento != '') {
+                          controllerEdad.text = DateTime(DateTime.now()
+                              .year -
+                              DateTime.parse(usuario.fechaNacimiento!)
+                                  .year)
+                              .year
+                              .toString();
+                        }
+                      }
 
-                            //   setState(() {});
-                          },
-                        ),
-                      )
+                      //   setState(() {});
+                    },
+                  ),
+                )
                     : new Container(),
                 SizedBox(
                   width: 350,
@@ -338,49 +339,49 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 ),
                 !validarcontroles
                     ? SizedBox(
-                        width: 350,
-                        child: TextField(
-                          controller: controllerSexo,
-                          enabled: validarcontroles,
-                          decoration: InputDecoration(
-                            labelText: 'Sexo',
-                            hintText: 'Sexo',
-                          ),
-                        ),
-                      )
+                  width: 350,
+                  child: TextField(
+                    controller: controllerSexo,
+                    enabled: validarcontroles,
+                    decoration: InputDecoration(
+                      labelText: 'Sexo',
+                      hintText: 'Sexo',
+                    ),
+                  ),
+                )
                     : new Container(),
                 validarcontroles
                     ? SizedBox(
-                        width: 350,
-                        child: new FutureBuilder<List<Sexo>>(
-                          future: DatabasePr.db.listarSexo(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<Sexo>> snapshot) {
-                            if (snapshot.hasData) {
-                              return Container(
-                                  child: DropdownButton<Sexo>(
-                                underline: SizedBox(),
-                                isExpanded: true,
-                                items: snapshot.data
-                                    ?.map((user) => DropdownMenuItem<Sexo>(
-                                          child: Text(user.descripcion),
-                                          value: user,
-                                        ))
-                                    .toList(),
-                                onChanged: (Sexo? newVal) {
-                                  controllerSexo.text = newVal!.cod;
-                                  setState(() {});
-                                },
-                                hint: Text(
-                                  "Sexo ${controllerSexo.text}",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ));
-                            }
-                            return SizedBox();
-                          },
-                        ),
-                      )
+                  width: 350,
+                  child: new FutureBuilder<List<Sexo>>(
+                    future: DatabasePr.db.listarSexo(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Sexo>> snapshot) {
+                      if (snapshot.hasData) {
+                        return Container(
+                            child: DropdownButton<Sexo>(
+                              underline: SizedBox(),
+                              isExpanded: true,
+                              items: snapshot.data
+                                  ?.map((user) => DropdownMenuItem<Sexo>(
+                                child: Text(user.descripcion),
+                                value: user,
+                              ))
+                                  .toList(),
+                              onChanged: (Sexo? newVal) {
+                                controllerSexo.text = newVal!.cod;
+                                setState(() {});
+                              },
+                              hint: Text(
+                                "Sexo ${controllerSexo.text}",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ));
+                      }
+                      return SizedBox();
+                    },
+                  ),
+                )
                     : new Container(),
                 SizedBox(
                     width: 350,
@@ -436,197 +437,197 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 ),
                 (_value == false)
                     ? Container(
-                        width: 350,
-                        child: FutureBuilder<List<ListarCcpp>>(
-                          future: DatabasePr.db.ListarCcpps(widget.snip),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<ListarCcpp>> snapshot) {
-                            ListarCcpp depatalits;
+                  width: 350,
+                  child: FutureBuilder<List<ListarCcpp>>(
+                    future: DatabasePr.db.ListarCcpps(widget.snip),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<ListarCcpp>> snapshot) {
+                      ListarCcpp depatalits;
 
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            final preguntas = snapshot.data;
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      final preguntas = snapshot.data;
 
-                            if (preguntas!.length == 0) {
-                              return Center(
-                                child: Text("sin dato"),
-                              );
-                            } else {
-                              return Container(
-                                  // decoration: servicios.myBoxDecoration(),
-                                  child: DropdownButton<ListarCcpp>(
-                                underline: SizedBox(),
-                                isExpanded: true,
-                                items: snapshot.data
-                                    ?.map(
-                                        (user) => DropdownMenuItem<ListarCcpp>(
-                                              child: Text(user.nombreCcpp!),
-                                              value: user,
-                                            ))
-                                    .toList(),
-                                onChanged: (ListarCcpp? newVal) {
-                                  cppText = newVal!.nombreCcpp!;
-                                  ubigeoCpp = newVal.ubigeoCcpp!;
-                                  print(ubigeoCpp);
-                                  setState(() {});
-                                },
-                                //value: depatalits.,
-                                hint: Text("$cppText $ubigeoCpp"),
-                              ));
-                            }
-                          },
-                        ),
-                      )
+                      if (preguntas!.length == 0) {
+                        return Center(
+                          child: Text("sin dato"),
+                        );
+                      } else {
+                        return Container(
+                          // decoration: servicios.myBoxDecoration(),
+                            child: DropdownButton<ListarCcpp>(
+                              underline: SizedBox(),
+                              isExpanded: true,
+                              items: snapshot.data
+                                  ?.map(
+                                      (user) => DropdownMenuItem<ListarCcpp>(
+                                    child: Text(user.nombreCcpp!),
+                                    value: user,
+                                  ))
+                                  .toList(),
+                              onChanged: (ListarCcpp? newVal) {
+                                cppText = newVal!.nombreCcpp!;
+                                ubigeoCpp = newVal.ubigeoCcpp!;
+                                print(ubigeoCpp);
+                                setState(() {});
+                              },
+                              //value: depatalits.,
+                              hint: Text("$cppText $ubigeoCpp"),
+                            ));
+                      }
+                    },
+                  ),
+                )
                     : new Container(),
                 (_value == true)
                     ? Container(
-                        width: 350,
-                        child: FutureBuilder<List<Provincia>>(
-                          future: provider.getProvincias(widget.snip),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<Provincia>> snapshot) {
-                            Provincia depatalits;
+                  width: 350,
+                  child: FutureBuilder<List<Provincia>>(
+                    future: provider.getProvincias(widget.snip),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Provincia>> snapshot) {
+                      Provincia depatalits;
 
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            final preguntas = snapshot.data;
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      final preguntas = snapshot.data;
 
-                            if (preguntas!.length == 0) {
-                              return Center(
-                                child: Text("sin dato"),
-                              );
-                            } else {
-                              return Container(
-                                  // decoration: servicios.myBoxDecoration(),
-                                  child: DropdownButton<Provincia>(
-                                underline: SizedBox(),
-                                isExpanded: true,
-                                items: snapshot.data
-                                    ?.map((user) => DropdownMenuItem<Provincia>(
-                                          child:
-                                              Text(user.provinciaDescripcion!),
-                                          value: user,
-                                        ))
-                                    .toList(),
-                                onChanged: (Provincia? newVal) {
-                                  provinciaDescripcion =
-                                      newVal!.provinciaDescripcion!;
-                                  ubigeoProvincia = newVal.provinciaUbigeo!;
-                                  setState(() {});
-                                },
-                                //value: depatalits.,
-                                hint: Text("$provinciaDescripcion"),
-                              ));
-                            }
-                          },
-                        ),
-                      )
+                      if (preguntas!.length == 0) {
+                        return Center(
+                          child: Text("sin dato"),
+                        );
+                      } else {
+                        return Container(
+                          // decoration: servicios.myBoxDecoration(),
+                            child: DropdownButton<Provincia>(
+                              underline: SizedBox(),
+                              isExpanded: true,
+                              items: snapshot.data
+                                  ?.map((user) => DropdownMenuItem<Provincia>(
+                                child:
+                                Text(user.provinciaDescripcion!),
+                                value: user,
+                              ))
+                                  .toList(),
+                              onChanged: (Provincia? newVal) {
+                                provinciaDescripcion =
+                                newVal!.provinciaDescripcion!;
+                                ubigeoProvincia = newVal.provinciaUbigeo!;
+                                setState(() {});
+                              },
+                              //value: depatalits.,
+                              hint: Text("$provinciaDescripcion"),
+                            ));
+                      }
+                    },
+                  ),
+                )
                     : new Container(),
                 (_value == true)
                     ? Container(
-                        width: 350,
-                        child: FutureBuilder<List<Distrito>>(
-                          future: provider.getDistritos(ubigeoProvincia),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<Distrito>> snapshot) {
-                            Distrito depatalits;
+                  width: 350,
+                  child: FutureBuilder<List<Distrito>>(
+                    future: provider.getDistritos(ubigeoProvincia),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Distrito>> snapshot) {
+                      Distrito depatalits;
 
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            final preguntas = snapshot.data;
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      final preguntas = snapshot.data;
 
-                            if (preguntas!.length == 0) {
-                              return Center(
-                                child: Text("sin dato"),
-                              );
-                            } else {
-                              return Container(
-                                  // decoration: servicios.myBoxDecoration(),
-                                  child: DropdownButton<Distrito>(
-                                underline: SizedBox(),
-                                isExpanded: true,
-                                items: snapshot.data
-                                    ?.map((user) => DropdownMenuItem<Distrito>(
-                                          child:
-                                              Text(user.distritoDescripcion!),
-                                          value: user,
-                                        ))
-                                    .toList(),
-                                onChanged: (Distrito? newVal) {
-                                  distritoDescripcion =
-                                      newVal!.distritoDescripcion!;
-                                  ubigeoDistrito = newVal.distritoUbigeo!;
+                      if (preguntas!.length == 0) {
+                        return Center(
+                          child: Text("sin dato"),
+                        );
+                      } else {
+                        return Container(
+                          // decoration: servicios.myBoxDecoration(),
+                            child: DropdownButton<Distrito>(
+                              underline: SizedBox(),
+                              isExpanded: true,
+                              items: snapshot.data
+                                  ?.map((user) => DropdownMenuItem<Distrito>(
+                                child:
+                                Text(user.distritoDescripcion!),
+                                value: user,
+                              ))
+                                  .toList(),
+                              onChanged: (Distrito? newVal) {
+                                distritoDescripcion =
+                                newVal!.distritoDescripcion!;
+                                ubigeoDistrito = newVal.distritoUbigeo!;
 
-                                  setState(() {
-                                    centroPblado = 'Centro Poblado';
-                                  });
-                                },
-                                //value: depatalits.,
-                                hint: Text("$distritoDescripcion"),
-                              ));
-                            }
-                          },
-                        ),
-                      )
+                                setState(() {
+                                  centroPblado = 'Centro Poblado';
+                                });
+                              },
+                              //value: depatalits.,
+                              hint: Text("$distritoDescripcion"),
+                            ));
+                      }
+                    },
+                  ),
+                )
                     : new Container(),
                 (_value == true)
                     ? Container(
-                        width: 350,
-                        child: FutureBuilder<List<CentroPoblado>>(
-                          future: provider.getCentroPoblado(ubigeoDistrito),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<CentroPoblado>> snapshot) {
-                            CentroPoblado depatalits;
+                  width: 350,
+                  child: FutureBuilder<List<CentroPoblado>>(
+                    future: provider.getCentroPoblado(ubigeoDistrito),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<CentroPoblado>> snapshot) {
+                      CentroPoblado depatalits;
 
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            final preguntas = snapshot.data;
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      final preguntas = snapshot.data;
 
-                            if (preguntas!.length == 0) {
-                              return Center(
-                                child: Text("sin dato"),
-                              );
-                            } else {
-                              return Container(
-                                  // decoration: servicios.myBoxDecoration(),
-                                  child: DropdownButton<CentroPoblado>(
-                                underline: SizedBox(),
-                                isExpanded: true,
-                                items: snapshot.data
-                                    ?.map((user) =>
-                                        DropdownMenuItem<CentroPoblado>(
-                                          child: Text(
-                                              user.centroPobladoDescripcion!),
-                                          value: user,
-                                        ))
-                                    .toList(),
-                                onChanged: (CentroPoblado? newVal) {
-                                  centroPblado =
-                                      newVal!.centroPobladoDescripcion!;
-                                  ubigeoCentroPoblado =
-                                      newVal.centroPobladoUbigeo!;
+                      if (preguntas!.length == 0) {
+                        return Center(
+                          child: Text("sin dato"),
+                        );
+                      } else {
+                        return Container(
+                          // decoration: servicios.myBoxDecoration(),
+                            child: DropdownButton<CentroPoblado>(
+                              underline: SizedBox(),
+                              isExpanded: true,
+                              items: snapshot.data
+                                  ?.map((user) =>
+                                  DropdownMenuItem<CentroPoblado>(
+                                    child: Text(
+                                        user.centroPobladoDescripcion!),
+                                    value: user,
+                                  ))
+                                  .toList(),
+                              onChanged: (CentroPoblado? newVal) {
+                                centroPblado =
+                                newVal!.centroPobladoDescripcion!;
+                                ubigeoCentroPoblado =
+                                newVal.centroPobladoUbigeo!;
 
-                                  setState(() {});
-                                },
-                                //value: depatalits.,
-                                hint: Text("$centroPblado"),
-                              ));
-                            }
-                          },
-                        ),
-                      )
+                                setState(() {});
+                              },
+                              //value: depatalits.,
+                              hint: Text("$centroPblado"),
+                            ));
+                      }
+                    },
+                  ),
+                )
                     : new Container(),
                 Row(
                   children: [
@@ -663,28 +664,28 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                         .listarEntidadFuncionario(widget.idProgramacion),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<ListarEntidadFuncionario>>
-                            snapshot) {
+                        snapshot) {
                       if (snapshot.hasData) {
                         return Container(
                             child: DropdownButton<ListarEntidadFuncionario>(
-                          underline: SizedBox(),
-                          isExpanded: true,
-                          items: snapshot.data
-                              ?.map((user) =>
+                              underline: SizedBox(),
+                              isExpanded: true,
+                              items: snapshot.data
+                                  ?.map((user) =>
                                   DropdownMenuItem<ListarEntidadFuncionario>(
                                     child: Text(' ${user.nombre_programa}'),
                                     value: user,
                                   ))
-                              .toList(),
-                          onChanged: (ListarEntidadFuncionario? newVal) {
-                            entidad = newVal!.nombre_programa;
-                            id_entidad = newVal.id_entidad;
-                            DatabasePr.db.ListarParticipanteEjecucion(
-                                widget.idProgramacion, id_entidad);
-                            setState(() {});
-                          },
-                          hint: Text('$entidad'),
-                        ));
+                                  .toList(),
+                              onChanged: (ListarEntidadFuncionario? newVal) {
+                                entidad = newVal!.nombre_programa;
+                                id_entidad = newVal.id_entidad;
+                                DatabasePr.db.ListarParticipanteEjecucion(
+                                    widget.idProgramacion, id_entidad);
+                                setState(() {});
+                              },
+                              hint: Text('$entidad'),
+                            ));
                       }
                       return SizedBox();
                     },
@@ -700,36 +701,36 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                       if (snapshot.hasData) {
                         return Container(
                             child:
-                                MultiSelectDialogField<ParticipanteEjecucion>(
-                          selectedColor: Colors.blue[800],
-                          //activeColor: Colors.blue[800],
-                          //focusColor: Colors.blue[800],
-                          items: snapshot.data!
-                              .map((animal) =>
+                            MultiSelectDialogField<ParticipanteEjecucion>(
+                              selectedColor: Colors.blue[800],
+                              //activeColor: Colors.blue[800],
+                              //focusColor: Colors.blue[800],
+                              items: snapshot.data!
+                                  .map((animal) =>
                                   MultiSelectItem<ParticipanteEjecucion>(
                                       animal, animal.nombre_servicio!))
-                              .toList(),
-                          title: Text("Servicios"),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.0),
-                            borderRadius: BorderRadius.all(Radius.circular(40)),
-                          ),
-                          buttonIcon: Icon(
-                            Icons.search,
-                            color: Colors.grey,
-                          ),
-                          buttonText: Text(
-                            "Servicios",
-                            style: TextStyle(
-                              // color: Colors.blue[800],
-                              fontSize: 16,
-                            ),
-                          ),
-                          onConfirm: (results) {
-                            listas.addAll(results);
-                            //_selectedAnimals = results;
-                          },
-                        ));
+                                  .toList(),
+                              title: Text("Servicios"),
+                              decoration: BoxDecoration(
+                                color: Colors.blue.withOpacity(0.0),
+                                borderRadius: BorderRadius.all(Radius.circular(40)),
+                              ),
+                              buttonIcon: Icon(
+                                Icons.search,
+                                color: Colors.grey,
+                              ),
+                              buttonText: Text(
+                                "Servicios",
+                                style: TextStyle(
+                                  // color: Colors.blue[800],
+                                  fontSize: 16,
+                                ),
+                              ),
+                              onConfirm: (results) {
+                                listas.addAll(results);
+                                //_selectedAnimals = results;
+                              },
+                            ));
                       }
                       return SizedBox();
                     },
@@ -741,7 +742,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                   child: TextButton(
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all(Colors.blue[800]),
+                      MaterialStateProperty.all(Colors.blue[800]),
                     ),
                     child: Text(
                       "Agregar ",

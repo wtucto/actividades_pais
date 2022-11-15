@@ -32,11 +32,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
-//import 'package:objectbox/objectbox.dart';
 
 class ProviderDatos {
   AppConfig appConfig = AppConfig();
-  bool fileExists = false;
+
   static Map<String, String> get headers {
     return {
       'Content-Type': 'application/json',
@@ -218,7 +217,6 @@ class ProviderDatos {
       distanceFilter: 100, //minimum distance (measured in meters) a
       //device must move horizontally before an update event is generated;
     );
-
     // ignore: cancel_subscriptions
    // StreamSubscription<Position> positionStream =
     Geolocator.getPositionStream(locationSettings: locationSettings)
@@ -227,13 +225,9 @@ class ProviderDatos {
       print(position.longitude);
       posicion.latitude = position.latitude;
       posicion.longitude = position.longitude;
-
     });
-
     pst.add(posicion);
-
     return pst;
-
   }*/
 
   Future<List<TramaIntervencion>> getListaTramaIntervencion(snip) async {
@@ -247,6 +241,7 @@ class ProviderDatos {
     );
     if (response.statusCode == 200) {
       await getlistarCcpp(snip);
+
       final jsonResponse = json.decode(response.body);
       final listadostraba =
           new TramaIntervenciones.fromJsonList(jsonResponse["response"]);
@@ -357,25 +352,24 @@ class ProviderDatos {
     if (cnt == false) {
       print("Sin red ");
       var resdb =
-         // await DatabaseParticipantes.db.getUsuarioParticipanteDniSQLites(dni);
-      await ProviderServicios().getBuscarParticipante(dni);
+          //  await DatabaseParticipantes.db.getUsuarioParticipanteDniSQLites(dni);
+          await ProviderServicios().getBuscarParticipante(dni);
 
-      if (resdb.length > 0) {
-        print("2....");
-        return resdb[0];
+      if (resdb.dni!.isNotEmpty) {
+        print("3....");
+
+        return resdb;
       } else {
-        print("resdb.length:: ${resdb.length}");
+        print("resdb.length:: ${resdb.dni}");
         return null;
       }
     } else {
       print("con red ");
 
-      var resdb =
-       //   await DatabaseParticipantes.db.getUsuarioParticipanteDniSQLites(dni);
-      await ProviderServicios().getBuscarParticipante(dni);
-      if (resdb.length > 0) {
+      var resdb = await ProviderServicios().getBuscarParticipante(dni);
+      if (resdb.dni!.isNotEmpty) {
         print("3....");
-        return resdb[0];
+        return resdb;
       } else {
         http.Response responseReniec = await http.get(
           Uri.parse(AppConfig.backendsismonitor +
@@ -422,7 +416,6 @@ class ProviderDatos {
           '/api-pnpais/app/validarParticipantes/$dni'),
     );
     print(response);
-
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       if (jsonResponse["total"] == 0) {
@@ -437,6 +430,7 @@ class ProviderDatos {
     }*/
 
   Future<List<ListarCcpp>> getlistarCcpp(snip) async {
+    DatabasePr.db.eliminarTodoListarCcpp();
     http.Response response = await http.get(
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listarCcpp/$snip'),
@@ -445,7 +439,7 @@ class ProviderDatos {
       final jsonResponse = json.decode(response.body);
       final listadostraba =
           new ListarCcppes.fromJsonList(jsonResponse["response"]);
-
+      print(listadostraba.items.length);
       for (var i = 0; i < listadostraba.items.length; i++) {
         final rspt = ListarCcpp(
           nombreCcpp: listadostraba.items[i].nombreCcpp,
@@ -521,6 +515,9 @@ class ProviderDatos {
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
+      print("ss");
+      print(jsonResponse);
+      print("ss");
       final listadostraba =
           new ListarEntidadFuncionarios.fromJsonList(jsonResponse["response"]);
 
@@ -550,6 +547,9 @@ class ProviderDatos {
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/participanteEjecucion/$idProgramacion/$idEntidad'),
     );
+    print("participanteEjecucion");
+    print(response.body);
+    print("participanteEjecucion");
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listadostraba =
@@ -568,27 +568,60 @@ class ProviderDatos {
     return List.empty();
   }
 
+  bool fileExists = false;
+
+  void createFile(
+      Map<String, dynamic> content, Directory dir, String fileName) {
+    print("Creating file!");
+    File file = new File(dir.path + "/" + fileName);
+    file.createSync();
+    fileExists = true;
+    file.writeAsStringSync(json.encode(content));
+  }
+
   Future<List<ParticipantesIntervenciones>>
-      getInsertParticipantesIntervencionesMovil1(UNIDAD_TERRITORIAL) async {
+      getInsertParticipantesIntervencionesMovil(UNIDAD_TERRITORIAL) async {
+    late File jsonFile;
+    late Directory dir;
+    String fileName = "myJSONFile.json";
+    bool fileExists = false;
+    late Map<String, String> fileContent;
+    getApplicationDocumentsDirectory().then((Directory directory) {
+      dir = directory;
+      jsonFile = new File(dir.path + "/" + fileName);
+      fileExists = jsonFile.existsSync();
+    });
+
     print("dsadsad");
     await DatabaseParticipantes.db.DeleteAllParticitantesInterv();
     http.Response response = await http.get(
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listarParticipantesIntervencionesMovil/$UNIDAD_TERRITORIAL'),
     );
-    print(response.body);
+
+    print(AppConfig.urlBackndServicioSeguro +
+        '/api-pnpais/app/listarParticipantesIntervencionesMovil/$UNIDAD_TERRITORIAL');
+    if (fileExists) {
+      print("File exists");
+
+      /*  Map<String, String> jsonFileContent = json.decode(response.body);
+      jsonFile.writeAsStringSync(json.encode(jsonFileContent));*/
+    } else {
+      print("File does not exist!");
+      createFile(json.decode(response.body), dir, fileName);
+    }
+
     if (response.statusCode == 200) {
       //final store = await openStore();
       //final box = store.box<ParticipantesIntervenciones>();
 
-    //  var person = ParticipantesIntervenciones(firstName: 'Joe', lastName: 'Green');
-
-
+      //  var person = ParticipantesIntervenciones(firstName: 'Joe', lastName: 'Green');
 
       final jsonResponse = json.decode(response.body);
+
       final listadostraba = new ListarParticipantesIntervenciones.fromJsonList(
           jsonResponse["response"]);
-      for (var i = 0; i < listadostraba.items.length; i++) {
+      /*  for (var i = 0; i < listadostraba.items.length; i++) {
         final rspt = ParticipantesIntervenciones(
           aPELLIDOMATERNO: listadostraba.items[i].aPELLIDOMATERNO,
           aPELLIDOPATERNO: listadostraba.items[i].aPELLIDOPATERNO,
@@ -603,59 +636,7 @@ class ProviderDatos {
      //   final id = box.put(rspt);  // Create
        await DatabaseParticipantes.db
             .insertParticipantesIntervencionesMovil(rspt);
-      }
-
-      return listadostraba.items;
-    } else if (response.statusCode == 400) {}
-    return List.empty();
-  }
-
-  void createFile(Map<String, dynamic> content, Directory dir, String fileName) {
-    print("Creating file!");
-    File file = new File(dir.path + "/" + fileName);
-    file.createSync();
-    fileExists = true;
-    file.writeAsStringSync(json.encode(content));
-  }
-
-  Future<List<ParticipantesIntervenciones>>
-  getInsertParticipantesIntervencionesMovil(UNIDAD_TERRITORIAL) async {
-
-    late File jsonFile;
-    late Directory dir;
-    String fileName = "myJSONFile.json";
-    bool fileExists = false;
-    late Map<String, String> fileContent;
-    getApplicationDocumentsDirectory().then((Directory directory) {
-      dir = directory;
-      jsonFile = new File(dir.path + "/" + fileName);
-      fileExists = jsonFile.existsSync();
-    });
-
-
-    print("dsadsad");
-    await DatabaseParticipantes.db.DeleteAllParticitantesInterv();
-    http.Response response = await http.get(
-      Uri.parse(AppConfig.urlBackndServicioSeguro +
-          '/api-pnpais/app/listarParticipantesIntervencionesMovil/$UNIDAD_TERRITORIAL'),
-    );
-    if (fileExists) {
-      print("File exists");
-      Map<String, String> jsonFileContent = json.decode(response.body);
-
-      jsonFile.writeAsStringSync(json.encode(jsonFileContent));
-    } else {
-      print("File does not exist!");
-      createFile(json.
-      decode(response.body), dir, fileName);
-    }
-
-    if (response.statusCode == 200) {
-
-      final jsonResponse = json.decode(response.body);
-
-      final listadostraba = new ListarParticipantesIntervenciones.fromJsonList(
-          jsonResponse["response"]);
+      }*/
 
       return listadostraba.items;
     } else if (response.statusCode == 400) {}
@@ -760,6 +741,7 @@ class ProviderDatos {
 
   Future<int> subirParticipantes(Participantes participantes) async {
     DatabasePr.db.initDB();
+    print("aqqqwioop");
     var abc = await DatabasePr.db.getAllConfigPersonal();
     http.Response usuariodb = await http.get(
         Uri.parse(AppConfig.urlBackndServicioSeguro +
@@ -767,13 +749,20 @@ class ProviderDatos {
         headers: headers);
     final jsonResponse = json.decode(usuariodb.body);
     participantes.idUsuario = jsonResponse["response"][0]["id_usuario"];
-    print(jsonEncode(participantes));
+    print("prticipantes");
+    print(
+      jsonEncode(participantes),
+    );
+    print("prticipantes");
+
     http.Response response = await http.post(
         Uri.parse(AppConfig.urlBackndServicioSeguro +
             '/api-pnpais/app/registrarParticipanteMovil'),
         body: jsonEncode(participantes),
         headers: headers);
-
+    print("registrarParticipanteMovil");
+    print(response.body);
+    print("registrarParticipanteMovil");
     if (response.statusCode == 200) {
       final jsonResponse2 = json.decode(response.body);
 
@@ -784,11 +773,15 @@ class ProviderDatos {
         resserv[i].idProgramacionesParticipante =
             int.parse(jsonResponse2["response"]);
         print(resserv[i].idProgramacionesParticipante);
+        print("jsonEncode(resserv[i])");
+        print(jsonEncode(resserv[i]));
+        print("jsonEncode(resserv[i])");
         http.Response response1 = await http.post(
             Uri.parse(AppConfig.urlBackndServicioSeguro +
                 '/api-pnpais/app/registrarParticipanteServicioMovil'),
             body: jsonEncode(resserv[i]),
             headers: headers);
+        print(response1.body);
         print("la respouesta es ${response1.body}");
       }
       // return response.statusCode;

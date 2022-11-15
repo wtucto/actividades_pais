@@ -59,7 +59,7 @@ class DatabasePr {
       version: 1,
       onCreate: (Database db, int version) {
         db.execute(
-            "CREATE TABLE ConfigPersonal (id INTEGER PRIMARY KEY, numeroDni, nombres, apellidoMaterno, apellidoPaterno, cargo)");
+            "CREATE TABLE ConfigPersonal (id INTEGER PRIMARY KEY,unidad, codigo, nombres, rol,fechaNacimento,numeroDni,contrasenia,apellidoMaterno, apellidoPaterno, cargo)");
 
         db.execute(
             "CREATE TABLE DatUnidadesOrganicas (id INTEGER PRIMARY KEY, UNIDAD_ORGANICA TEXT, IDUO INTEGER)");
@@ -168,7 +168,38 @@ class DatabasePr {
     print(_db!.execute("DELETE FROM tipoDocumento"));
     print(_db!.execute("DELETE FROM sexo"));
   }
+//
+  Future<List<ConfigPersonal>> getLoginUser(
+      {required int dni, contrasenia}) async {
+    initDB();
+    final res = await _db!.rawQuery(
+        "select * from ConfigPersonal where numeroDni=$dni and contrasenia = '$contrasenia'");
+    List<ConfigPersonal> list = res.isNotEmpty
+        ? res.map((e) => ConfigPersonal.fromMap(e)).toList()
+        : [];
+    return list;
+  }
 
+  Future<List<ConfigPersonal>> getValidarUsuario(
+      {required int dni, fechaNacimiento}) async {
+    initDB();
+    print("select * from ConfigPersonal where numeroDni=$dni and contrfechaNacimentoasenia = '$fechaNacimiento'");
+    final res = await _db!.rawQuery(
+        "select * from ConfigPersonal where numeroDni=$dni and fechaNacimento = '$fechaNacimiento'");
+    List<ConfigPersonal> list = res.isNotEmpty
+        ? res.map((e) => ConfigPersonal.fromMap(e)).toList()
+        : [];
+
+    return list;
+  }
+  Future <int> updateUsuarioContrasenia(ConfigPersonal configPersonal) async {
+    print( configPersonal.contrasenia);
+    print("UPDATE ConfigPersonal SET contrasenia = '${configPersonal.contrasenia}' where id = ${configPersonal.id};");
+    final res = await _db
+        ?.rawQuery("UPDATE ConfigPersonal SET contrasenia = '${configPersonal.contrasenia}' where id = ${configPersonal.id};");
+    print(res);
+    return res!.length;
+  }
 //////////////////////
   Future<void> insertParticipanteEjecucion(
       ParticipanteEjecucion participanteEjecucion) async {
@@ -302,7 +333,7 @@ class DatabasePr {
     print(
         "select id_servicio from servicioProgramacionParticipante where id_programacion_participante_servicio = $idProgramacionParticipanteServicio");
     final res = await _db?.rawQuery(
-        "select id_servicio from servicioProgramacionParticipante where id_programacion_participante_servicio = $idProgramacionParticipanteServicio");
+        "select * from servicioProgramacionParticipante where id_programacion_participante_servicio = $idProgramacionParticipanteServicio");
     List<ServicioProgramacionParticipante> list = res!.isNotEmpty
         ? res.map((e) => ServicioProgramacionParticipante.fromMap(e)).toList()
         : [];
@@ -701,8 +732,10 @@ class DatabasePr {
     print(_db!.insert("sexo", sexo.toMap()));
   }
 
-  Future<void> insertConfigPersonal(ConfigPersonal regitroCalificada) async {
-    print(_db!.insert("ConfigPersonal", regitroCalificada.toMap()));
+  Future<int> insertConfigPersonal(ConfigPersonal regitroCalificada) async {
+    var a = await _db!.insert("ConfigPersonal", regitroCalificada.toMap());
+    return a;
+    // print(_db!.insert("ConfigPersonal", regitroCalificada.toMap()));
   }
 
   Future<void> insertInicial(ConfigInicio regitroCalificada) async {

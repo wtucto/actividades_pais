@@ -2,19 +2,19 @@ import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
 
 // ignore: use_key_in_widget_constructors
-class AppBarPegaso extends StatefulWidget {
+class AppBarPais extends StatefulWidget {
   String datoUt = "", nombre = "", plataforma;
   int snip;
-  AppBarPegaso(
+  AppBarPais(
       {this.datoUt = "",
-      this.nombre = "",
-      this.snip = 0,
-      this.plataforma = ''});
+        this.nombre = "",
+        this.snip = 0,
+        this.plataforma = ''});
   @override
-  _AppBarPegasoState createState() => _AppBarPegasoState();
+  _AppBarPaisState createState() => _AppBarPaisState();
 }
 
-class _AppBarPegasoState extends State<AppBarPegaso> {
+class _AppBarPaisState extends State<AppBarPais> {
   Widget text() {
     return Container(
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -64,19 +64,30 @@ class _AppBarPegasoState extends State<AppBarPegaso> {
                       ),
                     ),
                   ],
-                  SizedBox(
-                    //  height: 15.0,
-                    width: 30,
-                  ),
+                  if (widget.datoUt != "") ...[
+                    SizedBox(
+                      //  height: 15.0,
+                      width: 30,
+                    ),
+                  ],
+
                   if (widget.nombre != "") ...[
                     SizedBox(
+                      height: 40.0,
+                      width: 150,
+                      child: Text(
+                        "Usuario : " + widget.nombre,
+                        style: TextStyle(color: Colors.white, fontSize: 11),
+                      ),
+                    ),
+                    /*SizedBox(
                       height: 40.0,
                       width: 150,
                       child: Text(
                         widget.nombre == "" ? "Usuario : " + widget.nombre : "",
                         style: TextStyle(color: Colors.white, fontSize: 11),
                       ),
-                    ),
+                    ),*/
                   ]
                 ],
               )
@@ -114,7 +125,7 @@ class _AppBarPegasoState extends State<AppBarPegaso> {
                   decoration: BoxDecoration(
                     color: bgColor,
                     borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(dRadiusTop)),
+                    BorderRadius.vertical(top: Radius.circular(dRadiusTop)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.2),

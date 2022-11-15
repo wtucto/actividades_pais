@@ -224,7 +224,7 @@ class _AsistenciaState extends State<Asistencia> {
         ' ' +
         abc[cantidad].apellidoMaterno.toUpperCase();
     numeroDni = abc[cantidad].numeroDni;
-    cargo = abc[cantidad].cargo;
+    //cargo = abc[cantidad].cargo;
   }
 
   void _startTimerPeriodic(tipo) {

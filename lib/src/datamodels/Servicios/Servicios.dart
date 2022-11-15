@@ -66,6 +66,10 @@ class Servicios {
     return await rootBundle.loadString('assets/tipoAtencion.json');
   }
 
+  Future loadUnidad() async {
+    return await rootBundle.loadString('assets/unidad.json');
+  }
+
 /*  Future loadParticipantes() async {
     return await rootBundle.loadString('assets/participantesIntervenciones.json');
   }*/

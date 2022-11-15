@@ -34,17 +34,17 @@ class DatabasePias {
 
   Future initDB() async {
     ///if(_db )
-    _db = await openDatabase('databasePiasDb.db', version:3,
+    _db = await openDatabase('databasePiasDb.db', version: 3,
         onCreate: (Database db, int version) {
-          db.execute("CREATE TABLE PuntoAtencionPias (id INTEGER PRIMARY KEY,"
-              "codigoUbigeo,"
-              "idCampania,"
-              "idPias,"
-              "pias,"
-              "puntoAtencion,"
-              "latitud,"
-              "longitud,"
-              "anio)");
+      db.execute("CREATE TABLE PuntoAtencionPias (id INTEGER PRIMARY KEY,"
+          "codigoUbigeo,"
+          "idCampania,"
+          "idPias,"
+          "pias,"
+          "puntoAtencion,"
+          "latitud,"
+          "longitud,"
+          "anio)");
       db.execute(
           "CREATE TABLE reportesPias (id INTEGER PRIMARY KEY,fechaParteDiario,puntoAtencion,codigoUbigeo,idPlataforma,plataforma,idUnidadTerritorial,unidadTerritorial,clima,climaId,detalle,personal,estadosEquipos,sismonitor,idUnicoReporte,latitud,longitud,campania, idParteDiario)");
 
@@ -72,13 +72,12 @@ class DatabasePias {
     });
   }
 
-  borrarPorcentajes(idUnicoReporte)async{
-
-    final res = await _db?.rawQuery("DELETE FROM porcentajesEnvio where idUnicoReporte = '$idUnicoReporte'");
-
+  borrarPorcentajes(idUnicoReporte) async {
+    final res = await _db?.rawQuery(
+        "DELETE FROM porcentajesEnvio where idUnicoReporte = '$idUnicoReporte'");
   }
 
-  Future updateArchivos(idParteDiarioNacimiento,idNacimiento) async {
+  Future updateArchivos(idParteDiarioNacimiento, idNacimiento) async {
     print("$idParteDiarioNacimiento $idNacimiento");
     await DatabasePr.db.initDB();
     final res = await _db?.rawQuery(
@@ -87,13 +86,15 @@ class DatabasePias {
   }
 
   Future<int> insertArchivos(Archivos ser) async {
-
     await DatabasePias.db.initDB();
     var a = await _db!.insert("archivos", ser.toMap());
     return a;
   }
 
-  Future<List<Archivos>> traerArchivos(idUnicoReporte, idNacimiento, ) async {
+  Future<List<Archivos>> traerArchivos(
+    idUnicoReporte,
+    idNacimiento,
+  ) async {
     await DatabasePias.db.initDB();
     final res = await _db?.rawQuery(
         "SELECT * from  archivos where idUnicoReporte =  '$idUnicoReporte' and idNacimiento = $idNacimiento");
@@ -102,21 +103,23 @@ class DatabasePias {
     return list;
   }
 
-  Future<List<Archivos>> traerArchivosParte(idUnicoReporte, idNacimiento, idParteDiarioNacimiento) async {
+  Future<List<Archivos>> traerArchivosParte(
+      idUnicoReporte, idNacimiento, idParteDiarioNacimiento) async {
     await DatabasePias.db.initDB();
     final res = await _db?.rawQuery(
         "SELECT * from  archivos where idUnicoReporte =  '$idUnicoReporte' and idNacimiento = $idNacimiento and idParteDiarioNacimiento=$idParteDiarioNacimiento");
     List<Archivos> list =
-    res!.isNotEmpty ? res.map((e) => Archivos.fromJson(e)).toList() : [];
+        res!.isNotEmpty ? res.map((e) => Archivos.fromJson(e)).toList() : [];
     return list;
   }
 
-  Future<List<Archivos>>DeleteArchivosParte(idUnicoReporte, idNacimiento, idParteDiarioNacimiento) async {
+  Future<List<Archivos>> DeleteArchivosParte(
+      idUnicoReporte, idNacimiento, idParteDiarioNacimiento) async {
     await DatabasePias.db.initDB();
     final res = await _db?.rawQuery(
         "Delete from archivos where idUnicoReporte =  '$idUnicoReporte' and idNacimiento = $idNacimiento and idParteDiarioNacimiento=$idParteDiarioNacimiento");
     List<Archivos> list =
-    res!.isNotEmpty ? res.map((e) => Archivos.fromJson(e)).toList() : [];
+        res!.isNotEmpty ? res.map((e) => Archivos.fromJson(e)).toList() : [];
     return list;
   }
 
@@ -165,13 +168,18 @@ class DatabasePias {
   Future<List<ReportesPias>> traerUtlimoPorId(idUnicoReporte) async {
     await DatabasePias.db.initDB();
     final res = await _db?.rawQuery(
-        "SELECT max(id), * from  reportesPias where idUnicoReporte = '$idUnicoReporte'");
+        "SELECT   * from  reportesPias where idUnicoReporte = '$idUnicoReporte'");
+    if (res!.isNotEmpty) {
+      final res2 = await _db?.rawQuery(
+          "SELECT max(id), * from  reportesPias where idUnicoReporte = '$idUnicoReporte'");
+      List<ReportesPias> list = res2!.isNotEmpty
+          ? res.map((e) => ReportesPias.fromJson(e)).toList()
+          : [];
 
-    List<ReportesPias> list = res!.isNotEmpty
-        ? res.map((e) => ReportesPias.fromJson(e)).toList()
-        : [];
-
-    return list;
+      return list;
+    } else {
+      return List.empty();
+    }
   }
 
   Future eliminarActividadesPiasid(i) async {
@@ -208,14 +216,16 @@ class DatabasePias {
     var a = await _db!.insert("atencion", ser.toMap());
     return a;
   }
-Future <List<Atencion>>buscarTipoAtencion(tipo, idUnicoReporte)async{
-  await DatabasePias.db.initDB();
-  final res = await _db?.rawQuery(
-      "SELECT * from atencion WHERE tipo='$tipo' and idUnicoReporte = '$idUnicoReporte'");
-  List<Atencion> list =
-  res!.isNotEmpty ? res.map((e) => Atencion.fromMap(e)).toList() : [];
-  return list;
-}
+
+  Future<List<Atencion>> buscarTipoAtencion(tipo, idUnicoReporte) async {
+    await DatabasePias.db.initDB();
+    final res = await _db?.rawQuery(
+        "SELECT * from atencion WHERE tipo='$tipo' and idUnicoReporte = '$idUnicoReporte'");
+    List<Atencion> list =
+        res!.isNotEmpty ? res.map((e) => Atencion.fromMap(e)).toList() : [];
+    return list;
+  }
+
   Future<List<Atencion>> listarAtencion(idUnicoReporte) async {
     await DatabasePias.db.initDB();
     final res = await _db?.rawQuery(
@@ -245,10 +255,10 @@ Future <List<Atencion>>buscarTipoAtencion(tipo, idUnicoReporte)async{
 
     return res;
   }
+
   Future eliminarNacidos(i) async {
     await DatabasePias.db.initDB();
-    final res = await _db
-        ?.rawQuery("DELETE FROM nacimiento where id = '$i';");
+    final res = await _db?.rawQuery("DELETE FROM nacimiento where id = '$i';");
 
     return res;
   }
@@ -316,7 +326,7 @@ Future <List<Atencion>>buscarTipoAtencion(tipo, idUnicoReporte)async{
 
   Future<List<Nacimiento>> ListarNacimientoPiasEn(
       idUnicoReporte, idNacimiento) async {
-     await DatabasePias.db.initDB();
+    await DatabasePias.db.initDB();
     final res = await _db?.rawQuery(
         "SELECT DISTINCT * from nacimiento where idUnicoReporte ='$idUnicoReporte' and id =$idNacimiento ORDER BY id DESC;");
     List<Nacimiento> list =
@@ -327,7 +337,7 @@ Future <List<Atencion>>buscarTipoAtencion(tipo, idUnicoReporte)async{
   Future eliminarNacimiento(i) async {
     await DatabasePias.db.initDB();
     final res = await _db?.rawQuery("DELETE FROM nacimiento where id = '$i';");
-     await _db?.rawQuery("DELETE FROM archivos where idNacimiento =  $i;");
+    await _db?.rawQuery("DELETE FROM archivos where idNacimiento =  $i;");
     return res;
   }
 
@@ -343,15 +353,21 @@ Future <List<Atencion>>buscarTipoAtencion(tipo, idUnicoReporte)async{
   Future eliminarReportePorIdru(idUnicoReporte) async {
     print("aqqaqaqayiuiuiu $idUnicoReporte");
     await DatabasePias.db.initDB();
-    final res =
-    await _db?.rawQuery("DELETE from reportesPias where idUnicoReporte = '$idUnicoReporte'");
-    await _db?.rawQuery("DELETE from atencion where idUnicoReporte = '$idUnicoReporte'");
-    await _db?.rawQuery("DELETE from actividadesPias where idUnicoReporte = '$idUnicoReporte'");
-    await _db?.rawQuery("DELETE from nacimiento where idUnicoReporte = '$idUnicoReporte'");
-    await _db?.rawQuery("DELETE from archivos where idUnicoReporte = '$idUnicoReporte'");
-    await _db?.rawQuery("DELETE from porcentajesEnvio where idUnicoReporte = '$idUnicoReporte'");
+    final res = await _db?.rawQuery(
+        "DELETE from reportesPias where idUnicoReporte = '$idUnicoReporte'");
+    await _db?.rawQuery(
+        "DELETE from atencion where idUnicoReporte = '$idUnicoReporte'");
+    await _db?.rawQuery(
+        "DELETE from actividadesPias where idUnicoReporte = '$idUnicoReporte'");
+    await _db?.rawQuery(
+        "DELETE from nacimiento where idUnicoReporte = '$idUnicoReporte'");
+    await _db?.rawQuery(
+        "DELETE from archivos where idUnicoReporte = '$idUnicoReporte'");
+    await _db?.rawQuery(
+        "DELETE from porcentajesEnvio where idUnicoReporte = '$idUnicoReporte'");
     return res;
   }
+
   Future updateTask(ReportesPias task) async {
     _db!.update("reportesPias", task.toMap(),
         where: "idUnicoReporte = ?", whereArgs: [task.idUnicoReporte]);
@@ -389,10 +405,10 @@ Future <List<Atencion>>buscarTipoAtencion(tipo, idUnicoReporte)async{
 
   Future deletePuntoAtencionPias() async {
     await DatabasePias.db.initDB();
-    final res = await _db?.rawQuery(
-        "DELETE from PuntoAtencionPias");
+    final res = await _db?.rawQuery("DELETE from PuntoAtencionPias");
     print(res);
   }
+
   Future<List<PuntoAtencionPias>> ListarPuntoAtencionPias(
       campaniaCod, idPia) async {
     await DatabasePias.db.initDB();
@@ -428,25 +444,27 @@ Future <List<Atencion>>buscarTipoAtencion(tipo, idUnicoReporte)async{
     return list;
   }
 
- Future eliminarArchivoPorId(file)async{
-   final res = await _db?.rawQuery(
-       "DELETE from archivos where file = '$file'");
-   print(res);
+  Future eliminarArchivoPorId(file) async {
+    final res =
+        await _db?.rawQuery("DELETE from archivos where file = '$file'");
+    print(res);
   }
-  Future eliminarArchivoEvPorId(file)async{
-   final res = await _db?.rawQuery(
-       "DELETE from archivosEvidencia where file = '$file'");
-   print(res);
+
+  Future eliminarArchivoEvPorId(file) async {
+    final res = await _db
+        ?.rawQuery("DELETE from archivosEvidencia where file = '$file'");
+    print(res);
   }
-  Future <List<Archivos>> listarArchivos(idNacimiento)async{
+
+  Future<List<Archivos>> listarArchivos(idNacimiento) async {
     final res = await _db?.rawQuery(
         "SELECT * from archivos a where idNacimiento = $idNacimiento");
-    List<Archivos> list = res!.isNotEmpty
-        ? res.map((e) => Archivos.fromMap(e)).toList()
-        : [];
+    List<Archivos> list =
+        res!.isNotEmpty ? res.map((e) => Archivos.fromMap(e)).toList() : [];
     return list;
   }
-  Future <List<ArchivosEvidencia>> listarArchivosUnico(idUnicoReporte)async{
+
+  Future<List<ArchivosEvidencia>> listarArchivosUnico(idUnicoReporte) async {
     final res = await _db?.rawQuery(
         "SELECT * from archivosEvidencia a where idUnicoReporte = '$idUnicoReporte'");
     List<ArchivosEvidencia> list = res!.isNotEmpty
@@ -454,8 +472,8 @@ Future <List<Atencion>>buscarTipoAtencion(tipo, idUnicoReporte)async{
         : [];
     return list;
   }
-  Future<int> insertArchivosEv(ArchivosEvidencia ser) async {
 
+  Future<int> insertArchivosEv(ArchivosEvidencia ser) async {
     await DatabasePias.db.initDB();
     var a = await _db!.insert("archivosEvidencia", ser.toMap());
     return a;
