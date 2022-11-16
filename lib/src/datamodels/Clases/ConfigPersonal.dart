@@ -39,14 +39,12 @@ class ConfigPersonal {
 
   Map<String, dynamic> toMap() {
     return {
-      "codigo":codigo,
-
+      "codigo": codigo,
       "nombres": nombres,
-      "rol":rol,
+      "rol": rol,
       "fechaNacimento": fechaNacimento,
       "numeroDni": numeroDni,
-      "contrasenia":contrasenia,
-
+      "contrasenia": contrasenia,
       "apellidoPaterno": apellidoPaterno,
       "apellidoMaterno": apellidoMaterno,
       "unidad": unidad,
@@ -67,5 +65,7 @@ class ConfigPersonal {
     apellidoMaterno = map['apellidoMaterno'];
     contrasenia = map['contrasenia'];
     unidad = map['unidad'];
+    codigo = map['codigo'];
+    rol = map['rol'];
   }
 }

@@ -181,7 +181,8 @@ class __FormState extends State<_Form> {
       if (res.length > 0) {
         UserModel oUser;
         try {
-          oUser = await mainController.getUserLogin(res[0].codigo, '');
+          String codigo = res[0].codigo;
+          oUser = await mainController.getUserLogin(codigo, '');
 
           if (oUser.clave == "") {
             if (bRepeat != true) {
@@ -208,12 +209,12 @@ class __FormState extends State<_Form> {
 
             await mainController.insertUser(oUser);
           } else {
-            oUser = await mainController.getUserLogin(usn, psw);
+            oUser = await mainController.getUserLogin(codigo, psw);
           }
 
           //setState(() { bRepeat = true; });
 
-          if ((oUser.codigo == usn && oUser.clave == psw)) {
+          if ((oUser.codigo == codigo && oUser.clave == psw)) {
             // mainController.users.value = [oUser];
 
             //SECCION
