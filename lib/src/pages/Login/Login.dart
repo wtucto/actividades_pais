@@ -32,11 +32,10 @@ MainController mainController = MainController();
 class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
-
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var contador=0;
+  var contador = 0;
   @override
   void initState() {
     loadPreferences();
@@ -56,12 +55,14 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
+
   vaidarexUsuario() async {
-    var cnt= await DatabasePr.db.getAllConfigPersonal();
+    var cnt = await DatabasePr.db.getAllConfigPersonal();
     setState(() {
       print(cnt.length);
       contador = cnt.length;
-    });  }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,22 +120,23 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           _Form(),
                           SizedBox(height: h / 50),
-                          (contador==0)?
-                          InkWell(
-                            onTap: () {
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (_) => PantallaInicio()),
-                              );
-                            },
-                            child: Text(
-                              'Registrarse en el app',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ):new Container(),
+                          (contador == 0)
+                              ? InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (_) => PantallaInicio()),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Registrarse en el app',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                )
+                              : new Container(),
                           SizedBox(height: h / 35),
                           const Text(
                             'Términos y condiciones de uso',
@@ -176,11 +178,70 @@ class __FormState extends State<_Form> {
 
       var res = await DatabasePr.db
           .getLoginUser(dni: int.parse(usn), contrasenia: psw);
-      if(res.length>0){
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => HomePagePais()),
-        );
-        return;
+      if (res.length > 0) {
+        UserModel oUser;
+        try {
+          oUser = await mainController.getUserLogin(res[0].codigo, '');
+
+          if (oUser.clave == "") {
+            if (bRepeat != true) {
+              setState(() {
+                bRepeat = true;
+              });
+              return;
+            }
+          }
+
+          if (bRepeat == true) {
+            if (psw != rpsw) {
+              mostrarAlerta(
+                context,
+                'Login incorrecto',
+                'Las contraseñas no coinciden. vuelve a intentarlo',
+              );
+              return '';
+            }
+          }
+
+          if (bRepeat == true) {
+            oUser.clave = psw;
+
+            await mainController.insertUser(oUser);
+          } else {
+            oUser = await mainController.getUserLogin(usn, psw);
+          }
+
+          //setState(() { bRepeat = true; });
+
+          if ((oUser.codigo == usn && oUser.clave == psw)) {
+            // mainController.users.value = [oUser];
+
+            //SECCION
+            check = _prefs!.getBool("check");
+            if (_prefs != null && check == true) {
+              _prefs!.setString("clave", oUser.clave!);
+            } else {
+              _prefs!.setString("clave", "");
+            }
+
+            _prefs!.setString("nombres", oUser.nombres!);
+            _prefs!.setString("codigo", oUser.codigo!);
+            _prefs!.setString("rol", oUser.rol!);
+
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => HomePagePais()),
+            );
+            return;
+          } else {
+            mostrarAlerta(
+              context,
+              'Login incorrecto',
+              'Revise sus credenciales nuevamente',
+            );
+          }
+        } catch (oError) {
+          mostrarAlerta(context, 'Login incorrecto', oError.toString());
+        }
       }
       /*  if (usn == 'PAIS' && psw == 'PAIS') {
         Navigator.of(context).pushReplacement(
@@ -284,8 +345,7 @@ class __FormState extends State<_Form> {
           InkWell(
             onTap: () {
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                    builder: (_) => ResetContrasenia()),
+                MaterialPageRoute(builder: (_) => ResetContrasenia()),
               );
             },
             child: const Text(
@@ -296,12 +356,10 @@ class __FormState extends State<_Form> {
               ),
             ),
           ),
-          SizedBox(height: h / 50
-          ),
+          SizedBox(height: h / 50),
           BotonLog(
             text: 'Ingresar',
             onPressed: () {
-
               LoginUser(emailCtrl.text, passCtrl.text, passCtrl2.text);
             },
           ),
