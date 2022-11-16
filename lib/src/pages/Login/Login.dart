@@ -179,6 +179,13 @@ class __FormState extends State<_Form> {
       var res = await DatabasePr.db
           .getLoginUser(dni: int.parse(usn), contrasenia: psw);
       if (res.length > 0) {
+        if (res[0].unidad != 'UPS') {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => HomePagePais()),
+          );
+          return;
+        }
+
         UserModel oUser;
         try {
           String codigo = res[0].codigo;
