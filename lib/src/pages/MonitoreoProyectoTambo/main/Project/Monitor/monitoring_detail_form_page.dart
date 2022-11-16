@@ -827,139 +827,159 @@ class _MonitoringDetailNewEditPageState
                                     'Debe ingresar una imagen de la partida Ejecutada',
                               );
                             } else {
-                              final alert = AlertQuestion(
-                                  title: "Información",
-                                  message: "¿Está Seguro de Enviar Monitor?",
-                                  onNegativePressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  onPostivePressed: () async {
-                                    Navigator.of(context).pop();
-                                    BusyIndicator.show(context);
-                                    try {
-                                      List<TramaMonitoreoModel> dataSend =
-                                          await mainController.sendMonitoreo([
-                                        TramaMonitoreoModel(
-                                          id: idM,
-                                          isEdit: 1,
-                                          createdTime: DateTime.now(),
-                                          snip: _snip,
-                                          cui: _cuiCtr.text,
-                                          latitud: _latitud.text,
-                                          longitud: _longitud.text,
-                                          tambo: _tambo,
-                                          fechaTerminoEstimado: _dateObra.text,
-                                          actividadPartidaEjecutada:
-                                              _valuePartidaEje!.toUpperCase() ==
-                                                      ('SelectOption'.tr)
-                                                          .toUpperCase()
-                                                  ? ""
-                                                  : _valuePartidaEje!,
-                                          alternativaSolucion:
-                                              _valueAlternSolucion!
-                                                          .toUpperCase() ==
-                                                      ('SelectOption'.tr)
-                                                          .toUpperCase()
-                                                  ? ""
-                                                  : _valueAlternSolucion!,
-                                          avanceFisicoAcumulado: (double.parse(
-                                                  _advanceFEA.text == ""
-                                                      ? "0"
-                                                      : _advanceFEA.text) /
-                                              100),
-                                          avanceFisicoPartida: (double.parse(
-                                                  _advanceFEP.text == ""
-                                                      ? "0"
-                                                      : _advanceFEP.text) /
-                                              100),
-                                          estadoAvance:
-                                              _statusAdvance!.toUpperCase() ==
-                                                      ('SelectOption'.tr)
-                                                          .toUpperCase()
-                                                  ? ""
-                                                  : _statusAdvance!,
-                                          estadoMonitoreo:
-                                              _statusMonitor!.toUpperCase() ==
-                                                      ('SelectOption'.tr)
-                                                          .toUpperCase()
-                                                  ? ""
-                                                  : _statusMonitor!,
-                                          fechaMonitoreo: _dateMonitor.text,
-                                          idMonitoreo: _idMonitor.text,
-                                          idUsuario: oUser.codigo,
-                                          imgActividad: imgPE,
-                                          imgProblema: imgPI,
-                                          imgRiesgo: imgRI,
-                                          observaciones: _obsMonitor.text,
-                                          problemaIdentificado:
-                                              _valueProblemaIO!.toUpperCase() ==
-                                                      ('SelectOption'.tr)
-                                                          .toUpperCase()
-                                                  ? ""
-                                                  : _valueProblemaIO!,
-                                          riesgoIdentificado:
-                                              _valueRiesgo!.toUpperCase() ==
-                                                      ('SelectOption'.tr)
-                                                          .toUpperCase()
-                                                  ? ""
-                                                  : _valueRiesgo!,
-                                          nivelRiesgo: _valueNivelRiesgo!
-                                                      .toUpperCase() ==
-                                                  ('SelectOption'.tr)
-                                                      .toUpperCase()
-                                              ? ""
-                                              : _valueNivelRiesgo!,
-                                          rol: oUser.rol,
-                                          usuario: oUser.nombres,
-                                        )
-                                      ]);
-                                      BusyIndicator.hide(context);
-                                      getDataMonitor(dataSend[0]);
-                                      if (dataSend.isEmpty) {
-                                        if (idM == 0) {
-                                          showSnackbar(
-                                            success: true,
-                                            text:
-                                                'Datos Enviados Correctamente',
-                                          );
+                              if (idM == 0) {
+                                AnimatedSnackBar.rectangle(
+                                  'Error',
+                                  'Para enviar un monitoreo debes ingresar todos los campos obligatorios y hacer click en el botón guardar',
+                                  type: AnimatedSnackBarType.error,
+                                  brightness: Brightness.light,
+                                  mobileSnackBarPosition:
+                                      MobileSnackBarPosition.top,
+                                ).show(context);
+                                // showSnackbar(
+                                //   success: false,
+                                //   text: 'Error, ',
+                                // );
+                              } else {
+                                final alert = AlertQuestion(
+                                    title: "Información",
+                                    message: "¿Está Seguro de Enviar Monitor?",
+                                    onNegativePressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    onPostivePressed: () async {
+                                      Navigator.of(context).pop();
+                                      BusyIndicator.show(context);
+                                      try {
+                                        List<TramaMonitoreoModel> dataSend =
+                                            await mainController.sendMonitoreo([
+                                          TramaMonitoreoModel(
+                                            id: idM,
+                                            isEdit: 1,
+                                            createdTime: DateTime.now(),
+                                            snip: _snip,
+                                            cui: _cuiCtr.text,
+                                            latitud: _latitud.text,
+                                            longitud: _longitud.text,
+                                            tambo: _tambo,
+                                            fechaTerminoEstimado:
+                                                _dateObra.text,
+                                            actividadPartidaEjecutada:
+                                                _valuePartidaEje!
+                                                            .toUpperCase() ==
+                                                        ('SelectOption'.tr)
+                                                            .toUpperCase()
+                                                    ? ""
+                                                    : _valuePartidaEje!,
+                                            alternativaSolucion:
+                                                _valueAlternSolucion!
+                                                            .toUpperCase() ==
+                                                        ('SelectOption'.tr)
+                                                            .toUpperCase()
+                                                    ? ""
+                                                    : _valueAlternSolucion!,
+                                            avanceFisicoAcumulado:
+                                                (double.parse(
+                                                        _advanceFEA.text == ""
+                                                            ? "0"
+                                                            : _advanceFEA
+                                                                .text) /
+                                                    100),
+                                            avanceFisicoPartida: (double.parse(
+                                                    _advanceFEP.text == ""
+                                                        ? "0"
+                                                        : _advanceFEP.text) /
+                                                100),
+                                            estadoAvance:
+                                                _statusAdvance!.toUpperCase() ==
+                                                        ('SelectOption'.tr)
+                                                            .toUpperCase()
+                                                    ? ""
+                                                    : _statusAdvance!,
+                                            estadoMonitoreo:
+                                                _statusMonitor!.toUpperCase() ==
+                                                        ('SelectOption'.tr)
+                                                            .toUpperCase()
+                                                    ? ""
+                                                    : _statusMonitor!,
+                                            fechaMonitoreo: _dateMonitor.text,
+                                            idMonitoreo: _idMonitor.text,
+                                            idUsuario: oUser.codigo,
+                                            imgActividad: imgPE,
+                                            imgProblema: imgPI,
+                                            imgRiesgo: imgRI,
+                                            observaciones: _obsMonitor.text,
+                                            problemaIdentificado:
+                                                _valueProblemaIO!
+                                                            .toUpperCase() ==
+                                                        ('SelectOption'.tr)
+                                                            .toUpperCase()
+                                                    ? ""
+                                                    : _valueProblemaIO!,
+                                            riesgoIdentificado:
+                                                _valueRiesgo!.toUpperCase() ==
+                                                        ('SelectOption'.tr)
+                                                            .toUpperCase()
+                                                    ? ""
+                                                    : _valueRiesgo!,
+                                            nivelRiesgo: _valueNivelRiesgo!
+                                                        .toUpperCase() ==
+                                                    ('SelectOption'.tr)
+                                                        .toUpperCase()
+                                                ? ""
+                                                : _valueNivelRiesgo!,
+                                            rol: oUser.rol,
+                                            usuario: oUser.nombres,
+                                          )
+                                        ]);
+                                        BusyIndicator.hide(context);
+                                        getDataMonitor(dataSend[0]);
+                                        if (dataSend.isEmpty) {
+                                          if (idM == 0) {
+                                            showSnackbar(
+                                              success: true,
+                                              text:
+                                                  'Datos Enviados Correctamente',
+                                            );
+                                          } else {
+                                            showSnackbar(
+                                              success: true,
+                                              text:
+                                                  'Datos Enviados Correctamente',
+                                            );
+                                          }
                                         } else {
-                                          showSnackbar(
-                                            success: true,
-                                            text:
-                                                'Datos Enviados Correctamente',
-                                          );
+                                          // ignore: use_build_context_synchronously
+                                          AnimatedSnackBar.rectangle(
+                                            'Error',
+                                            'No se pudo enviar el monitor',
+                                            type: AnimatedSnackBarType.error,
+                                            brightness: Brightness.light,
+                                            mobileSnackBarPosition:
+                                                MobileSnackBarPosition.top,
+                                          ).show(context);
                                         }
-                                      } else {
+                                      } catch (ex) {
                                         // ignore: use_build_context_synchronously
+                                        BusyIndicator.hide(context);
                                         AnimatedSnackBar.rectangle(
                                           'Error',
-                                          'No se pudo enviar el monitor',
+                                          ex.toString(),
                                           type: AnimatedSnackBarType.error,
                                           brightness: Brightness.light,
                                           mobileSnackBarPosition:
                                               MobileSnackBarPosition.top,
                                         ).show(context);
                                       }
-                                    } catch (ex) {
-                                      // ignore: use_build_context_synchronously
-                                      BusyIndicator.hide(context);
-                                      AnimatedSnackBar.rectangle(
-                                        'Error',
-                                        ex.toString(),
-                                        type: AnimatedSnackBarType.error,
-                                        brightness: Brightness.light,
-                                        mobileSnackBarPosition:
-                                            MobileSnackBarPosition.top,
-                                      ).show(context);
-                                    }
-                                  });
+                                    });
 
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return alert;
-                                },
-                              );
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return alert;
+                                  },
+                                );
+                              }
                             }
                           } else {
                             showSnackbar(

@@ -86,7 +86,7 @@ class ListViewProjet extends StatelessWidget {
                         percent:
                             double.parse(oProyecto.avanceFisico.toString()),
                         center: Text(
-                          "${double.parse(oProyecto.avanceFisico.toString()) * 100}%",
+                          "${((double.parse(oProyecto.avanceFisico.toString()) * 100).toStringAsFixed(2)).toString()}%",
                           style: const TextStyle(
                               fontSize: 11, fontWeight: FontWeight.bold),
                         ),
