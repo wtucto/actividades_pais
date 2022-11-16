@@ -171,6 +171,7 @@ flutter:
     - assets/campanias.json
     - assets/loading_icon.gif
     #- assets/participantesIntervenciones.json
+    - assets/unidad.json
     - assets/loaderios.gif
    
 

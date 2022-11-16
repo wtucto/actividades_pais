@@ -18,7 +18,7 @@ class TipoDocumento {
   factory TipoDocumento.fromJson(Map<String, dynamic> obj) {
     return TipoDocumento(
       id: obj['id'],
-      idTipoDocumento: obj['idTipoDocumento'],
+      idTipoDocumento: obj['idTipoDocumento'] ?? 0,
       descripcion: obj['descripcion'],
     );
   }

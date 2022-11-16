@@ -1,4 +1,3 @@
-
 class ListasCampanias {
   List<Campania> items = [];
   ListasCampanias();
@@ -11,21 +10,22 @@ class ListasCampanias {
   }
 }
 
-class Campania{
-  int id=0;
-  String cod='';
-  String descripcion='';
+class Campania {
+  int id = 0;
+  String cod = '';
+  String descripcion = '';
 
   Campania({
     this.id = 0,
-    this.cod='',
-    this.descripcion='',
+    this.cod = '',
+    this.descripcion = '',
   });
 
   Campania.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['id'] ?? 0;
     cod = json['cod'];
-    descripcion = json['descripcion'];}
+    descripcion = json['descripcion'];
+  }
 
   Campania.fromMap(Map<String, dynamic> map) {
     id = map['id'];
