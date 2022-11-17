@@ -6,6 +6,8 @@ import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/ListView/list_view_Projectos.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_list_page.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/report_dto.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/report_project.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Search/project_search.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_detail_form_page.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
@@ -94,6 +96,28 @@ class _ProjectListPageState extends State<ProjectListPage>
         loading = false;
       });
     }
+  }
+
+  Future<List<TramaProyectoModel>> getAllProjectForReport() async {
+    setState(() {
+      loading = true;
+    });
+
+    _prefs = await SharedPreferences.getInstance();
+    UserModel oUser = UserModel(
+      nombres: _prefs!.getString('nombres') ?? '',
+      codigo: _prefs!.getString('codigo') ?? '',
+      rol: _prefs!.getString('rol') ?? '',
+    );
+
+    final List<TramaProyectoModel> response =
+        await mainController.getAllProyectoByUserSearch(oUser, '', 0, 0);
+
+    setState(() {
+      loading = false;
+    });
+
+    return response;
   }
 
   void handleNext() {
@@ -249,29 +273,35 @@ class _ProjectListPageState extends State<ProjectListPage>
               );
             },
           ),
-          // FabItem(
-          //   "Reporte",
-          //   Icons.document_scanner_rounded,
-          //   onPress: () {
-          //     _controller!.reverse();
-          //     final oDataPdf = ReportDto(
-          //       customer: 'David Thomas',
-          //       address: '123 Fake St\r\nBermuda Triangle',
-          //       items: [
-          //         TramaMonitoreoModel.empty(),
-          //         TramaMonitoreoModel.empty(),
-          //         TramaMonitoreoModel.empty(),
-          //       ],
-          //       name: 'Test 001 PDF',
-          //     );
+          FabItem(
+            "Reporte",
+            Icons.document_scanner_rounded,
+            onPress: () async {
+              try {
+                List<TramaProyectoModel> aList = await getAllProjectForReport();
+                if (aList.isNotEmpty) {
+                  _controller!.reverse();
+                  final oDataPdf = ReportDto(
+                    customer: 'Proyectos Tambo',
+                    address: 'PAIS',
+                    items: aList,
+                    name: 'REPORTE PROYECTOS TAMBO',
+                  );
 
-          //     Navigator.of(context).push(
-          //       MaterialPageRoute(
-          //         builder: (builder) => ReportProjectPage(dataPdf: oDataPdf),
-          //       ),
-          //     );
-          //   },
-          // ),
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (builder) =>
+                          ReportProjectPage(dataPdf: oDataPdf),
+                    ),
+                  );
+                }
+              } catch (oError) {
+                setState(() {
+                  loading = false;
+                });
+              }
+            },
+          ),
           FabItem(
             "Sincronizar",
             Icons.cloud_sync_rounded,

@@ -1,10 +1,10 @@
-import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
+import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 
 class ReportDto {
   final String customer;
   final String address;
   final String name;
-  final List<TramaMonitoreoModel> items;
+  final List<TramaProyectoModel> items;
   ReportDto({
     required this.customer,
     required this.address,

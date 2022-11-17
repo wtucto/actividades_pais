@@ -1,14 +1,16 @@
 import 'dart:typed_data';
 
+import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/report_dto.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:printing/printing.dart';
 
 Future<Uint8List> makePdf(ReportDto oDataPdf) async {
   final pdf = Document();
   final imageLogo = MemoryImage(
-    (await rootBundle.load('assets/imagenatencion.png')).buffer.asUint8List(),
+    (await rootBundle.load('assets/paislogo.png')).buffer.asUint8List(),
   );
 
   /*pdf.addPage(
@@ -39,97 +41,142 @@ Future<Uint8List> makePdf(ReportDto oDataPdf) async {
       },
     ),
   ); */
+  List<Widget> widgets = [];
+
+  final font = await PdfGoogleFonts.cairoRegular();
+
+  widgets.add(Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Column(
+        children: [
+          Text("REPORTE PROYECTOS TAMBO"),
+          Text("PAIS"),
+        ],
+        crossAxisAlignment: CrossAxisAlignment.start,
+      ),
+      SizedBox(
+        height: 150,
+        width: 150,
+        child: Image(imageLogo),
+      )
+    ],
+  ));
+
+  widgets.add(Container(height: 10));
+
+  const pageSize = 30;
+  List<TramaProyectoModel> totalDueList = oDataPdf.items;
+  final numberOfPages = (totalDueList.length / pageSize).ceil();
+
+  Map<int, List<TableRow>> rows = {};
+
+  for (var page = 0; page < numberOfPages; page++) {
+    rows[page] = [
+      TableRow(
+        decoration: const BoxDecoration(color: PdfColor.fromInt(0xffff9505)),
+        children: [
+          centerText('N°'),
+          centerText('CUI'),
+          centerText('DEPARTAMENTO'),
+          centerText('PROVINCIA'),
+          centerText('DISTRITO'),
+          centerText('CC.PP'),
+          centerText('AVANCE FÍSICO'),
+          centerText('ESTADO'),
+        ],
+      )
+    ];
+
+    var loopLimit =
+        totalDueList.length - (totalDueList.length - ((page + 1) * pageSize));
+
+    if (loopLimit > totalDueList.length) loopLimit = totalDueList.length;
+
+    for (var index = pageSize * page; index < loopLimit; index++) {
+      rows[page]!.add(TableRow(
+        decoration: const BoxDecoration(color: PdfColor.fromInt(0xffffc971)),
+        children: [
+          Center(
+            child: Text(
+              "${index + 1}",
+              textDirection: TextDirection.rtl,
+              style: TextStyle(font: font, fontSize: 7.5),
+            ),
+          ),
+          Center(
+            child: Text(
+              totalDueList[index].cui ?? "",
+              textDirection: TextDirection.rtl,
+              style: TextStyle(font: font, fontSize: 7.5),
+            ),
+          ),
+          Center(
+            child: Text(
+              totalDueList[index].departamento ?? "",
+              textDirection: TextDirection.rtl,
+              style: TextStyle(font: font, fontSize: 7.5),
+            ),
+          ),
+          Center(
+            child: Text(
+              totalDueList[index].provincia ?? "",
+              textDirection: TextDirection.rtl,
+              style: TextStyle(font: font, fontSize: 7.5),
+            ),
+          ),
+          Center(
+            child: Text(
+              totalDueList[index].distrito ?? "",
+              textDirection: TextDirection.rtl,
+              style: TextStyle(font: font, fontSize: 7.5),
+            ),
+          ),
+          Center(
+            child: Text(
+              totalDueList[index].tambo ?? "",
+              textDirection: TextDirection.rtl,
+              style: TextStyle(font: font, fontSize: 7.5),
+            ),
+          ),
+          Center(
+            child: Text(
+              "${((double.parse(totalDueList[index].avanceFisico.toString()) * 100).toStringAsFixed(2)).toString()}%",
+              textDirection: TextDirection.rtl,
+              style: TextStyle(font: font, fontSize: 7.5),
+            ),
+          ),
+          Center(
+            child: Text(
+              totalDueList[index].estado ?? "",
+              textDirection: TextDirection.rtl,
+              style: TextStyle(font: font, fontSize: 7.5),
+            ),
+          ),
+        ],
+      ));
+    }
+  }
+
+  widgets.addAll(List<Widget>.generate(rows.keys.length, (index) {
+    return Column(
+      children: [
+        Table(
+          border: TableBorder.all(color: PdfColor.fromHex("#000000")),
+          children: rows[index]!,
+        ),
+        Container(height: 50),
+      ],
+    );
+  }));
+
   pdf.addPage(
     MultiPage(
       pageFormat: PdfPageFormat.a4,
       build: (context) {
         return [
           Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      Text("Reporte"),
-                      Text("PAIS"),
-                    ],
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                  ),
-                  SizedBox(
-                    height: 150,
-                    width: 150,
-                    child: Image(imageLogo),
-                  )
-                ],
-              ),
-              Container(height: 50),
-              Table(
-                border: TableBorder.all(color: PdfColors.black),
-                children: [
-                  TableRow(
-                    children: [
-                      centerText('N°'),
-                      centerText('CUI'),
-                      centerText('DEPARTAMENTO'),
-                      centerText('PROVINCIA'),
-                      centerText('DISTRITO'),
-                      centerText('CC.PP'),
-                      centerText('AVANCE FÍSICO'),
-                      centerText('ESTADO'),
-                    ],
-                  ),
-                  ...oDataPdf.items.map(
-                    (e) => TableRow(
-                      children: [
-                        Expanded(
-                          child: leftText(e.cui!),
-                          flex: 1,
-                        ),
-                        Expanded(
-                          child: leftText(e.cui!),
-                          flex: 1,
-                        ),
-                        Expanded(
-                          child: leftText(e.cui!),
-                          flex: 1,
-                        ),
-                        Expanded(
-                          child: leftText(e.cui!),
-                          flex: 1,
-                        ),
-                        Expanded(
-                          child: leftText(e.cui!),
-                          flex: 1,
-                        ),
-                        Expanded(
-                          child: leftText(e.cui!),
-                          flex: 1,
-                        ),
-                        Expanded(
-                          child: leftText(e.cui!),
-                          flex: 1,
-                        ),
-                        Expanded(
-                          child: leftText(e.cui!),
-                          flex: 1,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.all(30),
-                child: Text(
-                  'Reporte generado solo para pruebas.',
-                  style: Theme.of(context).header3.copyWith(
-                        fontStyle: FontStyle.italic,
-                      ),
-                  textAlign: TextAlign.center,
-                ),
-              )
-            ],
+            children: widgets,
           )
         ];
       },
@@ -143,7 +190,7 @@ Widget leftText(
   final TextAlign align = TextAlign.left,
 }) =>
     Padding(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Text(
         text,
         textAlign: align,
@@ -155,9 +202,15 @@ Widget centerText(
   final TextAlign align = TextAlign.center,
 }) =>
     Padding(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Text(
         text,
+        textDirection: TextDirection.rtl,
         textAlign: align,
+        style: TextStyle(
+          fontSize: 7.5,
+          color: PdfColors.white,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );

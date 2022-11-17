@@ -17,7 +17,15 @@ class ReportProjectPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: _createDataTable(),
+        child: Container(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: SingleChildScrollView(
+              child: _createDataTable(),
+            ),
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -28,7 +36,7 @@ class ReportProjectPage extends StatelessWidget {
           );
           // rootBundle.
         },
-        child: Icon(Icons.picture_as_pdf),
+        child: const Icon(Icons.picture_as_pdf),
       ),
     );
   }
@@ -39,74 +47,74 @@ class ReportProjectPage extends StatelessWidget {
 
   List<DataColumn> _createColumns() {
     return [
-      DataColumn(
+      const DataColumn(
         label: Text(
           'N°',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
-      DataColumn(
+      const DataColumn(
         label: Text(
           'CUI',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
-      DataColumn(
+      const DataColumn(
         label: Text(
           'DEPARTAMENTO',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
-      DataColumn(
+      const DataColumn(
         label: Text(
           'PROVINCIA',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
-      DataColumn(
+      const DataColumn(
         label: Text(
           'DISTRITO',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
-      DataColumn(
+      const DataColumn(
         label: Text(
           'CC.PP',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
-      DataColumn(
+      const DataColumn(
         label: Text(
           'AVANCE FÍSICO',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
-      DataColumn(
+      const DataColumn(
         label: Text(
           'ESTADO',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -115,21 +123,76 @@ class ReportProjectPage extends StatelessWidget {
   }
 
   List<DataRow> _createRows() {
-    return dataPdf.items
-        .map(
-          (o) => DataRow(
-            cells: [
-              DataCell(Text('1')),
-              DataCell(Text('cui')),
-              DataCell(Text('dep')),
-              DataCell(Text('prov')),
-              DataCell(Text('dist')),
-              DataCell(Text('ccpp')),
-              DataCell(Text('avan')),
-              DataCell(Text('estado')),
-            ],
+    return dataPdf.items.map((o) {
+      String idx = (dataPdf.items.indexOf(o) + 1).toString();
+      return DataRow(
+        cells: [
+          DataCell(
+            Text(
+              idx,
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
           ),
-        )
-        .toList();
+          DataCell(
+            Text(
+              o.cui ?? '',
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ),
+          DataCell(
+            Text(
+              o.departamento ?? '',
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ),
+          DataCell(
+            Text(
+              o.provincia ?? '',
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ),
+          DataCell(
+            Text(
+              o.distrito ?? '',
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ),
+          DataCell(
+            Text(
+              o.tambo ?? '',
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ),
+          DataCell(
+            Text(
+              "${((double.parse(o.avanceFisico.toString()) * 100).toStringAsFixed(2)).toString()}%",
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ),
+          DataCell(
+            Text(
+              o.estado ?? '',
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ],
+      );
+    }).toList();
   }
 }
