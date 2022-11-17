@@ -63,9 +63,9 @@ Future<Uint8List> makePdf(ReportDto oDataPdf) async {
     ],
   ));
 
-  widgets.add(Container(height: 10));
+  widgets.add(Container(height: 5));
 
-  const pageSize = 30;
+  const pageSize = 20;
   List<TramaProyectoModel> totalDueList = oDataPdf.items;
   final numberOfPages = (totalDueList.length / pageSize).ceil();
 
@@ -97,60 +97,69 @@ Future<Uint8List> makePdf(ReportDto oDataPdf) async {
       rows[page]!.add(TableRow(
         decoration: const BoxDecoration(color: PdfColor.fromInt(0xffffc971)),
         children: [
-          Center(
+          Container(
+            padding: const EdgeInsets.all(0.5),
             child: Text(
               "${index + 1}",
-              textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7),
+              // textDirection: TextDirection.rtl,
+              style: TextStyle(font: font, fontSize: 7.5),
+              textAlign: TextAlign.center,
             ),
           ),
-          Center(
+          Container(
+            padding: const EdgeInsets.all(0.5),
             child: Text(
               totalDueList[index].cui ?? "",
-              textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7),
+              style: TextStyle(font: font, fontSize: 7.5),
+              textAlign: TextAlign.center,
             ),
           ),
-          Center(
+          Container(
+            padding: const EdgeInsets.all(0.5),
             child: Text(
               totalDueList[index].departamento ?? "",
-              textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7),
+              style: TextStyle(font: font, fontSize: 7.5),
+              textAlign: TextAlign.center,
             ),
           ),
-          Center(
+          Container(
+            padding: const EdgeInsets.all(0.5),
             child: Text(
               totalDueList[index].provincia ?? "",
-              textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7),
+              style: TextStyle(font: font, fontSize: 7.5),
+              textAlign: TextAlign.center,
             ),
           ),
-          Center(
+          Container(
+            padding: const EdgeInsets.all(0.5),
             child: Text(
               totalDueList[index].distrito ?? "",
-              textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7),
+              style: TextStyle(font: font, fontSize: 7.5),
+              textAlign: TextAlign.center,
             ),
           ),
-          Center(
+          Container(
+            padding: const EdgeInsets.all(0.5),
             child: Text(
               totalDueList[index].tambo ?? "",
-              textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7),
+              style: TextStyle(font: font, fontSize: 7.5),
+              textAlign: TextAlign.center,
             ),
           ),
-          Center(
+          Container(
+            padding: const EdgeInsets.all(0.5),
             child: Text(
               "${((double.parse(totalDueList[index].avanceFisico.toString()) * 100).toStringAsFixed(2)).toString()}%",
-              textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7),
+              style: TextStyle(font: font, fontSize: 7.5),
+              textAlign: TextAlign.center,
             ),
           ),
-          Center(
+          Container(
+            padding: const EdgeInsets.all(0.5),
             child: Text(
               totalDueList[index].estado ?? "",
-              textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7),
+              style: TextStyle(font: font, fontSize: 7.5),
+              textAlign: TextAlign.center,
             ),
           ),
         ],
