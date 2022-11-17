@@ -56,8 +56,8 @@ Future<Uint8List> makePdf(ReportDto oDataPdf) async {
         crossAxisAlignment: CrossAxisAlignment.start,
       ),
       SizedBox(
-        height: 150,
-        width: 150,
+        height: 140,
+        width: 140,
         child: Image(imageLogo),
       )
     ],
@@ -101,56 +101,56 @@ Future<Uint8List> makePdf(ReportDto oDataPdf) async {
             child: Text(
               "${index + 1}",
               textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7.5),
+              style: TextStyle(font: font, fontSize: 7),
             ),
           ),
           Center(
             child: Text(
               totalDueList[index].cui ?? "",
               textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7.5),
+              style: TextStyle(font: font, fontSize: 7),
             ),
           ),
           Center(
             child: Text(
               totalDueList[index].departamento ?? "",
               textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7.5),
+              style: TextStyle(font: font, fontSize: 7),
             ),
           ),
           Center(
             child: Text(
               totalDueList[index].provincia ?? "",
               textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7.5),
+              style: TextStyle(font: font, fontSize: 7),
             ),
           ),
           Center(
             child: Text(
               totalDueList[index].distrito ?? "",
               textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7.5),
+              style: TextStyle(font: font, fontSize: 7),
             ),
           ),
           Center(
             child: Text(
               totalDueList[index].tambo ?? "",
               textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7.5),
+              style: TextStyle(font: font, fontSize: 7),
             ),
           ),
           Center(
             child: Text(
               "${((double.parse(totalDueList[index].avanceFisico.toString()) * 100).toStringAsFixed(2)).toString()}%",
               textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7.5),
+              style: TextStyle(font: font, fontSize: 7),
             ),
           ),
           Center(
             child: Text(
               totalDueList[index].estado ?? "",
               textDirection: TextDirection.rtl,
-              style: TextStyle(font: font, fontSize: 7.5),
+              style: TextStyle(font: font, fontSize: 7),
             ),
           ),
         ],
@@ -165,7 +165,7 @@ Future<Uint8List> makePdf(ReportDto oDataPdf) async {
           border: TableBorder.all(color: PdfColor.fromHex("#000000")),
           children: rows[index]!,
         ),
-        Container(height: 50),
+        // Container(height: 50),
       ],
     );
   }));
