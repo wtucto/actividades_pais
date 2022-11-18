@@ -347,44 +347,72 @@ class _MonitoringDetailNewEditPageState
             /**
                * CODIGO UNICO DE PROYECTO
               */
+            Text(
+              'FldMonitor001'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             TextFormField(
               controller: _cuiCtr,
-              decoration: InputDecoration(
-                labelText: 'FldMonitor001'.tr,
-              ),
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false,
             ),
             /**
                * ID MONITOREO
               */
+            const SizedBox(height: 10),
+            Text(
+              'FldMonitor002'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             TextFormField(
               controller: _idMonitor,
-              decoration: InputDecoration(
-                labelText: 'FldMonitor002'.tr,
-              ),
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false,
             ),
             /**
                * ESTADO MONITOREO
               */
+            const SizedBox(height: 10),
+            Text(
+              'FldMonitor003'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             myDropdownButtonFormField(
               "DDOW0001",
               _statusMonitor!,
               _itemStatusMonitor,
-              false,
+              true,
               'FldMonitor003'.tr,
               false,
             ),
             /**
                * FECHA MONITOREO
                */
+            const SizedBox(height: 10),
+            Text(
+              'FldMonitor004'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             TextFormField(
               controller: _dateMonitor,
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: false,
-              decoration: InputDecoration(labelText: 'FldMonitor004'.tr),
               readOnly: true,
               onTap: () async {
                 DateTime? pickedDate = await showDatePicker(
@@ -403,15 +431,20 @@ class _MonitoringDetailNewEditPageState
             /**
               * % AVANCE FISICO ESTIMADO ACUMULADO
               */
-
+            const SizedBox(height: 10),
+            Text(
+              'FldMonitor005'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             TextFormField(
               controller: _advanceFEA,
               keyboardType: TextInputType.number,
               maxLength: 6,
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
-              decoration: InputDecoration(
-                labelText: 'FldMonitor005'.tr,
-              ),
               enabled: _enabledF,
               validator: (v) {
                 final intNumber = double.tryParse(v!);
@@ -425,35 +458,59 @@ class _MonitoringDetailNewEditPageState
             /**
              * % ESTADO DE AVANCE
              */
+            const SizedBox(height: 5),
+            Text(
+              'FldMonitor006'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             myDropdownButtonFormField(
               "DDOW0002",
               _statusAdvance!,
               _itemStatusAdvance,
-              false,
+              true,
               'FldMonitor006'.tr,
               true,
             ),
             /**
                * PARTIDA EJECUTADA
                */
+            const SizedBox(height: 10),
+            Text(
+              'FldMonitor007'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             myDropdownButtonFormField(
               "DDOW0003",
               _valuePartidaEje!,
               _itemsPartidaEje,
-              false,
+              true,
               'FldMonitor007'.tr,
               true,
             ),
             /**
                * % AVANCE FISICO ACUMULADO PARTIDA
                */
+            const SizedBox(height: 10),
+            Text(
+              'FldMonitor008'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             TextFormField(
               controller: _advanceFEP,
               maxLength: 6,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'FldMonitor008'.tr,
-              ),
               enabled: _enabledF,
             ),
             /**
@@ -461,30 +518,65 @@ class _MonitoringDetailNewEditPageState
             */
             _enabledF
                 ? OutlinedButton.icon(
-                    label: Text('FldMonitor009'.tr),
+                    label: Text(
+                      'FldMonitor009'.tr,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                     icon: const Icon(Icons.image),
+                    style: OutlinedButton.styleFrom(
+                      primary: Colors.black,
+                    ),
                     onPressed: () async {
                       await _showChoiceDialog(context, _imgPartidaEjecutada);
                       setState(() {});
                     },
                   )
-                : Container(),
+                : Text(
+                    'FldMonitor009'.tr,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+            const SizedBox(height: 10),
             myExpansionPanelListethod(_imgPartidaEjecutada, expandedPE),
 
             /**
            * OBSERVACIONES
            */
+            const SizedBox(height: 10),
+            Text(
+              'FldMonitor010'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             TextFormField(
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.newline,
               controller: _obsMonitor,
               enabled: _enabledF,
-              decoration: InputDecoration(labelText: 'FldMonitor010'.tr),
               // validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             ),
             /**
            * PROBLEMA IDENTIFICADO EN LA OBRA (Obligatorio)
            */
+            const SizedBox(height: 10),
+            Text(
+              'FldMonitor011'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             myDropdownButtonFormField(
               "DDOW0004",
               _valueProblemaIO!,
@@ -496,21 +588,49 @@ class _MonitoringDetailNewEditPageState
             /**
              * Foto del Problema Identificado (Opcional)
              */
+            const SizedBox(height: 10),
             _enabledF
                 ? OutlinedButton.icon(
-                    label: Text('FldMonitor012'.tr),
+                    label: Text(
+                      'FldMonitor012'.tr,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                     icon: const Icon(Icons.image),
+                    style: OutlinedButton.styleFrom(
+                      primary: Colors.black,
+                    ),
                     onPressed: () async {
                       await _showChoiceDialog(
                           context, _imgProblemaIdentificado);
                       setState(() {});
                     },
                   )
-                : Container(),
+                : Text(
+                    'FldMonitor012'.tr,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+            const SizedBox(height: 10),
             myExpansionPanelListethod(_imgProblemaIdentificado, expandedPI),
             /**
              * ALTERNATIVA DE SOLUCION
              */
+            const SizedBox(height: 10),
+            Text(
+              'FldMonitor013'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             myDropdownButtonFormField(
               "DDOW0005",
               _valueAlternSolucion!,
@@ -522,6 +642,15 @@ class _MonitoringDetailNewEditPageState
             /**
            * SELECCIONES EL RIESGO Identificado
            */
+            const SizedBox(height: 10),
+            Text(
+              'FldMonitor014'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             myDropdownButtonFormField(
               "DDOW0006",
               _valueRiesgo!,
@@ -533,25 +662,53 @@ class _MonitoringDetailNewEditPageState
             /**
              * Foto del Riesgo Identificado (Opcional)
              */
+            const SizedBox(height: 5),
             _enabledF
                 ? OutlinedButton.icon(
-                    label: Text('FldMonitor015'.tr),
+                    label: Text(
+                      'FldMonitor015'.tr,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                     icon: const Icon(Icons.image),
+                    style: OutlinedButton.styleFrom(
+                      primary: Colors.black,
+                    ),
                     onPressed: () async {
                       await _showChoiceDialog(context, _imgRiesgoIdentificado);
                       setState(() {});
                     },
                   )
-                : Container(),
+                : Text(
+                    'FldMonitor015'.tr,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+            const SizedBox(height: 10),
             myExpansionPanelListethod(_imgRiesgoIdentificado, expandedRI),
             /**
             * NIVEL DE RIESGO
             */
+            const SizedBox(height: 10),
+            Text(
+              'FldMonitor016'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             myDropdownButtonFormField(
               "DDOW0007",
               _valueNivelRiesgo!,
               _itemNivelRiesgo,
-              false,
+              true,
               'FldMonitor016'.tr,
               false,
             ),
@@ -559,10 +716,18 @@ class _MonitoringDetailNewEditPageState
             /**
            * FECHA TERMINO OBRA
            */
+            const SizedBox(height: 10),
+            Text(
+              'FldMonitor017'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             TextFormField(
               controller: _dateObra,
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-              decoration: InputDecoration(labelText: 'FldMonitor017'.tr),
               enabled: _enabledF,
               readOnly: true,
               onTap: () async {
@@ -584,22 +749,38 @@ class _MonitoringDetailNewEditPageState
             /**
            * LOGITUD
            */
+            const SizedBox(height: 10),
+            Text(
+              'FldMonitor018'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             TextFormField(
               controller: _longitud,
-              decoration: InputDecoration(labelText: 'FldMonitor018'.tr),
               enabled: _enabledF,
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             ),
             /**
            * LATITUD
            */
+            const SizedBox(height: 10),
+            Text(
+              'FldMonitor019'.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             TextFormField(
               controller: _latitud,
-              decoration: InputDecoration(labelText: 'FldMonitor019'.tr),
               enabled: _enabledF,
               validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 10),
             Text(sShowMessage,
                 style: TextStyle(
                   fontStyle: FontStyle.italic,
@@ -1066,10 +1247,15 @@ class _MonitoringDetailNewEditPageState
     bool isvalidad,
   ) {
     return DropdownButtonFormField(
-      decoration: InputDecoration(labelText: textLabel),
+      // decoration: InputDecoration(labelText: textLabel),
       isExpanded: true,
       isDense: isDense!,
       value: valueId,
+      style: const TextStyle(
+        color: Colors.black,
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+      ),
       validator: (value) =>
           value!.toUpperCase() == ('SelectOption'.tr).toUpperCase()
               ? isvalidad

@@ -146,203 +146,402 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: ListView(padding: const EdgeInsets.all(32), children: [
+          Text(
+            'FldProyect001'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           TextFormField(
             controller: _cui,
 
             ///CÓDIGO ÚNICO DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect001'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect002'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _numSnip,
 
             ///CÓDIGO DE SNIP
-            decoration: InputDecoration(labelText: 'FldProyect002'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect003'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _latitud,
 
             ///LATITUD DE LA UBICACIÓN DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect003'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect004'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _longitud,
 
             ///LONGITUD DE LA UBICACIÓN DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect004'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect005'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _departamento,
 
             ///NOMBRE DEL DEPARTAMENTO DEL UBIGEO DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect005'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect005'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _provincia,
 
             ///NOMBRE DE LA PROVINCIA DEL UBIGEO DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect006'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect007'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _distrito,
 
             ///NOMBRE DEL DISTRITO DEL UBIGEO DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect007'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect008'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _tambo,
 
             ///NOMBRE DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect008'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect0098'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _centroPoblado,
 
             ///NOMBRE DEL CENTRO POBLADO DEL UBIGEO DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect009'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect010'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _estado,
 
             ///ESTADO DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect010'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect011'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _subEstado,
 
             ///SUB ESTADO DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect011'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect012'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _estadoSaneamiento,
 
             ///ESTADO DE SANEAMIENTO DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect012'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect013'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _modalidad,
 
             ///MODALIDAD DE CONTRATACIÓN DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect013'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect014'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _fechaInicio,
 
             ///FECHA DE INICIO DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect014'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect015'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _fechaTerminoEstimado,
 
             ///FECHA DE TÉRMINO ESTIMADO DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect015'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect016'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _inversion,
 
             ///MONTO DE INVERSIÓN DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect016'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect017'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _costoEjecutado,
 
             ///COSTO EJECUTADO ACUMULADO DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect017'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect018'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _costoEstimadoFinal,
 
             ///COSTO ESTIMADO FINAL DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect018'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect019'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _avanceFisico,
 
             ///% AVANCE FÍSICO ACUMULADO
-            decoration: InputDecoration(labelText: 'FldProyect019'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect020'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _residente,
 
             ///NOMBRE DEL RESIDENTE
-            decoration: InputDecoration(labelText: 'FldProyect020'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect021'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _supervisor,
 
             ///NOMBRE DEL SUPERVISOR
-            decoration: InputDecoration(labelText: 'FldProyect021'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect022'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _crp,
 
             ///NOMBRE DEL COORDINADOR REGIONAL DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect022'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect023'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _codResidente,
 
             ///CÓDIGO DEL RESIDENTE
-            decoration: InputDecoration(labelText: 'FldProyect023'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect024'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _codSupervisor,
 
             ///CÓDIGO DEL SUPERVISOR
-            decoration: InputDecoration(labelText: 'FldProyect024'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'FldProyect025'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           TextFormField(
             controller: _codCrp,
 
             ///CÓDIGO DEL COORDINADOR REGIONAL DEL PROYECTO
-            decoration: InputDecoration(labelText: 'FldProyect025'.tr),
             validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             enabled: false,
           ),
