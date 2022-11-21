@@ -5,6 +5,7 @@ import 'package:actividades_pais/src/pages/ProgramacionActividades/actividadesPn
 import 'package:actividades_pais/src/pages/ProgramacionActividades/cordinacion_articulacion.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_suspervicion.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/programacion_list_page.dart';
+import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/responsive.dart';
@@ -23,7 +24,6 @@ import 'package:get/get.dart';
 import 'appbar/AppBar.dart';
 
 class HomePagePais extends StatefulWidget {
-
   static String route = '/';
 
   @override
@@ -49,7 +49,7 @@ class _HomePagePais extends State<HomePagePais> {
 
   String long = '';
   String lat = '';
-  String unidad= '';
+  String unidad = '';
   @override
   void initState() {
     super.initState();
@@ -65,21 +65,19 @@ class _HomePagePais extends State<HomePagePais> {
   Future verificargps() async {
     bool servicestatus = await Geolocator.isLocationServiceEnabled();
     if (servicestatus) {
-    } else {
-    }
+    } else {}
   }
 
   traerdato() async {
     await ProviderDatos().verificacionpesmiso();
   }
 
-  datosParaPerfil()async{
+  datosParaPerfil() async {
     cantidadDB = 1;
-    var res = await DatabasePr.db
-        .getAllConfigPersonal();
-    if(res.length>0){
+    var res = await DatabasePr.db.getAllConfigPersonal();
+    if (res.length > 0) {
       setState(() {
-        unidad= res[0].unidad;
+        unidad = res[0].unidad;
       });
       return;
     }
@@ -126,7 +124,7 @@ class _HomePagePais extends State<HomePagePais> {
       setState(() {
         _nombrePersona = abc[abc.length - 1].nombres.toUpperCase();
         _apellidosPersona =
-        '${abc[abc.length - 1].apellidoPaterno.toUpperCase()} ${abc[abc.length - 1].apellidoMaterno.toUpperCase()}';
+            '${abc[abc.length - 1].apellidoPaterno.toUpperCase()} ${abc[abc.length - 1].apellidoMaterno.toUpperCase()}';
       });
     }
   }
@@ -165,7 +163,7 @@ class _HomePagePais extends State<HomePagePais> {
         ),
       );
     } else {
-      if(unidad=='UAGS'){
+      if (unidad == 'UAGS') {
         aHomeOptions.add(
           HomeOptions(
             code: 'OPT1001',
@@ -191,8 +189,8 @@ class _HomePagePais extends State<HomePagePais> {
             String sImagePias = modalidad == '1'
                 ? icon2
                 : modalidad == '2'
-                ? icon3
-                : icon1;
+                    ? icon3
+                    : icon1;
             aHomeOptions.add(
               HomeOptions(
                 code: 'OPT1004',
@@ -216,7 +214,7 @@ class _HomePagePais extends State<HomePagePais> {
       }
     }
 
-    if(unidad=='UPS'){
+    if (unidad == 'UPS') {
       aHomeOptions.add(
         HomeOptions(
           code: 'OPT1005',
@@ -227,8 +225,16 @@ class _HomePagePais extends State<HomePagePais> {
         ),
       );
 
+      aHomeOptions.add(
+        HomeOptions(
+          code: 'OPT1007',
+          name: 'SEGUIMINETO Y MONITOREO',
+          types: const ['Ver'],
+          image: icon1,
+          color: lightBlue,
+        ),
+      );
     }
-
 
     void _intervencionOptions(BuildContext context) {
       showCupertinoModalPopup<void>(
@@ -392,6 +398,13 @@ class _HomePagePais extends State<HomePagePais> {
                           ),
                         );
                         break;
+                      case 'OPT1007':
+                        var rspt = await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => Dashboard(),
+                          ),
+                        );
+                        break;
                       case 'OPT1006':
                         _intervencionOptions(context);
                         break;
@@ -418,7 +431,6 @@ class _HomePagePais extends State<HomePagePais> {
           listPages[currenIndex]
         ],
       ),
-
     );
   }
 }
