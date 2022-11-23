@@ -4,11 +4,7 @@ import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_detail_form_page.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_list_page.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/project_detail_page.dart';
 import 'package:actividades_pais/util/throw-exception.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class ListaProyectos extends StatelessWidget {
@@ -22,38 +18,6 @@ class ListaProyectos extends StatelessWidget {
   final TramaProyectoModel oProyecto;
 
   final MainController mainController = MainController();
-
-  void sendMonitoreoPorEnviarByProject() async {
-    try {
-      List<TramaMonitoreoModel> aError =
-          await mainController.sendMonitoreoByProyecto(oProyecto);
-      if (aError.isNotEmpty) {
-        mostrarAlerta(
-          context,
-          'Error!',
-          'Existen documentos que no se puedieron enviar, verifique que todo los datos sean correctos.',
-        );
-      } else {
-        mostrarAlerta(
-          context,
-          'Success!',
-          'Se enviaron los registros correctamente.',
-        );
-      }
-    } catch (oError) {
-      var sTitle = "Alerta";
-      var sMessage = oError.toString();
-      if (oError is ThrowCustom) {
-        sTitle = oError.typeText!;
-        sMessage = oError.msg!;
-      }
-      mostrarAlerta(
-        context,
-        sTitle,
-        sMessage,
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

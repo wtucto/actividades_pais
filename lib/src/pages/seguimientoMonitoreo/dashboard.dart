@@ -1,7 +1,7 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
-import 'package:actividades_pais/src/pages/seguimientoMonitoreo/listView/ListaProyectos.dart';
+import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/listView/ListaProyectos.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -55,7 +55,9 @@ class _DashboardState extends State<Dashboard> {
     ];
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Dashboard Monitor"),
+        title: const Center(
+          child: Text("Dashboard Monitor"),
+        ),
         shape: const CustomAppBarShape(multi: 0.05),
         actions: [
           Padding(
@@ -72,7 +74,7 @@ class _DashboardState extends State<Dashboard> {
         ],
       ),
       body: Container(
-        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
         width: double.maxFinite,
         child: Column(
           children: [
@@ -96,7 +98,7 @@ class _DashboardState extends State<Dashboard> {
                               children: [
                                 Container(
                                   child: Card(
-                                    color: Color.fromARGB(255, 211, 216, 228),
+                                    color: Color.fromARGB(255, 245, 245, 247),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10)),

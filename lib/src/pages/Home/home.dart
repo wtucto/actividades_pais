@@ -5,7 +5,8 @@ import 'package:actividades_pais/src/pages/ProgramacionActividades/actividadesPn
 import 'package:actividades_pais/src/pages/ProgramacionActividades/cordinacion_articulacion.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_suspervicion.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/programacion_list_page.dart';
-import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
+import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/dashboard.dart';
+import 'package:actividades_pais/src/pages/Tambook/homeTambook.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/responsive.dart';
@@ -149,6 +150,7 @@ class _HomePagePais extends State<HomePagePais> {
     String icon5 = 'assets/icons/icon_monitoring.png';
     String icon6 = 'assets/icons/icon_registration.png';
     String icon7 = 'assets/icons/icon_activity.png';
+    String icon8 = 'assets/Tambook/libro-abierto.png';
 
     List<HomeOptions> aHomeOptions = [];
 
@@ -231,6 +233,15 @@ class _HomePagePais extends State<HomePagePais> {
           name: 'SEGUIMINETO Y MONITOREO',
           types: const ['Ver'],
           image: icon1,
+          color: lightBlue,
+        ),
+      );
+      aHomeOptions.add(
+        HomeOptions(
+          code: 'OPT1008',
+          name: 'TAMBOOK',
+          types: const ['Ver'],
+          image: icon8,
           color: lightBlue,
         ),
       );
@@ -402,6 +413,13 @@ class _HomePagePais extends State<HomePagePais> {
                         var rspt = await Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => Dashboard(),
+                          ),
+                        );
+                        break;
+                      case 'OPT1008':
+                        var rspt = await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => HomeTambook(),
                           ),
                         );
                         break;

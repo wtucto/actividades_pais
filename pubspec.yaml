@@ -73,7 +73,7 @@ dependencies:
   printing: ^5.9.3
   open_file: ^3.2.1
   uuid: 3.0.6
-
+  syncfusion_flutter_charts: ^20.3.57
   #OBJECT BOX
   #objectbox: ^1.6.2
   #objectbox_flutter_libs: any #1 only local database
@@ -148,6 +148,8 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
     - assets/Monitor/
+    - assets/Tambook/
+    - assets/design_course/
     - assets/icons/
     #- assets/reloj.png
     - assets/paislogo.png

@@ -275,7 +275,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
           ),
           const SizedBox(height: 10),
           Text(
-            'FldProyect0098'.tr,
+            'FldProyect009'.tr,
             style: const TextStyle(
               fontSize: 14,
               color: Colors.black,
