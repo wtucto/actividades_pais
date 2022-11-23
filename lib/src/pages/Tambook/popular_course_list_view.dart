@@ -39,6 +39,12 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
               padding: const EdgeInsets.all(1),
               physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.vertical,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                mainAxisSpacing: 3.0,
+                crossAxisSpacing: 3.0,
+                childAspectRatio: 0.8,
+              ),
               children: List<Widget>.generate(
                 Category.popularCourseList.length,
                 (int index) {
@@ -52,19 +58,16 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
                     ),
                   );
                   animationController?.forward();
-                  return CategoryView(
-                    callback: widget.callBack,
-                    category: Category.popularCourseList[index],
-                    animation: animation,
-                    animationController: animationController,
+                  return Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: CategoryView(
+                      callback: widget.callBack,
+                      category: Category.popularCourseList[index],
+                      animation: animation,
+                      animationController: animationController,
+                    ),
                   );
                 },
-              ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                mainAxisSpacing: 3.0,
-                crossAxisSpacing: 3.0,
-                childAspectRatio: 0.8,
               ),
             );
           }
@@ -97,167 +100,42 @@ class CategoryView extends StatelessWidget {
           opacity: animation!,
           child: Transform(
             transform: Matrix4.translationValues(
-                0.0, 50 * (1.0 - animation!.value), 0.0),
+                0.0, 60 * (1.0 - animation!.value), 0.0),
             child: InkWell(
               splashColor: Colors.transparent,
               onTap: callback,
-              child: SizedBox(
-                height: 81,
-                child: Stack(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: <Widget>[
-                    Container(
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: HexColor('#F8FAFB'),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(16.0)),
-                                // border: new Border.all(
-                                //     color: DesignCourseAppTheme.notWhite),
-                              ),
-                              child: Column(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Container(
-                                      child: Column(
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 16, left: 16, right: 16),
-                                            child: Text(
-                                              category!.title,
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 16,
-                                                letterSpacing: 0.27,
-                                                color: DesignCourseAppTheme
-                                                    .darkerText,
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 8,
-                                                left: 16,
-                                                right: 16,
-                                                bottom: 8),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: <Widget>[
-                                                Expanded(
-                                                    child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      'VI Feria Agromercado 2022, con la finalidad de comercializar los productos agropecuarios y derivados propios de la zona a precios razonables y cumpliendo los protocolos de bioseguridad directamente a los consumidores finales, evento realizado por la Agencia Agraria Melgar, dirigido a las asociaciones de productores y población del distrito de Ayaviri.',
-                                                    ),
-                                                    Container(
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                top: 0,
-                                                                right: 15,
-                                                                left: 15),
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                const BorderRadius
-                                                                        .all(
-                                                                    Radius.circular(
-                                                                        16.0)),
-                                                            boxShadow: <
-                                                                BoxShadow>[
-                                                              BoxShadow(
-                                                                  color: DesignCourseAppTheme
-                                                                      .grey
-                                                                      .withOpacity(
-                                                                          0.2),
-                                                                  offset:
-                                                                      const Offset(
-                                                                          0.0,
-                                                                          0.0),
-                                                                  blurRadius:
-                                                                      6.0),
-                                                            ],
-                                                          ),
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                const BorderRadius
-                                                                        .all(
-                                                                    Radius.circular(
-                                                                        16.0)),
-                                                            child: AspectRatio(
-                                                                aspectRatio:
-                                                                    1.28,
-                                                                child: Image.asset(
-                                                                    category!
-                                                                        .imagePath)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ))
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  /*const SizedBox(
-                                    width: 4,
-                                  ),*/
-                                ],
-                              ),
-                            ),
-                          ),
-                          /*const SizedBox(
-                            height: 4,
-                          ),*/
-                        ],
-                      ),
-                    ),
-                    /*
-                    Container(
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(top: 0, right: 16, left: 16),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(16.0)),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: DesignCourseAppTheme.grey
-                                      .withOpacity(0.2),
-                                  offset: const Offset(0.0, 0.0),
-                                  blurRadius: 6.0),
-                            ],
-                          ),
-                          child: ClipRRect(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(16.0)),
-                            child: AspectRatio(
-                                aspectRatio: 1.28,
-                                child: Image.asset(category!.imagePath)),
-                          ),
+              child: Stack(
+                alignment: AlignmentDirectional.bottomCenter,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        category!.title,
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          letterSpacing: 0.27,
+                          color: DesignCourseAppTheme.darkerText,
                         ),
                       ),
-                    ),*/
-                  ],
-                ),
+                      const Text(
+                        'VI Feria Agromercado 2022, con la finalidad de comercializar los productos agropecuarios y derivados propios de la zona a precios razonables y cumpliendo los protocolos de bioseguridad directamente a los consumidores finales, evento realizado por la Agencia Agraria Melgar, dirigido a las asociaciones de productores y población del distrito de Ayaviri.',
+                        textAlign: TextAlign.justify,
+                      ),
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(16.0)),
+                          child: AspectRatio(
+                              aspectRatio: 1.28,
+                              child: Image.asset(category!.imagePath,
+                                  fit: BoxFit.fill)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),

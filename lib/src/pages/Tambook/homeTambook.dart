@@ -49,7 +49,8 @@ class _HomeTambookState extends State<HomeTambook> {
                 child: Container(
                   height: MediaQuery.of(context).size.height,
                   child: Column(
-                    children: <Widget>[
+                    children: [
+                      const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
                       getSearchBarUI(),
                       getCategoryUI(),
                       Flexible(
@@ -70,44 +71,7 @@ class _HomeTambookState extends State<HomeTambook> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        // Padding(
-        //   padding: const EdgeInsets.only(top: 8.0, left: 18, right: 16),
-        //   child: Text(
-        //     'Servicios',
-        //     textAlign: TextAlign.left,
-        //     style: TextStyle(
-        //       fontWeight: FontWeight.w600,
-        //       fontSize: 22,
-        //       letterSpacing: 0.27,
-        //       color: DesignCourseAppTheme.darkerText,
-        //     ),
-        //   ),
-        // ),
-        // const SizedBox(
-        //   height: 16,
-        // ),
-        // Padding(
-        //   padding: const EdgeInsets.only(left: 16, right: 16),
-        //   child: Row(
-        //     children: <Widget>[
-        //       getButtonUI(CategoryType.ui, categoryType == CategoryType.ui),
-        //       const SizedBox(
-        //         width: 16,
-        //       ),
-        //       getButtonUI(
-        //           CategoryType.coding, categoryType == CategoryType.coding),
-        //       const SizedBox(
-        //         width: 16,
-        //       ),
-        //       getButtonUI(
-        //           CategoryType.basic, categoryType == CategoryType.basic),
-        //     ],
-        //   ),
-        // ),
-        const SizedBox(
-          height: 16,
-        ),
+      children: [
         CategoryListView(
           callBack: () {
             moveTo();
@@ -124,7 +88,7 @@ class _HomeTambookState extends State<HomeTambook> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Ultimas Intervenciones',
             textAlign: TextAlign.left,
             style: TextStyle(
@@ -134,6 +98,7 @@ class _HomeTambookState extends State<HomeTambook> {
               color: DesignCourseAppTheme.darkerText,
             ),
           ),
+          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
           Flexible(
             child: PopularCourseListView(
               callBack: () {
@@ -234,37 +199,39 @@ class _HomeTambookState extends State<HomeTambook> {
                       child: Container(
                         padding: const EdgeInsets.only(left: 16, right: 16),
                         child: TextFormField(
-                          style: TextStyle(
-                            fontFamily: 'WorkSans',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: DesignCourseAppTheme.nearlyBlue,
-                          ),
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             labelText: 'Buscar por Tambo',
-                            border: InputBorder.none,
-                            helperStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: HexColor('#B9BABC'),
+                            hintText: 'Buscar por Tambo',
+                            suffixIcon: Icon(Icons.search),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                              borderSide: const BorderSide(
+                                color: Colors.blue,
+                              ),
                             ),
-                            labelStyle: TextStyle(
-                              fontWeight: FontWeight.w600,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                              borderSide: BorderSide(
+                                width: 2.0,
+                              ),
+                            ),
+                            helperStyle: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            labelStyle: const TextStyle(
+                              fontWeight: FontWeight.w700,
                               fontSize: 16,
                               letterSpacing: 0.2,
-                              color: HexColor('#B9BABC'),
+                              color: Colors.black,
                             ),
                           ),
                           onEditingComplete: () {},
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: Icon(Icons.search, color: HexColor('#B9BABC')),
-                    )
                   ],
                 ),
               ),
@@ -287,14 +254,7 @@ class _HomeTambookState extends State<HomeTambook> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Container(
-                //   height: 35,
-                //   child: Image.asset('assets/design_course/logo_midis.png'),
-                // ),
-                // const SizedBox(
-                //   height: 10,
-                // ),
+              children: const [
                 Text(
                   'PLATAFORMAS DE ACCIÓN PARA LA INCLUSIÓN SOCIAL',
                   textAlign: TextAlign.center,

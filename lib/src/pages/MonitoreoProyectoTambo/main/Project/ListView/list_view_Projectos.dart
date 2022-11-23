@@ -120,7 +120,11 @@ class ListViewProjet extends StatelessWidget {
                                   fontWeight: FontWeight.w500)),
                           const SizedBox(height: 5),
                           Text(oProyecto.estado!,
-                              style: TextStyle(color: Colors.grey[500])),
+                              style: const TextStyle(
+                                  color: Color.fromARGB(255, 73, 72, 72))),
+                          Text(oProyecto.departamento!,
+                              style: const TextStyle(
+                                  color: Color.fromARGB(255, 73, 72, 72))),
                         ]),
                   )
                 ]),
