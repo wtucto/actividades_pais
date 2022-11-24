@@ -405,7 +405,7 @@ class _HomeTambookState extends State<HomeTambook> {
 
   Widget getAppBarUI() {
     return Container(
-      color: Colors.blue,
+      // color: Colors.blue,
       child: Padding(
         padding: const EdgeInsets.only(left: 18, right: 18),
         child: Row(

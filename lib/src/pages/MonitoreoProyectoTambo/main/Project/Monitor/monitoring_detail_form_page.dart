@@ -1262,8 +1262,21 @@ class _MonitoringDetailNewEditPageState
                   ? 'Required'.tr
                   : null
               : null,
-      items:
-          items.map((e) => DropdownMenuItem(child: Text(e), value: e)).toList(),
+      items: items
+          .map(
+            (e) => DropdownMenuItem(
+              // ignore: sort_child_properties_last
+              child: e.toUpperCase() == ('SelectOption'.tr).toUpperCase()
+                  ? Text(
+                      "${('SelectOption'.tr).split(" ")[0]} ${textLabel}",
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w600),
+                    )
+                  : Text(e),
+              value: e,
+            ),
+          )
+          .toList(),
       onChanged: _enabledF
           ? (val) async {
               setState(() {
