@@ -1,3 +1,4 @@
+import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
@@ -17,6 +18,7 @@ class MainController extends GetxController {
   final users = <UserModel>[].obs;
   final moniteos = <TramaMonitoreoModel>[].obs;
   final proyectos = <TramaProyectoModel>[].obs;
+  final maestra = <ComboItemModel>[].obs;
 
   @override
   void onInit() async {
@@ -32,6 +34,7 @@ class MainController extends GetxController {
     users.value = await Get.find<MainService>().loadAllUser(0, 0);
     proyectos.value = await Get.find<MainService>().loadAllProyecto(0, 0);
     moniteos.value = await Get.find<MainService>().loadAllMonitoreo(0, 0);
+    maestra.value = await Get.find<MainService>().loadAllMaestra(0, 0);
     loading.value = false;
   }
 
@@ -57,6 +60,32 @@ class MainController extends GetxController {
   Future<bool> deleteAllMonitorByEstadoENV() async {
     await Get.find<MainService>().deleteAllMonitorByEstadoENV();
     return true;
+  }
+
+  /*
+   Obtiene los Items para los Combos
+   @String sType 
+   */
+  Future<List<ComboItemModel>> getComboItemByType(
+    String sType,
+    int? limit,
+    int? offset,
+  ) async {
+    return await Get.find<MainService>()
+        .getComboItemByType(sType, limit, offset);
+  }
+
+  Future<List<String>> getListComboItemByType(
+    String sType,
+    int? limit,
+    int? offset,
+  ) async {
+    List<ComboItemModel> aComboItem =
+        await getComboItemByType(sType, limit, offset);
+
+    List<String?> aList = aComboItem.map((o) => o.descripcion).toList();
+
+    return aList.whereType<String>().toList();
   }
 
   /*
@@ -174,6 +203,28 @@ class MainController extends GetxController {
     String sIdMonitoreo,
   ) async {
     return await Get.find<MainService>().getMonitoreoByIdMonitor(sIdMonitoreo);
+  }
+
+  /*
+   Obtiene los datos de generales del Monitoreo por el tipo de PARTIDA EJECUTADA
+   @String sTypePartida
+   */
+  Future<List<TramaMonitoreoModel>> getAllMonitoreoByTypePartida(
+    TramaProyectoModel o,
+    String sTypePartida,
+  ) async {
+    return await Get.find<MainService>()
+        .getMonitoreoByTypePartida(o, sTypePartida);
+  }
+
+  Future<TramaMonitoreoModel> getMonitoreoLastTypePartida(
+    TramaProyectoModel o,
+    String sTypePartida,
+  ) async {
+    List<TramaMonitoreoModel> aMonitoreo =
+        await getAllMonitoreoByTypePartida(o, sTypePartida);
+
+    return aMonitoreo.last;
   }
 
   /*

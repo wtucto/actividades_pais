@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
@@ -25,6 +26,15 @@ SharedPreferences? _prefs;
 class MonitoringDetailNewEditPage extends StatefulWidget {
   TramaProyectoModel? datoProyecto;
   TramaMonitoreoModel? datoMonitor;
+
+  List<String> cbEMONI = [];
+  List<String> cbNRIES = [];
+  List<String> cbEAVAN = [];
+  List<String> cbPEJEC = [];
+  List<String> cbPIDEO = [];
+  List<String> cbASOLU = [];
+  List<String> cbRIDEN = [];
+
   final String? statusM;
   MonitoringDetailNewEditPage(
       {Key? key, this.datoProyecto, this.statusM, this.datoMonitor})
@@ -48,15 +58,6 @@ class _MonitoringDetailNewEditPageState
   final _longitud = TextEditingController();
   final _latitud = TextEditingController();
 
-  static final _itemStatusMonitor = TramaMonitoreoModel.aEstadoMonitoreo;
-  static final _itemNivelRiesgo = TramaMonitoreoModel.aNivelRiesgo;
-  static final _itemStatusAdvance = TramaMonitoreoModel.aEstadoAvance;
-  static final _itemsPartidaEje =
-      TramaMonitoreoModel.aActividadPartidaEjecutada;
-  static final _itemProblemaIO = TramaMonitoreoModel.aProblemaIdentificado;
-  static final _itemAlternSolucion = TramaMonitoreoModel.aAlternativaSolucion;
-  static final _itemRiesgo = TramaMonitoreoModel.aRiesgoIdentificado;
-
   bool _enabledF = true;
   int idM = 0;
   String titleMonitor = "";
@@ -67,13 +68,13 @@ class _MonitoringDetailNewEditPageState
 
   TramaMonitoreoModel oMonitoreo = TramaMonitoreoModel.empty();
 
-  String? _statusMonitor = _itemStatusMonitor[0];
-  String? _statusAdvance = _itemStatusAdvance[0];
-  String? _valuePartidaEje = _itemsPartidaEje[0];
-  String? _valueProblemaIO = _itemProblemaIO[0];
-  String? _valueAlternSolucion = _itemAlternSolucion[0];
-  String? _valueRiesgo = _itemRiesgo[0];
-  String? _valueNivelRiesgo = _itemNivelRiesgo[0];
+  String? _statusMonitor = "";
+  String? _statusAdvance = "";
+  String? _valuePartidaEje = "";
+  String? _valueProblemaIO = "";
+  String? _valueAlternSolucion = "";
+  String? _valueRiesgo = "";
+  String? _valueNivelRiesgo = "";
 
   final MainController mainController = MainController();
   ImageController controller = ImageController();
@@ -100,6 +101,7 @@ class _MonitoringDetailNewEditPageState
   @override
   void initState() {
     super.initState();
+    getMaestra();
     checkGeolocator();
 
     if (mounted) {
@@ -134,6 +136,85 @@ class _MonitoringDetailNewEditPageState
       setState(() {
         sShowMessage = sMessage;
       });
+    }
+  }
+
+  Future<void> getMaestra() async {
+    try {
+      /**
+       * Obtener los registros de cada combo
+       */
+
+      try {
+        widget.cbASOLU = await mainController.getListComboItemByType(
+            ComboItemModel.cbASOLU, 0, 0);
+
+        widget.cbEAVAN = await mainController.getListComboItemByType(
+            ComboItemModel.cbEAVAN, 0, 0);
+
+        widget.cbEMONI = await mainController.getListComboItemByType(
+            ComboItemModel.cbEMONI, 0, 0);
+
+        widget.cbNRIES = await mainController.getListComboItemByType(
+            ComboItemModel.cbNRIES, 0, 0);
+
+        widget.cbPEJEC = await mainController.getListComboItemByType(
+            ComboItemModel.cbPEJEC, 0, 0);
+
+        widget.cbPIDEO = await mainController.getListComboItemByType(
+            ComboItemModel.cbPIDEO, 0, 0);
+
+        widget.cbRIDEN = await mainController.getListComboItemByType(
+            ComboItemModel.cbRIDEN, 0, 0);
+      } catch (oError) {
+        widget.cbASOLU = TramaMonitoreoModel.aAlternativaSolucion;
+        widget.cbEAVAN = TramaMonitoreoModel.aEstadoAvance;
+        widget.cbEMONI = TramaMonitoreoModel.aEstadoMonitoreo;
+        widget.cbNRIES = TramaMonitoreoModel.aNivelRiesgo;
+        widget.cbPEJEC = TramaMonitoreoModel.aActividadPartidaEjecutada;
+        widget.cbPIDEO = TramaMonitoreoModel.aProblemaIdentificado;
+        widget.cbRIDEN = TramaMonitoreoModel.aRiesgoIdentificado;
+      }
+
+      /**
+       * Agregar valor por defecto de los combos
+       * - Seleccione una opción
+       * en la primera posición
+       */
+
+      String sPlaceholder = TramaMonitoreoModel.sOptDropdownDefault;
+
+      widget.cbASOLU.insert(0, "$sPlaceholder para: ALTERNATIVA SOLUCION");
+      widget.cbEAVAN.insert(0, "$sPlaceholder para: ESTADO AVANCE");
+      widget.cbEMONI.insert(0, "$sPlaceholder para: ESTADO MONITOREO");
+      widget.cbNRIES.insert(0, "$sPlaceholder para: NIVEL RIESGO");
+      widget.cbPEJEC.insert(0, "$sPlaceholder para: PARTIDA EJECUTADA");
+      widget.cbPIDEO
+          .insert(0, "$sPlaceholder para: PROBLEMA IDENTIFICADO OBRA");
+      widget.cbRIDEN.insert(0, "$sPlaceholder para: RIESGO IDENTIFICADO");
+
+      /**
+       * Seleccionar el valor por defecto de los combos
+       * - Seleccione una opción
+       */
+      _statusMonitor = widget.cbEMONI[0];
+      _statusAdvance = widget.cbEAVAN[0];
+      _valuePartidaEje = widget.cbPEJEC[0];
+      _valueProblemaIO = widget.cbPIDEO[0];
+      _valueAlternSolucion = widget.cbASOLU[0];
+      _valueRiesgo = widget.cbRIDEN[0];
+      _valueNivelRiesgo = widget.cbNRIES[0];
+    } catch (oError) {
+      var sTitle = 'Error';
+      var sMessage = oError.toString();
+      if (oError is ThrowCustom) {
+        sTitle = oError.typeText!;
+        sMessage =
+            '${oError.msg!}, vaya a Configuración de su dispositivo > Privacidad para otorgar permisos a la aplicación.';
+      }
+      sShowMessage = sMessage;
+
+      setState(() {});
     }
   }
 
@@ -392,7 +473,7 @@ class _MonitoringDetailNewEditPageState
             myDropdownButtonFormField(
               "DDOW0001",
               _statusMonitor!,
-              _itemStatusMonitor,
+              widget.cbEMONI,
               true,
               'FldMonitor003'.tr,
               false,
@@ -470,7 +551,7 @@ class _MonitoringDetailNewEditPageState
             myDropdownButtonFormField(
               "DDOW0002",
               _statusAdvance!,
-              _itemStatusAdvance,
+              widget.cbEAVAN,
               true,
               'FldMonitor006'.tr,
               true,
@@ -490,7 +571,7 @@ class _MonitoringDetailNewEditPageState
             myDropdownButtonFormField(
               "DDOW0003",
               _valuePartidaEje!,
-              _itemsPartidaEje,
+              widget.cbPEJEC,
               true,
               'FldMonitor007'.tr,
               true,
@@ -580,7 +661,7 @@ class _MonitoringDetailNewEditPageState
             myDropdownButtonFormField(
               "DDOW0004",
               _valueProblemaIO!,
-              _itemProblemaIO,
+              widget.cbPIDEO,
               false,
               'FldMonitor011'.tr,
               true,
@@ -634,7 +715,7 @@ class _MonitoringDetailNewEditPageState
             myDropdownButtonFormField(
               "DDOW0005",
               _valueAlternSolucion!,
-              _itemAlternSolucion,
+              widget.cbASOLU,
               false,
               'FldMonitor013'.tr,
               true,
@@ -654,7 +735,7 @@ class _MonitoringDetailNewEditPageState
             myDropdownButtonFormField(
               "DDOW0006",
               _valueRiesgo!,
-              _itemRiesgo,
+              widget.cbRIDEN,
               false,
               'FldMonitor014'.tr,
               false,
@@ -707,7 +788,7 @@ class _MonitoringDetailNewEditPageState
             myDropdownButtonFormField(
               "DDOW0007",
               _valueNivelRiesgo!,
-              _itemNivelRiesgo,
+              widget.cbNRIES,
               true,
               'FldMonitor016'.tr,
               false,

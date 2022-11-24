@@ -1,3 +1,4 @@
+import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
@@ -14,6 +15,21 @@ class MainService {
   Future<bool> isOnline() async {
     bool isDeviceConnected = await CheckConnection.isOnlineWifiMobile();
     return isDeviceConnected;
+  }
+
+  /*
+   Obtiene los Items para los Combos
+   @String sType 
+   */
+  Future<List<ComboItemModel>> getComboItemByType(
+    String search,
+    int? limit,
+    int? offset,
+  ) async {
+    ///Obtiene los registros de la DB Local
+    List<ComboItemModel> aFind = await Get.find<MainRepository>()
+        .getAllComboItemByType(search, limit, offset);
+    return aFind;
   }
 
 /*
@@ -223,6 +239,16 @@ class MainService {
     return aFind;
   }
 
+  Future<List<TramaMonitoreoModel>> getMonitoreoByTypePartida(
+    TramaProyectoModel o,
+    String sTypePartida,
+  ) async {
+    ///Obtiene los registros de la DB Local
+    List<TramaMonitoreoModel> aFind = await Get.find<MainRepository>()
+        .getMonitoreoByTypePartida(o, sTypePartida);
+    return aFind;
+  }
+
   Future<List<TramaMonitoreoModel>> getMonitoreoByIdMonitor(
     String idMonitoreo,
   ) async {
@@ -285,6 +311,79 @@ class MainService {
     }
 
     return aNewProject;
+  }
+
+  /// MAESTRAS
+  Future<List<ComboItemModel>> loadAllMaestra(
+    int? limit,
+    int? offset,
+  ) async {
+    List<ComboItemModel> aNewMonitoreo = [];
+    if (await isOnline()) {
+      List<ComboItemModel> aDb = await Get.find<MainRepository>()
+          .getAllComboItemByType('', limit, offset);
+
+      List<ComboItemModel> aApi1 = await Get.find<MainRepository>()
+          .getMaestraByType(ComboItemModel.cbASOLU);
+
+      List<ComboItemModel> aApi2 = await Get.find<MainRepository>()
+          .getMaestraByType(ComboItemModel.cbEAVAN);
+
+      List<ComboItemModel> aApi3 = await Get.find<MainRepository>()
+          .getMaestraByType(ComboItemModel.cbEMONI);
+
+      List<ComboItemModel> aApi4 = await Get.find<MainRepository>()
+          .getMaestraByType(ComboItemModel.cbNRIES);
+
+      List<ComboItemModel> aApi5 = await Get.find<MainRepository>()
+          .getMaestraByType(ComboItemModel.cbPEJEC);
+
+      List<ComboItemModel> aApi6 = await Get.find<MainRepository>()
+          .getMaestraByType(ComboItemModel.cbPIDEO);
+
+      List<ComboItemModel> aApi7 = await Get.find<MainRepository>()
+          .getMaestraByType(ComboItemModel.cbRIDEN);
+
+      List<ComboItemModel> aApi = [];
+
+      aApi.addAll(aApi1);
+      aApi.addAll(aApi2);
+      aApi.addAll(aApi3);
+      aApi.addAll(aApi4);
+      aApi.addAll(aApi5);
+      aApi.addAll(aApi6);
+      aApi.addAll(aApi7);
+
+      for (ComboItemModel oApi in aApi) {
+        if (aDb.isNotEmpty) {
+          ComboItemModel? oDataFind;
+          try {
+            oDataFind = aDb.firstWhere((o) => o.codigo1 == oApi.codigo1,
+                orElse: () => ComboItemModel.empty());
+          } catch (oError) {
+            _log.e(oError);
+          }
+          if (oDataFind != null || oDataFind!.id == 0) {
+            oApi.id = oDataFind.id;
+            oApi.isEdit = 0;
+            await Get.find<MainRepository>().insertMaestraDb(oApi);
+
+            continue;
+          }
+        }
+
+        ComboItemModel? response =
+            await Get.find<MainRepository>().insertMaestraDb(oApi);
+        if (response != null) {
+          aNewMonitoreo.add(response!);
+        } else {
+          _log.e('Error al ingresar Maestros a la Base de Datos');
+        }
+      }
+      _log.i('Nuevos Maestros cargados: ${aNewMonitoreo.length}');
+    }
+
+    return aNewMonitoreo;
   }
 
   /// MONITOREO

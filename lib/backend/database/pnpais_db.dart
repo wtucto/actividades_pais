@@ -1,3 +1,4 @@
+import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
@@ -206,6 +207,17 @@ class DatabasePnPais {
       )
     ''');
 
+    await db.execute('''
+    $createTable $tableNameComboItem ( 
+      $constFields,
+      
+      ${ComboItemFields.idTypeItem} $textType,
+      ${ComboItemFields.codigo1} $textType,
+      ${ComboItemFields.codigo2} $textType,
+      ${ComboItemFields.descripcion} $textType
+      )
+    ''');
+
     /*
     var tableNames = (await db
           .query('sqlite_master', where: 'type = ?', whereArgs: ['table']))
@@ -240,6 +252,60 @@ class DatabasePnPais {
     if (oldversion < newversion) {
       print("Version Upgrade");
     }
+  }
+
+  Future<List<ComboItemModel>> readAllComboItemByType(
+    String sType,
+    int? limit,
+    int? offset,
+  ) async {
+    final db = await instance.database;
+    final orderBy = '${ComboItemFields.idTypeItem} ASC';
+
+    dynamic result;
+
+    String sWhere = '${ComboItemFields.idTypeItem} = ?';
+
+    if (sWhere == '') return [];
+
+    if (limit! > 0) {
+      if (sType != '') {
+        result = await db.query(
+          tableNameComboItem,
+          where: sWhere,
+          whereArgs: [sType.toUpperCase()],
+          orderBy: orderBy,
+          limit: limit,
+          offset: offset,
+        );
+      } else {
+        result = await db.query(
+          tableNameComboItem,
+          orderBy: orderBy,
+          limit: limit,
+          offset: offset,
+        );
+      }
+    } else {
+      if (sType != '') {
+        result = await db.query(
+          tableNameComboItem,
+          where: sWhere,
+          whereArgs: [sType.toUpperCase()],
+          orderBy: orderBy,
+        );
+      } else {
+        result = await db.query(
+          tableNameComboItem,
+          orderBy: orderBy,
+        );
+      }
+    }
+
+    if (result.length == 0) return [];
+    return result
+        .map<ComboItemModel>((json) => ComboItemModel.fromJson(json))
+        .toList();
   }
 
   /// PROYECTO
@@ -430,6 +496,28 @@ class DatabasePnPais {
         .toList();
   }
 
+  Future<List<TramaMonitoreoModel>> readMonitoreoByTypePartida(
+    TramaProyectoModel o,
+    String sTypePartida,
+  ) async {
+    final db = await instance.database;
+
+    final orderBy = '${TramaMonitoreoFields.fechaMonitoreo} ASC';
+
+    dynamic result = await db.query(
+      tableNameTramaMonitoreos,
+      where:
+          '${TramaMonitoreoFields.snip} = ? AND ${TramaMonitoreoFields.actividadPartidaEjecutada} = ?',
+      whereArgs: [o.numSnip, sTypePartida],
+      orderBy: orderBy,
+    );
+
+    if (result.length == 0) return List.empty();
+    return result
+        .map<TramaMonitoreoModel>((json) => TramaMonitoreoModel.fromJson(json))
+        .toList();
+  }
+
   Future<List<TramaMonitoreoModel>> readMonitoreoByIdMonitor(
     String sIdMonitoreo,
   ) async {
@@ -604,6 +692,35 @@ class DatabasePnPais {
     return result
         .map<TramaMonitoreoModel>((json) => TramaMonitoreoModel.fromJson(json))
         .toList();
+  }
+
+  Future<ComboItemModel> insertMaestra(
+    ComboItemModel o,
+  ) async {
+    final db = await instance.database;
+    if (o.id != null && o.id! > 0) {
+      await updateMaestra(o);
+      return o.copy(id: o.id);
+    } else {
+      final id = await db.insert(
+        tableNameComboItem,
+        o.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      return o.copy(id: id);
+    }
+  }
+
+  Future<int> updateMaestra(
+    ComboItemModel o,
+  ) async {
+    final db = await instance.database;
+    return db.update(
+      tableNameComboItem,
+      o.toJson(),
+      where: '${ComboItemFields.id} = ?',
+      whereArgs: [o.id],
+    );
   }
 
   Future<TramaMonitoreoModel> insertMonitoreo(

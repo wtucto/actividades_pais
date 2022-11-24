@@ -1,6 +1,7 @@
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
 import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
+import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
@@ -15,6 +16,18 @@ class MainRepository {
   final PnPaisApi _pnPaisApi;
 
   MainRepository(this._pnPaisApi, this._dbPnPais);
+
+  Future<List<ComboItemModel>> getAllComboItemByType(
+    String search,
+    int? limit,
+    int? offset,
+  ) async {
+    return _dbPnPais.readAllComboItemByType(
+      search,
+      limit,
+      offset,
+    );
+  }
 
   Future<List<TramaProyectoModel>> getAllProyectoDb(
     int? limit,
@@ -70,6 +83,13 @@ class MainRepository {
       limit,
       offset,
     );
+  }
+
+  Future<List<TramaMonitoreoModel>> getMonitoreoByTypePartida(
+    TramaProyectoModel o,
+    String sTypePartida,
+  ) async {
+    return _dbPnPais.readMonitoreoByTypePartida(o, sTypePartida);
   }
 
   Future<List<TramaMonitoreoModel>> getMonitoreoByIdMonitor(
@@ -146,6 +166,26 @@ class MainRepository {
     TramaMonitoreoModel o,
   ) async {
     return await _dbPnPais.insertMonitoreo(o);
+  }
+
+  Future<ComboItemModel> insertMaestraDb(
+    ComboItemModel o,
+  ) async {
+    return await _dbPnPais.insertMaestra(o);
+  }
+
+  Future<List<ComboItemModel>> getMaestraByType(String sType) async {
+    List<ComboItemModel> aResp = [];
+    final response = await _pnPaisApi.listarMaestra(sType);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+
+    aResp.forEach((x) => {x.idTypeItem = sType});
+
+    return aResp;
   }
 
   Future<List<ProgramacionActividadModel>> getProgramaIntervencionDb(

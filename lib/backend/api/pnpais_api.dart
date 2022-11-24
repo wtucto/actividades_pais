@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
+import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
@@ -13,6 +14,7 @@ import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 class PnPaisApi {
   final Http _http;
   final String basePathApp = "/api-pnpais/app/";
+  final String basePathApp2 = "/api-pnpais/monitoreo/app/";
 
   static String username = "username";
   static String password = "password";
@@ -43,6 +45,16 @@ class PnPaisApi {
         return (data as List)
             .map((e) => TramaProyectoModel.fromJson(e))
             .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<ComboItemModel>>> listarMaestra(String sType) async {
+    return await _http.request<List<ComboItemModel>>(
+      '${basePathApp2}listadoComboMonitoreo/$sType',
+      method: "GET",
+      parser: (data) {
+        return (data as List).map((e) => ComboItemModel.fromJson_(e)).toList();
       },
     );
   }
