@@ -358,8 +358,11 @@ class MainService {
         if (aDb.isNotEmpty) {
           ComboItemModel? oDataFind;
           try {
-            oDataFind = aDb.firstWhere((o) => o.codigo1 == oApi.codigo1,
-                orElse: () => ComboItemModel.empty());
+            oDataFind = aDb.firstWhere(
+              (o) =>
+                  o.idTypeItem == oApi.idTypeItem && o.codigo1 == oApi.codigo1,
+              orElse: () => ComboItemModel.empty(),
+            );
           } catch (oError) {
             _log.e(oError);
           }

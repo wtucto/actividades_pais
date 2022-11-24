@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -166,6 +167,14 @@ class _MonitoringDetailNewEditPageState
 
         widget.cbRIDEN = await mainController.getListComboItemByType(
             ComboItemModel.cbRIDEN, 0, 0);
+
+        widget.cbASOLU = LinkedHashSet<String>.from(widget.cbASOLU).toList();
+        widget.cbEAVAN = LinkedHashSet<String>.from(widget.cbEAVAN).toList();
+        widget.cbEMONI = LinkedHashSet<String>.from(widget.cbEMONI).toList();
+        widget.cbNRIES = LinkedHashSet<String>.from(widget.cbNRIES).toList();
+        widget.cbPEJEC = LinkedHashSet<String>.from(widget.cbPEJEC).toList();
+        widget.cbPIDEO = LinkedHashSet<String>.from(widget.cbPIDEO).toList();
+        widget.cbRIDEN = LinkedHashSet<String>.from(widget.cbRIDEN).toList();
       } catch (oError) {
         widget.cbASOLU = TramaMonitoreoModel.aAlternativaSolucion;
         widget.cbEAVAN = TramaMonitoreoModel.aEstadoAvance;
