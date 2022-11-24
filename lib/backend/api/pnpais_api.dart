@@ -136,7 +136,7 @@ class PnPaisApi {
     }
 
     return _http.postMultipartFile2<TramaRespApiDto>(
-      '${basePathApp}insertarMonitoreo',
+      '${basePathApp2}registrarAvanceAcumuladoPartidaMonitereoMovil',
       data: TramaMonitoreoModel.toJsonObjectApi(oBody),
       aFile: aFile,
       parser: (data) {
