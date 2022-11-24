@@ -66,7 +66,7 @@ class MyTraslation extends Translations {
           "RequiredFields": "Campos requeridos (*).",
           "RestarPassword": "Restablecer la contraseña",
           "SaveData": "Grabar",
-          "SelectData": "Seleccione",
+          "SelectData": "Seleccione una opción",
           "Send": "Enviado",
           "SendCodePhone": "Enviar codigo",
           "SendData": "Enviar",
