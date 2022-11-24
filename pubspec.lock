@@ -92,13 +92,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.4.1"
-  carousel_slider:
-    dependency: "direct main"
-    description:
-      name: carousel_slider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.1.1"
   characters:
     dependency: transitive
     description:
@@ -279,20 +272,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.4"
-  flutter_cache_manager:
-    dependency: transitive
-    description:
-      name: flutter_cache_manager
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.3.0"
-  flutter_cached_pdfview:
-    dependency: "direct main"
-    description:
-      name: flutter_cached_pdfview
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -300,13 +279,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  flutter_pdfview:
-    dependency: transitive
-    description:
-      name: flutter_pdfview
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.5"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -660,13 +632,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.8.4"
-  pedantic:
-    dependency: transitive
-    description:
-      name: pedantic
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.11.1"
   percent_indicator:
     dependency: "direct main"
     description:
@@ -674,41 +639,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.2"
-  permission_handler:
-    dependency: "direct main"
-    description:
-      name: permission_handler
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "10.2.0"
-  permission_handler_android:
-    dependency: transitive
-    description:
-      name: permission_handler_android
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "10.2.0"
-  permission_handler_apple:
-    dependency: transitive
-    description:
-      name: permission_handler_apple
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "9.0.7"
-  permission_handler_platform_interface:
-    dependency: transitive
-    description:
-      name: permission_handler_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.9.0"
-  permission_handler_windows:
-    dependency: transitive
-    description:
-      name: permission_handler_windows
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.2"
   petitparser:
     dependency: transitive
     description:
@@ -786,13 +716,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
-  rxdart:
-    dependency: transitive
-    description:
-      name: rxdart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.27.5"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -903,20 +826,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
-  syncfusion_flutter_charts:
-    dependency: "direct main"
-    description:
-      name: syncfusion_flutter_charts
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "20.3.58"
-  syncfusion_flutter_core:
-    dependency: transitive
-    description:
-      name: syncfusion_flutter_core
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "20.3.58"
   synchronized:
     dependency: transitive
     description:

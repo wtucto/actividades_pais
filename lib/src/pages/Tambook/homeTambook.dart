@@ -1,6 +1,7 @@
 import 'package:actividades_pais/src/pages/Tambook/category_list_view.dart';
 import 'package:actividades_pais/src/pages/Tambook/course_info_screen.dart';
 import 'package:actividades_pais/src/pages/Tambook/design_course_app_theme.dart';
+import 'package:actividades_pais/src/pages/Tambook/popular_course_list_view.dart';
 import 'package:flutter/material.dart';
 
 class HomeTambook extends StatefulWidget {
@@ -39,58 +40,27 @@ class _HomeTambookState extends State<HomeTambook> {
         ),
         body: Column(
           children: [
+            // SizedBox(
+            //   height: MediaQuery.of(context).padding.top,
+            // ),
             getAppBarUI(),
             Expanded(
-              child: ListView(
-                primary: false,
-                children: [
-                  getSearchBarUI(),
-                  getCategoryUI(),
-                  // const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => CourseInfoScreen(),
-                        ),
-                      );
-                    },
-                    child: Image.asset(
-                      'assets/Tambook/mapa-removebg-preview.png',
-                      // height: 200,
-                      // width: 200,
-                    ),
+              child: SingleChildScrollView(
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: Column(
+                    children: [
+                      const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+                      getSearchBarUI(),
+                      getCategoryUI(),
+                      Flexible(
+                        child: getPopularCourseUI(),
+                      ),
+                    ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => CourseInfoScreen(),
-                        ),
-                      );
-                    },
-                    child: getPopularCourseUI(),
-                  ),
-                ],
+                ),
               ),
             ),
-            // Expanded(
-            //   child: SingleChildScrollView(
-            //     child: Container(
-            //       height: MediaQuery.of(context).size.height,
-            //       child: Column(
-            //         children: [
-            //           const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-            //           // getSearchBarUI(),
-            //           // getCategoryUI(),
-            //           Flexible(
-            //             child: getPopularCourseUI(),
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -107,6 +77,11 @@ class _HomeTambookState extends State<HomeTambook> {
             moveTo();
           },
         ),
+        Image.asset(
+          'assets/Tambook/mapa-removebg-preview.png',
+          height: 200,
+          width: 200,
+        ),
       ],
     );
   }
@@ -116,11 +91,11 @@ class _HomeTambookState extends State<HomeTambook> {
       padding: const EdgeInsets.only(left: 18, right: 16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        // crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             'Últimas Intervenciones',
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.left,
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 22,
@@ -129,141 +104,13 @@ class _HomeTambookState extends State<HomeTambook> {
             ),
           ),
           const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-          Card(
-            margin: const EdgeInsets.all(10),
-            elevation: 1,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+          Flexible(
+            child: PopularCourseListView(
+              callBack: () {
+                moveTo();
+              },
             ),
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                const ListTile(
-                  title: Text(
-                    'DIRECCION REGIONAL DE AGRICULTURA',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      letterSpacing: 0.27,
-                      color: DesignCourseAppTheme.darkerText,
-                    ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                  child: Text(
-                    'VI Feria Agromercado 2022, con la finalidad de comercializar los productos agropecuarios y derivados propios de la zona a precios razonables y cumpliendo los protocolos de bioseguridad directamente a los consumidores finales, evento realizado por la Agencia Agraria Melgar, dirigido a las asociaciones de productores y población del distrito de Ayaviri.',
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-                Image.asset('assets/design_course/puno.jpeg'),
-              ],
-            ),
-          ),
-          Card(
-            margin: const EdgeInsets.all(5),
-            elevation: 1,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                const ListTile(
-                  title: Text(
-                    'FISE',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      letterSpacing: 0.27,
-                      color: DesignCourseAppTheme.darkerText,
-                    ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                  child: Text(
-                    'VI Feria Agromercado 2022, con la finalidad de comercializar los productos agropecuarios y derivados propios de la zona a precios razonables y cumpliendo los protocolos de bioseguridad directamente a los consumidores finales, evento realizado por la Agencia Agraria Melgar, dirigido a las asociaciones de productores y población del distrito de Ayaviri.',
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-                Image.asset('assets/design_course/segundo.jpg'),
-              ],
-            ),
-          ),
-          Card(
-            margin: const EdgeInsets.all(5),
-            elevation: 1,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                const ListTile(
-                  title: Text(
-                    'SUB PREFECTURA',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      letterSpacing: 0.27,
-                      color: DesignCourseAppTheme.darkerText,
-                    ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                  child: Text(
-                    'VI Feria Agromercado 2022, con la finalidad de comercializar los productos agropecuarios y derivados propios de la zona a precios razonables y cumpliendo los protocolos de bioseguridad directamente a los consumidores finales, evento realizado por la Agencia Agraria Melgar, dirigido a las asociaciones de productores y población del distrito de Ayaviri.',
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-                Image.asset('assets/design_course/tercero.jpeg'),
-              ],
-            ),
-          ),
-          Card(
-            margin: const EdgeInsets.all(5),
-            elevation: 1,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                const ListTile(
-                  title: Text(
-                    'CENTRO DE SALUD (ESPECIALIDAD)',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      letterSpacing: 0.27,
-                      color: DesignCourseAppTheme.darkerText,
-                    ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                  child: Text(
-                    'VI Feria Agromercado 2022, con la finalidad de comercializar los productos agropecuarios y derivados propios de la zona a precios razonables y cumpliendo los protocolos de bioseguridad directamente a los consumidores finales, evento realizado por la Agencia Agraria Melgar, dirigido a las asociaciones de productores y población del distrito de Ayaviri.',
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-                Image.asset('assets/design_course/cuarto.jpg'),
-              ],
-            ),
-          ),
-          // Flexible(
-          //   child: PopularCourseListView(
-          //     callBack: () {
-          //       moveTo();
-          //     },
-          //   ),
-          // )
+          )
         ],
       ),
     );
@@ -404,32 +251,39 @@ class _HomeTambookState extends State<HomeTambook> {
   }
 
   Widget getAppBarUI() {
-    return Container(
-      color: Colors.blue,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 18, right: 18),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset(
-                    'assets/Monitor/logo.png',
-                    width: 100,
-                    height: 100,
-                  ),
-                ],
-              ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 18, right: 18),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Text(
+                //   '',
+                //   textAlign: TextAlign.center,
+                //   style: TextStyle(
+                //     fontWeight: FontWeight.bold,
+                //     fontSize: 22,
+                //     letterSpacing: 0.27,
+                //     color: DesignCourseAppTheme.darkerText,
+                //   ),
+                // ),
+                Image.asset(
+                  'assets/Monitor/logo.png',
+                  width: 100,
+                  height: 100,
+                ),
+              ],
             ),
-            Container(
-              width: 60,
-              height: 60,
-              child: Image.asset('assets/Tambook/MicrosoftTeams-image.png'),
-            )
-          ],
-        ),
+          ),
+          Container(
+            width: 60,
+            height: 60,
+            child: Image.asset('assets/Tambook/MicrosoftTeams-image.png'),
+          )
+        ],
       ),
     );
   }
