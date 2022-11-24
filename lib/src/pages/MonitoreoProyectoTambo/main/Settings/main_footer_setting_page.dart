@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:actividades_pais/src/pages/Login/Login.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
+import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/check_connection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/settings_page.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -220,11 +226,38 @@ class PDFViewerFromUrl extends StatelessWidget {
 
   final String url;
 
+  Future<Uint8List> downloadPDF() async {
+    final HttpClient client = HttpClient();
+    final HttpClientRequest request = await client.getUrl(Uri.parse(this.url));
+    final HttpClientResponse response = await request.close();
+    return await consolidateHttpClientResponseBytes(response);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Manual de Usuario'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.download,
+              color: Colors.white,
+              semanticLabel: 'Bookmark',
+            ),
+            onPressed: () async {
+              BusyIndicator.show(context);
+              Uint8List dataPdf = await downloadPDF();
+              BusyIndicator.hide(context);
+
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => PdfPreviewPage2(dataPdf: dataPdf),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: const PDF(
         enableSwipe: true,
