@@ -155,7 +155,7 @@ class _DashboardState extends State<Dashboard> {
                                 Container(
                                   padding: const EdgeInsets.all(10),
                                   child: const Text(
-                                    "TAMBOS EN EJECUCIÓN Y POR REINICIAR",
+                                    "PROYECTOS TAMBOS",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Color.fromRGBO(0, 116, 227, 1),

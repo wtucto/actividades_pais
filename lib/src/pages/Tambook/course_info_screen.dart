@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'design_course_app_theme.dart';
 
 class CourseInfoScreen extends StatefulWidget {
   @override
@@ -7,7 +6,6 @@ class CourseInfoScreen extends StatefulWidget {
 }
 
 class _CourseInfoScreenState extends State<CourseInfoScreen> {
-  int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
 
   @override
@@ -17,7 +15,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
         title: Center(
           child: Text("TAMBO"),
         ),
-        shape: const CustomAppBarShape(multi: 0.05),
+        // shape: const CustomAppBarShape(multi: 0.05),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -89,7 +87,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
                                             ),
                                             child: const Center(
                                               child: Text(
-                                                "¡BIENVENIDO SOLEDAD!",
+                                                "¡BIENVENIDO A SOLEDAD!",
                                                 textAlign: TextAlign.left,
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w600,
@@ -97,6 +95,112 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
                                                   letterSpacing: 0.0,
                                                 ),
                                               ),
+                                            ),
+                                          ),
+
+                                          Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(16.0),
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.green
+                                                        .withOpacity(0.5),
+                                                    offset:
+                                                        const Offset(1.1, 1.1),
+                                                    blurRadius: 10.0),
+                                              ],
+                                            ),
+                                            child: const Center(
+                                              child: Text(
+                                                'OPERATIVO',
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 18,
+                                                  letterSpacing: 0.0,
+                                                  color: Color.fromARGB(
+                                                      255, 255, 255, 255),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          DefaultTabController(
+                                            length: 3, // length of tabs
+                                            initialIndex: 0,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: [
+                                                Container(
+                                                  child: const TabBar(
+                                                    labelColor: Colors.blue,
+                                                    isScrollable: true,
+                                                    unselectedLabelColor:
+                                                        Colors.black,
+                                                    tabs: [
+                                                      Tab(text: 'GESTOR'),
+                                                      Tab(
+                                                          text:
+                                                              'INTERVENCIONES'),
+                                                      Tab(text: 'UBICACIÓN'),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  height:
+                                                      400, //height of TabBarView
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                          border: Border(
+                                                              top: BorderSide(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  width: 0.5))),
+                                                  child: TabBarView(
+                                                    children: [
+                                                      Container(
+                                                        child: ListView(
+                                                          children: [
+                                                            buildCard(),
+                                                            const SizedBox(
+                                                                height: 10),
+                                                            generales(),
+                                                            const SizedBox(
+                                                                height: 10),
+                                                            card3(),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        child: ListView(
+                                                          children: [
+                                                            Intecard(),
+                                                            const SizedBox(
+                                                                height: 10),
+                                                            Intecard1(),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        child: ListView(
+                                                          children: [
+                                                            Image.asset(
+                                                              'assets/Tambook/mapa_tambo.jpg',
+                                                              height: 400,
+                                                              width: 400,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
                                             ),
                                           ),
 
@@ -108,19 +212,19 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
                                 ),
 
                                 //Detalle Proyecto
-                                Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      const SizedBox(height: 10),
-                                      buildCard(),
-                                      generales(),
-                                      card3(),
-                                    ],
-                                  ),
-                                ),
+                                // Padding(
+                                //   padding: EdgeInsets.all(20),
+                                //   child: Column(
+                                //     crossAxisAlignment:
+                                //         CrossAxisAlignment.stretch,
+                                //     children: [
+                                //       const SizedBox(height: 10),
+                                //       buildCard(),
+                                //       generales(),
+                                //       card3(),
+                                //     ],
+                                //   ),
+                                // ),
                               ],
                             );
                           }),
@@ -192,7 +296,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
                       subtitle: Text('Masculino'),
                     ),
                     ListTile(
-                      title: Text('STADO CIVIL'),
+                      title: Text('ESTADO CIVIL'),
                       subtitle: Text('Soltero'),
                     ),
                     ListTile(
@@ -300,6 +404,80 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
             ),
           ],
         ));
+  }
+
+// Intervenciones
+  Card Intecard() {
+    return Card(
+      margin: const EdgeInsets.all(5),
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.arrow_drop_down_circle),
+            title: const Text('QALIWARMA'),
+            subtitle: Text(
+              '10/11/2022',
+              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Text(
+              'TALLER DE CAPACITACION, CONFORMACION DEL CAE Y ENTREGA DE ALIMENTOS, CON LA FINALIDAD DE DOTAR DE PRODUCTOS RICOS EN PROTEINAS, MINERALES Y VITAMINAS LA CUAL PERMITE COMBATIR LA ANEMIA Y LA DCI, REALIZADO POR EL MONITOR DE GESTION LOCAL DEL PN QALIWARMA',
+              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+            ),
+          ),
+          Image.network(
+              'https://www.pais.gob.pe/backendsismonitor/public/storage/programaciones-git/temp/TMOgbPC8JekToSulb2QsRUlQNDtYWbnzwCdauuGx.jpg'),
+          ElevatedButton(
+            child: Text('Descargar Ficha'),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
+  }
+
+  Card Intecard1() {
+    return Card(
+      margin: const EdgeInsets.all(5),
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.arrow_drop_down_circle),
+            title: const Text(
+                'SERVICIO NACIONAL DE AREAS NATURALES PROTEGIDAS (SERNANP)'),
+            subtitle: Text(
+              '08/11/2022',
+              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Text(
+              'TALLER DE CAPACITACION: EVALUACION DE PECES, ESTANDARIZACION DE ALIMENTOS,COSECHA, COMERCIALIZACION Y ACUERDOS DE COMPROMISO PARA LA CONTINUIDAD DE ACTIVIDADES PARA EL AÑO 2023, EN EL MARCO DE LA EJECUCION DEL PROYECTO “PRODUCCION DE ALEVINOS DE ESPECIES AMAZONICAS',
+              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+            ),
+          ),
+          Image.network(
+              'https://www.pais.gob.pe/backendsismonitor/public/storage/programaciones-git/temp/E842oA2wFbzX0wb8ZleAjAJ18z4JQAQ6jDapOsXe.jpg'),
+          ElevatedButton(
+            child: Text('Descargar Ficha'),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
   }
 }
 

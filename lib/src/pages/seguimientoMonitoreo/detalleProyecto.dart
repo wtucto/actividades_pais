@@ -1,4 +1,5 @@
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -46,6 +47,7 @@ class _DetalleProyectoState extends State<DetalleProyecto>
   double opacity1 = 0.0;
   double opacity2 = 0.0;
   double opacity3 = 0.0;
+
   @override
   void initState() {
     animationController = AnimationController(
@@ -146,13 +148,64 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                AspectRatio(
-                                  aspectRatio: 1.2,
-                                  child: Image.network(
-                                    'https://portal.andina.pe/EDPfotografia3/Thumbnail/2016/06/27/000363320W.jpg',
-                                    fit: BoxFit.fill,
+                                CarouselSlider(
+                                  items: [
+                                    Container(
+                                      margin: EdgeInsets.all(8.0),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        image: const DecorationImage(
+                                          image: NetworkImage(
+                                              "https://www.pais.gob.pe/backendsismonitor/public/storage/programaciones-git/temp/4Lfp9n78LrRQqc8rOQ246sWlRa2I5pCjtAEDBA9r.JPG"),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.all(8.0),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        image: const DecorationImage(
+                                          image: NetworkImage(
+                                              "https://portal.andina.pe/EDPfotografia3/Thumbnail/2016/06/27/000363320W.jpg"),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.all(2.0),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        image: const DecorationImage(
+                                          image: NetworkImage(
+                                              "https://www.pais.gob.pe/backendsismonitor/public/storage/programaciones-git/temp/Gfp7ZihgLWrYbc9BqY0cnDGC2zXdhpftyaXQUX0D.jpg"),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                  options: CarouselOptions(
+                                    // height: 380.0,
+                                    enlargeCenterPage: true,
+                                    autoPlay: true,
+                                    aspectRatio: 16 / 9,
+                                    autoPlayCurve: Curves.fastOutSlowIn,
+                                    enableInfiniteScroll: true,
+                                    autoPlayAnimationDuration:
+                                        const Duration(milliseconds: 1000),
+                                    viewportFraction: 0.8,
                                   ),
                                 ),
+                                // AspectRatio(
+                                //   aspectRatio: 1.2,
+                                //   child: Image.network(
+                                //     '',
+                                //     fit: BoxFit.fill,
+                                //   ),
+                                // ),
                                 //Detalle imagen
                                 Container(
                                   decoration: BoxDecoration(

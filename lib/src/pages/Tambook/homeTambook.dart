@@ -40,9 +40,9 @@ class _HomeTambookState extends State<HomeTambook> {
         ),
         body: Column(
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).padding.top,
-            ),
+            // SizedBox(
+            //   height: MediaQuery.of(context).padding.top,
+            // ),
             getAppBarUI(),
             Expanded(
               child: SingleChildScrollView(
@@ -77,19 +77,24 @@ class _HomeTambookState extends State<HomeTambook> {
             moveTo();
           },
         ),
+        Image.asset(
+          'assets/Tambook/mapa-removebg-preview.png',
+          height: 200,
+          width: 200,
+        ),
       ],
     );
   }
 
   Widget getPopularCourseUI() {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0, left: 18, right: 16),
+      padding: const EdgeInsets.only(left: 18, right: 16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Ultimas Intervenciones',
+            'Últimas Intervenciones',
             textAlign: TextAlign.left,
             style: TextStyle(
               fontWeight: FontWeight.w600,
@@ -247,23 +252,28 @@ class _HomeTambookState extends State<HomeTambook> {
 
   Widget getAppBarUI() {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0, left: 18, right: 18),
+      padding: const EdgeInsets.only(left: 18, right: 18),
       child: Row(
         children: <Widget>[
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  'PLATAFORMAS DE ACCIÓN PARA LA INCLUSIÓN SOCIAL',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22,
-                    letterSpacing: 0.27,
-                    color: DesignCourseAppTheme.darkerText,
-                  ),
+              children: [
+                // Text(
+                //   '',
+                //   textAlign: TextAlign.center,
+                //   style: TextStyle(
+                //     fontWeight: FontWeight.bold,
+                //     fontSize: 22,
+                //     letterSpacing: 0.27,
+                //     color: DesignCourseAppTheme.darkerText,
+                //   ),
+                // ),
+                Image.asset(
+                  'assets/Monitor/logo.png',
+                  width: 100,
+                  height: 100,
                 ),
               ],
             ),
@@ -271,7 +281,7 @@ class _HomeTambookState extends State<HomeTambook> {
           Container(
             width: 60,
             height: 60,
-            child: Image.asset('assets/design_course/userImage.png'),
+            child: Image.asset('assets/Tambook/MicrosoftTeams-image.png'),
           )
         ],
       ),

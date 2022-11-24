@@ -74,6 +74,7 @@ dependencies:
   open_file: ^3.2.1
   uuid: 3.0.6
   syncfusion_flutter_charts: ^20.3.57
+  carousel_slider: ^4.1.1
   #OBJECT BOX
   #objectbox: ^1.6.2
   #objectbox_flutter_libs: any #1 only local database
