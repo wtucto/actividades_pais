@@ -153,6 +153,7 @@ class TramaMonitoreoModel {
   static const sProbIden04 = 'Núcleo ejector no rinde gastos';
   static const sProbIden05 = 'Limitados recursos y sobre utilizados';
   static const sProbIden06 = 'Terreno con problemas de saneamiento legal';
+  static const sProbIden07 = 'Sin Problema';
   static final List<String> aProblemaIdentificado = [
     sOptDropdownDefault,
     sProbIden01,
@@ -161,6 +162,7 @@ class TramaMonitoreoModel {
     sProbIden04,
     sProbIden05,
     sProbIden06,
+    sProbIden07
   ];
 
   static const sRiesIden01 =
@@ -180,20 +182,20 @@ class TramaMonitoreoModel {
     sRiesIden06,
   ];
 
-  static const sNivelRies01 = 'Muy Bajo';
+  // static const sNivelRies01 = 'Muy Bajo';
   static const sNivelRies02 = 'Bajo';
   static const sNivelRies03 = 'Medio';
-  static const sNivelRies04 = 'Medio Alto';
+  // static const sNivelRies04 = 'Medio Alto';
   static const sNivelRies05 = 'Alto';
-  static const sNivelRies06 = 'Muy Alto';
+  // static const sNivelRies06 = 'Muy Alto';
   static final List<String> aNivelRiesgo = [
     sOptDropdownDefault,
-    sNivelRies01,
+    // sNivelRies01,
     sNivelRies02,
     sNivelRies03,
-    sNivelRies04,
+    // sNivelRies04,
     sNivelRies05,
-    sNivelRies06,
+    // sNivelRies06,
   ];
 
 /*
