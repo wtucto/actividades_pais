@@ -52,7 +52,9 @@ class TramaRespApiDto {
         codResultado: json[TramaRespApiFields.codResultado] == null
             ? 0
             : json[TramaRespApiFields.codResultado] as int,
-        msgResultado: json[TramaRespApiFields.msgResultado] as String,
+        msgResultado: json[TramaRespApiFields.msgResultado] == null
+            ? ""
+            : json[TramaRespApiFields.msgResultado] as String,
         total: json[TramaRespApiFields.total] == null
             ? 0
             : json[TramaRespApiFields.total] as int,

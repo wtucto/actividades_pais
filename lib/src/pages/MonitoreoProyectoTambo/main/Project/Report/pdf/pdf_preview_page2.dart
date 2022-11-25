@@ -21,7 +21,7 @@ class PdfPreviewPage2 extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('VISTA PREVIA DOCUMENTO PDF'),
+        title: const Text('MANUAL DE USUARIO'),
       ),
       body: PdfPreview(
         maxPageWidth: 708,

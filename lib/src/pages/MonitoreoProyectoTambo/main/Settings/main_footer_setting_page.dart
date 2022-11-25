@@ -237,7 +237,7 @@ class PDFViewerFromUrl extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Manual de Usuario'),
+        title: const Text('MANUAL DE USUARIO'),
         actions: <Widget>[
           IconButton(
             icon: const Icon(

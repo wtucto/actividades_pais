@@ -87,7 +87,6 @@ class _MonitoringDetailNewEditPageState
   List<bool> expandedRI = [false, false];
 
   String sShowMessage = '';
-
   void showSnackbar({required bool success, required String text}) {
     AnimatedSnackBar.rectangle(
       'I'.tr,
@@ -102,23 +101,22 @@ class _MonitoringDetailNewEditPageState
   @override
   void initState() {
     super.initState();
-    getMaestra();
     checkGeolocator();
-
-    if (mounted) {
-      if (widget.statusM == "CREATE" || widget.statusM == "SEARCH") {
-        loadData(context);
+    getMaestra().then((o) {
+      if (mounted) {
+        if (widget.statusM == "CREATE" || widget.statusM == "SEARCH") {
+          loadData(context);
+        }
+        if (widget.statusM == "UPDATE") {
+          getDataMonitor(widget.datoMonitor!);
+        }
+        if (widget.statusM == "LECTURA") {
+          _enabledF = false;
+          getDataMonitor(widget.datoMonitor!);
+        }
       }
-      if (widget.statusM == "UPDATE") {
-        getDataMonitor(widget.datoMonitor!);
-      }
-      if (widget.statusM == "LECTURA") {
-        _enabledF = false;
-        getDataMonitor(widget.datoMonitor!);
-      }
-
       setState(() {});
-    }
+    });
   }
 
   Future<void> checkGeolocator() async {
@@ -192,7 +190,6 @@ class _MonitoringDetailNewEditPageState
        */
 
       String sPlaceholder = TramaMonitoreoModel.sOptDropdownDefault;
-
       widget.cbASOLU.insert(0, "$sPlaceholder para: ALTERNATIVA SOLUCION");
       widget.cbEAVAN.insert(0, "$sPlaceholder para: ESTADO AVANCE");
       widget.cbEMONI.insert(0, "$sPlaceholder para: ESTADO MONITOREO");
@@ -268,15 +265,16 @@ class _MonitoringDetailNewEditPageState
       _tambo = m.tambo;
       _cuiCtr.text = m.cui!;
       _idMonitor.text = m.idMonitoreo!;
+      _statusMonitor = m.estadoMonitoreo;
       _statusMonitor =
-          m.estadoMonitoreo == "" ? 'SelectOption'.tr : m.estadoMonitoreo;
+          m.estadoMonitoreo == "" ? widget.cbEMONI[0] : m.estadoMonitoreo;
       _dateMonitor.text = m.fechaMonitoreo!;
       _advanceFEA.text =
           ((m.avanceFisicoAcumulado! * 100).toStringAsFixed(2)).toString();
       _statusAdvance =
-          m.estadoAvance == "" ? 'SelectOption'.tr : m.estadoAvance;
+          m.estadoAvance == "" ? widget.cbEAVAN[0] : m.estadoAvance;
       _valuePartidaEje = m.actividadPartidaEjecutada == ""
-          ? 'SelectOption'.tr
+          ? widget.cbPEJEC[0]
           : m.actividadPartidaEjecutada;
 
       _advanceFEP.text =
@@ -284,15 +282,15 @@ class _MonitoringDetailNewEditPageState
       _obsMonitor.text = m.observaciones!;
 
       _valueProblemaIO = m.problemaIdentificado == ""
-          ? 'SelectOption'.tr
+          ? widget.cbPIDEO[0]
           : m.problemaIdentificado;
       _valueAlternSolucion = m.alternativaSolucion == ""
-          ? 'SelectOption'.tr
+          ? widget.cbASOLU[0]
           : m.alternativaSolucion;
       _valueRiesgo =
-          m.riesgoIdentificado == "" ? 'SelectOption'.tr : m.riesgoIdentificado;
+          m.riesgoIdentificado == "" ? widget.cbRIDEN[0] : m.riesgoIdentificado;
       _valueNivelRiesgo =
-          m.nivelRiesgo == "" ? 'SelectOption'.tr : m.nivelRiesgo;
+          m.nivelRiesgo == "" ? widget.cbNRIES[0] : m.nivelRiesgo;
 
       _dateObra.text = m.fechaTerminoEstimado!;
       _longitud.text = m.longitud!;
@@ -479,14 +477,31 @@ class _MonitoringDetailNewEditPageState
                 fontWeight: FontWeight.w700,
               ),
             ),
-            myDropdownButtonFormField(
-              "DDOW0001",
-              _statusMonitor!,
-              widget.cbEMONI,
-              true,
-              'FldMonitor003'.tr,
-              false,
+            // myDropdownButtonFormField(
+            //   "DDOW0001",
+            //   _statusMonitor!,
+            //   widget.cbEMONI,
+            //   true,
+            //   'FldMonitor003'.tr,
+            //   false,
+            // ),
+            MyDropdownButtonFormField(
+              value: _statusMonitor!,
+              items: widget.cbEMONI,
+              isDense: false,
+              validator: (value) =>
+                  value!.toUpperCase() == widget.cbEMONI[0].toUpperCase()
+                      ? 'Required'.tr
+                      : null,
+              onChanged: _enabledF
+                  ? (val) {
+                      setState(() {
+                        _statusMonitor = val.toString();
+                      });
+                    }
+                  : null,
             ),
+
             /**
                * FECHA MONITOREO
                */
@@ -557,13 +572,30 @@ class _MonitoringDetailNewEditPageState
                 fontWeight: FontWeight.w700,
               ),
             ),
-            myDropdownButtonFormField(
-              "DDOW0002",
-              _statusAdvance!,
-              widget.cbEAVAN,
-              true,
-              'FldMonitor006'.tr,
-              true,
+            // myDropdownButtonFormField(
+            //   "DDOW0002",
+            //   _statusAdvance!,
+            //   widget.cbEAVAN,
+            //   true,
+            //   'FldMonitor006'.tr,
+            //   true,
+            // ),
+
+            MyDropdownButtonFormField(
+              value: _statusAdvance!,
+              items: widget.cbEAVAN,
+              isDense: false,
+              validator: (value) =>
+                  value!.toUpperCase() == widget.cbEAVAN[0].toUpperCase()
+                      ? 'Required'.tr
+                      : null,
+              onChanged: _enabledF
+                  ? (val) {
+                      setState(() {
+                        _statusAdvance = val.toString();
+                      });
+                    }
+                  : null,
             ),
             /**
                * PARTIDA EJECUTADA
@@ -577,13 +609,46 @@ class _MonitoringDetailNewEditPageState
                 fontWeight: FontWeight.w700,
               ),
             ),
-            myDropdownButtonFormField(
-              "DDOW0003",
-              _valuePartidaEje!,
-              widget.cbPEJEC,
-              true,
-              'FldMonitor007'.tr,
-              true,
+            // myDropdownButtonFormField(
+            //   "DDOW0003",
+            //   _valuePartidaEje!,
+            //   widget.cbPEJEC,
+            //   true,
+            //   'FldMonitor007'.tr,
+            //   true,
+            // ),
+            MyDropdownButtonFormField(
+              value: _valuePartidaEje!,
+              items: widget.cbPEJEC,
+              isDense: false,
+              validator: (value) =>
+                  value!.toUpperCase() == widget.cbPEJEC[0].toUpperCase()
+                      ? 'Required'.tr
+                      : null,
+              onChanged: _enabledF
+                  ? (val) async {
+                      _valuePartidaEje = val.toString();
+                      try {
+                        TramaProyectoModel oProyect =
+                            TramaProyectoModel.empty();
+                        oProyect.numSnip = _snip;
+                        TramaMonitoreoModel oLastMonitor =
+                            await mainController.getMonitoreoLastTypePartida(
+                          oProyect,
+                          _valuePartidaEje!,
+                        );
+                        // setState(() {
+                        _advanceFEP.text =
+                            ((oLastMonitor.avanceFisicoPartida! * 100)
+                                    .toStringAsFixed(2))
+                                .toString();
+                        // });
+                      } catch (e) {
+                        print(e);
+                        _advanceFEP.text = '0.00';
+                      }
+                    }
+                  : null,
             ),
             /**
                * % AVANCE FISICO ACUMULADO PARTIDA
@@ -667,13 +732,29 @@ class _MonitoringDetailNewEditPageState
                 fontWeight: FontWeight.w700,
               ),
             ),
-            myDropdownButtonFormField(
-              "DDOW0004",
-              _valueProblemaIO!,
-              widget.cbPIDEO,
-              false,
-              'FldMonitor011'.tr,
-              true,
+            // myDropdownButtonFormField(
+            //   "DDOW0004",
+            //   _valueProblemaIO!,
+            //   widget.cbPIDEO,
+            //   false,
+            //   'FldMonitor011'.tr,
+            //   true,
+            // ),
+            MyDropdownButtonFormField(
+              value: _valueProblemaIO!,
+              items: widget.cbPIDEO,
+              isDense: false,
+              validator: (value) =>
+                  value!.toUpperCase() == widget.cbPIDEO[0].toUpperCase()
+                      ? 'Required'.tr
+                      : null,
+              onChanged: _enabledF
+                  ? (val) {
+                      setState(() {
+                        _valueProblemaIO = val.toString();
+                      });
+                    }
+                  : null,
             ),
             /**
              * Foto del Problema Identificado (Opcional)
@@ -721,13 +802,30 @@ class _MonitoringDetailNewEditPageState
                 fontWeight: FontWeight.w700,
               ),
             ),
-            myDropdownButtonFormField(
-              "DDOW0005",
-              _valueAlternSolucion!,
-              widget.cbASOLU,
-              false,
-              'FldMonitor013'.tr,
-              true,
+            // myDropdownButtonFormField(
+            //   "DDOW0005",
+            //   _valueAlternSolucion!,
+            //   widget.cbASOLU,
+            //   false,
+            //   'FldMonitor013'.tr,
+            //   true,
+            // ),
+
+            MyDropdownButtonFormField(
+              value: _valueAlternSolucion!,
+              items: widget.cbASOLU,
+              isDense: false,
+              validator: (value) =>
+                  value!.toUpperCase() == widget.cbASOLU[0].toUpperCase()
+                      ? 'Required'.tr
+                      : null,
+              onChanged: _enabledF
+                  ? (val) {
+                      setState(() {
+                        _valueAlternSolucion = val.toString();
+                      });
+                    }
+                  : null,
             ),
             /**
            * SELECCIONES EL RIESGO Identificado
@@ -741,13 +839,29 @@ class _MonitoringDetailNewEditPageState
                 fontWeight: FontWeight.w700,
               ),
             ),
-            myDropdownButtonFormField(
-              "DDOW0006",
-              _valueRiesgo!,
-              widget.cbRIDEN,
-              false,
-              'FldMonitor014'.tr,
-              false,
+            // myDropdownButtonFormField(
+            //   "DDOW0006",
+            //   _valueRiesgo!,
+            //   widget.cbRIDEN,
+            //   false,
+            //   'FldMonitor014'.tr,
+            //   false,
+            // ),
+            MyDropdownButtonFormField(
+              value: _valueRiesgo!,
+              items: widget.cbRIDEN,
+              isDense: false,
+              validator: (value) =>
+                  value!.toUpperCase() == widget.cbRIDEN[0].toUpperCase()
+                      ? 'Required'.tr
+                      : null,
+              onChanged: _enabledF
+                  ? (val) {
+                      setState(() {
+                        _valueRiesgo = val.toString();
+                      });
+                    }
+                  : null,
             ),
             /**
              * Foto del Riesgo Identificado (Opcional)
@@ -794,13 +908,29 @@ class _MonitoringDetailNewEditPageState
                 fontWeight: FontWeight.w700,
               ),
             ),
-            myDropdownButtonFormField(
-              "DDOW0007",
-              _valueNivelRiesgo!,
-              widget.cbNRIES,
-              true,
-              'FldMonitor016'.tr,
-              false,
+            // myDropdownButtonFormField(
+            //   "DDOW0007",
+            //   _valueNivelRiesgo!,
+            //   widget.cbNRIES,
+            //   true,
+            //   'FldMonitor016'.tr,
+            //   false,
+            // ),
+            MyDropdownButtonFormField(
+              value: _valueNivelRiesgo!,
+              items: widget.cbNRIES,
+              isDense: false,
+              validator: (value) =>
+                  value!.toUpperCase() == widget.cbNRIES[0].toUpperCase()
+                      ? 'Required'.tr
+                      : null,
+              onChanged: _enabledF
+                  ? (val) {
+                      setState(() {
+                        _valueNivelRiesgo = val.toString();
+                      });
+                    }
+                  : null,
             ),
 
             /**
@@ -939,13 +1069,13 @@ class _MonitoringDetailNewEditPageState
                                       fechaTerminoEstimado: _dateObra.text,
                                       actividadPartidaEjecutada:
                                           _valuePartidaEje!.toUpperCase() ==
-                                                  ('SelectOption'.tr)
+                                                  widget.cbPEJEC[0]
                                                       .toUpperCase()
                                               ? ""
                                               : _valuePartidaEje!,
                                       alternativaSolucion: _valueAlternSolucion!
                                                   .toUpperCase() ==
-                                              ('SelectOption'.tr).toUpperCase()
+                                              widget.cbASOLU[0].toUpperCase()
                                           ? ""
                                           : _valueAlternSolucion!,
                                       avanceFisicoAcumulado: (double.parse(
@@ -960,12 +1090,12 @@ class _MonitoringDetailNewEditPageState
                                           100),
                                       estadoAvance: _statusAdvance!
                                                   .toUpperCase() ==
-                                              ('SelectOption'.tr).toUpperCase()
+                                              widget.cbEAVAN[0].toUpperCase()
                                           ? ""
                                           : _statusAdvance!,
                                       estadoMonitoreo: _statusMonitor!
                                                   .toUpperCase() ==
-                                              ('SelectOption'.tr).toUpperCase()
+                                              widget.cbEMONI[0].toUpperCase()
                                           ? ""
                                           : _statusMonitor!,
                                       fechaMonitoreo: _dateMonitor.text,
@@ -977,17 +1107,17 @@ class _MonitoringDetailNewEditPageState
                                       observaciones: _obsMonitor.text,
                                       problemaIdentificado: _valueProblemaIO!
                                                   .toUpperCase() ==
-                                              ('SelectOption'.tr).toUpperCase()
+                                              widget.cbPIDEO[0].toUpperCase()
                                           ? ""
                                           : _valueProblemaIO!,
                                       riesgoIdentificado: _valueRiesgo!
                                                   .toUpperCase() ==
-                                              ('SelectOption'.tr).toUpperCase()
+                                              widget.cbRIDEN[0].toUpperCase()
                                           ? ""
                                           : _valueRiesgo!,
                                       nivelRiesgo: _valueNivelRiesgo!
                                                   .toUpperCase() ==
-                                              ('SelectOption'.tr).toUpperCase()
+                                              widget.cbNRIES[0].toUpperCase()
                                           ? ""
                                           : _valueNivelRiesgo!,
                                       rol: oUser.rol,
@@ -1138,14 +1268,14 @@ class _MonitoringDetailNewEditPageState
                                             actividadPartidaEjecutada:
                                                 _valuePartidaEje!
                                                             .toUpperCase() ==
-                                                        ('SelectOption'.tr)
+                                                        widget.cbPEJEC[0]
                                                             .toUpperCase()
                                                     ? ""
                                                     : _valuePartidaEje!,
                                             alternativaSolucion:
                                                 _valueAlternSolucion!
                                                             .toUpperCase() ==
-                                                        ('SelectOption'.tr)
+                                                        widget.cbASOLU[0]
                                                             .toUpperCase()
                                                     ? ""
                                                     : _valueAlternSolucion!,
@@ -1163,13 +1293,13 @@ class _MonitoringDetailNewEditPageState
                                                 100),
                                             estadoAvance:
                                                 _statusAdvance!.toUpperCase() ==
-                                                        ('SelectOption'.tr)
+                                                        widget.cbEAVAN[0]
                                                             .toUpperCase()
                                                     ? ""
                                                     : _statusAdvance!,
                                             estadoMonitoreo:
                                                 _statusMonitor!.toUpperCase() ==
-                                                        ('SelectOption'.tr)
+                                                        widget.cbEMONI[0]
                                                             .toUpperCase()
                                                     ? ""
                                                     : _statusMonitor!,
@@ -1183,19 +1313,19 @@ class _MonitoringDetailNewEditPageState
                                             problemaIdentificado:
                                                 _valueProblemaIO!
                                                             .toUpperCase() ==
-                                                        ('SelectOption'.tr)
+                                                        widget.cbPIDEO[0]
                                                             .toUpperCase()
                                                     ? ""
                                                     : _valueProblemaIO!,
                                             riesgoIdentificado:
                                                 _valueRiesgo!.toUpperCase() ==
-                                                        ('SelectOption'.tr)
+                                                        widget.cbRIDEN[0]
                                                             .toUpperCase()
                                                     ? ""
                                                     : _valueRiesgo!,
                                             nivelRiesgo: _valueNivelRiesgo!
                                                         .toUpperCase() ==
-                                                    ('SelectOption'.tr)
+                                                    widget.cbNRIES[0]
                                                         .toUpperCase()
                                                 ? ""
                                                 : _valueNivelRiesgo!,
@@ -1328,77 +1458,77 @@ class _MonitoringDetailNewEditPageState
     ]);
   }
 
-  DropdownButtonFormField<String> myDropdownButtonFormField(
-    String code,
-    String valueId,
-    List<String> items,
-    bool? isDense,
-    textLabel,
-    bool isvalidad,
-  ) {
-    return DropdownButtonFormField(
-      // decoration: InputDecoration(labelText: textLabel),
-      isExpanded: true,
-      isDense: isDense!,
-      value: valueId,
-      style: const TextStyle(
-        color: Colors.black,
-        fontSize: 15,
-        fontWeight: FontWeight.w400,
-      ),
-      validator: (value) =>
-          value!.toUpperCase() == ('SelectOption'.tr).toUpperCase()
-              ? isvalidad
-                  ? 'Required'.tr
-                  : null
-              : null,
-      items: items
-          .map(
-            (e) => DropdownMenuItem(
-              // ignore: sort_child_properties_last
-              child: e.toUpperCase() == ('SelectOption'.tr).toUpperCase()
-                  ? Text(
-                      "${('SelectOption'.tr).split(" ")[0]} ${textLabel}",
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w600),
-                    )
-                  : Text(e),
-              value: e,
-            ),
-          )
-          .toList(),
-      onChanged: _enabledF
-          ? (val) async {
-              setState(() {
-                switch (code) {
-                  case "DDOW0001":
-                    _statusMonitor = val;
-                    break;
-                  case "DDOW0002":
-                    _statusAdvance = val;
-                    break;
-                  case "DDOW0003":
-                    _valuePartidaEje = val;
-                    break;
-                  case "DDOW0004":
-                    _valueProblemaIO = val;
-                    break;
-                  case "DDOW0005":
-                    _valueAlternSolucion = val;
-                    break;
-                  case "DDOW0006":
-                    _valueRiesgo = val;
-                    break;
-                  case "DDOW0007":
-                    _valueNivelRiesgo = val;
-                    break;
-                  default:
-                }
-              });
-            }
-          : null,
-    );
-  }
+  // DropdownButtonFormField<String> myDropdownButtonFormField(
+  //   String code,
+  //   String valueId,
+  //   List<String> items,
+  //   bool? isDense,
+  //   textLabel,
+  //   bool isvalidad,
+  // ) {
+  //   return DropdownButtonFormField(
+  //     // decoration: InputDecoration(labelText: textLabel),
+  //     isExpanded: true,
+  //     isDense: isDense!,
+  //     value: valueId,
+  //     style: const TextStyle(
+  //       color: Colors.black,
+  //       fontSize: 15,
+  //       fontWeight: FontWeight.w400,
+  //     ),
+  //     validator: (value) =>
+  //         value!.toUpperCase() == ('SelectOption'.tr).toUpperCase()
+  //             ? isvalidad
+  //                 ? 'Required'.tr
+  //                 : null
+  //             : null,
+  //     items: items
+  //         .map(
+  //           (e) => DropdownMenuItem(
+  //             // ignore: sort_child_properties_last
+  //             child: e.toUpperCase() == widget.cbASOLU[0].toUpperCase()
+  //                 ? Text(
+  //                     "${('SelectOption'.tr).split(" ")[0]} ${textLabel}",
+  //                     style: TextStyle(
+  //                         color: Colors.black, fontWeight: FontWeight.w600),
+  //                   )
+  //                 : Text(e),
+  //             value: e,
+  //           ),
+  //         )
+  //         .toList(),
+  //     onChanged: _enabledF
+  //         ? (val) async {
+  //             setState(() {
+  //               switch (code) {
+  //                 case "DDOW0001":
+  //                   _statusMonitor = val;
+  //                   break;
+  //                 case "DDOW0002":
+  //                   _statusAdvance = val;
+  //                   break;
+  //                 case "DDOW0003":
+  //                   _valuePartidaEje = val;
+  //                   break;
+  //                 case "DDOW0004":
+  //                   _valueProblemaIO = val;
+  //                   break;
+  //                 case "DDOW0005":
+  //                   _valueAlternSolucion = val;
+  //                   break;
+  //                 case "DDOW0006":
+  //                   _valueRiesgo = val;
+  //                   break;
+  //                 case "DDOW0007":
+  //                   _valueNivelRiesgo = val;
+  //                   break;
+  //                 default:
+  //               }
+  //             });
+  //           }
+  //         : null,
+  //   );
+  // }
 
   Future<void> _confirmDialog(String sAction) async {
     return showDialog<void>(
@@ -1498,5 +1628,49 @@ class _MonitoringDetailNewEditPageState
             ),
           );
         });
+  }
+}
+
+class MyDropdownButtonFormField extends StatelessWidget {
+  const MyDropdownButtonFormField({
+    Key? key,
+    required this.items,
+    required this.value,
+    required this.isDense,
+    this.validator,
+    this.onChanged,
+  }) : super(key: key);
+
+  final List<dynamic> items;
+  final String value;
+  final bool isDense;
+  final Function(String?)? validator;
+  final void Function(Object?)? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField(
+      isExpanded: true,
+      isDense: isDense,
+      value: value,
+      style: const TextStyle(
+        color: Colors.black,
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+      ),
+      onChanged: onChanged,
+      items: items
+          .map(
+            (e) => DropdownMenuItem(
+              child: Text(
+                e,
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
+              ),
+              value: e,
+            ),
+          )
+          .toList(),
+    );
   }
 }
