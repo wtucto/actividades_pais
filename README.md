@@ -16,7 +16,7 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 ## Create Project
-flutter create --org pe.gob.pais actividades_pais
+flutter create --org com.pnpais.sifpnpais actividades_pais
 
 ## Git Ignore
 Clear cache
@@ -109,6 +109,48 @@ DOCS:
 
 
 flutter pub outdated  -> Verifica dependencias obsoletas
+flutter pub upgrade --major-versions -> Actualiza dependencias a la ultima version estable
+
+
+## Cambiar el NameSpace y Nombre del proyecto  (--org)
+```sh
+flutter pub global activate rename  (instalar)
+flutter pub global run rename --bundleId com.pnpais.sifpnpais (Cambia la --org)
+flutter pub global run rename --appname "SIFPNPAIS" (Cambia en nombre)
+```
+
+
+
+## DEPLOY PLAYSTORE
+Generar una Keystore
+
+Paso 1: ubicarse en la carpeta bin de java JDK
+Requiere ejecutar el terminal como administrador (windows)
+Paso 2: ingresar el siguiente comando
+
+para activar los permisos en MacOs se antene la clave:  sudo
+
+```sh
+1: .jks (recomendado)
+sudo keytool -genkey -v -keystore key.jks -alias sifpnpais -storetype JKS -keyalg RSA -keysize 2048 -validity 10000
+
+    Al ejecutar el comando solicitara completar algunos parametros:
+    - keyPassword
+    - datos de la organizacion
+    - storePassword
+
+2: .keystore
+sudo keytool -genkey -v -keystore key.keystore -alias sifpnpais -keyalg RSA -keysize 2048 -validity 10000
+
+```
+
+clave: compnpaissifpnpais2023
+
+    -keystore: Nombre de archivo [key]
+    -alias: Alias del proyecto   [sifpnpais]
+    -storetype: Tipo keystore
+    -keysize: Tamaño de la keystore [2048]
+    -validity: Tempo de duracion de la keystore en dias [10000]
 
 
 ### ERRORES Y POSIBLES SOLUCIONES

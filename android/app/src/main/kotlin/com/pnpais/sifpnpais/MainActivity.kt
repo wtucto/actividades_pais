@@ -1,4 +1,4 @@
-package pe.gob.pais.actividades_pais
+package com.pnpais.sifpnpais
 
 import io.flutter.embedding.android.FlutterActivity
 
