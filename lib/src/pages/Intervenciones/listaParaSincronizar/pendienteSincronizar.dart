@@ -72,7 +72,7 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
       onWillPop: systemBackButtonPressed,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blue[800],
+          backgroundColor: Colors.blue[600],
           title: Text("Pendientes Envio"),
           leading: Util().iconbuton(() => Navigator.of(context).pushReplacement(
                 MaterialPageRoute(

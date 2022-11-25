@@ -75,7 +75,7 @@ class Servicios {
   }*/
   BoxDecoration myBoxDecoration() {
     return BoxDecoration(
-      border: Border.all(width: 2.0, color: Color(0xFF1565C0)),
+      border: Border.all(width: 2.0, color: Color(0xFF1E88E5)),
       borderRadius: BorderRadius.all(
           Radius.circular(11) //                 <--- border radius here
           ),

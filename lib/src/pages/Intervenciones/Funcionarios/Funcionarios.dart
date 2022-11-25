@@ -91,7 +91,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[800],
+        backgroundColor: Colors.blue[600],
         title: Text("Agregar Funcionarios"),
         leading: Util().iconbuton(() => Navigator.of(context).pop()),
       ),
@@ -196,7 +196,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                     child: TextButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.blue[800]),
+                            MaterialStateProperty.all(Colors.blue[600]),
                       ),
                       child: Text(
                         'Validar ' + nombreBoton,
@@ -397,7 +397,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                     child: TextButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.blue[800]),
+                            MaterialStateProperty.all(Colors.blue[600]),
                       ),
                       child: Text(
                         "Agregar " + nombreBoton,

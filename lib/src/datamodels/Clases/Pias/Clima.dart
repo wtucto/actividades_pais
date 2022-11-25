@@ -23,7 +23,7 @@ CLima({
 });
 
   CLima.fromJson(Map<String, dynamic> json) {
-  id = json['id'];
+  //id = json['id'];
   cod = json['cod'];
   descripcion = json['descripcion'];}
 

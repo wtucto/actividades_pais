@@ -302,7 +302,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
             widget.tambo + '\n' + widget.codigoIntervencion,
             style: TextStyle(fontSize: 15),
           ),
-          backgroundColor: Colors.blue[800],
+          backgroundColor: Colors.blue[600],
         ),
       ),
       body: Center(

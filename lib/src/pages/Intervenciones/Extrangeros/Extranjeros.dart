@@ -94,7 +94,7 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.blue[800],
+        backgroundColor: Colors.blue[600],
         title: Text("Extranjeros"),
         leading: Util().iconbuton(() => Navigator.of(context).pop()),
         actions: [],
@@ -222,7 +222,7 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                     child: TextButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.blue[800]),
+                            MaterialStateProperty.all(Colors.blue[600]),
                       ),
                       child: Text(
                         "Validar",
@@ -460,7 +460,7 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                           return Container(
                               child:
                                   MultiSelectDialogField<ParticipanteEjecucion>(
-                            selectedColor: Colors.blue[800],
+                            selectedColor: Colors.blue[600],
                             //activeColor: Colors.blue[800],
                             //focusColor: Colors.blue[800],
                             items: snapshot.data!
@@ -502,9 +502,9 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                     child: TextButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.blue[800]),
+                            MaterialStateProperty.all(Colors.blue[600]),
                       ),
-                      child: Text(
+                      child:const Text(
                         "Agregar ",
                         style: TextStyle(
                           color: Colors.white, // this is for your text colour

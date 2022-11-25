@@ -30,11 +30,11 @@ class FormularioReq {
       TextCapitalization textCapitalization, TextInputType textInputType) {
     return Container(
 
-    decoration: servicios.myBoxDecoration(),
+   // decoration: servicios.myBoxDecoration(),
     //  decoration: FormularioReq().myBoxDecoration(),
       child: TextField(
 
-        textAlign: TextAlign.center,
+        textAlign: TextAlign.justify,
         keyboardType: textInputType,
         textCapitalization: textCapitalization,
         controller: _controller,
@@ -46,14 +46,14 @@ class FormularioReq {
         //                             counterText: '${_enteredText.length.toString()} character(s)'),*/
         decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: primaryColor),
+            borderSide: BorderSide(color: Color(0xFF0EA1E8)),
           ),
           focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: primaryColor),
+            borderSide: BorderSide(color: Color(0xFF0EA1E8)),
           ),
 
           border: UnderlineInputBorder(
-            borderSide: BorderSide(color: primaryColor),
+            borderSide: BorderSide(color: Color(0xFF0EA1E8)),
           ),
           labelText: text,
 
@@ -63,85 +63,6 @@ class FormularioReq {
     );
   }
 
-
-  seleccionFecha(
-      TextEditingController _controllerFechaInicontrato, String text) {
-    /*  return DateTimeField(
-      enabled: true,
-      decoration: InputDecoration(
-        labelText: text,
-      ),
-      resetIcon: Icon(Icons.calendar_today),
-      controller: _controllerFechaInicontrato,
-      format: DateFormat("MM-dd-yyyy"),
-      onShowPicker: (context, currentValue) {
-        return showDatePicker(
-            context: context,
-            firstDate: DateTime(1900),
-            initialDate: currentValue ?? DateTime.now(),
-            lastDate: DateTime(2100));
-      },
-    ); */
-  }
-
-  fechaNacimiento(voidCallback, TextEditingController _controllerFechaNac) {
-/*    return DateTimeField(
-        format: DateFormat("dd-MM-yyyy"),
-        controller: _controllerFechaNac,
-        keyboardType: TextInputType.datetime,
-        decoration: InputDecoration(
-            labelText: 'FECHA NACIMIENTO', suffixIcon: Icon(Icons.date_range)),
-        onChanged: voidCallback,
-        resetIcon: null,
-        onShowPicker: (context, currentValue) {
-          return showDatePicker(
-              context: context,
-              firstDate: DateTime(1900),
-              initialDate: currentValue ?? DateTime.now(),
-              lastDate: DateTime(2100));
-        }); */
-  }
-
-/*  cboDepartamento({dataDepara, onPreset, Departamento depatalits}) {
-    return FutureBuilder<List<Departamento>>(
-      future: DbProvider.db.getTodosDepartamento(),
-      builder:
-          (BuildContext context, AsyncSnapshot<List<Departamento>> snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        final preguntas = snapshot.data;
-
-        if (preguntas.length == 0) {
-          return Center(
-            child: Text("sin dato"),
-          );
-        } else {
-          return Container(
-              decoration: FormularioReq().myBoxDecoration(),
-              child: DropdownButton<Departamento>(
-                underline: SizedBox(),
-                isExpanded: true,
-
-                items: snapshot.data
-                    .map((user) => DropdownMenuItem<Departamento>(
-                          child: Text(user.cidNombre),
-                          value: user,
-                        ))
-                    .toList(),
-                onChanged: onPreset,
-                //   isExpanded: false,
-                value: depatalits,
-
-                hint: Text("   $dataDepara"),
-              ));
-        }
-      },
-    );
-  } */
-
   ccboTipoDocumento({itemsTipoDOC, onChanged, mySelectionTipoDoc}) {
     return Container(
       decoration: FormularioReq().myBoxDecoration(),
@@ -150,80 +71,6 @@ class FormularioReq {
     );
   }
 
-/*  cboProvincia({idDepartamento, datProvincia, onchang}) {
-    return FutureBuilder<List<Provincia>>(
-      future: DbProvider.db.getTodosProvinciasID(idDepartamento),
-      builder: (BuildContext context, AsyncSnapshot<List<Provincia>> snapshot) {
-        Provincia provincia;
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        final provincias = snapshot.data;
-
-        if (provincias.length == 0) {
-          return Center(
-            child: Text("sin dato"),
-          );
-        } else {
-          return Container(
-              decoration: FormularioReq().myBoxDecoration(),
-              child: DropdownButton<Provincia>(
-                underline: SizedBox(),
-                items: snapshot.data
-                    .map((user) => DropdownMenuItem<Provincia>(
-                          child: Text(user.cidNombre),
-                          value: user,
-                        ))
-                    .toList(),
-                onChanged: onchang,
-                isExpanded: true,
-                value: provincia,
-                hint: Text("   $datProvincia"),
-              ));
-        }
-      },
-    );
-  } */
-/*
-  Widget cboDistrito({idProvincia, datDistrito, onChanged}) {
-    return FutureBuilder<List<Distrito>>(
-      future: DbProvider.db.getTodosDistritoID(idProvincia),
-      builder: (BuildContext context, AsyncSnapshot<List<Distrito>> snapshot) {
-        Distrito distrito;
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        final preguntas = snapshot.data;
-
-        if (preguntas.length == 0) {
-          return Center(
-            child: Text("sin dato"),
-          );
-        } else {
-          return Container(
-              decoration: FormularioReq().myBoxDecoration(),
-              child: DropdownButton<Distrito>(
-                underline: SizedBox(),
-                items: snapshot.data
-                    .map((user) => DropdownMenuItem<Distrito>(
-                          child: Text(user.cidNombre),
-                          value: user,
-                        ))
-                    .toList(),
-                onChanged: onChanged,
-                isExpanded: true,
-                value: distrito,
-                hint: Text("   $datDistrito"),
-              ));
-        }
-      },
-    );
-  }
- */
   textIngresoDc({controllerNDocumento, maxLengthDOC, onSubmitted}) {
     return Container(
         decoration: FormularioReq().myBoxDecoration(),

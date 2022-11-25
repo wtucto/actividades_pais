@@ -293,7 +293,7 @@ class Participantes {
     apellidoPaterno = json['apellido_paterno'];
     apellidoMaterno = json['apellido_materno'];
     primerNombre = json['nombres'];
-    segundoNombre = json['segundoNombre'];
+    segundoNombre = json['segundoNombre'] ?? "";
     dni = json['dni'];
     sexo = json['genero'];
     fechaNacimiento = json['fecha_nacimiento'];

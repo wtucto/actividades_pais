@@ -61,7 +61,7 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
                               height: 20.0,
                             ),
                             Container(
-                              decoration: servicios.myBoxDecoration(),
+                           //   decoration: servicios.myBoxDecoration(),
                               child: TextFormField(
                                 validator: (value) {
                                   if (value!.isEmpty) {
@@ -72,7 +72,7 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
                                   final DateTime? picked = await showDatePicker(
                                     context: context,
                                     initialDate: nowfec!,
-                                    firstDate: DateTime(2015, 8),
+                                    firstDate: DateTime(1800, 8),
                                     lastDate: DateTime(2101),
                                   );
 
@@ -93,15 +93,15 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
                                 decoration: const InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Colors.transparent),
+                                          BorderSide(color: Color(0xFF0EA1E8)),
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Colors.transparent),
+                                          BorderSide(color: Color(0xFF0EA1E8)),
                                     ),
                                     border: UnderlineInputBorder(
                                       borderSide:
-                                          BorderSide(color: Colors.transparent),
+                                          BorderSide(color: Color(0xFF0EA1E8)),
                                     ),
                                     labelText: "FECHA NACIMIENTO"),
                               ),
@@ -192,7 +192,7 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
                         Container(child: Text("$nombresUsuario"),),
                     const SizedBox(height: 20.0),
                           FormularioReq().textinputdet(
-                              " CONTRASEÑA",
+                              "INGRESAR NUEVA CONTRASEÑA",
                               _controllerContrasenia,
                               TextCapitalization.words,
                               TextInputType.number),

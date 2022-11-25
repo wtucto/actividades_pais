@@ -18,6 +18,11 @@ samples, guidance on mobile development, and a full API reference.
 ## Create Project
 flutter create --org pe.gob.pais actividades_pais
 
+## Git Ignore
+Clear cache
+
+git rm -r --cached .
+
 ## RECURSOS
 ```
 > java -version

@@ -5,8 +5,8 @@ import 'package:actividades_pais/src/pages/ProgramacionActividades/actividadesPn
 import 'package:actividades_pais/src/pages/ProgramacionActividades/cordinacion_articulacion.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_suspervicion.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/programacion_list_page.dart';
-import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/src/pages/Tambook/homeTambook.dart';
+import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/responsive.dart';
@@ -166,7 +166,7 @@ class _HomePagePais extends State<HomePagePais> {
       );
     } else {
       if (unidad == 'UAGS') {
-        aHomeOptions.add(
+        /*aHomeOptions.add(
           HomeOptions(
             code: 'OPT1001',
             name: 'TileBitacoraRegister'.tr,
@@ -174,7 +174,7 @@ class _HomePagePais extends State<HomePagePais> {
             image: icon6,
             color: lightBlue,
           ),
-        );
+        );*/
         if (tipoPlataforma == 'TAMBO') {
           aHomeOptions.add(
             HomeOptions(

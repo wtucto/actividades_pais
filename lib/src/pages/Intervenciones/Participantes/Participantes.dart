@@ -109,7 +109,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[800],
+        backgroundColor: Colors.blue[600],
         leading: Util().iconbuton(() => Navigator.of(context).pop()),
         title: Text("Agregar Participantes"),
       ),
@@ -121,8 +121,8 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 ListTile(
                   title: const Text('Tiene DNI'),
                   leading: Radio(
-                    activeColor: Colors.blue[800],
-                    focusColor: Colors.blue[800],
+                    activeColor: Colors.blue[600],
+                    focusColor: Colors.blue[600],
                     value: BestTutorSite.javatpoint,
                     groupValue: _site,
                     onChanged: (BestTutorSite? value) {
@@ -140,8 +140,8 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 ListTile(
                   title: const Text('Menor de Edad Datos no encontrados'),
                   leading: Radio(
-                    activeColor: Colors.blue[800],
-                    focusColor: Colors.blue[800],
+                    activeColor: Colors.blue[600],
+                    focusColor: Colors.blue[600],
                     value: BestTutorSite.w3schools,
                     groupValue: _site,
                     onChanged: (BestTutorSite? value) {
@@ -159,8 +159,8 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 ListTile(
                   title: const Text('No tiene DNI'),
                   leading: Radio(
-                    activeColor: Colors.blue[800],
-                    focusColor: Colors.blue[800],
+                    activeColor: Colors.blue[600],
+                    focusColor: Colors.blue[600],
                     value: BestTutorSite.tutorialandexample,
                     groupValue: _site,
                     onChanged: (BestTutorSite? value) {
@@ -195,7 +195,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                   child: TextButton(
                     style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all(Colors.blue[800]),
+                      MaterialStateProperty.all(Colors.blue[600]),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -632,8 +632,8 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 Row(
                   children: [
                     Checkbox(
-                      activeColor: Colors.blue[800],
-                      focusColor: Colors.blue[800],
+                      activeColor: Colors.blue[600],
+                      focusColor: Colors.blue[600],
                       onChanged: (value) {
                         setState(() {
                           _value = value!;
@@ -738,16 +738,15 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 ),
                 SizedBox(
                   width: 350,
-                  // ignore: deprecated_member_use
-                  child: TextButton(
+                   child: TextButton(
                     style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all(Colors.blue[800]),
+                      MaterialStateProperty.all(Colors.blue[600]),
                     ),
-                    child: Text(
+                    child:const Text(
                       "Agregar ",
                       style: TextStyle(
-                        color: Colors.white, // this is for your text colour
+                        color: Colors.white,
                       ),
                     ),
                     onPressed: () async {
@@ -813,45 +812,6 @@ class _ParticipantesPageState extends State<ParticipantesPage>
       ),
     );
   }
-
-/*  void _fetchData(BuildContext context) async {
-    // show the loading dialog
-    showDialog(
-        // The user CANNOT close this dialog  by pressing outsite it
-        barrierDismissible: false,
-        context: context,
-        builder: (_) {
-          return Dialog(
-            // The background color
-            backgroundColor: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  // The loading indicator
-                  CircularProgressIndicator(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  // Some text
-                  Text('Loading...')
-                ],
-              ),
-            ),
-          );
-        });
-
-    // Your asynchronous computation here (fetching data from an API, processing files, inserting something to the database, etc)
-    setState(() {});
-    await Future.delayed(const Duration(seconds: 10));
-
-    if (closeTraerDni == false) {
-      Navigator.of(context).pop();
-    }
-
-    // Close the dialog programmatically
-  }*/
 
   showAlertDialog(BuildContext context, text) {
     Widget okButton = TextButton(

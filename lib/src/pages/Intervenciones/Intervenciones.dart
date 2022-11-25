@@ -65,7 +65,7 @@ class _IntervencionesState extends State<Intervenciones> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.blue[800],
+          backgroundColor: Colors.blue[600],
           leading: Util().iconbuton(() => Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => HomePagePais()),
           )),

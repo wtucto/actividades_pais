@@ -111,6 +111,7 @@ class _ConfiguracionInicial extends State<ConfiguracionInicial> {
   TextEditingController _controllerRol = TextEditingController();
   TextEditingController _controllerfecha = TextEditingController();
 
+var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
   DateTime? nowfec = new DateTime.now();
   var formatter = new DateFormat('yyyy-MM-dd');
   final _formKeyUps = GlobalKey<FormState>();
@@ -132,7 +133,7 @@ class _ConfiguracionInicial extends State<ConfiguracionInicial> {
     setState(() {});
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Colors.blue[800],
+            backgroundColor: Colors.blue[600],
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -166,15 +167,15 @@ class _ConfiguracionInicial extends State<ConfiguracionInicial> {
                             );
                           } else {
                             return Container(
-                                decoration: servicios.myBoxDecoration(),
+                               // decoration: servicios.myBoxDecoration(),
                                 child: DropdownButton<Unidad>(
-                                  underline: SizedBox(),
+                                   underline:underlineCbo,
                                   isExpanded: true,
                                   items: snapshot.data
                                       ?.map((user) => DropdownMenuItem<Unidad>(
-                                    child: Text(user.descripcion),
-                                    value: user,
-                                  ))
+                                            child: Text(user.descripcion),
+                                            value: user,
+                                          ))
                                       .toList(),
                                   onChanged: (Unidad? newVal) {
                                     setState(() {
@@ -205,885 +206,891 @@ class _ConfiguracionInicial extends State<ConfiguracionInicial> {
                   SizedBox(height: 10),
                   (_istrue == true)
                       ? Column(
-                    children: [
-                      Container(
-                        child: FutureBuilder<List<LugarPrestacion>>(
-                          future: DatabasePr.db.getTodosLugarPrestacion(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<LugarPrestacion>>
-                              snapshot) {
-                            LugarPrestacion depatalits;
+                          children: [
+                            Container(
+                              child: FutureBuilder<List<LugarPrestacion>>(
+                                future: DatabasePr.db.getTodosLugarPrestacion(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<List<LugarPrestacion>>
+                                        snapshot) {
+                                  LugarPrestacion depatalits;
 
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            final preguntas = snapshot.data;
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                  final preguntas = snapshot.data;
 
-                            if (preguntas!.length == 0) {
-                              return Center(
-                                child: Text("sin dato"),
-                              );
-                            } else {
-                              return Container(
-                                  decoration: servicios.myBoxDecoration(),
-                                  child: DropdownButton<LugarPrestacion>(
-                                    underline: SizedBox(),
-                                    isExpanded: true,
-                                    items: snapshot.data
-                                        ?.map((user) => DropdownMenuItem<
-                                        LugarPrestacion>(
-                                      child: Text(
-                                        user.nombreLugarPrestacion,
-                                        style: TextStyle(
-                                            color: Colors.black),
-                                      ),
-                                      value: user,
-                                    ))
-                                        .toList(),
-                                    onChanged: (LugarPrestacion? newVal) {
-                                      setState(() {
-                                        depatalits = newVal!;
-                                        seleccionarLugarPrestacion =
-                                            newVal.nombreLugarPrestacion;
-                                        lugarPrestacion =
-                                            newVal.nombreLugarPrestacion;
+                                  if (preguntas!.length == 0) {
+                                    return Center(
+                                      child: Text("sin dato"),
+                                    );
+                                  } else {
+                                    return Container(
+                                        //decoration: servicios.myBoxDecoration(),
+                                        child: DropdownButton<LugarPrestacion>(
+                                          underline: underlineCbo,
+                                          isExpanded: true,
+                                          items: snapshot.data
+                                              ?.map((user) => DropdownMenuItem<
+                                                      LugarPrestacion>(
+                                                    child: Text(
+                                                      user.nombreLugarPrestacion,
+                                                      style: TextStyle(
+                                                          color: Colors.black),
+                                                    ),
+                                                    value: user,
+                                                  ))
+                                              .toList(),
+                                          onChanged: (LugarPrestacion? newVal) {
+                                            setState(() {
+                                              depatalits = newVal!;
+                                              seleccionarLugarPrestacion =
+                                                  newVal.nombreLugarPrestacion;
+                                              lugarPrestacion =
+                                                  newVal.nombreLugarPrestacion;
 
-                                        idseleccionarLugarPrestacion =
-                                            newVal.idLugarPrestacion;
-                                        idLugarPrestacion =
-                                            newVal.idLugarPrestacion;
-                                        DatabasePr.db
-                                            .getporidUnidadTeritoria(
-                                            tablaid);
+                                              idseleccionarLugarPrestacion =
+                                                  newVal.idLugarPrestacion;
+                                              idLugarPrestacion =
+                                                  newVal.idLugarPrestacion;
+                                              DatabasePr.db
+                                                  .getporidUnidadTeritoria(
+                                                      tablaid);
 
-                                        if (idseleccionarLugarPrestacion ==
-                                            1) {
-                                          tamanio = 50;
-                                          tamanio2 = 0;
-                                          tamanio3 = 0;
-                                          tamanioboton = 0;
-                                        } else if (idseleccionarLugarPrestacion ==
-                                            2) {
-                                          tamanio2 = 50;
-                                          tamanio = 0;
-                                          tamanioboton = 0;
-                                        }
-                                      });
-                                    },
-                                    hint: Text(
-                                        "   $seleccionarLugarPrestacion",
-                                        style: TextStyle(
-                                            color: Colors.black)),
-                                  ));
-                            }
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      SizedBox(
-                        height: tamanio,
-                        child: Container(
-                          margin: EdgeInsets.only(),
-                          child: FutureBuilder<List<UnidadesOrganicas>>(
-                            future:
-                            DatabasePr.db.getTodosUnidadesOrganicas(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<UnidadesOrganicas>>
-                                snapshot) {
-                              UnidadesOrganicas depatalits;
-                              if (!snapshot.hasData) {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              final preguntas = snapshot.data;
+                                              if (idseleccionarLugarPrestacion ==
+                                                  1) {
+                                                tamanio = 50;
+                                                tamanio2 = 0;
+                                                tamanio3 = 0;
+                                                tamanioboton = 0;
+                                              } else if (idseleccionarLugarPrestacion ==
+                                                  2) {
+                                                tamanio2 = 50;
+                                                tamanio = 0;
+                                                tamanioboton = 0;
+                                              }
+                                            });
+                                          },
+                                          hint: Text(
+                                              "   $seleccionarLugarPrestacion",
+                                              style: TextStyle(
+                                                  color: Colors.black)),
+                                        ));
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            SizedBox(
+                              height: tamanio,
+                              child: Container(
+                                margin: EdgeInsets.only(),
+                                child: FutureBuilder<List<UnidadesOrganicas>>(
+                                  future:
+                                      DatabasePr.db.getTodosUnidadesOrganicas(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<UnidadesOrganicas>>
+                                          snapshot) {
+                                    UnidadesOrganicas depatalits;
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    final preguntas = snapshot.data;
 
-                              if (preguntas!.length == 0) {
-                                return Center(
-                                  child: Text("sin dato"),
-                                );
-                              } else {
-                                return Container(
-                                    decoration:
-                                    servicios.myBoxDecoration(),
-                                    child:
-                                    DropdownButton<UnidadesOrganicas>(
-                                      underline: SizedBox(),
-                                      isExpanded: true,
-                                      items: snapshot.data
-                                          ?.map((user) =>
-                                          DropdownMenuItem<
-                                              UnidadesOrganicas>(
-                                            child: Text(
-                                                user.UNIDAD_ORGANICA),
-                                            value: user,
-                                          ))
-                                          .toList(),
-                                      onChanged:
-                                          (UnidadesOrganicas? newVal) {
-                                        setState(() {
-                                          depatalits = newVal!;
-                                          seleccionarUnidOrganicas =
-                                              newVal.UNIDAD_ORGANICA;
-                                          idUnidadesOrganicas =
-                                              newVal.IDUO;
-                                          nombreUnnidadesOrganicas =
-                                              newVal.UNIDAD_ORGANICA;
-                                          if (newVal.IDUO >= 1) {
-                                            tamaniopuesto = 50.0;
-                                          } else {
-                                            tamanioboton = 0;
-                                          }
-                                        });
-                                      },
-                                      hint: Row(children: [
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text("$seleccionarUnidOrganicas",
-                                            style: TextStyle(
-                                                color: Colors.black))
-                                      ]),
-                                    ));
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: tamanio2,
-                        child: Container(
-                          child:
-                          FutureBuilder<List<UnidadesTerritoriales>>(
-                            future: DatabasePr.db
-                                .getAllTasksUnidadesTerritoriales(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<UnidadesTerritoriales>>
-                                snapshot) {
-                              UnidadesTerritoriales depatalits;
-                              if (!snapshot.hasData) {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              final preguntas = snapshot.data;
+                                    if (preguntas!.length == 0) {
+                                      return Center(
+                                        child: Text("sin dato"),
+                                      );
+                                    } else {
+                                      return Container(
+                                          decoration:
+                                              servicios.myBoxDecoration(),
+                                          child:
+                                              DropdownButton<UnidadesOrganicas>(
+                                            underline: SizedBox(),
+                                            isExpanded: true,
+                                            items: snapshot.data
+                                                ?.map((user) =>
+                                                    DropdownMenuItem<
+                                                        UnidadesOrganicas>(
+                                                      child: Text(
+                                                          user.UNIDAD_ORGANICA),
+                                                      value: user,
+                                                    ))
+                                                .toList(),
+                                            onChanged:
+                                                (UnidadesOrganicas? newVal) {
+                                              setState(() {
+                                                depatalits = newVal!;
+                                                seleccionarUnidOrganicas =
+                                                    newVal.UNIDAD_ORGANICA;
+                                                idUnidadesOrganicas =
+                                                    newVal.IDUO;
+                                                nombreUnnidadesOrganicas =
+                                                    newVal.UNIDAD_ORGANICA;
+                                                if (newVal.IDUO >= 1) {
+                                                  tamaniopuesto = 50.0;
+                                                } else {
+                                                  tamanioboton = 0;
+                                                }
+                                              });
+                                            },
+                                            hint: Row(children: [
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text("$seleccionarUnidOrganicas",
+                                                  style: TextStyle(
+                                                      color: Colors.black))
+                                            ]),
+                                          ));
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: tamanio2,
+                              child: Container(
+                                child:
+                                    FutureBuilder<List<UnidadesTerritoriales>>(
+                                  future: DatabasePr.db
+                                      .getAllTasksUnidadesTerritoriales(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<UnidadesTerritoriales>>
+                                          snapshot) {
+                                    UnidadesTerritoriales depatalits;
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    final preguntas = snapshot.data;
 
-                              if (preguntas!.length == 0) {
-                                return Center(
-                                  child: Text("sin dato"),
-                                );
-                              } else {
-                                return Container(
-                                    decoration:
-                                    servicios.myBoxDecoration(),
-                                    child: DropdownButton<
-                                        UnidadesTerritoriales>(
-                                        underline: SizedBox(),
-                                        isExpanded: true,
-                                        items: snapshot.data
-                                            ?.map((user) =>
-                                            DropdownMenuItem<
-                                                UnidadesTerritoriales>(
-                                              child: Text(user
-                                                  .unidadTerritorial),
-                                              value: user,
-                                            ))
-                                            .toList(),
-                                        onChanged: (UnidadesTerritoriales?
-                                        newVal) {
-                                          setState(() {
-                                            nombreUnidTerritoriales =
-                                                newVal!.unidadTerritorial;
-                                            depatalits = newVal;
-                                            seleccionarUnidTerritoriales =
-                                                newVal.unidadTerritorial;
-                                            tablaid = newVal
-                                                .id_UnidadesTerritoriales;
-                                            idUnidTerritoriales = newVal
-                                                .id_UnidadesTerritoriales;
-                                            DatabasePr.db
-                                                .getporidUnidadTeritoria(
-                                                tablaid);
+                                    if (preguntas!.length == 0) {
+                                      return Center(
+                                        child: Text("sin dato"),
+                                      );
+                                    } else {
+                                      return Container(
+                                          //decoration:   servicios.myBoxDecoration(),
+                                          child: DropdownButton<
+                                                  UnidadesTerritoriales>(
+                                              underline: underlineCbo,
+                                              isExpanded: true,
+                                              items: snapshot.data
+                                                  ?.map((user) =>
+                                                      DropdownMenuItem<
+                                                          UnidadesTerritoriales>(
+                                                        child: Text(user
+                                                            .unidadTerritorial),
+                                                        value: user,
+                                                      ))
+                                                  .toList(),
+                                              onChanged: (UnidadesTerritoriales?
+                                                  newVal) {
+                                                setState(() {
+                                                  nombreUnidTerritoriales =
+                                                      newVal!.unidadTerritorial;
+                                                  depatalits = newVal;
+                                                  seleccionarUnidTerritoriales =
+                                                      newVal.unidadTerritorial;
+                                                  tablaid = newVal
+                                                      .id_UnidadesTerritoriales;
+                                                  idUnidTerritoriales = newVal
+                                                      .id_UnidadesTerritoriales;
+                                                  DatabasePr.db
+                                                      .getporidUnidadTeritoria(
+                                                          tablaid);
 
-                                            if (newVal
-                                                .id_UnidadesTerritoriales >=
-                                                1) {
+                                                  if (newVal
+                                                          .id_UnidadesTerritoriales >=
+                                                      1) {
+                                                    tamanio3 = 50.0;
+                                                  } else {
+                                                    tamanioboton = 0;
+                                                  }
+                                                });
+                                              },
+                                              hint: Row(
+                                                children: [
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                      "$seleccionarUnidTerritoriales",
+                                                      style: TextStyle(
+                                                          color: Colors.black)),
+                                                ],
+                                              )
+                                              //     hint: Text("   $data_depara"),
+                                              ));
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              height: tamanio2,
+                              child: FutureBuilder<List<TipoPlataforma>>(
+                                future: DatabasePr.db.getAllTipoPlataforma(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<List<TipoPlataforma>>
+                                        snapshot) {
+                                  TipoPlataforma depatalits;
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                  final preguntas = snapshot.data;
+
+                                  if (preguntas!.length == 0) {
+                                    return Center(
+                                      child: Text("sin dato"),
+                                    );
+                                  } else {
+                                    return Container(
+                                      //  decoration: servicios.myBoxDecoration(),
+                                        child: DropdownButton<TipoPlataforma>(
+                                          underline:underlineCbo,
+                                          isExpanded: true,
+                                          items: snapshot.data
+                                              ?.map((user) => DropdownMenuItem<
+                                                      TipoPlataforma>(
+                                                    child:
+                                                        Text(user.descripcion!),
+                                                    value: user,
+                                                  ))
+                                              .toList(),
+                                          onChanged: (TipoPlataforma? newVal) {
+                                            seleccionarTpPla =
+                                                newVal!.descripcion!;
+                                            ProviderConfiguracion()
+                                                .listaTambosPiasxUnidadTerritorial(
+                                                    seleccionarTpPla, tablaid);
+                                            if (newVal.id! >= 1) {
                                               tamanio3 = 50.0;
                                             } else {
                                               tamanioboton = 0;
                                             }
-                                          });
-                                        },
-                                        hint: Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                                "$seleccionarUnidTerritoriales",
+                                            if (newVal.descripcion == 'PIAS') {
+                                              tamanioCampania = 50.0;
+                                            } else {
+                                              tamanioCampania = 0.0;
+                                            }
+                                            setState(() {});
+                                          },
+                                          hint: Row(
+                                            children: [
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text("$seleccionarTpPla",
+                                                  style: TextStyle(
+                                                      color: Colors.black))
+                                            ],
+                                          ),
+                                        ));
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            SizedBox(
+                              height: tamanio3,
+                              child: Container(
+                                child: FutureBuilder<
+                                    List<RspoTambosPiasxUnidadTerritorial>?>(
+                                  future: ProviderConfiguracion()
+                                      .listaTambosPiasxUnidadTerritorial(
+                                          seleccionarTpPla, tablaid),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<
+                                              List<
+                                                  RspoTambosPiasxUnidadTerritorial>?>
+                                          snapshot) {
+                                    RspoTambosPiasxUnidadTerritorial?
+                                        depatalits;
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    final preguntas = snapshot.data;
+
+                                    if (preguntas!.length == 0) {
+                                      return Center(
+                                        child: Text("sin dato"),
+                                      );
+                                    } else {
+                                      return Container(
+                                         // decoration: servicios.myBoxDecoration(),
+                                          child: DropdownButton<
+                                              RspoTambosPiasxUnidadTerritorial>(
+                                            underline:underlineCbo,
+                                            isExpanded: true,
+                                            items: snapshot.data
+                                                ?.map((user) =>
+                                                    DropdownMenuItem<
+                                                        RspoTambosPiasxUnidadTerritorial>(
+                                                      child: Text(
+                                                          user.nombreTambo!),
+                                                      value: user,
+                                                    ))
+                                                .toList(),
+                                            onChanged:
+                                                (RspoTambosPiasxUnidadTerritorial?
+                                                    newVal) {
+                                              setState(() {
+                                                depatalits = newVal!;
+
+                                                seleccionarTablaPlataforma =
+                                                    newVal.nombreTambo!;
+                                                idTambo = newVal.idPlataforma!;
+                                                snip = newVal.snip!;
+                                                nombreTambo =
+                                                    newVal.nombreTambo!;
+
+                                                modalidad = newVal.modalidad!;
+
+                                                if (seleccionarTablaPlataforma
+                                                        .length >
+                                                    0) {
+                                                  tamaniopuesto = 50.0;
+                                                }
+                                              });
+                                            },
+                                            value: depatalits,
+                                            hint: Text(
+                                                "   $seleccionarTablaPlataforma",
                                                 style: TextStyle(
                                                     color: Colors.black)),
+                                          ));
+                                    }
+                                  },
+                                ),
+
+                                ///getporidUnidadTeritoria
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            SizedBox(
+                              height: tamanioCampania,
+                              child: Container(
+                                child: FutureBuilder<List<Campania>>(
+                                  future: DatabasePias.db.getCampanias(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<Campania>> snapshot) {
+                                    Campania? depatalits;
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    final preguntas = snapshot.data;
+
+                                    if (preguntas!.length == 0) {
+                                      return Center(
+                                        child: Text("sin dato"),
+                                      );
+                                    } else {
+                                      return Container(
+                                        //  decoration:
+                                          //    servicios.myBoxDecoration(),
+                                          child: DropdownButton<Campania>(
+                                            underline: underlineCbo,
+                                            isExpanded: true,
+                                            items: snapshot.data
+                                                ?.map((user) =>
+                                                    DropdownMenuItem<Campania>(
+                                                      child: Text(
+                                                          user.descripcion),
+                                                      value: user,
+                                                    ))
+                                                .toList(),
+                                            onChanged: (Campania? newVal) {
+                                              setState(() {
+                                                depatalits = newVal!;
+                                                seleccionarCamapania =
+                                                    newVal.descripcion;
+                                                campania = newVal.descripcion;
+                                                codCampania =
+                                                    int.parse(newVal.cod);
+                                              });
+                                            },
+                                            value: depatalits,
+                                            hint: Text(
+                                                "   $seleccionarCamapania",
+                                                style: TextStyle(
+                                                    color: Colors.black)),
+                                          ));
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            SizedBox(
+                              height: tamaniopuesto,
+                              child: Container(
+                                child: FutureBuilder<List<Puesto>>(
+                                  future: DatPuesto.db.getTodosPuesto(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<Puesto>> snapshot) {
+                                    Puesto? depatalits;
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    final preguntas = snapshot.data;
+                                    if (preguntas!.length == 0) {
+                                      return Center(
+                                        child: Text("sin dato"),
+                                      );
+                                    } else {
+                                      return Container(
+                                          //decoration:
+                                            //  servicios.myBoxDecoration(),
+                                          child: DropdownButton<Puesto>(
+                                            underline: underlineCbo,
+                                            isExpanded: true,
+                                            items: snapshot.data
+                                                ?.map((user) =>
+                                                    DropdownMenuItem<Puesto>(
+                                                      child: Text(
+                                                          user.nombrePuesto),
+                                                      value: user,
+                                                    ))
+                                                .toList(),
+                                            onChanged: (Puesto? newVal) {
+                                              setState(() {
+                                                depatalits = newVal!;
+                                                seleccionarPuesto =
+                                                    newVal.nombrePuesto;
+                                                idPuesto = newVal.idPuesto;
+                                                nombrePuesto =
+                                                    newVal.nombrePuesto;
+                                                if (newVal.idPuesto >= 1) {
+                                                  tamanioboton = 40.0;
+                                                }
+                                              });
+                                            },
+                                            value: depatalits,
+                                            hint: Text("$seleccionarPuesto",
+                                                style: TextStyle(
+                                                    color: Colors.black)),
+                                          ));
+                                    }
+                                  },
+                                ),
+
+                                ///getporidUnidadTeritoria
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            Container(
+                              decoration: servicios.myBoxDecoration(),
+                              margin: EdgeInsets.only(right: 0, left: 0),
+                              height: tamanioboton,
+                              width: MediaQuery.of(context).size.width,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.blue[600],
+                                  ),
+                                  child: _isloading
+                                      ? Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            CircularProgressIndicator(
+                                              color: Colors.white,
+                                            ),
+                                            const SizedBox(
+                                              width: 24,
+                                            ),
+                                            Text(
+                                              'Descargando...!!',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  color: Colors.white),
+                                            )
                                           ],
                                         )
-                                      //     hint: Text("   $data_depara"),
-                                    ));
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        height: tamanio2,
-                        child: FutureBuilder<List<TipoPlataforma>>(
-                          future: DatabasePr.db.getAllTipoPlataforma(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<TipoPlataforma>>
-                              snapshot) {
-                            TipoPlataforma depatalits;
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            final preguntas = snapshot.data;
-
-                            if (preguntas!.length == 0) {
-                              return Center(
-                                child: Text("sin dato"),
-                              );
-                            } else {
-                              return Container(
-                                  decoration: servicios.myBoxDecoration(),
-                                  child: DropdownButton<TipoPlataforma>(
-                                    underline: SizedBox(),
-                                    isExpanded: true,
-                                    items: snapshot.data
-                                        ?.map((user) => DropdownMenuItem<
-                                        TipoPlataforma>(
-                                      child:
-                                      Text(user.descripcion!),
-                                      value: user,
-                                    ))
-                                        .toList(),
-                                    onChanged: (TipoPlataforma? newVal) {
-                                      seleccionarTpPla =
-                                      newVal!.descripcion!;
-                                      ProviderConfiguracion()
-                                          .listaTambosPiasxUnidadTerritorial(
-                                          seleccionarTpPla, tablaid);
-                                      if (newVal.id! >= 1) {
-                                        tamanio3 = 50.0;
-                                      } else {
-                                        tamanioboton = 0;
-                                      }
-                                      if (newVal.descripcion == 'PIAS') {
-                                        tamanioCampania = 50.0;
-                                      } else {
-                                        tamanioCampania = 0.0;
-                                      }
-                                      setState(() {});
-                                    },
-                                    hint: Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 10,
+                                      : Text(
+                                          'Guardar',
+                                          style: TextStyle(
+                                              fontSize: 19,
+                                              color: Colors.white),
                                         ),
-                                        Text("$seleccionarTpPla",
-                                            style: TextStyle(
-                                                color: Colors.black))
-                                      ],
-                                    ),
-                                  ));
-                            }
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      SizedBox(
-                        height: tamanio3,
-                        child: Container(
-                          child: FutureBuilder<
-                              List<RspoTambosPiasxUnidadTerritorial>?>(
-                            future: ProviderConfiguracion()
-                                .listaTambosPiasxUnidadTerritorial(
-                                seleccionarTpPla, tablaid),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<
-                                    List<
-                                        RspoTambosPiasxUnidadTerritorial>?>
-                                snapshot) {
-                              RspoTambosPiasxUnidadTerritorial?
-                              depatalits;
-                              if (!snapshot.hasData) {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              final preguntas = snapshot.data;
-
-                              if (preguntas!.length == 0) {
-                                return Center(
-                                  child: Text("sin dato"),
-                                );
-                              } else {
-                                return Container(
-                                    decoration:
-                                    servicios.myBoxDecoration(),
-                                    child: DropdownButton<
-                                        RspoTambosPiasxUnidadTerritorial>(
-                                      underline: SizedBox(),
-                                      isExpanded: true,
-                                      items: snapshot.data
-                                          ?.map((user) =>
-                                          DropdownMenuItem<
-                                              RspoTambosPiasxUnidadTerritorial>(
-                                            child: Text(
-                                                user.nombreTambo!),
-                                            value: user,
-                                          ))
-                                          .toList(),
-                                      onChanged:
-                                          (RspoTambosPiasxUnidadTerritorial?
-                                      newVal) {
-                                        setState(() {
-                                          depatalits = newVal!;
-
-                                          seleccionarTablaPlataforma =
-                                          newVal.nombreTambo!;
-                                          idTambo = newVal.idPlataforma!;
-                                          snip = newVal.snip!;
-                                          nombreTambo =
-                                          newVal.nombreTambo!;
-
-                                          modalidad = newVal.modalidad!;
-
-                                          if (seleccionarTablaPlataforma
-                                              .length >
-                                              0) {
-                                            tamaniopuesto = 50.0;
-                                          }
-                                        });
-                                      },
-                                      value: depatalits,
-                                      hint: Text(
-                                          "   $seleccionarTablaPlataforma",
-                                          style: TextStyle(
-                                              color: Colors.black)),
-                                    ));
-                              }
-                            },
-                          ),
-
-                          ///getporidUnidadTeritoria
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      SizedBox(
-                        height: tamanioCampania,
-                        child: Container(
-                          child: FutureBuilder<List<Campania>>(
-                            future: DatabasePias.db.getCampanias(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<Campania>> snapshot) {
-                              Campania? depatalits;
-                              if (!snapshot.hasData) {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              final preguntas = snapshot.data;
-
-                              if (preguntas!.length == 0) {
-                                return Center(
-                                  child: Text("sin dato"),
-                                );
-                              } else {
-                                return Container(
-                                    decoration:
-                                    servicios.myBoxDecoration(),
-                                    child: DropdownButton<Campania>(
-                                      underline: SizedBox(),
-                                      isExpanded: true,
-                                      items: snapshot.data
-                                          ?.map((user) =>
-                                          DropdownMenuItem<Campania>(
-                                            child: Text(
-                                                user.descripcion),
-                                            value: user,
-                                          ))
-                                          .toList(),
-                                      onChanged: (Campania? newVal) {
-                                        setState(() {
-                                          depatalits = newVal!;
-                                          seleccionarCamapania =
-                                              newVal.descripcion;
-                                          campania = newVal.descripcion;
-                                          codCampania =
-                                              int.parse(newVal.cod);
-                                        });
-                                      },
-                                      value: depatalits,
-                                      hint: Text(
-                                          "   $seleccionarCamapania",
-                                          style: TextStyle(
-                                              color: Colors.black)),
-                                    ));
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      SizedBox(
-                        height: tamaniopuesto,
-                        child: Container(
-                          child: FutureBuilder<List<Puesto>>(
-                            future: DatPuesto.db.getTodosPuesto(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<Puesto>> snapshot) {
-                              Puesto? depatalits;
-                              if (!snapshot.hasData) {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              final preguntas = snapshot.data;
-                              if (preguntas!.length == 0) {
-                                return Center(
-                                  child: Text("sin dato"),
-                                );
-                              } else {
-                                return Container(
-                                    decoration:
-                                    servicios.myBoxDecoration(),
-                                    child: DropdownButton<Puesto>(
-                                      underline: SizedBox(),
-                                      isExpanded: true,
-                                      items: snapshot.data
-                                          ?.map((user) =>
-                                          DropdownMenuItem<Puesto>(
-                                            child: Text(
-                                                user.nombrePuesto),
-                                            value: user,
-                                          ))
-                                          .toList(),
-                                      onChanged: (Puesto? newVal) {
-                                        setState(() {
-                                          depatalits = newVal!;
-                                          seleccionarPuesto =
-                                              newVal.nombrePuesto;
-                                          idPuesto = newVal.idPuesto;
-                                          nombrePuesto =
-                                              newVal.nombrePuesto;
-                                          if (newVal.idPuesto >= 1) {
-                                            tamanioboton = 50.0;
-                                          }
-                                        });
-                                      },
-                                      value: depatalits,
-                                      hint: Text("   $seleccionarPuesto",
-                                          style: TextStyle(
-                                              color: Colors.black)),
-                                    ));
-                              }
-                            },
-                          ),
-
-                          ///getporidUnidadTeritoria
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Container(
-                        decoration: servicios.myBoxDecoration(),
-                        margin: EdgeInsets.only(right: 0, left: 0),
-                        height: tamanioboton,
-                        width: MediaQuery.of(context).size.width,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.blue[800],
-                            ),
-                            child: _isloading
-                                ? Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.center,
-                              children: [
-                                CircularProgressIndicator(
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(
-                                  width: 24,
-                                ),
-                                Text(
-                                  'Descargando...!!',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      color: Colors.white),
-                                )
-                              ],
-                            )
-                                : Text(
-                              'Guardar',
-                              style: TextStyle(
-                                  fontSize: 19,
-                                  color: Colors.white),
-                            ),
-                            onPressed: () async {
-                              if (seleccionarUnidOrganicas ==
-                                  "SELECCIONAR UNIDADES ORGANICAS" &&
-                                  seleccionarLugarPrestacion ==
-                                      "SELECIONAR LUGAR PRESTACION") {
-                                Fluttertoast.showToast(
-                                    msg: "SELLECCIONAR",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.grey,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-                              } else {
-                                if (_isloading) return;
-                                setState(() {
-                                  _isloading = true;
-                                });
-
-                                if (seleccionarTpPla == "PIAS") {
-                                  if (codCampania != 0) {
-                                    var rsp =
-                                    await ProviderServiciosRest()
-                                        .listarPuntoAtencionPias(
-                                        codCampania.toString(),
-                                        idTambo,
-                                        0);
-                                    if (rsp.isEmpty) {
-                                      Util().showAlertDialog(
-                                          "PIAS",
-                                          "No cuenta con datos para esta campaña o pia",
-                                          context, () {
-                                        Navigator.pop(context);
-                                      });
-                                      setState(() {
-                                        _isloading = false;
-                                      });
+                                  onPressed: () async {
+                                    if (seleccionarUnidOrganicas ==
+                                            "SELECCIONAR UNIDADES ORGANICAS" &&
+                                        seleccionarLugarPrestacion ==
+                                            "SELECIONAR LUGAR PRESTACION") {
+                                      Fluttertoast.showToast(
+                                          msg: "SELLECCIONAR",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.CENTER,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.grey,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
                                     } else {
-                                      var r = ConfigInicio(
-                                          modalidad: modalidad,
-                                          idLugarPrestacion:
-                                          idLugarPrestacion,
-                                          idPuesto: idPuesto,
-                                          idTambo: idTambo,
-                                          idUnidTerritoriales:
-                                          idUnidTerritoriales,
-                                          idUnidadesOrganicas:
-                                          idUnidadesOrganicas,
-                                          lugarPrestacion:
-                                          lugarPrestacion,
-                                          nombreTambo: nombreTambo,
-                                          puesto: nombrePuesto,
-                                          unidTerritoriales:
-                                          nombreUnidTerritoriales,
-                                          unidadesOrganicas:
-                                          nombreUnnidadesOrganicas,
-                                          snip: snip,
-                                          tipoPlataforma:
-                                          seleccionarTpPla,
-                                          campania: campania,
-                                          codCampania:
-                                          codCampania.toString());
-                                      await DatabasePr.db
-                                          .insertConfigInicio(r);
-
+                                      if (_isloading) return;
                                       setState(() {
-                                        _isloading = false;
+                                        _isloading = true;
                                       });
-                                      Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                              builder: (_) =>
-                                                  ConfiguracionPersonal(unidad: seleccionarUnidad,)));
+
+                                      if (seleccionarTpPla == "PIAS") {
+                                        if (codCampania != 0) {
+                                          var rsp =
+                                              await ProviderServiciosRest()
+                                                  .listarPuntoAtencionPias(
+                                                      codCampania.toString(),
+                                                      idTambo,
+                                                      0);
+                                          if (rsp.isEmpty) {
+                                            Util().showAlertDialog(
+                                                "PIAS",
+                                                "No cuenta con datos para esta campaña o pia",
+                                                context, () {
+                                              Navigator.pop(context);
+                                            });
+                                            setState(() {
+                                              _isloading = false;
+                                            });
+                                          } else {
+                                            var r = ConfigInicio(
+                                                modalidad: modalidad,
+                                                idLugarPrestacion:
+                                                    idLugarPrestacion,
+                                                idPuesto: idPuesto,
+                                                idTambo: idTambo,
+                                                idUnidTerritoriales:
+                                                    idUnidTerritoriales,
+                                                idUnidadesOrganicas:
+                                                    idUnidadesOrganicas,
+                                                lugarPrestacion:
+                                                    lugarPrestacion,
+                                                nombreTambo: nombreTambo,
+                                                puesto: nombrePuesto,
+                                                unidTerritoriales:
+                                                    nombreUnidTerritoriales,
+                                                unidadesOrganicas:
+                                                    nombreUnnidadesOrganicas,
+                                                snip: snip,
+                                                tipoPlataforma:
+                                                    seleccionarTpPla,
+                                                campania: campania,
+                                                codCampania:
+                                                    codCampania.toString());
+                                            await DatabasePr.db
+                                                .insertConfigInicio(r);
+
+                                            setState(() {
+                                              _isloading = false;
+                                            });
+                                            Navigator.of(context).pushReplacement(
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        ConfiguracionPersonal(
+                                                          unidad:
+                                                              seleccionarUnidad,
+                                                        )));
+                                          }
+                                        } else {
+                                          Util().showAlertDialog(
+                                              "PIAS",
+                                              "Seleccionar alguna campaña",
+                                              context, () {
+                                            Navigator.pop(context);
+                                          });
+                                          setState(() {
+                                            _isloading = false;
+                                          });
+                                        }
+                                      } else if (seleccionarTpPla == "TAMBO") {
+                                        if (seleccionarUnidTerritoriales !=
+                                            "SELECCIONAR UNIDADES TERRITORIALES") {
+                                          await ProviderDatos()
+                                              .getInsertParticipantesIntervencionesMovil(
+                                                  seleccionarUnidTerritoriales);
+                                        }
+                                        var r = ConfigInicio(
+                                            idLugarPrestacion:
+                                                idLugarPrestacion,
+                                            idPuesto: idPuesto,
+                                            idTambo: idTambo,
+                                            idUnidTerritoriales:
+                                                idUnidTerritoriales,
+                                            idUnidadesOrganicas:
+                                                idUnidadesOrganicas,
+                                            lugarPrestacion: lugarPrestacion,
+                                            nombreTambo: nombreTambo,
+                                            puesto: nombrePuesto,
+                                            unidTerritoriales:
+                                                nombreUnidTerritoriales,
+                                            unidadesOrganicas:
+                                                nombreUnnidadesOrganicas,
+                                            snip: snip,
+                                            tipoPlataforma: seleccionarTpPla,
+                                            campania: campania,
+                                            codCampania:
+                                                codCampania.toString());
+                                        await DatabasePr.db
+                                            .insertConfigInicio(r);
+
+                                        setState(() {
+                                          _isloading = false;
+                                        });
+                                        Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    ConfiguracionPersonal(
+                                                        unidad:
+                                                            seleccionarUnidad)));
+                                      } else {
+                                        var r = ConfigInicio(
+                                            idLugarPrestacion:
+                                                idLugarPrestacion,
+                                            idPuesto: idPuesto,
+                                            idTambo: idTambo,
+                                            idUnidTerritoriales:
+                                                idUnidTerritoriales,
+                                            idUnidadesOrganicas:
+                                                idUnidadesOrganicas,
+                                            lugarPrestacion: lugarPrestacion,
+                                            nombreTambo: nombreTambo,
+                                            puesto: nombrePuesto,
+                                            unidTerritoriales:
+                                                nombreUnidTerritoriales,
+                                            unidadesOrganicas:
+                                                nombreUnnidadesOrganicas,
+                                            snip: snip,
+                                            tipoPlataforma: seleccionarTpPla,
+                                            campania: campania,
+                                            codCampania:
+                                                codCampania.toString());
+                                        await DatabasePr.db
+                                            .insertConfigInicio(r);
+
+                                        setState(() {
+                                          _isloading = false;
+                                        });
+                                        Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    ConfiguracionPersonal(
+                                                      unidad: seleccionarUnidad,
+                                                    )));
+                                      }
                                     }
-                                  } else {
-                                    Util().showAlertDialog(
-                                        "PIAS",
-                                        "Seleccionar alguna campaña",
-                                        context, () {
-                                      Navigator.pop(context);
-                                    });
-                                    setState(() {
-                                      _isloading = false;
-                                    });
-                                  }
-                                } else if (seleccionarTpPla == "TAMBO") {
-                                  if (seleccionarUnidTerritoriales !=
-                                      "SELECCIONAR UNIDADES TERRITORIALES") {
-                                    await ProviderDatos()
-                                        .getInsertParticipantesIntervencionesMovil(
-                                        seleccionarUnidTerritoriales);
-                                  }
-                                  var r = ConfigInicio(
-                                      idLugarPrestacion:
-                                      idLugarPrestacion,
-                                      idPuesto: idPuesto,
-                                      idTambo: idTambo,
-                                      idUnidTerritoriales:
-                                      idUnidTerritoriales,
-                                      idUnidadesOrganicas:
-                                      idUnidadesOrganicas,
-                                      lugarPrestacion: lugarPrestacion,
-                                      nombreTambo: nombreTambo,
-                                      puesto: nombrePuesto,
-                                      unidTerritoriales:
-                                      nombreUnidTerritoriales,
-                                      unidadesOrganicas:
-                                      nombreUnnidadesOrganicas,
-                                      snip: snip,
-                                      tipoPlataforma: seleccionarTpPla,
-                                      campania: campania,
-                                      codCampania:
-                                      codCampania.toString());
-                                  await DatabasePr.db
-                                      .insertConfigInicio(r);
-
-                                  setState(() {
-                                    _isloading = false;
-                                  });
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (_) =>
-                                              ConfiguracionPersonal(unidad: seleccionarUnidad)));
-                                } else {
-                                  var r = ConfigInicio(
-                                      idLugarPrestacion:
-                                      idLugarPrestacion,
-                                      idPuesto: idPuesto,
-                                      idTambo: idTambo,
-                                      idUnidTerritoriales:
-                                      idUnidTerritoriales,
-                                      idUnidadesOrganicas:
-                                      idUnidadesOrganicas,
-                                      lugarPrestacion: lugarPrestacion,
-                                      nombreTambo: nombreTambo,
-                                      puesto: nombrePuesto,
-                                      unidTerritoriales:
-                                      nombreUnidTerritoriales,
-                                      unidadesOrganicas:
-                                      nombreUnnidadesOrganicas,
-                                      snip: snip,
-                                      tipoPlataforma: seleccionarTpPla,
-                                      campania: campania,
-                                      codCampania:
-                                      codCampania.toString());
-                                  await DatabasePr.db
-                                      .insertConfigInicio(r);
-
-                                  setState(() {
-                                    _isloading = false;
-                                  });
-                                  print("seleccionarUnidad");
-                                  print(seleccionarUnidad);
-                                  print("seleccionarUnidad");
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (_) =>
-                                              ConfiguracionPersonal(unidad: seleccionarUnidad,)));
-                                }
-                              }
-                            }),
-                      )
-                    ],
-                  )
+                                  }),
+                            )
+                          ],
+                        )
                       : new Container(),
                   (_istrueUps == true)
                       ? Form(
-                    key: _formKeyUps,
-                    child: Column(
-                      children: [
-                        Container(
-                          decoration: servicios.myBoxDecoration(),
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            onSubmitted: (va) async {
-                              setState(() {
-                                _formKeyUps.currentState!.reset();
-                                _controllerfecha.clear();
-                                _controllerUsuario.clear();
-                                _controllerContrasenia.clear();
-                              });
+                          key: _formKeyUps,
+                          child: Column(
+                            children: [
+                              FormularioReq().textinputdet(
+                              "Codigo Personal",
+                              _controllerCodPersonal,
+                              TextCapitalization.words,
+                              TextInputType.text),
 
-                              var usuario = await ProviderConfiguracion()
-                                  .buscarUsuarioApp(
-                                  _controllerCodPersonal.text);
-                              _controllerNombres.text = usuario.nombres;
-                              _controllerRol.text = usuario.rol;
-                            },
+                              SizedBox(height: 10.0),
+                              Container(
+                                decoration: servicios.myBoxDecoration(),
+                                margin: EdgeInsets.only(right: 0, left: 0),
+                                height: 40.0,
+                                width: MediaQuery.of(context).size.width,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.blue[600],
+                                    ),
+                                    child: _isloading
+                                        ? Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: const [
+                                              CircularProgressIndicator(
+                                                color: Colors.white,
+                                              ),
+                                              SizedBox(
+                                                width: 24,
+                                              ),
+                                              Text(
+                                                '...!!',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 17,
+                                                    color: Colors.white),
+                                              )
+                                            ],
+                                          )
+                                        :const Text(
+                                            'Consultar',
+                                            style: TextStyle(
+                                                fontSize: 19,
+                                                color: Colors.white),
+                                          ),
+                                    onPressed: () async {
+                                      setState(() {
+                                        _isloading = true;
+                                      });
+                                      setState(() {
+                                        _formKeyUps.currentState!.reset();
+                                        _controllerfecha.clear();
+                                        _controllerUsuario.clear();
+                                        _controllerContrasenia.clear();
+                                      });
 
-                            keyboardType: TextInputType.text,
-                            textCapitalization: TextCapitalization.words,
-                            controller: _controllerCodPersonal,
-                            enabled: true,
-                            decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.transparent),
+                                      var usuario =
+                                          await ProviderConfiguracion()
+                                              .buscarUsuarioApp(
+                                                  _controllerCodPersonal.text);
+                                      _controllerNombres.text = usuario.nombres;
+                                      _controllerRol.text = usuario.rol;
+                                      setState(() {
+                                        _isloading = false;
+                                      });
+                                    }),
                               ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.transparent),
-                              ),
-                              border: UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.transparent),
-                              ),
-                              labelText: "Codigo Personal",
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10.0),
-                        FormularioReq().textinputdet(
-                            "Nombres",
-                            _controllerNombres,
-                            TextCapitalization.words,
-                            TextInputType.text),
-                        SizedBox(height: 10.0),
-                        FormularioReq().textinputdet(
-                            "Rol",
-                            _controllerRol,
-                            TextCapitalization.words,
-                            TextInputType.text),
-                        SizedBox(height: 10.0),
-                        Container(
-                          decoration: servicios.myBoxDecoration(),
-                          //  decoration: FormularioReq().myBoxDecoration(),
-                          child: TextFormField(
-                            textAlign: TextAlign.center,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Por favor ingrese dato.';
-                              }
-                            },
-                            onTap: () async {
-                              final DateTime? picked =
-                              await showDatePicker(
-                                context: context,
-                                initialDate: nowfec!,
-                                firstDate: DateTime(2015, 8),
-                                lastDate: DateTime(2101),
-                              );
-
-                              if (picked != null) {
-                                setState(() {
-                                  _controllerfecha.text.replaceAll(
-                                      '', formatter.format(picked!));
-                                  _controllerfecha.text =
-                                      formatter.format(picked!);
-                                });
-                              }
-                            },
-                             keyboardType: TextInputType.text,
-                            textCapitalization: TextCapitalization.words,
-                            controller: _controllerfecha,
-                            enabled: true,
-                            decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.transparent),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.transparent),
-                              ),
-                              border: UnderlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.transparent),
-                              ),
-                              labelText: "Fecha Nacimiento",
-
-                              //   suffixIcon: Icon(Icons.https, color: primaryColor)
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10.0),
-                        FormularioReq().textinputdet(
-                            "DNI",
-                            _controllerUsuario,
-                            TextCapitalization.words,
-                            TextInputType.number),
-                        SizedBox(height: 10.0),
-                        FormularioReq().textinputdet(
-                            "Contraseña ",
-                            _controllerContrasenia,
-                            TextCapitalization.words,
-                            TextInputType.number),
-                        SizedBox(height: 10.0),
-                        Container(
-                          decoration: servicios.myBoxDecoration(),
-                          margin: EdgeInsets.only(right: 0, left: 0),
-                          height: 50.0,
-                          width: MediaQuery.of(context).size.width,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.blue[800],
-                              ),
-                              child: _isloading
-                                  ? Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
-                                children: [
-                                  CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(
-                                    width: 24,
-                                  ),
-                                  Text(
-                                    'Descargando...!!',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        color: Colors.white),
-                                  )
-                                ],
-                              )
-                                  : Text(
-                                'Guardar',
-                                style: TextStyle(
-                                    fontSize: 19,
-                                    color: Colors.white),
-                              ),
-                              onPressed: () async {
-                                if (_formKeyUps.currentState!
-                                    .validate()) {
-                                  var r = ConfigPersonal(
-                                      unidad: seleccionarUnidad,
-                                      nombres: _controllerNombres.text,
-                                      codigo: _controllerCodPersonal.text,
-                                      rol: _controllerRol.text,
-                                      fechaNacimento:
-                                      _controllerfecha.text,
-                                      contrasenia:
-                                      _controllerContrasenia.text,
-                                      numeroDni: int.parse(
-                                          _controllerUsuario.text));
-                                  await Future.delayed(
-                                      Duration(seconds: 1));
-                                  var res = await DatabasePr.db
-                                      .insertConfigPersonal(r);
-                                  if (res >= 0) {
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (_) => LoginPage()),
+                              SizedBox(height: 10.0),
+                              FormularioReq().textinputdet(
+                                  "Nombres",
+                                  _controllerNombres,
+                                  TextCapitalization.words,
+                                  TextInputType.text),
+                              SizedBox(height: 10.0),
+                              FormularioReq().textinputdet(
+                                  "Rol",
+                                  _controllerRol,
+                                  TextCapitalization.words,
+                                  TextInputType.text),
+                              SizedBox(height: 10.0),
+                              Container(
+                                // decoration: servicios.myBoxDecoration(),
+                                //  decoration: FormularioReq().myBoxDecoration(),
+                                child: TextFormField(
+                                  textAlign: TextAlign.justify,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Por favor ingrese dato.';
+                                    }
+                                  },
+                                  onTap: () async {
+                                    final DateTime? picked =
+                                        await showDatePicker(
+                                      context: context,
+                                      initialDate: nowfec!,
+                                      firstDate: DateTime(1800, 8),
+                                      lastDate: DateTime(2101),
                                     );
-                                  }
-                                }
-                              }),
+
+                                    if (picked != null) {
+                                      setState(() {
+                                        _controllerfecha.text.replaceAll(
+                                            '', formatter.format(picked!));
+                                        _controllerfecha.text =
+                                            formatter.format(picked!);
+                                      });
+                                    }
+                                  },
+                                  keyboardType: TextInputType.text,
+                                  textCapitalization: TextCapitalization.words,
+                                  controller: _controllerfecha,
+                                  enabled: true,
+                                  decoration: InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFF0EA1E8)),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFF0EA1E8)),
+                                    ),
+                                    border: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFF0EA1E8)),
+                                    ),
+                                    labelText: "Fecha Nacimiento",
+
+                                    //   suffixIcon: Icon(Icons.https, color: primaryColor)
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                              FormularioReq().textinputdet(
+                                  "DNI",
+                                  _controllerUsuario,
+                                  TextCapitalization.words,
+                                  TextInputType.number),
+                              SizedBox(height: 10.0),
+                              FormularioReq().textinputdet(
+                                  "Contraseña ",
+                                  _controllerContrasenia,
+                                  TextCapitalization.words,
+                                  TextInputType.number),
+                              SizedBox(height: 10.0),
+                              Container(
+                                decoration: servicios.myBoxDecoration(),
+                                margin: EdgeInsets.only(right: 0, left: 0),
+                                height: 40.0,
+                                width: MediaQuery.of(context).size.width,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.blue[600],
+                                    ),
+                                    child: Text(
+                                            'Guardar',
+                                            style: TextStyle(
+                                                fontSize: 19,
+                                                color: Colors.white),
+                                          ),
+                                    onPressed: () async {
+                                      if (_formKeyUps.currentState!
+                                          .validate()) {
+                                        var r = ConfigPersonal(
+                                            unidad: seleccionarUnidad,
+                                            nombres: _controllerNombres.text,
+                                            codigo: _controllerCodPersonal.text,
+                                            rol: _controllerRol.text,
+                                            fechaNacimento:
+                                                _controllerfecha.text,
+                                            contrasenia:
+                                                _controllerContrasenia.text,
+                                            numeroDni: int.parse(
+                                                _controllerUsuario.text));
+                                        await Future.delayed(
+                                            Duration(seconds: 1));
+                                        var res = await DatabasePr.db
+                                            .insertConfigPersonal(r);
+                                        if (res >= 0) {
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder: (_) => LoginPage()),
+                                          );
+                                        }
+                                      }
+                                    }),
+                              )
+                            ],
+                          ),
                         )
-                      ],
-                    ),
-                  )
                       : new Container(),
                 ],
               )),

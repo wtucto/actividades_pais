@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:actividades_pais/src/datamodels/Clases/ConsultarTambosPiasxUnidadTerritorial.dart';
 import 'package:actividades_pais/util/app-config.dart';
 
+import '../Clases/Participantes.dart';
+
 class ProviderConfiguracion {
   Future<List<RspoTambosPiasxUnidadTerritorial>?>
       listaTambosPiasxUnidadTerritorial(tambo, idUnidadTerr) async {
@@ -40,5 +42,20 @@ class ProviderConfiguracion {
       }
     }
     return new ConfigPersonal();
+  }
+
+  Future<Participantes> buscarUsuarioDni(dni) async{
+    http.Response responseReniec = await http.get(
+      Uri.parse(AppConfig.backendsismonitor +
+          '/programaciongit/validar-dni/$dni'),
+    );
+    if (responseReniec.statusCode == 200) {
+      final jsonResponse = json.decode(responseReniec.body);
+      final listadostraba = new Participantes.fromJsonReniec(jsonResponse);
+
+      return listadostraba;
+    } else {
+      return Participantes();
+    }
   }
 }

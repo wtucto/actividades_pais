@@ -9,7 +9,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../../datamodels/Provider/ProviderConfiguracion.dart';
 
 class ConfiguracionPersonal extends StatefulWidget {
   String unidad = '';
@@ -33,6 +36,9 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
   DateTime? nowfec = new DateTime.now();
   Servicios servicios = new Servicios();
   var _isloading = false;
+  var _isloadingSave = false;
+  var espacio = const SizedBox(height: 10.0);
+
   @override
   void initState() {
     setState(() {});
@@ -58,32 +64,88 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  const SizedBox(
-                    height: 20.0,
-                  ),
                   FormularioReq().textinputdet(
-                      " NUMERO DNI",
+                      "NUMERO DNI",
                       _controllerNDocumento,
                       TextCapitalization.words,
                       TextInputType.number),
-                  const SizedBox(height: 20.0),
-                  FormularioReq().textinputdet(" NOMBRES", _controllerNombres,
+                  espacio,
+                  Container(
+                    decoration: servicios.myBoxDecoration(),
+                    margin: EdgeInsets.only(right: 0, left: 0),
+                    height: 40.0,
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.blue[600],
+                        ),
+                        child: _isloading
+                            ? Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.center,
+                          children: const [
+                            CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: 24,
+                            ),
+                            Text(
+                              '...!!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.white),
+                            )
+                          ],
+                        )
+                            :const Text(
+                          'Consultar',
+                          style: TextStyle(
+                              fontSize: 19,
+                              color: Colors.white),
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            _isloading = true;
+                          });
+                          setState(() {
+                            _controllerNombres.clear();
+                            _controllerApPaterno.clear();
+                            _controllerApMaterno.clear();
+                            _controllerfecha.clear();
+                          });
+
+                          var usuario =
+                          await ProviderConfiguracion()
+                              .buscarUsuarioDni(
+                              _controllerNDocumento.text);
+                          print(usuario.primerNombre);
+                          if(!usuario.isNull){
+                            _controllerNombres.text=usuario.primerNombre.toString() + " " + usuario.segundoNombre.toString();
+                            _controllerApPaterno.text=usuario.apellidoPaterno.toString();
+                            _controllerApMaterno.text=usuario.apellidoMaterno.toString();
+                            _controllerfecha.text=usuario.fechaNacimiento.toString();
+                          }
+                          setState(() {
+                            _isloading = false;
+                          });
+                        }),
+                  ),
+                  FormularioReq().textinputdet("NOMBRES", _controllerNombres,
                       TextCapitalization.words, TextInputType.text),
-                  const SizedBox(height: 20.0),
                   FormularioReq().textinputdet(
                       " APELLIDO PATERNO",
                       _controllerApPaterno,
                       TextCapitalization.words,
                       TextInputType.text),
-                  const SizedBox(height: 20.0),
                   FormularioReq().textinputdet(
                       " APELLIDO MATERNO",
                       _controllerApMaterno,
                       TextCapitalization.words,
                       TextInputType.text),
-                  const SizedBox(height: 20.0),
                   Container(
-                    decoration: servicios.myBoxDecoration(),
+                    //  decoration: servicios.myBoxDecoration(),
                     child: TextFormField(
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -113,60 +175,60 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                       enabled: true,
                       decoration: const InputDecoration(
                           enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
+                            borderSide: BorderSide(color: Color(0xFF0EA1E8)),
                           ),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
+                            borderSide: BorderSide(color: Color(0xFF0EA1E8)),
                           ),
                           border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
+                            borderSide: BorderSide(color: Color(0xFF0EA1E8)),
                           ),
                           labelText: "Fecha Nacimiento"),
                     ),
                   ),
-                  const SizedBox(height: 25.0),
                   FormularioReq().textinputdet(
                       " CONTRASEÑA",
                       _controllerContrasenia,
                       TextCapitalization.words,
                       TextInputType.text),
-                  const SizedBox(height: 25.0),
+                  espacio,
                   Container(
                     decoration: servicios.myBoxDecoration(),
-                    height: 50,
+                    height: 40,
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.blue[800],
+                          primary: Colors.blue[600],
                         ),
-                        child: _isloading
+                        child: _isloadingSave
                             ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                            SizedBox(
-                              width: 24,
-                            ),
-                            Text(
-                              'Registrando...',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 17, color: Colors.white),
-                            )
-                          ],
-                        )
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 24,
+                                  ),
+                                  Text(
+                                    'Registrando...',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 17, color: Colors.white),
+                                  )
+                                ],
+                              )
                             : const Text(
-                          'Guardar',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 19, color: Colors.white),
-                        ),
+                                'Guardar',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 19, color: Colors.white),
+                              ),
                         onPressed: () async {
                           if (_controllerNombres.text == "" ||
                               _controllerApPaterno.text == "" ||
                               _controllerApMaterno.text == "" ||
+                              _controllerContrasenia.text == "" ||
                               _controllerNDocumento.text == "") {
                             Fluttertoast.showToast(
                                 msg: "Ingresar Datos",
@@ -177,9 +239,9 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                                 textColor: Colors.white,
                                 fontSize: 16.0);
                           } else {
-                            if (_isloading) return;
+                            if (_isloadingSave) return;
                             setState(() {
-                              _isloading = true;
+                              _isloadingSave = true;
                             });
 
                             var r = ConfigPersonal(
@@ -190,15 +252,15 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                                 contrasenia: _controllerContrasenia.text,
                                 fechaNacimento: _controllerfecha.text,
                                 numeroDni:
-                                int.parse(_controllerNDocumento.text));
+                                    int.parse(_controllerNDocumento.text));
 
                             await DatabasePr.db.insertConfigPersonal(r);
                             await Future.delayed(const Duration(seconds: 2));
 
                             setState(() {
-                              _isloading = false;
+                              _isloadingSave = false;
                             });
-                            if (_isloading == false) {
+                            if (_isloadingSave == false) {
                               Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                       builder: (_) => LoadingScreen()));

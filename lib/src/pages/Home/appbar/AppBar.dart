@@ -59,8 +59,8 @@ class _AppBarPaisState extends State<AppBarPais> {
                       height: 40.0,
                       width: 170,
                       child: Text(
-                        "UT : ${widget.datoUt} - Plataforma: ${widget.plataforma}",
-                        style: TextStyle(color: Colors.white, fontSize: 11),
+                        "UT : ${widget.datoUt} - PLATAFORMA: ${widget.plataforma}",
+                        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 11),
                       ),
                     ),
                   ],
@@ -76,18 +76,11 @@ class _AppBarPaisState extends State<AppBarPais> {
                       height: 40.0,
                       width: 150,
                       child: Text(
-                        "Usuario : " + widget.nombre,
-                        style: TextStyle(color: Colors.white, fontSize: 11),
+                        "USUARIO : " + widget.nombre,
+                        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 11, ),
                       ),
                     ),
-                    /*SizedBox(
-                      height: 40.0,
-                      width: 150,
-                      child: Text(
-                        widget.nombre == "" ? "Usuario : " + widget.nombre : "",
-                        style: TextStyle(color: Colors.white, fontSize: 11),
-                      ),
-                    ),*/
+
                   ]
                 ],
               )
