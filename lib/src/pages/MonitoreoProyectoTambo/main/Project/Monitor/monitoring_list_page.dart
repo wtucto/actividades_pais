@@ -84,7 +84,8 @@ class _MonitorListState extends State<MonitorList> {
             'Error al enviar el Monitoreo, verifica que los datos sean correctos y vuelve a intentarlo más tarde, código de Monitoreo: ${aResp[0].idMonitoreo}';
       }
     } catch (oError) {
-      sMsg = '¡Ups! Algo salió mal, vuelve a intentarlo mas tarde.';
+      sMsg =
+          '¡Ups! Algo salió mal, verifica tu conexión a internet y vuelve a intentarlo más tarde.';
     }
     //throw Exception('¡Ups! Algo salió mal, vuelve a intentarlo mas tarde.');
     return sMsg;

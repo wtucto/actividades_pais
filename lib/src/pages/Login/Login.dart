@@ -333,13 +333,13 @@ class __FormState extends State<_Form> {
         children: <Widget>[
           CustomInput(
             icon: Icons.supervised_user_circle,
-            placeholder: 'usuario',
+            placeholder: 'Ingrerse su DNI',
             keyboardType: TextInputType.text,
             textController: emailCtrl,
           ),
           CustomInput(
             icon: Icons.lock_outline,
-            placeholder: 'Contraseña',
+            placeholder: 'Ingrese su Contraseña',
             textController: passCtrl,
             isPassword: true,
           ),

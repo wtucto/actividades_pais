@@ -493,13 +493,14 @@ class _MonitoringDetailNewEditPageState
                   value!.toUpperCase() == widget.cbEMONI[0].toUpperCase()
                       ? 'Required'.tr
                       : null,
-              onChanged: _enabledF
-                  ? (val) {
-                      setState(() {
-                        _statusMonitor = val.toString();
-                      });
-                    }
-                  : null,
+              onChanged: null,
+              // onChanged: _enabledF
+              //     ? (val) {
+              //         setState(() {
+              //           _statusMonitor = val.toString();
+              //         });
+              //       }
+              //     : null,
             ),
 
             /**
@@ -1652,25 +1653,27 @@ class MyDropdownButtonFormField extends StatelessWidget {
     return DropdownButtonFormField(
       isExpanded: true,
       isDense: isDense,
-      value: value,
+      value: value.isNotEmpty ? value : null,
       style: const TextStyle(
         color: Colors.black,
         fontSize: 15,
         fontWeight: FontWeight.w400,
       ),
       onChanged: onChanged,
-      items: items
-          .map(
-            (e) => DropdownMenuItem(
-              child: Text(
-                e,
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
-              ),
-              value: e,
-            ),
-          )
-          .toList(),
+      items: items.isNotEmpty
+          ? items
+              .map(
+                (e) => DropdownMenuItem(
+                  child: Text(
+                    e,
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w400),
+                  ),
+                  value: e,
+                ),
+              )
+              .toList()
+          : null,
     );
   }
 }
