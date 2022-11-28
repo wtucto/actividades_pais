@@ -45,6 +45,7 @@ class ImageController extends GetxController {
             itemsImagesAll.addAll({nameInputImage: listImagePath});
           }
         }
+        itemsImagesAll[nameInputImage] = listImagePath;
       } else {
         Get.snackbar('Error', 'Solo esta permitido 4 imaganes',
             snackPosition: SnackPosition.BOTTOM,
@@ -57,7 +58,6 @@ class ImageController extends GetxController {
           backgroundColor: Colors.red,
           colorText: Colors.white);
     }
-    itemsImagesAll[nameInputImage] = listImagePath;
   }
 
   Future imageCamera(String nameInputImage) async {
@@ -81,6 +81,7 @@ class ImageController extends GetxController {
             listImagePath.add(imageFile.path);
             itemsImagesAll.addAll({nameInputImage: listImagePath});
           }
+          itemsImagesAll[nameInputImage] = listImagePath;
         } else {
           Get.snackbar('Error', 'Solo esta permitido 4 imaganes',
               snackPosition: SnackPosition.BOTTOM,
@@ -93,7 +94,6 @@ class ImageController extends GetxController {
             backgroundColor: Colors.red,
             colorText: Colors.white);
       }
-      itemsImagesAll[nameInputImage] = listImagePath;
     } catch (e) {
       Get.snackbar('Error', 'Ocurrio un Problema en: $e.toString()',
           snackPosition: SnackPosition.BOTTOM,
