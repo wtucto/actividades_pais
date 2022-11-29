@@ -91,7 +91,7 @@ class MainController extends GetxController {
   /*
    Obtiene los datos del usuario
    @String codigo
-   @String clave (Opcional)
+   @String clave (Opcional) Si clave es vacio solo obtiene la info del usuario por el codigo
    */
   Future<UserModel> getUserLogin(
     String codigo,

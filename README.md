@@ -124,11 +124,11 @@ flutter pub global run rename --appname "SIFPNPAIS" (Cambia en nombre)
 ## DEPLOY PLAYSTORE
 Generar una Keystore
 
-Paso 1: ubicarse en la carpeta bin de java JDK
+Paso 1: ubicarse en la carpeta .../bin de java JDK
 Requiere ejecutar el terminal como administrador (windows)
 Paso 2: ingresar el siguiente comando
 
-para activar los permisos en MacOs se antene la clave:  sudo
+para activar los permisos en MacOs se antepone la clave:  sudo
 
 ```sh
 1: .jks (recomendado)

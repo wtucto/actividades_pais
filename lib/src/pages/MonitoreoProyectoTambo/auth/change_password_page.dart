@@ -1,7 +1,10 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
+import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,11 +46,27 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         return;
       }
 
+      String dni = _prefs!.getString("dni") ?? "";
       String usn = _prefs!.getString("codigo") ?? "";
       String psw = _prefs!.getString("clave") ?? "";
-      oUser = await mainController.getUserLogin(usn, '');
 
-      if (npsw == oUser.clave) {
+      List<ConfigPersonal> aUserInfo = await DatabasePr.db.getLoginUser(
+        dni: int.parse(dni),
+        contrasenia: apsw,
+      );
+
+      if (aUserInfo.isEmpty) {
+        mostrarAlerta(
+          context,
+          'Incorrecto',
+          'Comprueba tu contraseña actual de nuevo.',
+        );
+        return;
+      }
+
+      ConfigPersonal oUserInfo = aUserInfo[0];
+
+      if (npsw == oUserInfo.contrasenia) {
         mostrarAlerta(
           context,
           'Incorrecto',
@@ -56,21 +75,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         return;
       }
 
-      if (oUser.clave != apsw) {
-        mostrarAlerta(
-          context,
-          'Incorrecto',
-          'Comprueba tu contraseña actual de nuevo.',
-        );
+      oUser = await mainController.getUserLogin(usn, '');
 
-        return;
-      }
-
+      oUserInfo.contrasenia = npsw;
       oUser.clave = npsw;
+      await DatabasePr.db.updateUsuarioContrasenia(oUserInfo);
       await mainController.insertUser(oUser);
 
       if (psw != "") {
-        _prefs!.setString("clave", oUser.clave!);
+        _prefs!.setString("clave", oUserInfo.contrasenia!);
       }
 
       Fluttertoast.showToast(
@@ -138,13 +151,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         iconTheme: const IconThemeData(
           color: Colors.black,
         ),
-        brightness: Brightness.light,
         backgroundColor: Colors.transparent,
         title: Text(
           'Credential'.tr,
           style: const TextStyle(color: darkGrey),
         ),
         elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: SafeArea(
         bottom: true,

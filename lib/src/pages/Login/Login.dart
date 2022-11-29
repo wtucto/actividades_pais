@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:actividades_pais/main.dart';
+import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/configuracion/ConfiguracionInicial.dart';
 import 'package:actividades_pais/src/pages/configuracion/ResetContrasenia.dart';
@@ -179,6 +180,8 @@ class __FormState extends State<_Form> {
       var res = await DatabasePr.db
           .getLoginUser(dni: int.parse(usn), contrasenia: psw);
       if (res.length > 0) {
+        ConfigPersonal oUserInfo = res[0];
+
         if (res[0].unidad != 'UPS') {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (_) => HomePagePais()),
@@ -216,12 +219,13 @@ class __FormState extends State<_Form> {
 
             await mainController.insertUser(oUser);
           } else {
-            oUser = await mainController.getUserLogin(codigo, psw);
+            oUser = await mainController.getUserLogin(codigo, "");
           }
 
           //setState(() { bRepeat = true; });
 
-          if ((oUser.codigo == codigo && oUser.clave == psw)) {
+          if ((oUser.codigo == codigo &&
+              (oUser.clave == psw || oUserInfo.contrasenia == psw))) {
             // mainController.users.value = [oUser];
 
             //SECCION
@@ -235,6 +239,7 @@ class __FormState extends State<_Form> {
             _prefs!.setString("nombres", oUser.nombres!);
             _prefs!.setString("codigo", oUser.codigo!);
             _prefs!.setString("rol", oUser.rol!);
+            _prefs!.setString("dni", oUserInfo.numeroDni.toString());
 
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (_) => HomePagePais()),
