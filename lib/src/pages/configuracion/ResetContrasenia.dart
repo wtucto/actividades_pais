@@ -53,10 +53,10 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
                               height: 20.0,
                             ),
                             FormularioReq().textinputdet(
-                                " NUMERO DNI",
+                                "NUMERO DNI",
                                 _controllerNDocumento,
                                 TextCapitalization.words,
-                                TextInputType.number),
+                                TextInputType.number, true),
                             const SizedBox(
                               height: 20.0,
                             ),
@@ -195,7 +195,7 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
                               "INGRESAR NUEVA CONTRASEÑA",
                               _controllerContrasenia,
                               TextCapitalization.words,
-                              TextInputType.number),
+                              TextInputType.number, true),
                           const SizedBox(height: 20.0),
                           Container(
                             decoration: servicios.myBoxDecoration(),

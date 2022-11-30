@@ -104,6 +104,7 @@ class _ConfiguracionInicial extends State<ConfiguracionInicial> {
   var _isloading = false;
   var _istrue = false;
   var _istrueUps = false;
+  var _isActive = false;
   TextEditingController _controllerContrasenia = TextEditingController();
   TextEditingController _controllerUsuario = TextEditingController();
   TextEditingController _controllerCodPersonal = TextEditingController();
@@ -111,7 +112,10 @@ class _ConfiguracionInicial extends State<ConfiguracionInicial> {
   TextEditingController _controllerRol = TextEditingController();
   TextEditingController _controllerfecha = TextEditingController();
 
-var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
+  var underlineCbo = Container(
+    height: 1,
+    color: Color(0xFF1E88E5),
+  );
   DateTime? nowfec = new DateTime.now();
   var formatter = new DateFormat('yyyy-MM-dd');
   final _formKeyUps = GlobalKey<FormState>();
@@ -167,37 +171,37 @@ var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
                             );
                           } else {
                             return Container(
-                               // decoration: servicios.myBoxDecoration(),
+                                // decoration: servicios.myBoxDecoration(),
                                 child: DropdownButton<Unidad>(
-                                   underline:underlineCbo,
-                                  isExpanded: true,
-                                  items: snapshot.data
-                                      ?.map((user) => DropdownMenuItem<Unidad>(
-                                            child: Text(user.descripcion),
-                                            value: user,
-                                          ))
-                                      .toList(),
-                                  onChanged: (Unidad? newVal) {
-                                    setState(() {
-                                      depatalits = newVal!;
-                                      seleccionarUnidad = newVal.descripcion;
-                                      if (newVal.descripcion == 'UPS') {
-                                        _istrue = false;
-                                        _istrueUps = true;
-                                      } else if (newVal.descripcion == 'UAGS') {
-                                        _istrue = true;
-                                        _istrueUps = false;
-                                      }
-                                    });
-                                  },
-                                  hint: Row(children: [
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text("$seleccionarUnidad",
-                                        style: TextStyle(color: Colors.black))
-                                  ]),
-                                ));
+                              underline: underlineCbo,
+                              isExpanded: true,
+                              items: snapshot.data
+                                  ?.map((user) => DropdownMenuItem<Unidad>(
+                                        child: Text(user.descripcion),
+                                        value: user,
+                                      ))
+                                  .toList(),
+                              onChanged: (Unidad? newVal) {
+                                setState(() {
+                                  depatalits = newVal!;
+                                  seleccionarUnidad = newVal.descripcion;
+                                  if (newVal.descripcion == 'UPS') {
+                                    _istrue = false;
+                                    _istrueUps = true;
+                                  } else if (newVal.descripcion == 'UAGS') {
+                                    _istrue = true;
+                                    _istrueUps = false;
+                                  }
+                                });
+                              },
+                              hint: Row(children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text("$seleccionarUnidad",
+                                    style: TextStyle(color: Colors.black))
+                              ]),
+                            ));
                           }
                         },
                       ),
@@ -230,54 +234,53 @@ var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
                                     return Container(
                                         //decoration: servicios.myBoxDecoration(),
                                         child: DropdownButton<LugarPrestacion>(
-                                          underline: underlineCbo,
-                                          isExpanded: true,
-                                          items: snapshot.data
-                                              ?.map((user) => DropdownMenuItem<
-                                                      LugarPrestacion>(
-                                                    child: Text(
-                                                      user.nombreLugarPrestacion,
-                                                      style: TextStyle(
-                                                          color: Colors.black),
-                                                    ),
-                                                    value: user,
-                                                  ))
-                                              .toList(),
-                                          onChanged: (LugarPrestacion? newVal) {
-                                            setState(() {
-                                              depatalits = newVal!;
-                                              seleccionarLugarPrestacion =
-                                                  newVal.nombreLugarPrestacion;
-                                              lugarPrestacion =
-                                                  newVal.nombreLugarPrestacion;
+                                      underline: underlineCbo,
+                                      isExpanded: true,
+                                      items: snapshot.data
+                                          ?.map((user) =>
+                                              DropdownMenuItem<LugarPrestacion>(
+                                                child: Text(
+                                                  user.nombreLugarPrestacion,
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                ),
+                                                value: user,
+                                              ))
+                                          .toList(),
+                                      onChanged: (LugarPrestacion? newVal) {
+                                        setState(() {
+                                          depatalits = newVal!;
+                                          seleccionarLugarPrestacion =
+                                              newVal.nombreLugarPrestacion;
+                                          lugarPrestacion =
+                                              newVal.nombreLugarPrestacion;
 
-                                              idseleccionarLugarPrestacion =
-                                                  newVal.idLugarPrestacion;
-                                              idLugarPrestacion =
-                                                  newVal.idLugarPrestacion;
-                                              DatabasePr.db
-                                                  .getporidUnidadTeritoria(
-                                                      tablaid);
+                                          idseleccionarLugarPrestacion =
+                                              newVal.idLugarPrestacion;
+                                          idLugarPrestacion =
+                                              newVal.idLugarPrestacion;
+                                          DatabasePr.db
+                                              .getporidUnidadTeritoria(tablaid);
 
-                                              if (idseleccionarLugarPrestacion ==
-                                                  1) {
-                                                tamanio = 50;
-                                                tamanio2 = 0;
-                                                tamanio3 = 0;
-                                                tamanioboton = 0;
-                                              } else if (idseleccionarLugarPrestacion ==
-                                                  2) {
-                                                tamanio2 = 50;
-                                                tamanio = 0;
-                                                tamanioboton = 0;
-                                              }
-                                            });
-                                          },
-                                          hint: Text(
-                                              "   $seleccionarLugarPrestacion",
-                                              style: TextStyle(
-                                                  color: Colors.black)),
-                                        ));
+                                          if (idseleccionarLugarPrestacion ==
+                                              1) {
+                                            tamanio = 50;
+                                            tamanio2 = 0;
+                                            tamanio3 = 0;
+                                            tamanioboton = 0;
+                                          } else if (idseleccionarLugarPrestacion ==
+                                              2) {
+                                            tamanio2 = 50;
+                                            tamanio = 0;
+                                            tamanioboton = 0;
+                                          }
+                                        });
+                                      },
+                                      hint: Text(
+                                          "   $seleccionarLugarPrestacion",
+                                          style:
+                                              TextStyle(color: Colors.black)),
+                                    ));
                                   }
                                 },
                               ),
@@ -456,47 +459,45 @@ var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
                                     );
                                   } else {
                                     return Container(
-                                      //  decoration: servicios.myBoxDecoration(),
+                                        //  decoration: servicios.myBoxDecoration(),
                                         child: DropdownButton<TipoPlataforma>(
-                                          underline:underlineCbo,
-                                          isExpanded: true,
-                                          items: snapshot.data
-                                              ?.map((user) => DropdownMenuItem<
-                                                      TipoPlataforma>(
-                                                    child:
-                                                        Text(user.descripcion!),
-                                                    value: user,
-                                                  ))
-                                              .toList(),
-                                          onChanged: (TipoPlataforma? newVal) {
-                                            seleccionarTpPla =
-                                                newVal!.descripcion!;
-                                            ProviderConfiguracion()
-                                                .listaTambosPiasxUnidadTerritorial(
-                                                    seleccionarTpPla, tablaid);
-                                            if (newVal.id! >= 1) {
-                                              tamanio3 = 50.0;
-                                            } else {
-                                              tamanioboton = 0;
-                                            }
-                                            if (newVal.descripcion == 'PIAS') {
-                                              tamanioCampania = 50.0;
-                                            } else {
-                                              tamanioCampania = 0.0;
-                                            }
-                                            setState(() {});
-                                          },
-                                          hint: Row(
-                                            children: [
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text("$seleccionarTpPla",
-                                                  style: TextStyle(
-                                                      color: Colors.black))
-                                            ],
+                                      underline: underlineCbo,
+                                      isExpanded: true,
+                                      items: snapshot.data
+                                          ?.map((user) =>
+                                              DropdownMenuItem<TipoPlataforma>(
+                                                child: Text(user.descripcion!),
+                                                value: user,
+                                              ))
+                                          .toList(),
+                                      onChanged: (TipoPlataforma? newVal) {
+                                        seleccionarTpPla = newVal!.descripcion!;
+                                        ProviderConfiguracion()
+                                            .listaTambosPiasxUnidadTerritorial(
+                                                seleccionarTpPla, tablaid);
+                                        if (newVal.id! >= 1) {
+                                          tamanio3 = 50.0;
+                                        } else {
+                                          tamanioboton = 0;
+                                        }
+                                        if (newVal.descripcion == 'PIAS') {
+                                          tamanioCampania = 50.0;
+                                        } else {
+                                          tamanioCampania = 0.0;
+                                        }
+                                        setState(() {});
+                                      },
+                                      hint: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 10,
                                           ),
-                                        ));
+                                          Text("$seleccionarTpPla",
+                                              style: TextStyle(
+                                                  color: Colors.black))
+                                        ],
+                                      ),
+                                    ));
                                   }
                                 },
                               ),
@@ -530,48 +531,46 @@ var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
                                       );
                                     } else {
                                       return Container(
-                                         // decoration: servicios.myBoxDecoration(),
+                                          // decoration: servicios.myBoxDecoration(),
                                           child: DropdownButton<
                                               RspoTambosPiasxUnidadTerritorial>(
-                                            underline:underlineCbo,
-                                            isExpanded: true,
-                                            items: snapshot.data
-                                                ?.map((user) =>
-                                                    DropdownMenuItem<
-                                                        RspoTambosPiasxUnidadTerritorial>(
-                                                      child: Text(
-                                                          user.nombreTambo!),
-                                                      value: user,
-                                                    ))
-                                                .toList(),
-                                            onChanged:
-                                                (RspoTambosPiasxUnidadTerritorial?
-                                                    newVal) {
-                                              setState(() {
-                                                depatalits = newVal!;
+                                        underline: underlineCbo,
+                                        isExpanded: true,
+                                        items: snapshot.data
+                                            ?.map((user) => DropdownMenuItem<
+                                                    RspoTambosPiasxUnidadTerritorial>(
+                                                  child:
+                                                      Text(user.nombreTambo!),
+                                                  value: user,
+                                                ))
+                                            .toList(),
+                                        onChanged:
+                                            (RspoTambosPiasxUnidadTerritorial?
+                                                newVal) {
+                                          setState(() {
+                                            depatalits = newVal!;
 
-                                                seleccionarTablaPlataforma =
-                                                    newVal.nombreTambo!;
-                                                idTambo = newVal.idPlataforma!;
-                                                snip = newVal.snip!;
-                                                nombreTambo =
-                                                    newVal.nombreTambo!;
+                                            seleccionarTablaPlataforma =
+                                                newVal.nombreTambo!;
+                                            idTambo = newVal.idPlataforma!;
+                                            snip = newVal.snip!;
+                                            nombreTambo = newVal.nombreTambo!;
 
-                                                modalidad = newVal.modalidad!;
+                                            modalidad = newVal.modalidad!;
 
-                                                if (seleccionarTablaPlataforma
-                                                        .length >
-                                                    0) {
-                                                  tamaniopuesto = 50.0;
-                                                }
-                                              });
-                                            },
-                                            value: depatalits,
-                                            hint: Text(
-                                                "   $seleccionarTablaPlataforma",
-                                                style: TextStyle(
-                                                    color: Colors.black)),
-                                          ));
+                                            if (seleccionarTablaPlataforma
+                                                    .length >
+                                                0) {
+                                              tamaniopuesto = 50.0;
+                                            }
+                                          });
+                                        },
+                                        value: depatalits,
+                                        hint: Text(
+                                            "   $seleccionarTablaPlataforma",
+                                            style:
+                                                TextStyle(color: Colors.black)),
+                                      ));
                                     }
                                   },
                                 ),
@@ -601,35 +600,32 @@ var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
                                       );
                                     } else {
                                       return Container(
-                                        //  decoration:
+                                          //  decoration:
                                           //    servicios.myBoxDecoration(),
                                           child: DropdownButton<Campania>(
-                                            underline: underlineCbo,
-                                            isExpanded: true,
-                                            items: snapshot.data
-                                                ?.map((user) =>
-                                                    DropdownMenuItem<Campania>(
-                                                      child: Text(
-                                                          user.descripcion),
-                                                      value: user,
-                                                    ))
-                                                .toList(),
-                                            onChanged: (Campania? newVal) {
-                                              setState(() {
-                                                depatalits = newVal!;
-                                                seleccionarCamapania =
-                                                    newVal.descripcion;
-                                                campania = newVal.descripcion;
-                                                codCampania =
-                                                    int.parse(newVal.cod);
-                                              });
-                                            },
-                                            value: depatalits,
-                                            hint: Text(
-                                                "   $seleccionarCamapania",
-                                                style: TextStyle(
-                                                    color: Colors.black)),
-                                          ));
+                                        underline: underlineCbo,
+                                        isExpanded: true,
+                                        items: snapshot.data
+                                            ?.map((user) =>
+                                                DropdownMenuItem<Campania>(
+                                                  child: Text(user.descripcion),
+                                                  value: user,
+                                                ))
+                                            .toList(),
+                                        onChanged: (Campania? newVal) {
+                                          setState(() {
+                                            depatalits = newVal!;
+                                            seleccionarCamapania =
+                                                newVal.descripcion;
+                                            campania = newVal.descripcion;
+                                            codCampania = int.parse(newVal.cod);
+                                          });
+                                        },
+                                        value: depatalits,
+                                        hint: Text("   $seleccionarCamapania",
+                                            style:
+                                                TextStyle(color: Colors.black)),
+                                      ));
                                     }
                                   },
                                 ),
@@ -657,36 +653,35 @@ var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
                                     } else {
                                       return Container(
                                           //decoration:
-                                            //  servicios.myBoxDecoration(),
+                                          //  servicios.myBoxDecoration(),
                                           child: DropdownButton<Puesto>(
-                                            underline: underlineCbo,
-                                            isExpanded: true,
-                                            items: snapshot.data
-                                                ?.map((user) =>
-                                                    DropdownMenuItem<Puesto>(
-                                                      child: Text(
-                                                          user.nombrePuesto),
-                                                      value: user,
-                                                    ))
-                                                .toList(),
-                                            onChanged: (Puesto? newVal) {
-                                              setState(() {
-                                                depatalits = newVal!;
-                                                seleccionarPuesto =
-                                                    newVal.nombrePuesto;
-                                                idPuesto = newVal.idPuesto;
-                                                nombrePuesto =
-                                                    newVal.nombrePuesto;
-                                                if (newVal.idPuesto >= 1) {
-                                                  tamanioboton = 40.0;
-                                                }
-                                              });
-                                            },
-                                            value: depatalits,
-                                            hint: Text("$seleccionarPuesto",
-                                                style: TextStyle(
-                                                    color: Colors.black)),
-                                          ));
+                                        underline: underlineCbo,
+                                        isExpanded: true,
+                                        items: snapshot.data
+                                            ?.map((user) =>
+                                                DropdownMenuItem<Puesto>(
+                                                  child:
+                                                      Text(user.nombrePuesto),
+                                                  value: user,
+                                                ))
+                                            .toList(),
+                                        onChanged: (Puesto? newVal) {
+                                          setState(() {
+                                            depatalits = newVal!;
+                                            seleccionarPuesto =
+                                                newVal.nombrePuesto;
+                                            idPuesto = newVal.idPuesto;
+                                            nombrePuesto = newVal.nombrePuesto;
+                                            if (newVal.idPuesto >= 1) {
+                                              tamanioboton = 40.0;
+                                            }
+                                          });
+                                        },
+                                        value: depatalits,
+                                        hint: Text("$seleccionarPuesto",
+                                            style:
+                                                TextStyle(color: Colors.black)),
+                                      ));
                                     }
                                   },
                                 ),
@@ -906,11 +901,11 @@ var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
                           child: Column(
                             children: [
                               FormularioReq().textinputdet(
-                              "Codigo Personal",
-                              _controllerCodPersonal,
-                              TextCapitalization.words,
-                              TextInputType.text),
-
+                                  "Codigo Personal",
+                                  _controllerCodPersonal,
+                                  TextCapitalization.words,
+                                  TextInputType.text,
+                                  true),
                               SizedBox(height: 10.0),
                               Container(
                                 decoration: servicios.myBoxDecoration(),
@@ -941,32 +936,51 @@ var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
                                               )
                                             ],
                                           )
-                                        :const Text(
+                                        : const Text(
                                             'Consultar',
                                             style: TextStyle(
                                                 fontSize: 19,
                                                 color: Colors.white),
                                           ),
                                     onPressed: () async {
-                                      setState(() {
-                                        _isloading = true;
-                                      });
-                                      setState(() {
-                                        _formKeyUps.currentState!.reset();
-                                        _controllerfecha.clear();
-                                        _controllerUsuario.clear();
-                                        _controllerContrasenia.clear();
-                                      });
+                                      if (_controllerCodPersonal
+                                          .text.isNotEmpty) {
+                                        setState(() {
+                                          _isloading = true;
+                                        });
+                                        setState(() {
+                                          _controllerNombres.clear();
+                                          _controllerRol.clear();
+                                           _controllerfecha.clear();
+                                          _controllerUsuario.clear();
+                                          _controllerContrasenia.clear();
+                                        });
 
-                                      var usuario =
-                                          await ProviderConfiguracion()
-                                              .buscarUsuarioApp(
-                                                  _controllerCodPersonal.text);
-                                      _controllerNombres.text = usuario.nombres;
-                                      _controllerRol.text = usuario.rol;
-                                      setState(() {
-                                        _isloading = false;
-                                      });
+                                        var usuario =
+                                            await ProviderConfiguracion()
+                                                .buscarUsuarioApp(
+                                                    _controllerCodPersonal
+                                                        .text);
+                                        if (usuario.nombres != "") {
+                                          _isActive = true;
+                                          _controllerNombres.text =
+                                              usuario.nombres;
+                                          _controllerRol.text = usuario.rol;
+                                        } else {
+                                          _controllerNombres.text = "";
+                                          _controllerRol.text = "";
+                                          _isActive = false;
+                                        }
+                                        setState(() {
+                                          _isloading = false;
+                                        });
+                                      } else {
+                                        _controllerNombres.text = "";
+                                        _controllerRol.text = "";
+                                        setState(() {
+                                          _isActive = false;
+                                        });
+                                      }
                                     }),
                               ),
                               SizedBox(height: 10.0),
@@ -974,13 +988,15 @@ var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
                                   "Nombres",
                                   _controllerNombres,
                                   TextCapitalization.words,
-                                  TextInputType.text),
+                                  TextInputType.text,
+                                  false),
                               SizedBox(height: 10.0),
                               FormularioReq().textinputdet(
                                   "Rol",
                                   _controllerRol,
                                   TextCapitalization.words,
-                                  TextInputType.text),
+                                  TextInputType.text,
+                                  false),
                               SizedBox(height: 10.0),
                               Container(
                                 // decoration: servicios.myBoxDecoration(),
@@ -993,12 +1009,16 @@ var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
                                     }
                                   },
                                   onTap: () async {
+                                    var fecha2 = DateTime.now();
+                                    DateTime date = fecha2;
+
                                     final DateTime? picked =
                                         await showDatePicker(
                                       context: context,
                                       initialDate: nowfec!,
                                       firstDate: DateTime(1800, 8),
-                                      lastDate: DateTime(2101),
+                                      lastDate: DateTime(
+                                          date.year, date.month, date.day),
                                     );
 
                                     if (picked != null) {
@@ -1013,7 +1033,7 @@ var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
                                   keyboardType: TextInputType.text,
                                   textCapitalization: TextCapitalization.words,
                                   controller: _controllerfecha,
-                                  enabled: true,
+                                  enabled: _isActive,
                                   decoration: InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
                                       borderSide:
@@ -1034,17 +1054,30 @@ var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
                                 ),
                               ),
                               SizedBox(height: 10.0),
-                              FormularioReq().textinputdet(
-                                  "DNI",
-                                  _controllerUsuario,
-                                  TextCapitalization.words,
-                                  TextInputType.number),
+                              FormularioReq().textIngresoDc(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Por favor ingrese datos.';
+                                    }
+                                  },
+                                  enabled: _isActive,
+                                  controllerNDocumento: _controllerUsuario,
+                                  maxLengthDOC: 8,
+                                  labelText: "DNI",
+                                  onChanged: (value) {
+                                    var contar = value.toString();
+                                  }),
                               SizedBox(height: 10.0),
                               FormularioReq().textinputdet(
                                   "Contraseña ",
                                   _controllerContrasenia,
                                   TextCapitalization.words,
-                                  TextInputType.number),
+                                  TextInputType.number,
+                                  _isActive, validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Por favor ingrese datos.';
+                                }
+                              },),
                               SizedBox(height: 10.0),
                               Container(
                                 decoration: servicios.myBoxDecoration(),
@@ -1056,35 +1089,42 @@ var  underlineCbo = Container( height: 1, color:Color(0xFF1E88E5),);
                                       primary: Colors.blue[600],
                                     ),
                                     child: Text(
-                                            'Guardar',
-                                            style: TextStyle(
-                                                fontSize: 19,
-                                                color: Colors.white),
-                                          ),
+                                      'Guardar',
+                                      style: TextStyle(
+                                          fontSize: 19, color: Colors.white),
+                                    ),
                                     onPressed: () async {
                                       if (_formKeyUps.currentState!
                                           .validate()) {
-                                        var r = ConfigPersonal(
-                                            unidad: seleccionarUnidad,
-                                            nombres: _controllerNombres.text,
-                                            codigo: _controllerCodPersonal.text,
-                                            rol: _controllerRol.text,
-                                            fechaNacimento:
-                                                _controllerfecha.text,
-                                            contrasenia:
-                                                _controllerContrasenia.text,
-                                            numeroDni: int.parse(
-                                                _controllerUsuario.text));
-                                        await Future.delayed(
-                                            Duration(seconds: 1));
-                                        var res = await DatabasePr.db
-                                            .insertConfigPersonal(r);
-                                        if (res >= 0) {
-                                          Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                                builder: (_) => LoginPage()),
-                                          );
-                                        }
+                                        Util().showAlertDialogokno(
+                                            'Guardar configuracion inical',
+                                            context, () async {
+                                          var r = ConfigPersonal(
+                                              unidad: seleccionarUnidad,
+                                              nombres: _controllerNombres.text,
+                                              codigo: _controllerCodPersonal.text,
+                                              rol: _controllerRol.text,
+                                              fechaNacimento:
+                                              _controllerfecha.text,
+                                              contrasenia:
+                                              _controllerContrasenia.text,
+                                              numeroDni: int.parse(
+                                                  _controllerUsuario.text));
+                                          await Future.delayed(
+                                              Duration(seconds: 1));
+                                          var res = await DatabasePr.db
+                                              .insertConfigPersonal(r);
+                                          if (res >= 0) {
+                                            Navigator.of(context).pushReplacement(
+                                              MaterialPageRoute(
+                                                  builder: (_) => LoginPage()),
+                                            );
+                                          }
+                                        }, () {
+                                          print("NO");
+                                          Navigator.pop(context);
+                                        }, '¿Estas seguro de guardar el registro?');
+
                                       }
                                     }),
                               )

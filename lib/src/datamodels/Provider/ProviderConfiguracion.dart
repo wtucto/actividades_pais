@@ -31,13 +31,14 @@ class ProviderConfiguracion {
           '/api-pnpais/app/listarUsuariosApp'),
     );
   print(response.body);
-  print(codigo);
+
     final jsonResponse = json.decode(response.body);
     final listadoUsuario =
     new ListasUsuarios.fromJsonList(jsonResponse["response"]);
     for (var i = 0; i < listadoUsuario.items.length; i++) {
       if (listadoUsuario.items[i].codigo == codigo) {
-        print(listadoUsuario.items[i]);
+        print(codigo);
+        print(listadoUsuario.items[i].nombres);
         return listadoUsuario.items[i];
       }
     }

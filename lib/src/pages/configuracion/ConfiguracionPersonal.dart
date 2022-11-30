@@ -68,7 +68,7 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                       "NUMERO DNI",
                       _controllerNDocumento,
                       TextCapitalization.words,
-                      TextInputType.number),
+                      TextInputType.number, true),
                   espacio,
                   Container(
                     decoration: servicios.myBoxDecoration(),
@@ -133,17 +133,17 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                         }),
                   ),
                   FormularioReq().textinputdet("NOMBRES", _controllerNombres,
-                      TextCapitalization.words, TextInputType.text),
+                      TextCapitalization.words, TextInputType.text, true),
                   FormularioReq().textinputdet(
                       " APELLIDO PATERNO",
                       _controllerApPaterno,
                       TextCapitalization.words,
-                      TextInputType.text),
+                      TextInputType.text, true),
                   FormularioReq().textinputdet(
                       " APELLIDO MATERNO",
                       _controllerApMaterno,
                       TextCapitalization.words,
-                      TextInputType.text),
+                      TextInputType.text, true),
                   Container(
                     //  decoration: servicios.myBoxDecoration(),
                     child: TextFormField(
@@ -190,7 +190,7 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                       " CONTRASEÑA",
                       _controllerContrasenia,
                       TextCapitalization.words,
-                      TextInputType.text),
+                      TextInputType.text, true),
                   espacio,
                   Container(
                     decoration: servicios.myBoxDecoration(),

@@ -27,18 +27,19 @@ class FormularioReq {
   Servicios servicios = new Servicios();
 
   textinputdet(String text, TextEditingController _controller,
-      TextCapitalization textCapitalization, TextInputType textInputType) {
+      TextCapitalization textCapitalization, TextInputType textInputType, enabled,{validator}) {
     return Container(
 
    // decoration: servicios.myBoxDecoration(),
     //  decoration: FormularioReq().myBoxDecoration(),
-      child: TextField(
+      child: TextFormField(
 
         textAlign: TextAlign.justify,
         keyboardType: textInputType,
         textCapitalization: textCapitalization,
         controller: _controller,
-        enabled: true,
+        enabled: enabled,
+          validator: validator,
         //obscureText: true,/*    decoration: InputDecoration(
         //                             labelText: 'Your Name',
         //                             border: const OutlineInputBorder(),
@@ -71,17 +72,37 @@ class FormularioReq {
     );
   }
 
-  textIngresoDc({controllerNDocumento, maxLengthDOC, onSubmitted}) {
+  textIngresoDc({controllerNDocumento, maxLengthDOC, onSubmitted, labelText,onEditingComplete,onChanged, enabled, validator }) {
     return Container(
-        decoration: FormularioReq().myBoxDecoration(),
-        child: TextField(
+         child: TextFormField(
           keyboardType: TextInputType.phone,
           controller: controllerNDocumento,
-          enabled: true,
+          enabled: enabled,
           maxLength: maxLengthDOC,
+          onEditingComplete: onEditingComplete,
+          onChanged: onChanged,
+           validator:validator,
           //obscureText: true,
-          onSubmitted: onSubmitted,
+        //  onSubmitted: onSubmitted,
+
           decoration: InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFF0EA1E8)),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFF0EA1E8)),
+            ),
+
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFF0EA1E8)),
+            ),
+            labelText: labelText,
+
+            //   suffixIcon: Icon(Icons.https, color: primaryColor)
+          ),
+        /*  decoration: InputDecoration(
+
+
             labelText: 'N° DOCUMENTO IDENTIDAD',
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: primaryColor),
@@ -94,7 +115,7 @@ class FormularioReq {
 
               //   suffixIcon: Icon(Icons.https, color: primaryColor)
             ),
-          ),
+          ),*/
         ));
   }
 }

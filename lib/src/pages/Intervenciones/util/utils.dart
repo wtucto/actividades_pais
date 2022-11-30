@@ -37,7 +37,7 @@ class Util {
 
 
   showAlertDialogokno(titulo, BuildContext context, presse, pressno, texto) {
-    Widget okButton = TextButton(child: Text("OK"), onPressed: presse);
+    Widget okButton = TextButton(child: Text("SI"), onPressed: presse);
     Widget moButton = TextButton(child: Text("NO"), onPressed: pressno);
     AlertDialog alert = AlertDialog(
       title: Text(titulo),
