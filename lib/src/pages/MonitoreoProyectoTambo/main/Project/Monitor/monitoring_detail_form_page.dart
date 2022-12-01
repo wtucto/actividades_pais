@@ -203,13 +203,13 @@ class _MonitoringDetailNewEditPageState
        * Seleccionar el valor por defecto de los combos
        * - Seleccione una opción
        */
-      //_statusMonitor = widget.cbEMONI[0];
-      //_statusAdvance = widget.cbEAVAN[0];
-      //_valuePartidaEje = widget.cbPEJEC[0];
-      //_valueProblemaIO = widget.cbPIDEO[0];
-      //_valueAlternSolucion = widget.cbASOLU[0];
-      //_valueRiesgo = widget.cbRIDEN[0];
-      //_valueNivelRiesgo = widget.cbNRIES[0];
+      _statusMonitor = widget.cbEMONI[0];
+      _statusAdvance = widget.cbEAVAN[0];
+      _valuePartidaEje = widget.cbPEJEC[0];
+      _valueProblemaIO = widget.cbPIDEO[0];
+      _valueAlternSolucion = widget.cbASOLU[0];
+      _valueRiesgo = widget.cbRIDEN[0];
+      _valueNivelRiesgo = widget.cbNRIES[0];
     } catch (oError) {
       var sTitle = 'Error';
       var sMessage = oError.toString();
@@ -285,13 +285,23 @@ class _MonitoringDetailNewEditPageState
       _longitud.text = m.longitud!;
       _latitud.text = m.latitud!;
 
-      _statusMonitor = m.estadoMonitoreo ?? "";
-      _statusAdvance = m.estadoAvance ?? "";
-      _valuePartidaEje = m.actividadPartidaEjecutada ?? "";
-      _valueProblemaIO = m.problemaIdentificado ?? "";
-      _valueAlternSolucion = m.alternativaSolucion ?? "";
-      _valueRiesgo = m.riesgoIdentificado ?? "";
-      _valueNivelRiesgo = m.nivelRiesgo ?? "";
+      _statusMonitor =
+          m.estadoMonitoreo == "" ? widget.cbEMONI[0] : m.estadoMonitoreo;
+      _statusAdvance =
+          m.estadoAvance == "" ? widget.cbEAVAN[0] : m.estadoAvance;
+      _valuePartidaEje = m.actividadPartidaEjecutada == ""
+          ? widget.cbPEJEC[0]
+          : m.actividadPartidaEjecutada;
+      _valueProblemaIO = m.problemaIdentificado == ""
+          ? widget.cbPIDEO[0]
+          : m.problemaIdentificado;
+      _valueAlternSolucion = m.alternativaSolucion == ""
+          ? widget.cbASOLU[0]
+          : m.alternativaSolucion;
+      _valueRiesgo =
+          m.riesgoIdentificado == "" ? widget.cbRIDEN[0] : m.riesgoIdentificado;
+      _valueNivelRiesgo =
+          m.nivelRiesgo == "" ? widget.cbNRIES[0] : m.nivelRiesgo;
 
       List<String?> listaImage = [];
       listaImage.addAll([
@@ -420,7 +430,7 @@ class _MonitoringDetailNewEditPageState
        */
       body: Form(
         key: _formKey,
-        //autovalidateMode: AutovalidateMode.onUserInteraction,
+        // autovalidateMode: AutovalidateMode.onUserInteraction,
         child: ListView(
           padding: const EdgeInsets.all(32.0),
           children: [
@@ -473,12 +483,8 @@ class _MonitoringDetailNewEditPageState
               value: _statusMonitor!,
               items: widget.cbEMONI,
               isDense: false,
-              validator: (value) =>
-                  value!.toUpperCase().contains("SELECCIONE UNA OPCIÓN") ||
-                          value == ""
-                      ? 'Required'.tr
-                      : null,
               onChanged: null,
+              isRequired: false,
             ),
 
             /**
@@ -555,20 +561,11 @@ class _MonitoringDetailNewEditPageState
               value: _statusAdvance!,
               items: widget.cbEAVAN,
               isDense: false,
-              validator: (value) =>
-                  value!.toUpperCase().contains("SELECCIONE UNA OPCIÓN") ||
-                          value == ""
-                      ? 'Required'.tr
-                      : null,
+              isRequired: true,
               onChanged: _enabledF
                   ? (val) {
                       setState(() {
-                        String sValue = val.toString().toUpperCase();
-                        if (!sValue.contains("SELECCIONE UNA OPCIÓN")) {
-                          _statusAdvance = val.toString();
-                        } else {
-                          _statusAdvance = "";
-                        }
+                        _statusAdvance = val.toString();
                       });
                     }
                   : null,
@@ -589,37 +586,29 @@ class _MonitoringDetailNewEditPageState
               value: _valuePartidaEje!,
               items: widget.cbPEJEC,
               isDense: false,
-              validator: (value) =>
-                  value!.toUpperCase().contains("SELECCIONE UNA OPCIÓN") ||
-                          value == ""
-                      ? 'Required'.tr
-                      : null,
+              isRequired: true,
               onChanged: _enabledF
                   ? (val) async {
                       String sValue = val.toString().toUpperCase();
-                      if (!sValue.contains("SELECCIONE UNA OPCIÓN")) {
-                        _valuePartidaEje = val.toString();
-                        try {
-                          TramaProyectoModel oProyect =
-                              TramaProyectoModel.empty();
-                          oProyect.numSnip = _snip;
-                          TramaMonitoreoModel oLastMonitor =
-                              await mainController.getMonitoreoLastTypePartida(
-                            oProyect,
-                            _valuePartidaEje!,
-                          );
+                      _valuePartidaEje = val.toString();
+                      try {
+                        TramaProyectoModel oProyect =
+                            TramaProyectoModel.empty();
+                        oProyect.numSnip = _snip;
+                        TramaMonitoreoModel oLastMonitor =
+                            await mainController.getMonitoreoLastTypePartida(
+                          oProyect,
+                          _valuePartidaEje!,
+                        );
 
-                          _advanceFEP.text =
-                              ((oLastMonitor.avanceFisicoPartida! * 100)
-                                      .toStringAsFixed(2))
-                                  .toString();
-                        } catch (e) {
-                          _advanceFEP.text = '0.00';
-                        }
-                      } else {
-                        _valuePartidaEje = "";
+                        _advanceFEP.text =
+                            ((oLastMonitor.avanceFisicoPartida! * 100)
+                                    .toStringAsFixed(2))
+                                .toString();
+                      } catch (e) {
                         _advanceFEP.text = '0.00';
                       }
+
                       setState(() {});
                     }
                   : null,
@@ -640,6 +629,7 @@ class _MonitoringDetailNewEditPageState
               controller: _advanceFEP,
               maxLength: 6,
               keyboardType: TextInputType.number,
+              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
               enabled: _enabledF,
             ),
             /**
@@ -710,20 +700,11 @@ class _MonitoringDetailNewEditPageState
               value: _valueProblemaIO!,
               items: widget.cbPIDEO,
               isDense: false,
-              validator: (value) =>
-                  value!.toUpperCase().contains("SELECCIONE UNA OPCIÓN") ||
-                          value == ""
-                      ? 'Required'.tr
-                      : null,
+              isRequired: true,
               onChanged: _enabledF
                   ? (val) {
                       setState(() {
-                        String sValue = val.toString().toUpperCase();
-                        if (!sValue.contains("SELECCIONE UNA OPCIÓN")) {
-                          _valueProblemaIO = val.toString();
-                        } else {
-                          _valueProblemaIO = "";
-                        }
+                        _valueProblemaIO = val.toString();
                       });
                     }
                   : null,
@@ -778,20 +759,11 @@ class _MonitoringDetailNewEditPageState
               value: _valueAlternSolucion!,
               items: widget.cbASOLU,
               isDense: false,
-              validator: (value) =>
-                  value!.toUpperCase().contains("SELECCIONE UNA OPCIÓN") ||
-                          value == ""
-                      ? 'Required'.tr
-                      : null,
+              isRequired: true,
               onChanged: _enabledF
                   ? (val) {
                       setState(() {
-                        String sValue = val.toString().toUpperCase();
-                        if (!sValue.contains("SELECCIONE UNA OPCIÓN")) {
-                          _valueAlternSolucion = val.toString();
-                        } else {
-                          _valueAlternSolucion = "";
-                        }
+                        _valueAlternSolucion = val.toString();
                       });
                     }
                   : null,
@@ -812,20 +784,11 @@ class _MonitoringDetailNewEditPageState
               value: _valueRiesgo!,
               items: widget.cbRIDEN,
               isDense: false,
-              validator: (value) =>
-                  value!.toUpperCase().contains("SELECCIONE UNA OPCIÓN") ||
-                          value == ""
-                      ? 'Required'.tr
-                      : null,
+              isRequired: false,
               onChanged: _enabledF
                   ? (val) {
                       setState(() {
-                        String sValue = val.toString().toUpperCase();
-                        if (!sValue.contains("SELECCIONE UNA OPCIÓN")) {
-                          _valueRiesgo = val.toString();
-                        } else {
-                          _valueRiesgo = "";
-                        }
+                        _valueRiesgo = val.toString();
                       });
                     }
                   : null,
@@ -879,20 +842,11 @@ class _MonitoringDetailNewEditPageState
               value: _valueNivelRiesgo!,
               items: widget.cbNRIES,
               isDense: false,
-              validator: (value) =>
-                  value!.toUpperCase().contains("SELECCIONE UNA OPCIÓN") ||
-                          value == ""
-                      ? 'Required'.tr
-                      : null,
+              isRequired: false,
               onChanged: _enabledF
                   ? (val) {
                       setState(() {
-                        String sValue = val.toString().toUpperCase();
-                        if (!sValue.contains("SELECCIONE UNA OPCIÓN")) {
-                          _valueNivelRiesgo = val.toString();
-                        } else {
-                          _valueNivelRiesgo = "";
-                        }
+                        _valueNivelRiesgo = val.toString();
                       });
                     }
                   : null,
@@ -1468,31 +1422,31 @@ class _MonitoringDetailNewEditPageState
 }
 
 class MyDropdownButtonFormField extends StatelessWidget {
-  const MyDropdownButtonFormField({
-    Key? key,
-    required this.items,
-    required this.value,
-    required this.isDense,
-    this.validator,
-    this.onChanged,
-  }) : super(key: key);
+  const MyDropdownButtonFormField(
+      {Key? key,
+      required this.items,
+      required this.value,
+      required this.isDense,
+      this.onChanged,
+      required this.isRequired})
+      : super(key: key);
 
   final List<dynamic> items;
   final String value;
   final bool isDense;
-  final Function(String?)? validator;
   final void Function(Object?)? onChanged;
+  final bool isRequired;
 
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
-      hint: Text(
-        'seleccione una opción',
-        style: TextStyle(
-          fontSize: 14,
-          color: Theme.of(context).hintColor,
-        ),
-      ),
+      // hint: Text(
+      //   'seleccione una opción',
+      //   style: TextStyle(
+      //     fontSize: 14,
+      //     color: Theme.of(context).hintColor,
+      //   ),
+      // ),
       isExpanded: true,
       isDense: isDense,
       value: value.isNotEmpty ? value : null,
@@ -1502,17 +1456,33 @@ class MyDropdownButtonFormField extends StatelessWidget {
         fontWeight: FontWeight.w400,
       ),
       onChanged: onChanged,
+      validator: isRequired
+          ? (value) => value
+                      .toString()
+                      .toUpperCase()
+                      .contains("SELECCIONE UNA OPCIÓN") ||
+                  value == ""
+              ? 'Required'.tr
+              : null
+          : null,
       items: items.isNotEmpty
           ? items
               .map(
                 (e) => DropdownMenuItem(
-                  value: e,
-                  child: Text(
-                    e,
-                    style: const TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                ),
+                    value: e,
+                    child: e.toUpperCase().contains("SELECCIONE UNA OPCIÓN")
+                        ? Text(
+                            e,
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).hintColor),
+                          )
+                        : Text(
+                            e,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                          )),
               )
               .toList()
           : null,

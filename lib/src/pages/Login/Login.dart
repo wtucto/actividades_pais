@@ -176,23 +176,97 @@ class __FormState extends State<_Form> {
     double w = MediaQuery.of(context).size.width;
     Future LoginUser(usn, psw, rpsw) async {
       //final listarTramaproyecto = await pnPaisApi.listarTramaproyecto();
+      try {
+        var res = await DatabasePr.db
+            .getLoginUser(dni: int.parse(usn), contrasenia: psw);
+        if (res.length > 0) {
+          ConfigPersonal oUserInfo = res[0];
 
-      var res = await DatabasePr.db
-          .getLoginUser(dni: int.parse(usn), contrasenia: psw);
-      if (res.length > 0) {
-        ConfigPersonal oUserInfo = res[0];
+          if (res[0].unidad != 'UPS') {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => HomePagePais()),
+            );
+            return;
+          }
 
-        if (res[0].unidad != 'UPS') {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => HomePagePais()),
-          );
-          return;
+          UserModel oUser;
+          try {
+            String codigo = res[0].codigo;
+            oUser = await mainController.getUserLogin(codigo, '');
+
+            // if (oUser.clave == "") {
+            //   if (bRepeat != true) {
+            //     setState(() {
+            //       bRepeat = true;
+            //     });
+            //     return;
+            //   }
+            // }
+
+            // if (bRepeat == true) {
+            if (psw != rpsw) {
+              mostrarAlerta(
+                context,
+                'Login incorrecto',
+                'Las contraseñas no coinciden. vuelve a intentarlo',
+              );
+              return '';
+            }
+            // }
+
+            if (bRepeat == true) {
+              oUser.clave = psw;
+
+              await mainController.insertUser(oUser);
+            } else {
+              oUser = await mainController.getUserLogin(codigo, "");
+            }
+
+            //setState(() { bRepeat = true; });
+
+            if ((oUser.codigo == codigo &&
+                (oUser.clave == psw || oUserInfo.contrasenia == psw))) {
+              // mainController.users.value = [oUser];
+
+              //SECCION
+              check = _prefs!.getBool("check");
+              if (_prefs != null && check == true) {
+                _prefs!.setString("clave", oUser.clave!);
+              } else {
+                _prefs!.setString("clave", "");
+              }
+
+              _prefs!.setString("nombres", oUser.nombres!);
+              _prefs!.setString("codigo", oUser.codigo!);
+              _prefs!.setString("rol", oUser.rol!);
+              _prefs!.setString("dni", oUserInfo.numeroDni.toString());
+
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (_) => HomePagePais()),
+              );
+              return;
+            } else {
+              mostrarAlerta(
+                context,
+                'Login incorrecto',
+                'Revise sus credenciales nuevamente',
+              );
+            }
+          } catch (oError) {
+            mostrarAlerta(context, 'Login incorrecto', oError.toString());
+          }
         }
+
+        /*  if (usn == 'PAIS' && psw == 'PAIS') {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => HomePagePais()),
+        );
+        return;
+      }*/
 
         UserModel oUser;
         try {
-          String codigo = res[0].codigo;
-          oUser = await mainController.getUserLogin(codigo, '');
+          oUser = await mainController.getUserLogin(usn, '');
 
           if (oUser.clave == "") {
             if (bRepeat != true) {
@@ -219,13 +293,12 @@ class __FormState extends State<_Form> {
 
             await mainController.insertUser(oUser);
           } else {
-            oUser = await mainController.getUserLogin(codigo, "");
+            oUser = await mainController.getUserLogin(usn, psw);
           }
 
           //setState(() { bRepeat = true; });
 
-          if ((oUser.codigo == codigo &&
-              (oUser.clave == psw || oUserInfo.contrasenia == psw))) {
+          if ((oUser.codigo == usn && oUser.clave == psw)) {
             // mainController.users.value = [oUser];
 
             //SECCION
@@ -239,12 +312,12 @@ class __FormState extends State<_Form> {
             _prefs!.setString("nombres", oUser.nombres!);
             _prefs!.setString("codigo", oUser.codigo!);
             _prefs!.setString("rol", oUser.rol!);
-            _prefs!.setString("dni", oUserInfo.numeroDni.toString());
 
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => HomePagePais()),
+              MaterialPageRoute(
+                builder: (_) => HomePagePais(),
+              ),
             );
-            return;
           } else {
             mostrarAlerta(
               context,
@@ -255,77 +328,9 @@ class __FormState extends State<_Form> {
         } catch (oError) {
           mostrarAlerta(context, 'Login incorrecto', oError.toString());
         }
-      }
-      /*  if (usn == 'PAIS' && psw == 'PAIS') {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => HomePagePais()),
-        );
-        return;
-      }*/
-
-      UserModel oUser;
-      try {
-        oUser = await mainController.getUserLogin(usn, '');
-
-        if (oUser.clave == "") {
-          if (bRepeat != true) {
-            setState(() {
-              bRepeat = true;
-            });
-            return;
-          }
-        }
-
-        if (bRepeat == true) {
-          if (psw != rpsw) {
-            mostrarAlerta(
-              context,
-              'Login incorrecto',
-              'Las contraseñas no coinciden. vuelve a intentarlo',
-            );
-            return '';
-          }
-        }
-
-        if (bRepeat == true) {
-          oUser.clave = psw;
-
-          await mainController.insertUser(oUser);
-        } else {
-          oUser = await mainController.getUserLogin(usn, psw);
-        }
-
-        //setState(() { bRepeat = true; });
-
-        if ((oUser.codigo == usn && oUser.clave == psw)) {
-          // mainController.users.value = [oUser];
-
-          //SECCION
-          check = _prefs!.getBool("check");
-          if (_prefs != null && check == true) {
-            _prefs!.setString("clave", oUser.clave!);
-          } else {
-            _prefs!.setString("clave", "");
-          }
-
-          _prefs!.setString("nombres", oUser.nombres!);
-          _prefs!.setString("codigo", oUser.codigo!);
-          _prefs!.setString("rol", oUser.rol!);
-
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (_) => HomePagePais(),
-            ),
-          );
-        } else {
-          mostrarAlerta(
-            context,
-            'Login incorrecto',
-            'Revise sus credenciales nuevamente',
-          );
-        }
       } catch (oError) {
-        mostrarAlerta(context, 'Login incorrecto', oError.toString());
+        mostrarAlerta(
+            context, 'Login incorrecto', 'Revise sus credenciales nuevamente');
       }
 
       return;
@@ -348,13 +353,13 @@ class __FormState extends State<_Form> {
             textController: passCtrl,
             isPassword: true,
           ),
-          if (bRepeat == true)
-            CustomInput(
-              icon: Icons.lock_outline,
-              placeholder: 'Repetir Contraseña',
-              textController: passCtrl2,
-              isPassword: true,
-            ),
+          // if (bRepeat == true)
+          // CustomInput(
+          //   icon: Icons.lock_outline,
+          //   placeholder: 'Repetir Contraseña',
+          //   textController: passCtrl2,
+          //   isPassword: true,
+          // ),
           InkWell(
             onTap: () {
               Navigator.of(context).pushReplacement(
@@ -372,8 +377,8 @@ class __FormState extends State<_Form> {
           SizedBox(height: h / 50),
           BotonLog(
             text: 'Ingresar',
-            onPressed: () {
-              LoginUser(emailCtrl.text, passCtrl.text, passCtrl2.text);
+            onPressed: () async {
+              await LoginUser(emailCtrl.text, passCtrl.text, passCtrl.text);
             },
           ),
           CheckboxListTile(
