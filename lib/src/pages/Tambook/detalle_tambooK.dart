@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
-class CourseInfoScreen extends StatefulWidget {
+class DetalleTambook extends StatefulWidget {
   @override
-  _CourseInfoScreenState createState() => _CourseInfoScreenState();
+  _DetalleTambookState createState() => _DetalleTambookState();
 }
 
-class _CourseInfoScreenState extends State<CourseInfoScreen> {
+class _DetalleTambookState extends State<DetalleTambook> {
   StepperType stepperType = StepperType.vertical;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -478,30 +477,5 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
         ],
       ),
     );
-  }
-}
-
-class CustomAppBarShape extends ContinuousRectangleBorder {
-  final double multi;
-  const CustomAppBarShape({this.multi = 0.5});
-  @override
-  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    double height = rect.height;
-    double width = rect.width;
-    var path = Path();
-    path.lineTo(0, height + width * multi);
-    path.arcToPoint(
-      Offset(width * multi, height),
-      radius: Radius.circular(width * multi),
-    );
-    path.lineTo(width * (1 - multi), height);
-    path.arcToPoint(
-      Offset(width, height + width * multi),
-      radius: Radius.circular(width * multi),
-    );
-    path.lineTo(width, 0);
-    path.close();
-
-    return path;
   }
 }

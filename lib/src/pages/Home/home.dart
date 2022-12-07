@@ -5,7 +5,7 @@ import 'package:actividades_pais/src/pages/ProgramacionActividades/actividadesPn
 import 'package:actividades_pais/src/pages/ProgramacionActividades/cordinacion_articulacion.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_suspervicion.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/programacion_list_page.dart';
-import 'package:actividades_pais/src/pages/Tambook/homeTambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/dashboard_tambook.dart';
 import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
@@ -419,7 +419,8 @@ class _HomePagePais extends State<HomePagePais> {
                       case 'OPT1008':
                         var rspt = await Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => HomeTambook(),
+                            builder: (_) => DashboardTambook(),
+                            // builder: (_) => HomeTambook(),
                           ),
                         );
                         break;
