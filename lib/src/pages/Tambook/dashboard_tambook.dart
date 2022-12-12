@@ -1,5 +1,7 @@
 import 'package:actividades_pais/src/pages/Tambook/atenciones_list_view.dart';
 import 'package:actividades_pais/src/pages/Tambook/detalle_tambooK.dart';
+import 'package:actividades_pais/src/pages/Tambook/widgets/color_title.dart';
+import 'package:actividades_pais/src/pages/Tambook/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 
 class DashboardTambook extends StatefulWidget {
@@ -10,6 +12,9 @@ class DashboardTambook extends StatefulWidget {
 }
 
 class _DashboardTambookState extends State<DashboardTambook> {
+  final TextEditingController searchController = TextEditingController();
+  String query = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +39,7 @@ class _DashboardTambookState extends State<DashboardTambook> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor: Color(0xFFFAFAFA),
+            backgroundColor: Color.fromARGB(255, 238, 230, 230),
             pinned: true,
             snap: true,
             floating: true,
@@ -47,53 +52,51 @@ class _DashboardTambookState extends State<DashboardTambook> {
   }
 
   getHeader() {
-    return Container(
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    "Bienvenidos!",
-                    style: TextStyle(
-                        color: Color(0xFF3E4249),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    "Programa Nacional Pais",
-                    style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => DetalleTambook(),
-                    ),
-                  );
-                },
-                child: const CustomImage(
-                  'https://avatars.githubusercontent.com/u/86506519?v=4',
-                  width: 35,
-                  height: 35,
-                  trBackground: true,
-                  borderColor: Color(0xFF3498db),
-                  radius: 10,
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  "Bienvenidos!",
+                  style: TextStyle(
+                      color: Color(0xFF3E4249),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
                 ),
+                Text(
+                  "Programa Nacional Pais",
+                  style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => DetalleTambook(),
+                  ),
+                );
+              },
+              child: const CustomImage(
+                'https://avatars.githubusercontent.com/u/86506519?v=4',
+                width: 35,
+                height: 35,
+                trBackground: true,
+                borderColor: Color(0xFF3498db),
+                radius: 10,
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -102,27 +105,8 @@ class _DashboardTambookState extends State<DashboardTambook> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
-            height: 15,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15),
-            child: Row(
-              children: const [
-                Expanded(
-                  child: CustomTextBox(
-                    hint: "Buscar por Tambo",
-                    prefix: Icon(Icons.search, color: Colors.grey),
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 20,
+          SearchBar(
+            onChanged: (z) => setState(() => query = z.toLowerCase()),
           ),
           // Atenciones
           Column(
@@ -132,6 +116,7 @@ class _DashboardTambookState extends State<DashboardTambook> {
               AtencionesListView(),
             ],
           ),
+
           getPopularCourseUI()
           // Intervenciones
         ],
@@ -192,6 +177,49 @@ class _DashboardTambookState extends State<DashboardTambook> {
         ],
       ),
     );
+  }
+
+  Widget searchField() {
+    return SearchBar(
+      onChanged: (z) => setState(() => query = z.toLowerCase()),
+    );
+  }
+
+  Widget clonesResult() {
+    List<Clone> _clones = clones.where((clone) {
+      return clone.title.toString().toLowerCase().contains(query) ||
+          clone.title.toString().toLowerCase().contains(query);
+    }).toList();
+    return Flexible(
+      child: ListView.builder(
+        padding: const EdgeInsets.all(0),
+        shrinkWrap: false,
+        itemCount: _clones.length,
+        itemBuilder: (BuildContext context, int index) {
+          Clone clone = _clones[index];
+          return ColorTile(
+              icon: clone.icon,
+              color: clone.color,
+              title: clone.title,
+              subtitle: clone.subtitle,
+              onTap: () {
+                // Navigator.push(context, clone.page);
+                print("Seleccionado = >");
+              });
+        },
+      ),
+    );
+  }
+
+  static List<Clone> clones = [
+    Clone(Text("hola"), Colors.blue, Icons.calendar_today, "Timer Drawer",
+        "Simple clean drawer design from dribbble.com"),
+  ];
+
+  void clearSearch() {
+    searchController.clear();
+    query = '';
+    FocusScope.of(context).unfocus();
   }
 }
 
@@ -290,4 +318,14 @@ class CustomImage extends StatelessWidget {
       ),
     );
   }
+}
+
+class Clone {
+  final Widget page;
+  final Color color;
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  Clone(this.page, this.color, this.icon, this.title, this.subtitle);
 }

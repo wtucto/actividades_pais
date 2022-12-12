@@ -34,7 +34,7 @@ class _AtencionesListViewState extends State<AtencionesListView>
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16, bottom: 16),
+      padding: const EdgeInsets.only(bottom: 16),
       child: Container(
         height: 134,
         width: double.infinity,
