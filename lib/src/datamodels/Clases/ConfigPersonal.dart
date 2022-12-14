@@ -23,6 +23,7 @@ class ConfigPersonal {
   String codigo = '';
   String rol = '';
   String fechaNacimento = '';
+  String tipoUsuario = '';
 
   ConfigPersonal({
     this.numeroDni = 0,
@@ -48,6 +49,7 @@ class ConfigPersonal {
       "apellidoPaterno": apellidoPaterno,
       "apellidoMaterno": apellidoMaterno,
       "unidad": unidad,
+      "tipoUsuario": tipoUsuario ?? '',
     };
   }
 
@@ -67,5 +69,6 @@ class ConfigPersonal {
     unidad = map['unidad'];
     codigo = map['codigo'];
     rol = map['rol'];
+    tipoUsuario = map['tipoUsuario'] ?? '';
   }
 }

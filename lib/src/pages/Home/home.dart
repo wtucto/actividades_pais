@@ -50,7 +50,7 @@ class _HomePagePais extends State<HomePagePais> {
 
   String long = '';
   String lat = '';
-  String unidad = '';
+  List<String> aUnidad = [];
   @override
   void initState() {
     super.initState();
@@ -77,8 +77,16 @@ class _HomePagePais extends State<HomePagePais> {
     cantidadDB = 1;
     var res = await DatabasePr.db.getAllConfigPersonal();
     if (res.length > 0) {
+      List<String> aUnidadTemp = [];
+      String codigo = '';
+      List<String> aPass = [];
+      for (var u in res) {
+        aUnidadTemp.add(u.unidad);
+        if (u.unidad == 'UPS') codigo = u.codigo;
+      }
+
       setState(() {
-        unidad = res[0].unidad;
+        aUnidad = aUnidadTemp;
       });
       return;
     }
@@ -165,16 +173,7 @@ class _HomePagePais extends State<HomePagePais> {
         ),
       );
     } else {
-      if (unidad == 'UAGS') {
-        /*aHomeOptions.add(
-          HomeOptions(
-            code: 'OPT1001',
-            name: 'TileBitacoraRegister'.tr,
-            types: const ['Ver'],
-            image: icon6,
-            color: lightBlue,
-          ),
-        );*/
+      if (aUnidad.contains("UAGS")) {
         if (tipoPlataforma == 'TAMBO') {
           aHomeOptions.add(
             HomeOptions(
@@ -216,7 +215,7 @@ class _HomePagePais extends State<HomePagePais> {
       }
     }
 
-    if (unidad == 'UPS') {
+    if (aUnidad.contains("UPS")) {
       aHomeOptions.add(
         HomeOptions(
           code: 'OPT1005',

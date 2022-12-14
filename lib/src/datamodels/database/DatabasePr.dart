@@ -57,10 +57,7 @@ class DatabasePr {
     _db = await openDatabase(
       'databaseConfig.db',
       version: 1,
-      onCreate: (Database db, int version) {
-        db.execute(
-            "CREATE TABLE ConfigPersonal (id INTEGER PRIMARY KEY,unidad, codigo, nombres, rol,fechaNacimento,numeroDni,contrasenia,apellidoMaterno, apellidoPaterno, cargo)");
-
+      onCreate: (Database db, int version) async {
         db.execute(
             "CREATE TABLE DatUnidadesOrganicas (id INTEGER PRIMARY KEY, UNIDAD_ORGANICA TEXT, IDUO INTEGER)");
         db.execute(
@@ -85,9 +82,6 @@ class DatabasePr {
 
         db.execute(
             "CREATE TABLE DatPuesto (id INTEGER PRIMARY KEY, idPuesto INTEGER, nombrePuesto TEXT)");
-        db.execute(
-            "CREATE TABLE DatConfigInicio (idConfigInicio INTEGER PRIMARY KEY,  nombreConfigInicio,	idLugarPrestacion, lugarPrestacion,	idUnidadesOrganicas, unidadesOrganicas,	idPuesto,	puesto, idUnidTerritoriales, unidTerritoriales,	idTambo,	nombreTambo, snip, tipoPlataforma,campania,codCampania,modalidad)");
-
         db.execute(
             "CREATE TABLE asistenciaClass (id INTEGER PRIMARY KEY,  numeroDni,	nombres, snip,	nombreTambo, modalidadTrabajo,	idModalidadTrabajo,	cargo, date,dateSalida, unidadorg, tipoasistencia, idTipoasistencia)");
         db.execute(
@@ -143,6 +137,32 @@ class DatabasePr {
         db.execute(
             'CREATE TABLE participanteEjecucion (id INTEGER PRIMARY KEY, id_entidad,id_servicio,'
             'nombre_servicio,id_programacion)');
+
+        await db.execute(
+            "CREATE TABLE DatConfigInicio (idConfigInicio INTEGER PRIMARY KEY,  nombreConfigInicio,	idLugarPrestacion, lugarPrestacion,	idUnidadesOrganicas, unidadesOrganicas,	idPuesto,	puesto, idUnidTerritoriales, unidTerritoriales,	idTambo,	nombreTambo, snip, tipoPlataforma,campania,codCampania,modalidad)");
+
+        await db.execute(
+            "CREATE TABLE ConfigPersonal (id INTEGER PRIMARY KEY,unidad, codigo, nombres, rol,fechaNacimento,numeroDni,contrasenia,apellidoMaterno, apellidoPaterno, cargo, tipoUsuario)");
+
+        /**
+         * GENERAR USUARIO DEMO
+         */
+
+        await db.execute(
+          "INSERT INTO DatConfigInicio (idLugarPrestacion, lugarPrestacion, idUnidadesOrganicas, unidadesOrganicas, idPuesto, puesto, idUnidTerritoriales, unidTerritoriales, idTambo, nombreTambo, tipoPlataforma, snip, campania, codCampania, modalidad) VALUES (2, 'UNIDADES TERRITORIALES', 2, 'UNIDAD DE ADMINISTRACION', 1, 'GESTOR INSTITUCIONAL', 1, 'AMAZONAS', 20491, 'PUERTO PACUY', 'TAMBO', 342434, '', '0', '')",
+        );
+        /*
+        await db.execute(
+          "INSERT INTO DatConfigInicio (idLugarPrestacion, lugarPrestacion, idUnidadesOrganicas, unidadesOrganicas, idPuesto, puesto, idUnidTerritoriales, unidTerritoriales, idTambo, nombreTambo, tipoPlataforma, snip, campania, codCampania, modalidad) VALUES (2, 'UNIDADES TERRITORIALES', 2, 'UNIDAD DE ADMINISTRACION', 1, 'GESTOR INSTITUCIONAL', 1, 'AMAZONAS', 20491, 'PUERTO PACUY', 'PIAS', 342434, '', '0', '1')",
+        );
+        */
+
+        await db.execute(
+          "INSERT INTO ConfigPersonal (codigo, nombres, rol, fechaNacimento, numeroDni, contrasenia, apellidoPaterno, apellidoMaterno, unidad, tipoUsuario) VALUES ('', 'JULIO ARMANDO ', '', '1994-07-26', 48400113, '111222', 'VEGA', 'SALVADOR', 'UAGS', 'DEMO')",
+        );
+        await db.execute(
+          "INSERT INTO ConfigPersonal (codigo, nombres, rol, fechaNacimento, numeroDni, contrasenia, apellidoPaterno, apellidoMaterno, unidad, tipoUsuario) VALUES ('CIP_92822', 'Freddy Ramos Espinoza', 'CRP', '1994-07-26', 48400113, '111222', '', '', 'UPS', 'DEMO')",
+        );
       },
     );
   }
@@ -168,6 +188,7 @@ class DatabasePr {
     print(_db!.execute("DELETE FROM tipoDocumento"));
     print(_db!.execute("DELETE FROM sexo"));
   }
+
 //
   Future<List<ConfigPersonal>> getLoginUser(
       {required int dni, contrasenia}) async {
@@ -183,7 +204,8 @@ class DatabasePr {
   Future<List<ConfigPersonal>> getValidarUsuario(
       {required int dni, fechaNacimiento}) async {
     initDB();
-    print("select * from ConfigPersonal where numeroDni=$dni and contrfechaNacimentoasenia = '$fechaNacimiento'");
+    print(
+        "select * from ConfigPersonal where numeroDni=$dni and contrfechaNacimentoasenia = '$fechaNacimiento'");
     final res = await _db!.rawQuery(
         "select * from ConfigPersonal where numeroDni=$dni and fechaNacimento = '$fechaNacimiento'");
     List<ConfigPersonal> list = res.isNotEmpty
@@ -192,14 +214,17 @@ class DatabasePr {
 
     return list;
   }
-  Future <int> updateUsuarioContrasenia(ConfigPersonal configPersonal) async {
-    print( configPersonal.contrasenia);
-    print("UPDATE ConfigPersonal SET contrasenia = '${configPersonal.contrasenia}' where id = ${configPersonal.id};");
-    final res = await _db
-        ?.rawQuery("UPDATE ConfigPersonal SET contrasenia = '${configPersonal.contrasenia}' where id = ${configPersonal.id};");
+
+  Future<int> updateUsuarioContrasenia(ConfigPersonal configPersonal) async {
+    print(configPersonal.contrasenia);
+    print(
+        "UPDATE ConfigPersonal SET contrasenia = '${configPersonal.contrasenia}' where id = ${configPersonal.id};");
+    final res = await _db?.rawQuery(
+        "UPDATE ConfigPersonal SET contrasenia = '${configPersonal.contrasenia}' where id = ${configPersonal.id};");
     print(res);
     return res!.length;
   }
+
 //////////////////////
   Future<void> insertParticipanteEjecucion(
       ParticipanteEjecucion participanteEjecucion) async {

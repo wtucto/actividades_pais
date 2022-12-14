@@ -2,10 +2,8 @@
 
 import 'dart:async';
 
-import 'package:actividades_pais/main.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
-import 'package:actividades_pais/src/pages/configuracion/ConfiguracionInicial.dart';
 import 'package:actividades_pais/src/pages/configuracion/ResetContrasenia.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -59,9 +57,18 @@ class _LoginPageState extends State<LoginPage> {
 
   vaidarexUsuario() async {
     var cnt = await DatabasePr.db.getAllConfigPersonal();
+
+    List<String> aTipoUsuario = [];
+    for (var u in cnt) {
+      if (u.tipoUsuario == 'DEMO') aTipoUsuario.add(u.tipoUsuario);
+    }
+
+    /**
+     * Valida si el usuario registrado es DEMO, 
+     * caso contrario habilita el boton "registrarse en el app".
+     */
     setState(() {
-      print(cnt.length);
-      contador = cnt.length;
+      contador = cnt.length == aTipoUsuario.length ? 0 : cnt.length;
     });
   }
 
@@ -175,158 +182,68 @@ class __FormState extends State<_Form> {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     Future LoginUser(usn, psw, rpsw) async {
-      //final listarTramaproyecto = await pnPaisApi.listarTramaproyecto();
       try {
+        var prefixUserDemo = 'D';
+
         var res = await DatabasePr.db
             .getLoginUser(dni: int.parse(usn), contrasenia: psw);
-        if (res.length > 0) {
+        if (res.isNotEmpty) {
           ConfigPersonal oUserInfo = res[0];
-
-          if (res[0].unidad != 'UPS') {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => HomePagePais()),
-            );
-            return;
+          List<String> aUnidad = [];
+          String codigo = '';
+          List<String> aPass = [];
+          for (var u in res) {
+            aUnidad.add(u.unidad);
+            aPass.add(u.contrasenia);
+            if (u.unidad == 'UPS') codigo = u.codigo;
           }
 
-          UserModel oUser;
-          try {
-            String codigo = res[0].codigo;
-            oUser = await mainController.getUserLogin(codigo, '');
-
-            // if (oUser.clave == "") {
-            //   if (bRepeat != true) {
-            //     setState(() {
-            //       bRepeat = true;
-            //     });
-            //     return;
-            //   }
-            // }
-
-            // if (bRepeat == true) {
-            if (psw != rpsw) {
-              mostrarAlerta(
-                context,
-                'Login incorrecto',
-                'Las contraseñas no coinciden. vuelve a intentarlo',
-              );
-              return '';
-            }
-            // }
-
-            if (bRepeat == true) {
-              oUser.clave = psw;
-
-              await mainController.insertUser(oUser);
-            } else {
-              oUser = await mainController.getUserLogin(codigo, "");
-            }
-
-            //setState(() { bRepeat = true; });
-
-            if ((oUser.codigo == codigo &&
-                (oUser.clave == psw || oUserInfo.contrasenia == psw))) {
-              // mainController.users.value = [oUser];
-
-              //SECCION
-              check = _prefs!.getBool("check");
-              if (_prefs != null && check == true) {
-                _prefs!.setString("clave", oUser.clave!);
-              } else {
-                _prefs!.setString("clave", "");
-              }
-
-              _prefs!.setString("nombres", oUser.nombres!);
-              _prefs!.setString("codigo", oUser.codigo!);
-              _prefs!.setString("rol", oUser.rol!);
-              _prefs!.setString("dni", oUserInfo.numeroDni.toString());
-
+          if (codigo == '') {
+            if (!aUnidad.contains('UPS')) {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (_) => HomePagePais()),
               );
               return;
-            } else {
+            }
+          } else {
+            UserModel oUser;
+            try {
+              oUser = await mainController.getUserLogin(codigo, '');
+
+              if ((oUser.codigo == codigo && (aPass.contains(psw)))) {
+                check = _prefs!.getBool("check");
+                if (_prefs != null && check == true) {
+                  _prefs!.setString("clave", oUser.clave!);
+                } else {
+                  _prefs!.setString("clave", "");
+                }
+
+                _prefs!.setString("nombres", oUser.nombres!);
+                _prefs!.setString("codigo", oUser.codigo!);
+                _prefs!.setString("rol", oUser.rol!);
+                _prefs!.setString("dni", oUserInfo.numeroDni.toString());
+
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (_) => HomePagePais(),
+                  ),
+                );
+                return;
+              } else {
+                mostrarAlerta(
+                  context,
+                  'Login incorrecto',
+                  'Revise sus credenciales nuevamente',
+                );
+              }
+            } catch (oError) {
               mostrarAlerta(
                 context,
                 'Login incorrecto',
-                'Revise sus credenciales nuevamente',
+                oError.toString(),
               );
             }
-          } catch (oError) {
-            mostrarAlerta(context, 'Login incorrecto', oError.toString());
           }
-        }
-
-        /*  if (usn == 'PAIS' && psw == 'PAIS') {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => HomePagePais()),
-        );
-        return;
-      }*/
-
-        UserModel oUser;
-        try {
-          oUser = await mainController.getUserLogin(usn, '');
-
-          if (oUser.clave == "") {
-            if (bRepeat != true) {
-              setState(() {
-                bRepeat = true;
-              });
-              return;
-            }
-          }
-
-          if (bRepeat == true) {
-            if (psw != rpsw) {
-              mostrarAlerta(
-                context,
-                'Login incorrecto',
-                'Las contraseñas no coinciden. vuelve a intentarlo',
-              );
-              return '';
-            }
-          }
-
-          if (bRepeat == true) {
-            oUser.clave = psw;
-
-            await mainController.insertUser(oUser);
-          } else {
-            oUser = await mainController.getUserLogin(usn, psw);
-          }
-
-          //setState(() { bRepeat = true; });
-
-          if ((oUser.codigo == usn && oUser.clave == psw)) {
-            // mainController.users.value = [oUser];
-
-            //SECCION
-            check = _prefs!.getBool("check");
-            if (_prefs != null && check == true) {
-              _prefs!.setString("clave", oUser.clave!);
-            } else {
-              _prefs!.setString("clave", "");
-            }
-
-            _prefs!.setString("nombres", oUser.nombres!);
-            _prefs!.setString("codigo", oUser.codigo!);
-            _prefs!.setString("rol", oUser.rol!);
-
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (_) => HomePagePais(),
-              ),
-            );
-          } else {
-            mostrarAlerta(
-              context,
-              'Login incorrecto',
-              'Revise sus credenciales nuevamente',
-            );
-          }
-        } catch (oError) {
-          mostrarAlerta(context, 'Login incorrecto', oError.toString());
         }
       } catch (oError) {
         mostrarAlerta(

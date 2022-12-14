@@ -30,7 +30,7 @@ void main() async {
   final mainServ = MainService();
   Get.put(mainRepo);
   Get.put(mainServ);
-  Get.put(await MainController()); // Se ejecuta loadInitialData();
+  Get.put(MainController()); // Se ejecuta loadInitialData();
 
   runApp(MyApp());
 }
