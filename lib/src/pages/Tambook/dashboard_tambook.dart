@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:actividades_pais/src/pages/Tambook/atenciones_list_view.dart';
 import 'package:actividades_pais/src/pages/Tambook/detalle_tambooK.dart';
+import 'package:actividades_pais/src/pages/Tambook/models/tambo.dart';
 import 'package:actividades_pais/src/pages/Tambook/widgets/color_title.dart';
 import 'package:actividades_pais/src/pages/Tambook/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class DashboardTambook extends StatefulWidget {
   const DashboardTambook({super.key});
@@ -14,6 +18,30 @@ class DashboardTambook extends StatefulWidget {
 class _DashboardTambookState extends State<DashboardTambook> {
   final TextEditingController searchController = TextEditingController();
   String query = '';
+  late Future<Tambo> listTambo;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {});
+    listTambo = fetchAlbum();
+    print(listTambo);
+  }
+
+  Future<Tambo> fetchAlbum() async {
+    final response = await http.get(Uri.parse(
+        'https://www.pais.gob.pe/tambook/tambo/default/buscarportambo?term=SOLEDA'));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return Tambo.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
