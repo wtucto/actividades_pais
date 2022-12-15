@@ -24,25 +24,26 @@ abstract class DependencyInjection {
         baseUrl = "";
         break;
     }
+
+    Logger logger = Logger();
+
     final Dio dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
       ),
     );
 
-    final Dio dio2 = Dio(
-      BaseOptions(
-        baseUrl: baseUrl,
-      ),
-    );
-
-    Logger logger = Logger();
     Http http = Http(
       dio: dio,
       logger: logger,
       logsEnabled: true,
     );
 
+    final Dio dio2 = Dio(
+      BaseOptions(
+        baseUrl: baseUrl2,
+      ),
+    );
     Http http2 = Http(
       dio: dio2,
       logger: logger,

@@ -77,7 +77,12 @@ class Http {
         data: formData != null ? FormData.fromMap(formData) : data,
       );
 
-      final oData = response.data["response"];
+      var oData;
+      try {
+        oData = response.data["response"];
+      } catch (oError) {
+        oData = jsonDecode(response.data);
+      }
 
       if (parser != null) {
         return HttpResponse.success<T>(parser(oData));
