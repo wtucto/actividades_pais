@@ -1,12 +1,9 @@
 import 'dart:convert';
 
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Search/project_search.dart';
 import 'package:actividades_pais/src/pages/Tambook/atenciones_list_view.dart';
-import 'package:actividades_pais/src/pages/Tambook/detalle_tambooK.dart';
-import 'package:actividades_pais/src/pages/Tambook/models/tambo.dart';
-import 'package:actividades_pais/src/pages/Tambook/widgets/color_title.dart';
-import 'package:actividades_pais/src/pages/Tambook/widgets/search_bar.dart';
+import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class DashboardTambook extends StatefulWidget {
   const DashboardTambook({super.key});
@@ -18,29 +15,11 @@ class DashboardTambook extends StatefulWidget {
 class _DashboardTambookState extends State<DashboardTambook> {
   final TextEditingController searchController = TextEditingController();
   String query = '';
-  late Future<Tambo> listTambo;
 
   @override
   void initState() {
     super.initState();
     setState(() {});
-    listTambo = fetchAlbum();
-    print(listTambo);
-  }
-
-  Future<Tambo> fetchAlbum() async {
-    final response = await http.get(Uri.parse(
-        'https://www.pais.gob.pe/tambook/tambo/default/buscarportambo?term=SOLEDA'));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return Tambo.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
-    }
   }
 
   @override
@@ -48,83 +27,35 @@ class _DashboardTambookState extends State<DashboardTambook> {
     return Scaffold(
       appBar: AppBar(
         title: const Center(
-          child: Text("TAMBOOK"),
+          child: Text(
+            'TAMBOOK',
+            style: TextStyle(
+              color: Color(0xfffefefe),
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+              fontSize: 18.0,
+            ),
+          ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              iconSize: 30,
-              onPressed: () {},
-              icon: const Icon(
-                Icons.book,
-                color: Color.fromARGB(255, 255, 255, 255),
-              ),
-            ),
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: SearchTambookDelegate(),
+              );
+            },
           )
         ],
       ),
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            backgroundColor: Color.fromARGB(255, 238, 230, 230),
-            pinned: true,
-            snap: true,
-            floating: true,
-            title: getHeader(),
+          SliverToBoxAdapter(
+            child: getBody(),
           ),
-          SliverToBoxAdapter(child: getBody())
         ],
       ),
-    );
-  }
-
-  getHeader() {
-    return Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "Bienvenidos!",
-                  style: TextStyle(
-                      color: Color(0xFF3E4249),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  "Programa Nacional Pais",
-                  style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => DetalleTambook(),
-                  ),
-                );
-              },
-              child: const CustomImage(
-                'https://avatars.githubusercontent.com/u/86506519?v=4',
-                width: 35,
-                height: 35,
-                trBackground: true,
-                borderColor: Color(0xFF3498db),
-                radius: 10,
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 
@@ -133,19 +64,18 @@ class _DashboardTambookState extends State<DashboardTambook> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SearchBar(
-            onChanged: (z) => setState(() => query = z.toLowerCase()),
-          ),
-          // Atenciones
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
-              AtencionesListView(),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: AtencionesListView(),
+              ),
             ],
           ),
 
-          getPopularCourseUI()
+          getPopularCourseUI(),
           // Intervenciones
         ],
       ),
@@ -206,154 +136,4 @@ class _DashboardTambookState extends State<DashboardTambook> {
       ),
     );
   }
-
-  Widget searchField() {
-    return SearchBar(
-      onChanged: (z) => setState(() => query = z.toLowerCase()),
-    );
-  }
-
-  Widget clonesResult() {
-    List<Clone> _clones = clones.where((clone) {
-      return clone.title.toString().toLowerCase().contains(query) ||
-          clone.title.toString().toLowerCase().contains(query);
-    }).toList();
-    return Flexible(
-      child: ListView.builder(
-        padding: const EdgeInsets.all(0),
-        shrinkWrap: false,
-        itemCount: _clones.length,
-        itemBuilder: (BuildContext context, int index) {
-          Clone clone = _clones[index];
-          return ColorTile(
-              icon: clone.icon,
-              color: clone.color,
-              title: clone.title,
-              subtitle: clone.subtitle,
-              onTap: () {
-                // Navigator.push(context, clone.page);
-                print("Seleccionado = >");
-              });
-        },
-      ),
-    );
-  }
-
-  static List<Clone> clones = [
-    Clone(Text("hola"), Colors.blue, Icons.calendar_today, "Timer Drawer",
-        "Simple clean drawer design from dribbble.com"),
-  ];
-
-  void clearSearch() {
-    searchController.clear();
-    query = '';
-    FocusScope.of(context).unfocus();
-  }
-}
-
-// Search Tambook
-class CustomTextBox extends StatefulWidget {
-  const CustomTextBox(
-      {Key? key,
-      this.hint = "",
-      this.prefix,
-      this.suffix,
-      this.controller,
-      this.readOnly = false})
-      : super(key: key);
-  final String hint;
-  final Widget? prefix;
-  final Widget? suffix;
-  final bool readOnly;
-  final TextEditingController? controller;
-
-  @override
-  State<CustomTextBox> createState() => _CustomTextBoxState();
-}
-
-class _CustomTextBoxState extends State<CustomTextBox> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.only(bottom: 3),
-      height: 50,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Color.fromARGB(255, 170, 161, 161)),
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black87.withOpacity(0.05),
-            spreadRadius: .5,
-            blurRadius: .5,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: TextField(
-        readOnly: widget.readOnly,
-        controller: widget.controller,
-        onChanged: (value) {},
-        decoration: InputDecoration(
-            prefixIcon: widget.prefix,
-            suffixIcon: widget.suffix,
-            border: InputBorder.none,
-            hintText: widget.hint,
-            hintStyle: const TextStyle(color: Colors.grey, fontSize: 15)),
-      ),
-    );
-  }
-}
-
-class CustomImage extends StatelessWidget {
-  const CustomImage(this.name,
-      {this.width = 100,
-      this.height = 100,
-      this.bgColor,
-      this.borderWidth = 0,
-      this.borderColor,
-      this.trBackground = false,
-      this.isNetwork = true,
-      this.radius = 50});
-  final String name;
-  final double width;
-  final double height;
-  final double borderWidth;
-  final Color? borderColor;
-  final Color? bgColor;
-  final bool trBackground;
-  final bool isNetwork;
-  final double radius;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(radius),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black87.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 1,
-            offset: const Offset(0, 1), // changes position of shadow
-          ),
-        ],
-        image: DecorationImage(image: NetworkImage(name), fit: BoxFit.cover),
-      ),
-    );
-  }
-}
-
-class Clone {
-  final Widget page;
-  final Color color;
-  final IconData icon;
-  final String title;
-  final String subtitle;
-
-  Clone(this.page, this.color, this.icon, this.title, this.subtitle);
 }
