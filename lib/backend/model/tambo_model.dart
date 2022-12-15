@@ -1,6 +1,7 @@
 class TamboFields {
   static String imagen = 'imagen';
   static String id_tambo = 'id_tambo';
+  static String tambo = 'tambo';
   static String id_departamento = 'id_departamento';
   static String departamento = 'departamento';
   static String gestor = 'gestor';
@@ -13,6 +14,7 @@ class TamboFields {
 class TamboModel {
   String? imagen;
   String? id_tambo;
+  String? tambo;
   String? id_departamento;
   String? departamento;
   String? gestor;
@@ -26,6 +28,7 @@ class TamboModel {
   TamboModel({
     this.imagen,
     this.id_tambo,
+    this.tambo,
     this.id_departamento,
     this.departamento,
     this.gestor,
@@ -39,6 +42,7 @@ class TamboModel {
     return TamboModel(
       imagen: json[TamboFields.imagen],
       id_tambo: json[TamboFields.id_tambo],
+      tambo: json[TamboFields.tambo],
       id_departamento: json[TamboFields.id_departamento],
       departamento: json[TamboFields.departamento],
       gestor: json[TamboFields.gestor],

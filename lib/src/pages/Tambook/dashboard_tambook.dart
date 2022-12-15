@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Search/project_search.dart';
 import 'package:actividades_pais/src/pages/Tambook/atenciones_list_view.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +10,6 @@ class DashboardTambook extends StatefulWidget {
 }
 
 class _DashboardTambookState extends State<DashboardTambook> {
-  final TextEditingController searchController = TextEditingController();
-  String query = '';
-
   @override
   void initState() {
     super.initState();

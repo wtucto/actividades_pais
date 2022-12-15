@@ -1,32 +1,18 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
-import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
-import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/ListView/list_view_Projectos.dart';
+import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/src/pages/Tambook/detalle_tambooK.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-SharedPreferences? _prefs;
 
 class SearchTambookDelegate extends SearchDelegate<String> {
   SearchTambookDelegate();
-  MainController mainController = MainController();
+  final MainController mainController = MainController();
+  List<TamboModel> listTambo = [];
 
-  List<TramaProyectoModel> aProyecto = [];
-  Future<List<TramaProyectoModel>> getProyectos(String search) async {
-    _prefs = await SharedPreferences.getInstance();
-    UserModel oUser = UserModel(
-      nombres: _prefs!.getString('nombres') ?? '',
-      codigo: _prefs!.getString('codigo') ?? '',
-      rol: _prefs!.getString('rol') ?? '',
-    );
-    aProyecto = await mainController.getAllProyectoByUserSearch(
-      oUser,
-      search,
-      0,
-      0,
-    );
-
-    return aProyecto;
+  Future<List<TamboModel>> getTambook(String search) async {
+    if (search.length > 2) {
+      listTambo = await mainController.searchTambo(search);
+    }
+    return listTambo;
   }
 
   @override
@@ -64,13 +50,13 @@ class SearchTambookDelegate extends SearchDelegate<String> {
       return buildNoSuggestions();
     } else {
       return FutureBuilder(
-        future: getProyectos(query),
+        future: getTambook(query),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            if (query.isEmpty || aProyecto.isEmpty) {
+            if (query.isEmpty || listTambo.isEmpty) {
               return buildNoSuggestions();
             } else {
-              return buildSuggestionsSuccess(aProyecto);
+              return buildSuggestionsSuccess(listTambo);
             }
           } else {
             return const Center(
@@ -84,13 +70,13 @@ class SearchTambookDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    if (query.isNotEmpty || aProyecto.isNotEmpty) {
-      for (var item in aProyecto) {
+    if (query.isNotEmpty || listTambo.isNotEmpty) {
+      for (var items in listTambo) {
         return ListView.builder(
           padding: const EdgeInsets.all(10),
           itemCount: 1,
           itemBuilder: (context, index) {
-            return ListViewProjet(context: context, oProyecto: item);
+            return Container();
           },
         );
       }
@@ -105,87 +91,87 @@ class SearchTambookDelegate extends SearchDelegate<String> {
         ),
       );
 
-  Widget buildSuggestionsSuccess(List<TramaProyectoModel> suggestions) =>
-      ListView.builder(
-        itemCount: suggestions.length,
+  Widget buildSuggestionsSuccess(List<TamboModel> dataList) => ListView.builder(
+        itemCount: dataList.length,
         itemBuilder: (context, index) {
-          final suggestion = suggestions[index].tambo.toString();
-          return Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10)),
-              color: Colors.black12,
-            ),
-            width: double.infinity,
-            // height: 120,
-            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            child: Row(
-              children: [
-                Center(
-                  child: Container(
-                    width: 70,
-                    height: 70,
-                    margin: const EdgeInsets.only(right: 15),
-                    child: Image.network(
-                        'https://www.pais.gob.pe/sismonitor/FILES/usuarios/6234/perfil/thumbnail/6234_200x200.jpg'),
-                  ),
+          return GestureDetector(
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => DetalleTambook(),
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Text(
-                        "Tambo: SOLEDAD",
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
+              );
+            },
+            child: Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10)),
+                color: Colors.black12,
+              ),
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              child: Row(
+                children: [
+                  Center(
+                    child: Container(
+                      width: 70,
+                      height: 70,
+                      margin: const EdgeInsets.only(right: 15),
+                      child: Image.network(
+                        dataList[index].imagen!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            alignment: Alignment.center,
+                            child: Image.network(
+                              "https://www.pais.gob.pe/tambook/themes/tambook/assets/img/user-male-2.png",
+                            ),
+                          );
+                        },
                       ),
-                      SizedBox(height: 6),
-                      Text(
-                        "Gestor: JULIO CÉSAR TAMINCHE LLAMO",
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      SizedBox(height: 6),
-                      Text(
-                        "Departamento: AMAZONAS",
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Tambo: ${dataList[index].tambo!}",
+                          style: const TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          "Gestor: ${dataList[index].gestor!}",
+                          style: const TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          "Departamento: ${dataList[index].departamento!}",
+                          style: const TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
-          // return ListTile(
-          //   onTap: () {
-          //     query = suggestion;
-          //     showResults(context);
-          //   },
-          //   leading: const Icon(Icons.search),
-          //   title: RichText(
-          //     text: TextSpan(
-          //       text: suggestion,
-          //       style: const TextStyle(
-          //         color: Colors.black,
-          //         fontWeight: FontWeight.bold,
-          //         fontSize: 18,
-          //       ),
-          //     ),
-          //   ),
-          // );
         },
       );
 }
