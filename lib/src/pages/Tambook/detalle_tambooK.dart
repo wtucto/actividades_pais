@@ -1,6 +1,10 @@
+import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:flutter/material.dart';
 
 class DetalleTambook extends StatefulWidget {
+  const DetalleTambook({super.key, this.listTambo});
+  final TamboModel? listTambo;
+
   @override
   _DetalleTambookState createState() => _DetalleTambookState();
 }
@@ -11,7 +15,7 @@ class _DetalleTambookState extends State<DetalleTambook> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
+        title: const Center(
           child: Text("TAMBO"),
         ),
         // shape: const CustomAppBarShape(multi: 0.05),
@@ -41,193 +45,171 @@ class _DetalleTambookState extends State<DetalleTambook> {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: 1,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                AspectRatio(
-                                  aspectRatio: 1.2,
-                                  child: Image.asset(
-                                    'assets/design_course/fondo2.jpg',
-                                    fit: BoxFit.fill,
-                                  ),
+                        shrinkWrap: true,
+                        itemCount: 1,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AspectRatio(
+                                aspectRatio: 1.2,
+                                child: Image.asset(
+                                  'assets/design_course/fondo2.jpg',
+                                  fit: BoxFit.fill,
                                 ),
-                                //DETALLE
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFFFFFF),
-                                    borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(1.0),
-                                        topRight: Radius.circular(1.0)),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: const Color(0xFF3A5160)
-                                              .withOpacity(0.2),
-                                          offset: const Offset(1.1, 1.1),
-                                          blurRadius: 10.0),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Container(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(height: 15),
-                                          Container(
-                                            padding: const EdgeInsets.all(5),
-                                            decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(16.0),
-                                              ),
+                              ),
+                              //DETALLE
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFFFFF),
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(1.0),
+                                      topRight: Radius.circular(1.0)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: const Color(0xFF3A5160)
+                                            .withOpacity(0.2),
+                                        offset: const Offset(1.1, 1.1),
+                                        blurRadius: 10.0),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Container(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: 15),
+                                        Container(
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(16.0),
                                             ),
-                                            child: const Center(
-                                              child: Text(
-                                                "¡BIENVENIDO A SOLEDAD!",
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 18,
-                                                  letterSpacing: 0.0,
-                                                ),
+                                          ),
+                                          child: const Center(
+                                            child: Text(
+                                              "¡BIENVENIDO A SOLEDAD!",
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 18,
+                                                letterSpacing: 0.0,
                                               ),
                                             ),
                                           ),
-
-                                          Container(
-                                            padding: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color: Colors.green,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                Radius.circular(16.0),
-                                              ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    color: Colors.green
-                                                        .withOpacity(0.5),
-                                                    offset:
-                                                        const Offset(1.1, 1.1),
-                                                    blurRadius: 10.0),
-                                              ],
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(16.0),
                                             ),
-                                            child: const Center(
-                                              child: Text(
-                                                'OPERATIVO',
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 18,
-                                                  letterSpacing: 0.0,
-                                                  color: Color.fromARGB(
-                                                      255, 255, 255, 255),
-                                                ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.green
+                                                      .withOpacity(0.5),
+                                                  offset:
+                                                      const Offset(1.1, 1.1),
+                                                  blurRadius: 10.0),
+                                            ],
+                                          ),
+                                          child: const Center(
+                                            child: Text(
+                                              'OPERATIVO',
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 18,
+                                                letterSpacing: 0.0,
+                                                color: Color.fromARGB(
+                                                    255, 255, 255, 255),
                                               ),
                                             ),
                                           ),
-                                          DefaultTabController(
-                                            length: 3, // length of tabs
-                                            initialIndex: 0,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              children: [
-                                                Container(
-                                                  child: const TabBar(
-                                                    labelColor: Colors.blue,
-                                                    isScrollable: true,
-                                                    unselectedLabelColor:
-                                                        Colors.black,
-                                                    tabs: [
-                                                      Tab(text: 'GESTOR'),
-                                                      Tab(
-                                                          text:
-                                                              'INTERVENCIONES'),
-                                                      Tab(text: 'UBICACIÓN'),
-                                                    ],
-                                                  ),
+                                        ),
+                                        DefaultTabController(
+                                          length: 3, // length of tabs
+                                          initialIndex: 0,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: [
+                                              Container(
+                                                child: const TabBar(
+                                                  labelColor: Colors.blue,
+                                                  isScrollable: true,
+                                                  unselectedLabelColor:
+                                                      Colors.black,
+                                                  tabs: [
+                                                    Tab(text: 'GESTOR'),
+                                                    Tab(text: 'INTERVENCIONES'),
+                                                    Tab(text: 'UBICACIÓN'),
+                                                  ],
                                                 ),
-                                                Container(
-                                                  height:
-                                                      400, //height of TabBarView
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                          border: Border(
-                                                              top: BorderSide(
-                                                                  color: Colors
-                                                                      .grey,
-                                                                  width: 0.5))),
-                                                  child: TabBarView(
-                                                    children: [
-                                                      Container(
-                                                        child: ListView(
-                                                          children: [
-                                                            buildCard(),
-                                                            const SizedBox(
-                                                                height: 10),
-                                                            generales(),
-                                                            const SizedBox(
-                                                                height: 10),
-                                                            card3(),
-                                                          ],
-                                                        ),
+                                              ),
+                                              Container(
+                                                height:
+                                                    400, //height of TabBarView
+                                                decoration: const BoxDecoration(
+                                                    border: Border(
+                                                        top: BorderSide(
+                                                            color: Colors.grey,
+                                                            width: 0.5))),
+                                                child: TabBarView(
+                                                  children: [
+                                                    Container(
+                                                      child: ListView(
+                                                        children: [
+                                                          buildCard(),
+                                                          const SizedBox(
+                                                              height: 10),
+                                                          generales(),
+                                                          const SizedBox(
+                                                              height: 10),
+                                                          card3(),
+                                                        ],
                                                       ),
-                                                      Container(
-                                                        child: ListView(
-                                                          children: [
-                                                            Intecard(),
-                                                            const SizedBox(
-                                                                height: 10),
-                                                            Intecard1(),
-                                                          ],
-                                                        ),
+                                                    ),
+                                                    Container(
+                                                      child: ListView(
+                                                        children: [
+                                                          Intecard(),
+                                                          const SizedBox(
+                                                              height: 10),
+                                                          Intecard1(),
+                                                        ],
                                                       ),
-                                                      Container(
-                                                        child: ListView(
-                                                          children: [
-                                                            Image.asset(
-                                                              'assets/Tambook/mapa_tambo.jpg',
-                                                              height: 400,
-                                                              width: 400,
-                                                            ),
-                                                          ],
-                                                        ),
+                                                    ),
+                                                    Container(
+                                                      child: ListView(
+                                                        children: [
+                                                          Image.asset(
+                                                            'assets/Tambook/mapa_tambo.jpg',
+                                                            height: 400,
+                                                            width: 400,
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
                                           ),
-
-                                          //detalle
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-
-                                //Detalle Proyecto
-                                // Padding(
-                                //   padding: EdgeInsets.all(20),
-                                //   child: Column(
-                                //     crossAxisAlignment:
-                                //         CrossAxisAlignment.stretch,
-                                //     children: [
-                                //       const SizedBox(height: 10),
-                                //       buildCard(),
-                                //       generales(),
-                                //       card3(),
-                                //     ],
-                                //   ),
-                                // ),
-                              ],
-                            );
-                          }),
-                      // child:
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -242,7 +224,7 @@ class _DetalleTambookState extends State<DetalleTambook> {
   Card buildCard() {
     var heading = 'NUESTRO GESTOR';
     var subheading = 'JULIO CESAR TAMINCHE LLAMO';
-    var cardImage = NetworkImage(
+    var cardImage = const NetworkImage(
         'https://www.pais.gob.pe/sismonitor/FILES/usuarios/6234/perfil/thumbnail/6234_200x200.jpg');
 
     return Card(

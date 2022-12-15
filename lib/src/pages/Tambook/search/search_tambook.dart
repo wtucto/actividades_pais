@@ -9,9 +9,12 @@ class SearchTambookDelegate extends SearchDelegate<String> {
   List<TamboModel> listTambo = [];
 
   Future<List<TamboModel>> getTambook(String search) async {
-    if (search.length > 2) {
-      listTambo = await mainController.searchTambo(search);
-    }
+    try {
+      if (search.length > 2) {
+        listTambo = await mainController.searchTambo(search);
+      }
+    } catch (oError) {}
+
     return listTambo;
   }
 
@@ -71,7 +74,7 @@ class SearchTambookDelegate extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     if (query.isNotEmpty || listTambo.isNotEmpty) {
-      for (var items in listTambo) {
+      for (var item in listTambo) {
         return ListView.builder(
           padding: const EdgeInsets.all(10),
           itemCount: 1,
@@ -99,7 +102,8 @@ class SearchTambookDelegate extends SearchDelegate<String> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => DetalleTambook(),
+                  builder: (BuildContext context) =>
+                      DetalleTambook(listTambo: dataList[index]),
                 ),
               );
             },
