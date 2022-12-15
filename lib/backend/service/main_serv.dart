@@ -3,6 +3,8 @@ import 'package:actividades_pais/backend/model/listar_programa_actividad_model.d
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/backend/repository/main2_repo.dart';
 import 'package:actividades_pais/util/check_connection.dart';
 import 'package:get/get.dart';
 import 'package:actividades_pais/backend/repository/main_repo.dart';
@@ -572,5 +574,18 @@ class MainService {
 
   Future deleteAllMonitorByEstadoENV() async {
     return await Get.find<MainRepository>().deleteAllMonitorByEstadoENV();
+  }
+
+  /*
+   Obtiene todas las considencias de Tambos buscados por:
+   @String search 
+   */
+  Future<List<TamboModel>> searchTambo(
+    String? search,
+  ) async {
+    ///Obtiene los registros de la DB Local
+    List<TamboModel> aFind =
+        await Get.find<Main2Repository>().searchTambo(search);
+    return aFind;
   }
 }

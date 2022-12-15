@@ -1,4 +1,4 @@
-import 'package:actividades_pais/src/pages/Tambook/models/atenciones.dart';
+import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:flutter/material.dart';
 
 class AtencionesListView extends StatefulWidget {
@@ -47,12 +47,12 @@ class _AtencionesListViewState extends State<AtencionesListView>
               return ListView.builder(
                 padding: const EdgeInsets.only(
                     top: 0, bottom: 0, right: 16, left: 16),
-                itemCount: Atenciones.categoryList.length,
+                itemCount: AtencionesModel.categoryList.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
-                  final int count = Atenciones.categoryList.length > 10
+                  final int count = AtencionesModel.categoryList.length > 10
                       ? 10
-                      : Atenciones.categoryList.length;
+                      : AtencionesModel.categoryList.length;
                   final Animation<double> animation =
                       Tween<double>(begin: 0.0, end: 1.0).animate(
                           CurvedAnimation(
@@ -62,7 +62,7 @@ class _AtencionesListViewState extends State<AtencionesListView>
                   animationController?.forward();
 
                   return AtencionesView(
-                    category: Atenciones.categoryList[index],
+                    category: AtencionesModel.categoryList[index],
                     animation: animation,
                     animationController: animationController,
                     callback: widget.callBack,
@@ -87,7 +87,7 @@ class AtencionesView extends StatelessWidget {
       : super(key: key);
 
   final VoidCallback? callback;
-  final Atenciones? category;
+  final AtencionesModel? category;
   final AnimationController? animationController;
   final Animation<double>? animation;
 
@@ -134,7 +134,7 @@ class AtencionesView extends StatelessWidget {
                                             padding: const EdgeInsets.only(
                                                 top: 10, bottom: 16, right: 16),
                                             child: Text(
-                                              category!.title,
+                                              category!.title!,
                                               textAlign: TextAlign.left,
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.w600,

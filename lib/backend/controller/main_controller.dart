@@ -1,8 +1,10 @@
+import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/util/check_geolocator.dart';
 import 'package:actividades_pais/util/throw-exception.dart';
@@ -727,6 +729,21 @@ class MainController extends GetxController {
     }
 
     return o;
+  }
+
+  Future<List<TamboModel>> searchTambo(
+    String? search,
+  ) async {
+    ///Obtiene los registros de la DB Local
+    List<TamboModel> aFind = await Get.find<MainService>().searchTambo(search);
+    return aFind;
+  }
+
+  Future<List<AtencionesModel>> getResumeAtenciones() async {
+    ///Obtiene los registros de la DB Local
+    await Future.delayed(const Duration(seconds: 1));
+    List<AtencionesModel> aFind = await AtencionesModel.categoryList;
+    return aFind;
   }
 
   bool isNumeric(dynamic s) {

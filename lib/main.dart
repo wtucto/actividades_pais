@@ -1,6 +1,8 @@
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
+import 'package:actividades_pais/backend/api/pnpais2_api.dart';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
+import 'package:actividades_pais/backend/repository/main2_repo.dart';
 import 'package:actividades_pais/backend/repository/main_repo.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/helpers/dependecy_injection.dart';
@@ -25,10 +27,13 @@ void main() async {
   //OBoxDbPnPais = await ObjectBoxDbPnPais.init();
 
   final mainApi = GetIt.instance<PnPaisApi>();
+  final mainApi2 = GetIt.instance<PnPaisApi2>();
   final mainDb = await DatabasePnPais.instance;
   final mainRepo = MainRepository(mainApi, mainDb);
+  final mainRepo2 = Main2Repository(mainApi2, mainDb);
   final mainServ = MainService();
   Get.put(mainRepo);
+  Get.put(mainRepo2);
   Get.put(mainServ);
   Get.put(MainController()); // Se ejecuta loadInitialData();
 
