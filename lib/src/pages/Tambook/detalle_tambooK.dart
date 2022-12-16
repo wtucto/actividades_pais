@@ -11,212 +11,317 @@ class DetalleTambook extends StatefulWidget {
 
 class _DetalleTambookState extends State<DetalleTambook> {
   StepperType stepperType = StepperType.vertical;
+  ScrollController scrollController = ScrollController();
+
+  Widget _buildActions() {
+    Widget profile = GestureDetector(
+      onTap: () => {},
+      child: Container(
+        height: 30.0,
+        width: 45.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.grey,
+          image: const DecorationImage(
+            image: ExactAssetImage("assets/design_course/fondo2.jpg"),
+            fit: BoxFit.cover,
+          ),
+          border: Border.all(color: Colors.black, width: 2.0),
+        ),
+      ),
+    );
+
+    double scale;
+    if (scrollController.hasClients) {
+      scale = scrollController.offset / 200;
+      scale = scale * 2;
+      if (scale > 1) {
+        scale = 1.0;
+      }
+    } else {
+      scale = 0.0;
+    }
+
+    return Transform(
+      transform: Matrix4.identity()..scale(scale, scale),
+      alignment: Alignment.center,
+      child: profile,
+    );
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController = ScrollController();
+    scrollController.addListener(() => setState(() {}));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Center(
-          child: Text("TAMBO"),
+    var flexibleSpaceWidget = SliverAppBar(
+      expandedHeight: 200.0,
+      pinned: true,
+      flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
+        title: Text("¡BIENVENIDO A ${widget.listTambo?.tambo}!",
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+                fontWeight: FontWeight.w700)),
+        background: Image.asset(
+          "assets/design_course/fondo2.jpg",
+          fit: BoxFit.fill,
         ),
-        // shape: const CustomAppBarShape(multi: 0.05),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              iconSize: 30,
-              onPressed: () {},
-              icon: const Icon(
-                Icons.home,
-                color: Color.fromARGB(255, 255, 255, 255),
-              ),
-            ),
-          )
-        ],
       ),
-      body: Container(
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-        width: double.maxFinite,
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(
-                alignment: Alignment.topCenter,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: 1,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AspectRatio(
-                                aspectRatio: 1.2,
-                                child: Image.asset(
-                                  'assets/design_course/fondo2.jpg',
-                                  fit: BoxFit.fill,
-                                ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: _buildActions(),
+        ),
+      ],
+    );
+    return Scaffold(
+      body: DefaultTabController(
+        length: 4,
+        child: NestedScrollView(
+          controller: scrollController,
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
+              flexibleSpaceWidget,
+              SliverPersistentHeader(
+                delegate: _SliverAppBarDelegate(
+                  const TabBar(
+                    labelColor: Colors.black87,
+                    unselectedLabelColor: Colors.black38,
+                    isScrollable: true,
+                    tabs: [
+                      Tab(
+                        icon: Icon(Icons.account_box),
+                        text: "GESTOR",
+                      ),
+                      Tab(
+                        icon: Icon(Icons.cloud),
+                        text: "SERVICIOS INTERNET",
+                      ),
+                      Tab(
+                        icon: Icon(Icons.policy_rounded),
+                        text: "INTERVENCIONES",
+                      ),
+                      Tab(
+                        icon: Icon(Icons.computer),
+                        text: "EQUIPAMIENTO TECNOLÓGICO",
+                      ),
+                    ],
+                  ),
+                ),
+                pinned: true,
+              ),
+            ];
+          },
+          body: const TabBarView(
+            children: [
+              TabScreen("GESTOR"),
+              TabScreen("SERVICIOS INTERNET"),
+              TabScreen("INTERVENCIONES"),
+              TabScreen("EQUIPAMIENTO TECNOLÓGICO DEL TAMBO"),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+//  showProfile() {
+//     Navigator.pushNamed(context, '/profile');
+//   }
+
+  Container newMethod() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      width: double.maxFinite,
+      child: Column(
+        children: [
+          Expanded(
+            child: Container(
+              alignment: Alignment.topCenter,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: 1,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AspectRatio(
+                              aspectRatio: 1.2,
+                              child: Image.asset(
+                                'assets/design_course/fondo2.jpg',
+                                fit: BoxFit.fill,
                               ),
-                              //DETALLE
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFFFFF),
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(1.0),
-                                      topRight: Radius.circular(1.0)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: const Color(0xFF3A5160)
-                                            .withOpacity(0.2),
-                                        offset: const Offset(1.1, 1.1),
-                                        blurRadius: 10.0),
-                                  ],
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Container(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(height: 15),
-                                        Container(
-                                          padding: const EdgeInsets.all(5),
-                                          decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(16.0),
-                                            ),
+                            ),
+                            //DETALLE
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFFFFF),
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(1.0),
+                                    topRight: Radius.circular(1.0)),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: const Color(0xFF3A5160)
+                                          .withOpacity(0.2),
+                                      offset: const Offset(1.1, 1.1),
+                                      blurRadius: 10.0),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 15),
+                                      Container(
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(16.0),
                                           ),
-                                          child: const Center(
-                                            child: Text(
-                                              "¡BIENVENIDO A SOLEDAD!",
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 18,
-                                                letterSpacing: 0.0,
-                                              ),
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            "¡BIENVENIDO A SOLEDAD!",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 18,
+                                              letterSpacing: 0.0,
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            color: Colors.green,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(16.0),
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.green
-                                                      .withOpacity(0.5),
-                                                  offset:
-                                                      const Offset(1.1, 1.1),
-                                                  blurRadius: 10.0),
-                                            ],
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(16.0),
                                           ),
-                                          child: const Center(
-                                            child: Text(
-                                              'OPERATIVO',
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 18,
-                                                letterSpacing: 0.0,
-                                                color: Color.fromARGB(
-                                                    255, 255, 255, 255),
-                                              ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.green
+                                                    .withOpacity(0.5),
+                                                offset: const Offset(1.1, 1.1),
+                                                blurRadius: 10.0),
+                                          ],
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            'OPERATIVO',
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 18,
+                                              letterSpacing: 0.0,
+                                              color: Color.fromARGB(
+                                                  255, 255, 255, 255),
                                             ),
                                           ),
                                         ),
-                                        DefaultTabController(
-                                          length: 3, // length of tabs
-                                          initialIndex: 0,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
-                                            children: [
-                                              Container(
-                                                child: const TabBar(
-                                                  labelColor: Colors.blue,
-                                                  isScrollable: true,
-                                                  unselectedLabelColor:
-                                                      Colors.black,
-                                                  tabs: [
-                                                    Tab(text: 'GESTOR'),
-                                                    Tab(text: 'INTERVENCIONES'),
-                                                    Tab(text: 'UBICACIÓN'),
-                                                  ],
-                                                ),
+                                      ),
+                                      DefaultTabController(
+                                        length: 3, // length of tabs
+                                        initialIndex: 0,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: [
+                                            Container(
+                                              child: const TabBar(
+                                                labelColor: Colors.blue,
+                                                isScrollable: true,
+                                                unselectedLabelColor:
+                                                    Colors.black,
+                                                tabs: [
+                                                  Tab(text: 'GESTOR'),
+                                                  Tab(text: 'INTERVENCIONES'),
+                                                  Tab(text: 'UBICACIÓN'),
+                                                ],
                                               ),
-                                              Container(
-                                                height:
-                                                    400, //height of TabBarView
-                                                decoration: const BoxDecoration(
-                                                    border: Border(
-                                                        top: BorderSide(
-                                                            color: Colors.grey,
-                                                            width: 0.5))),
-                                                child: TabBarView(
-                                                  children: [
-                                                    Container(
-                                                      child: ListView(
-                                                        children: [
-                                                          buildCard(),
-                                                          const SizedBox(
-                                                              height: 10),
-                                                          generales(),
-                                                          const SizedBox(
-                                                              height: 10),
-                                                          card3(),
-                                                        ],
-                                                      ),
+                                            ),
+                                            Container(
+                                              height:
+                                                  400, //height of TabBarView
+                                              decoration: const BoxDecoration(
+                                                  border: Border(
+                                                      top: BorderSide(
+                                                          color: Colors.grey,
+                                                          width: 0.5))),
+                                              child: TabBarView(
+                                                children: [
+                                                  Container(
+                                                    child: ListView(
+                                                      children: [
+                                                        buildCard(),
+                                                        const SizedBox(
+                                                            height: 10),
+                                                        generales(),
+                                                        const SizedBox(
+                                                            height: 10),
+                                                        card3(),
+                                                      ],
                                                     ),
-                                                    Container(
-                                                      child: ListView(
-                                                        children: [
-                                                          Intecard(),
-                                                          const SizedBox(
-                                                              height: 10),
-                                                          Intecard1(),
-                                                        ],
-                                                      ),
+                                                  ),
+                                                  Container(
+                                                    child: ListView(
+                                                      children: [
+                                                        Intecard(),
+                                                        const SizedBox(
+                                                            height: 10),
+                                                        Intecard1(),
+                                                      ],
                                                     ),
-                                                    Container(
-                                                      child: ListView(
-                                                        children: [
-                                                          Image.asset(
-                                                            'assets/Tambook/mapa_tambo.jpg',
-                                                            height: 400,
-                                                            width: 400,
-                                                          ),
-                                                        ],
-                                                      ),
+                                                  ),
+                                                  Container(
+                                                    child: ListView(
+                                                      children: [
+                                                        Image.asset(
+                                                          'assets/Tambook/mapa_tambo.jpg',
+                                                          height: 400,
+                                                          width: 400,
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                            ],
-                          );
-                        },
-                      ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -457,6 +562,137 @@ class _DetalleTambookState extends State<DetalleTambook> {
             onPressed: () {},
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar _tabBar;
+
+  _SliverAppBarDelegate(this._tabBar);
+
+  @override
+  double get minExtent => _tabBar.preferredSize.height;
+
+  @override
+  double get maxExtent => _tabBar.preferredSize.height;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      child: Column(
+        children: [Expanded(child: _tabBar)],
+      ),
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return false;
+  }
+}
+
+class TabScreen extends StatelessWidget {
+  const TabScreen(this.listType, {super.key});
+  final String listType;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              listType,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SliverContainer extends StatefulWidget {
+  final List<Widget> slivers;
+  final Widget floatingActionButton;
+  final double expandedHeight;
+  final double marginRight;
+  final double topScalingEdge;
+
+  const SliverContainer(
+      {super.key,
+      required this.slivers,
+      required this.floatingActionButton,
+      this.expandedHeight = 256.0,
+      this.marginRight = 16.0,
+      this.topScalingEdge = 96.0});
+
+  @override
+  State<StatefulWidget> createState() {
+    return SliverFabState();
+  }
+}
+
+class SliverFabState extends State<SliverContainer> {
+  ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController = ScrollController();
+    scrollController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        CustomScrollView(
+          controller: scrollController,
+          slivers: widget.slivers,
+        ),
+        _buildFab(),
+      ],
+    );
+  }
+
+  Widget _buildFab() {
+    final topMarginAdjustVal =
+        Theme.of(context).platform == TargetPlatform.iOS ? 12.0 : -4.0;
+    final double defaultTopMargin = widget.expandedHeight + topMarginAdjustVal;
+
+    double top = defaultTopMargin;
+    double scale = 1.0;
+    if (scrollController.hasClients) {
+      double offset = scrollController.offset;
+      top -= offset > 0 ? offset : 0;
+      if (offset < defaultTopMargin - widget.topScalingEdge) {
+        scale = 1.0;
+      } else if (offset < defaultTopMargin - widget.topScalingEdge / 2) {
+        scale = (defaultTopMargin - widget.topScalingEdge / 2 - offset) /
+            (widget.topScalingEdge / 2);
+      } else {
+        scale = 0.0;
+      }
+    }
+
+    return Positioned(
+      top: top,
+      right: widget.marginRight,
+      child: Transform(
+        transform: Matrix4.identity()..scale(scale, scale),
+        alignment: Alignment.center,
+        child: widget.floatingActionButton,
       ),
     );
   }
