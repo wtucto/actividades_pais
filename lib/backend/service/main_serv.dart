@@ -209,6 +209,14 @@ class MainService {
     return aFind;
   }
 
+  Future<List<TramaProyectoModel>> getAllProyectoDashboard(
+    String search,
+  ) async {
+    List<TramaProyectoModel> aFind =
+        await Get.find<MainRepository>().getAllProyectoApi();
+    return aFind;
+  }
+
   Future<List<TramaProyectoModel>> getAllProyectoByNeUserSearch(
     UserModel o,
     String search,

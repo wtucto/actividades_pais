@@ -145,6 +145,17 @@ class MainController extends GetxController {
   }
 
   /*
+   Obtiene la lista de proyectos segun el ROL del Usuario y busqueda según la coincidencia
+   @UserModel o
+   @String search
+   */
+  Future<List<TramaProyectoModel>> getAllProyectoDashboard(
+    String search,
+  ) async {
+    return await Get.find<MainService>().getAllProyectoDashboard(search);
+  }
+
+  /*
    Obtiene la lista de proyectos diferentes al ROL del Usuario logeado y busqueda según la coincidencia
    @UserModel o
    @String search

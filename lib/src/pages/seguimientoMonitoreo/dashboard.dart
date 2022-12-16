@@ -1,6 +1,5 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
-import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/listView/ListaProyectos.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,49 +16,121 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  List<TramaProyectoModel> aProyecto1 = [];
+  List<TramaProyectoModel> aProyecto2 = [];
+  List<TramaProyectoModel> aProyecto3 = [];
+  List<TramaProyectoModel> aProyecto4 = [];
+
   List<TramaProyectoModel> aProyecto = [];
   ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    readJson();
+    buildData();
   }
 
-  Future<void> readJson() async {
-    _prefs = await SharedPreferences.getInstance();
-    UserModel oUser = UserModel(
-      nombres: _prefs!.getString('nombres') ?? '',
-      codigo: _prefs!.getString('codigo') ?? '',
-      rol: _prefs!.getString('rol') ?? '',
-    );
+  List<ChartData> chartData = [
+    //1 - Verde       80D8A4
+    //2 - Amarillo    FEE191
+    //3 - Rojo        E84258
+    ChartData('MUY ALTO', 0, const Color(0xFF2196F3)),
+    ChartData('ALTO', 0, const Color(0xFF80D8A4)),
+    ChartData('MEDIO', 0, const Color(0xFFFEE191)),
+    ChartData('BAJO', 0, const Color(0xFFE84258)),
+  ];
 
-    final List<TramaProyectoModel> response =
-        await mainController.getAllProyectoByUserSearch(
-      oUser,
-      '',
-      0,
-      0,
-    );
+  Future<void> buildData() async {
+    List<TramaProyectoModel> response =
+        await mainController.getAllProyectoDashboard("");
+
+    response.sort((a, b) => a.avanceFisico!.compareTo(b.avanceFisico!));
+
+    for (var o in response) {
+      int iSection = getAvancefisicoChar(o);
+      switch (iSection) {
+        case 1: /* MUL ALTO*/
+          aProyecto1.add(o);
+          break;
+        case 2: /* ALTO*/
+          aProyecto2.add(o);
+          break;
+        case 3: /* BAJO*/
+          aProyecto3.add(o);
+          break;
+        case 4: /* MEDIO */
+          aProyecto4.add(o);
+          break;
+        default:
+      }
+    }
+
     setState(() {
       aProyecto = response;
+      chartData = [
+        //1 - Verde       80D8A4
+        //2 - Amarillo    FEE191
+        //3 - Rojo        E84258
+        ChartData('MUY ALTO', aProyecto1.length, const Color(0xFF2196F3)),
+        ChartData('ALTO', aProyecto2.length, const Color(0xFF80D8A4)),
+        ChartData('MEDIO', aProyecto3.length, const Color(0xFFFEE191)),
+        ChartData('BAJO', aProyecto4.length, const Color(0xFFE84258)),
+      ];
     });
+  }
+
+  Color getColorAvancefisico(dynamic oProyecto) {
+    try {
+      return ((double.parse(oProyecto.avanceFisico.toString()) * 100) == 100
+          ? Colors.blue
+          : (double.parse(oProyecto.avanceFisico.toString()) * 100) >= 50
+              ? Colors.green
+              : (double.parse(oProyecto.avanceFisico.toString()) * 100) <= 30
+                  ? Colors.red
+                  : Colors.yellow);
+    } catch (oError) {
+      return Colors.black;
+    }
+  }
+
+  int getAvancefisicoChar(dynamic oProyecto) {
+    try {
+      return ((double.parse(oProyecto.avanceFisico.toString()) * 100) == 100
+          ? 1 /* MUL ALTO*/
+          : (double.parse(oProyecto.avanceFisico.toString()) * 100) >= 50
+              ? 2 /* ALTO*/
+              : (double.parse(oProyecto.avanceFisico.toString()) * 100) <= 30
+                  ? 4 /* BAJO*/
+                  : 3); /* MEDIO */
+    } catch (oError) {
+      return 4;
+    }
+  }
+
+  double getAvancefisico(dynamic oProyecto) {
+    try {
+      return double.parse(oProyecto.avanceFisico.toString());
+    } catch (oError) {
+      return 1;
+    }
+  }
+
+  String getAvancefisicoText(dynamic oProyecto) {
+    try {
+      return "${((double.parse(oProyecto.avanceFisico.toString()) * 100).toStringAsFixed(2)).toString()}%";
+    } catch (oError) {
+      return "NAN %";
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<ChartData> chartData = [
-      ChartData('CULMINADOS', 3, const Color.fromRGBO(9, 0, 136, 1)),
-      ChartData('EN JECUCION', 11, const Color.fromARGB(255, 41, 160, 134)),
-      ChartData('POR REINICIAR', 8, Color.fromARGB(255, 243, 232, 77)),
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: const Center(
           child: Text("Dashboard Monitor"),
         ),
-        shape: const CustomAppBarShape(multi: 0.05),
+        //shape: const CustomAppBarShape(multi: 0.05),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -67,7 +138,7 @@ class _DashboardState extends State<Dashboard> {
               iconSize: 30,
               onPressed: () {},
               icon: const Icon(
-                Icons.bar_chart_sharp,
+                Icons.pie_chart_sharp,
                 color: Color.fromARGB(255, 255, 255, 255),
               ),
             ),
@@ -85,101 +156,109 @@ class _DashboardState extends State<Dashboard> {
                   color: Colors.white,
                   border: Border.all(
                       color: const Color.fromRGBO(0, 0, 0, 0.12), width: 1.1),
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  //borderRadius: const BorderRadius.all(Radius.circular(12)),
                 ),
                 child: Column(
                   children: [
                     Expanded(
                       child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: 1,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  child: Card(
-                                    color: Color.fromARGB(255, 245, 245, 247),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    elevation: 2,
-                                    child: SfCircularChart(
-                                      title: ChartTitle(
-                                        text: 'ESTADOS DE TAMBOS',
-                                        textStyle: const TextStyle(
-                                            color:
-                                                Color.fromRGBO(0, 116, 227, 1),
-                                            fontSize: 16,
-                                            fontFamily: 'Roboto-Bold'),
-                                        alignment: ChartAlignment.center,
-                                      ),
-                                      // Enables the legend
-                                      legend: Legend(
-                                        isVisible: true,
-                                        position: LegendPosition.bottom,
-                                        orientation:
-                                            LegendItemOrientation.vertical,
-                                        overflowMode:
-                                            LegendItemOverflowMode.wrap,
-                                        textStyle: const TextStyle(
-                                            color:
-                                                Color.fromRGBO(0, 116, 227, 1),
-                                            fontSize: 16,
-                                            fontFamily: 'Roboto-Bold'),
-                                      ),
-                                      series: [
-                                        PieSeries<ChartData, String>(
-                                          dataSource: chartData,
-                                          pointColorMapper:
-                                              (ChartData data, _) => data.color,
-                                          xValueMapper: (ChartData data, _) =>
-                                              data.x,
-                                          yValueMapper: (ChartData data, _) =>
-                                              data.y,
-                                          dataLabelSettings:
-                                              const DataLabelSettings(
-                                                  isVisible: true,
-                                                  labelAlignment:
-                                                      ChartDataLabelAlignment
-                                                          .top,
-                                                  margin: EdgeInsets.all(1)),
-                                          name: 'Data',
-                                        ),
-                                      ],
+                        shrinkWrap: true,
+                        itemCount: 1,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              /**
+                               * PIE CHART
+                               */
+                              Card(
+                                color: const Color(0xFFF5F5F5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                elevation: 3,
+                                child: SfCircularChart(
+                                  title: ChartTitle(
+                                    text: 'ESTADOS DE TAMBOS',
+                                    textStyle: const TextStyle(
+                                      color: Color.fromRGBO(0, 116, 227, 1),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                    alignment: ChartAlignment.center,
+                                  ),
+                                  legend: Legend(
+                                    isVisible: true,
+                                    position: LegendPosition.right,
+                                    orientation: LegendItemOrientation.vertical,
+                                    overflowMode: LegendItemOverflowMode.wrap,
+                                    textStyle: const TextStyle(
+                                      color: Color.fromRGBO(0, 116, 227, 1),
                                     ),
                                   ),
+                                  onDataLabelRender:
+                                      (DataLabelRenderArgs args) {
+                                    double value = double.parse(args.text);
+                                    args.text = value.toStringAsFixed(0);
+                                  },
+                                  series: [
+                                    PieSeries<ChartData, String>(
+                                      dataSource: chartData,
+                                      pointColorMapper: (ChartData data, _) =>
+                                          data.color,
+                                      xValueMapper: (ChartData data, _) =>
+                                          data.x,
+                                      yValueMapper: (ChartData data, _) =>
+                                          data.y,
+                                      dataLabelSettings:
+                                          const DataLabelSettings(
+                                        isVisible: true,
+                                        labelAlignment:
+                                            ChartDataLabelAlignment.top,
+                                        margin: EdgeInsets.all(1),
+                                      ),
+                                      name: 'Data',
+                                      explode: true,
+                                      explodeIndex: 1,
+                                      radius: '80%',
+                                    ),
+                                  ],
                                 ),
-                                const Divider(
-                                    color: Color.fromRGBO(61, 61, 61, 1)),
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  child: const Text(
-                                    "PROYECTOS TAMBOS",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Color.fromRGBO(0, 116, 227, 1),
-                                        fontSize: 16,
-                                        fontFamily: 'Roboto-Bold'),
+                              ),
+
+                              /**
+                               * DATA
+                               */
+                              const SizedBox(height: 15),
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                child: const Text(
+                                  "PROYECTOS TAMBOS",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(0, 116, 227, 1),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w800,
+                                    fontFamily: 'Roboto-Bold',
                                   ),
                                 ),
-                                const Divider(
-                                    color: Color.fromRGBO(61, 61, 61, 1)),
-                                ListView.builder(
-                                  itemCount: aProyecto.length,
-                                  physics: ClampingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  padding: const EdgeInsets.all(10),
-                                  itemBuilder: (context, index) {
-                                    return ListaProyectos(
-                                      context: context,
-                                      oProyecto: aProyecto[index],
-                                    );
-                                  },
-                                ),
-                              ],
-                            );
-                          }),
+                              ),
+                              ListView.builder(
+                                itemCount: aProyecto.length,
+                                physics: const ClampingScrollPhysics(),
+                                shrinkWrap: true,
+                                padding: const EdgeInsets.all(10),
+                                itemBuilder: (context, index) {
+                                  return ListaProyectos(
+                                    context: context,
+                                    oProyecto: aProyecto[index],
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),

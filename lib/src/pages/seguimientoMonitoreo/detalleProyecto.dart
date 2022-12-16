@@ -54,7 +54,7 @@ class _DetalleProyectoState extends State<DetalleProyecto>
         duration: const Duration(milliseconds: 1000), vsync: this);
     animation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
         parent: animationController!,
-        curve: Interval(0, 1.0, curve: Curves.fastOutSlowIn)));
+        curve: const Interval(0, 1.0, curve: Curves.fastOutSlowIn)));
     setData();
     _oProject = widget.datoProyecto;
     _numSnip = TextEditingController(text: _oProject.numSnip);
@@ -105,6 +105,50 @@ class _DetalleProyectoState extends State<DetalleProyecto>
     });
   }
 
+  Color getColorAvancefisico(dynamic oProyecto) {
+    try {
+      return ((double.parse(oProyecto.avanceFisico.toString()) * 100) == 100
+          ? Colors.blue
+          : (double.parse(oProyecto.avanceFisico.toString()) * 100) >= 50
+              ? Colors.green
+              : (double.parse(oProyecto.avanceFisico.toString()) * 100) <= 30
+                  ? Colors.red
+                  : Colors.yellow);
+    } catch (oError) {
+      return Colors.black;
+    }
+  }
+
+  int getAvancefisicoChar(dynamic oProyecto) {
+    try {
+      return ((double.parse(oProyecto.avanceFisico.toString()) * 100) == 100
+          ? 1 /* MUL ALTO*/
+          : (double.parse(oProyecto.avanceFisico.toString()) * 100) >= 50
+              ? 2 /* ALTO*/
+              : (double.parse(oProyecto.avanceFisico.toString()) * 100) <= 30
+                  ? 4 /* BAJO*/
+                  : 3); /* MEDIO */
+    } catch (oError) {
+      return 4;
+    }
+  }
+
+  double getAvancefisico(dynamic oProyecto) {
+    try {
+      return double.parse(oProyecto.avanceFisico.toString());
+    } catch (oError) {
+      return 1;
+    }
+  }
+
+  String getAvancefisicoText(dynamic oProyecto) {
+    try {
+      return "${((double.parse(oProyecto.avanceFisico.toString()) * 100).toStringAsFixed(2)).toString()}%";
+    } catch (oError) {
+      return "NAN %";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final double tempHeight = MediaQuery.of(context).size.height -
@@ -115,7 +159,6 @@ class _DetalleProyectoState extends State<DetalleProyecto>
         title: Center(
           child: Text(widget.datoProyecto.tambo!),
         ),
-        shape: const CustomAppBarShape(multi: 0.05),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -123,7 +166,7 @@ class _DetalleProyectoState extends State<DetalleProyecto>
               iconSize: 30,
               onPressed: () {},
               icon: const Icon(
-                Icons.monitor,
+                Icons.format_align_left,
                 color: Color.fromARGB(255, 255, 255, 255),
               ),
             ),
@@ -151,7 +194,7 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                 CarouselSlider(
                                   items: [
                                     Container(
-                                      margin: EdgeInsets.all(8.0),
+                                      margin: const EdgeInsets.all(8.0),
                                       decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(10.0),
@@ -163,7 +206,7 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                       ),
                                     ),
                                     Container(
-                                      margin: EdgeInsets.all(8.0),
+                                      margin: const EdgeInsets.all(8.0),
                                       decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(10.0),
@@ -175,7 +218,7 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                       ),
                                     ),
                                     Container(
-                                      margin: EdgeInsets.all(2.0),
+                                      margin: const EdgeInsets.all(2.0),
                                       decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(10.0),
@@ -199,170 +242,143 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                     viewportFraction: 0.8,
                                   ),
                                 ),
-                                // AspectRatio(
-                                //   aspectRatio: 1.2,
-                                //   child: Image.network(
-                                //     '',
-                                //     fit: BoxFit.fill,
-                                //   ),
-                                // ),
-                                //Detalle imagen
+
+                                /**
+                                 * HEADER
+                                 */
+                                const Divider(),
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFFFFFFFF),
-                                    borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(1.0),
-                                        topRight: Radius.circular(1.0)),
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      width: 1,
+                                      color: const Color.fromARGB(
+                                          255, 212, 207, 207),
+                                    ),
                                     boxShadow: [
                                       BoxShadow(
-                                          color: const Color(0xFF3A5160)
-                                              .withOpacity(0.2),
-                                          offset: const Offset(1.1, 1.1),
-                                          blurRadius: 10.0),
+                                        color: const Color.fromARGB(
+                                                255, 218, 211, 211)
+                                            .withOpacity(0.9),
+                                        spreadRadius: 0,
+                                        blurRadius: 2,
+                                        offset: const Offset(0, 1),
+                                      ),
                                     ],
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8),
-                                    child: Container(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(height: 15),
-                                          Container(
-                                            padding: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFF00B6F0),
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                Radius.circular(16.0),
-                                              ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    color: Color(0xFF00B6F0)
-                                                        .withOpacity(0.5),
-                                                    offset:
-                                                        const Offset(1.1, 1.1),
-                                                    blurRadius: 10.0),
-                                              ],
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: 15),
+                                        Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            border: Border.all(
+                                              width: 1.5,
+                                              color: const Color(0xFF00B6F0),
                                             ),
-                                            child: Center(
-                                              child: Text(
-                                                widget.datoProyecto.estado!,
-                                                textAlign: TextAlign.left,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(16.0),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              widget.datoProyecto.estado!,
+                                              textAlign: TextAlign.left,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w800,
+                                                fontSize: 18,
+                                                letterSpacing: 0.0,
+                                                color: Color.fromARGB(
+                                                    255, 33, 32, 32),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 15),
+
+                                        Text(
+                                          widget.datoProyecto.tambo!,
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 22,
+                                            letterSpacing: 0.27,
+                                            color: Color(0xFF17262A),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 15),
+                                        Text(
+                                          "${widget.datoProyecto.departamento!} / ${widget.datoProyecto.provincia!} / ${widget.datoProyecto.distrito!}",
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            letterSpacing: 0.27,
+                                            color:
+                                                Color.fromARGB(255, 13, 0, 255),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 15),
+                                        Text(
+                                          widget.datoProyecto.cui!,
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            letterSpacing: 0.27,
+                                            color:
+                                                Color.fromARGB(255, 13, 0, 255),
+                                          ),
+                                        ),
+                                        ScaleTransition(
+                                          alignment: Alignment.center,
+                                          scale: CurvedAnimation(
+                                              parent: animationController!,
+                                              curve: Curves.fastOutSlowIn),
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 20),
+                                            child: CircularPercentIndicator(
+                                              radius: 30.0,
+                                              lineWidth: 5.0,
+                                              percent: getAvancefisico(
+                                                  widget.datoProyecto),
+                                              center: Text(
+                                                getAvancefisicoText(
+                                                    widget.datoProyecto),
                                                 style: const TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 18,
-                                                  letterSpacing: 0.0,
-                                                  color: Color(0xFFFFFFFF),
-                                                ),
+                                                    fontSize: 11,
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
+                                              progressColor:
+                                                  getColorAvancefisico(
+                                                      widget.datoProyecto),
                                             ),
                                           ),
-                                          const SizedBox(height: 15),
+                                        ),
 
-                                          Text(
-                                            widget.datoProyecto.tambo!,
-                                            textAlign: TextAlign.left,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 22,
-                                              letterSpacing: 0.27,
-                                              color: Color(0xFF17262A),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 15),
-                                          Container(
-                                            child: Text(
-                                              "${widget.datoProyecto.departamento!} / ${widget.datoProyecto.provincia!} / ${widget.datoProyecto.distrito!}",
-                                              textAlign: TextAlign.left,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                letterSpacing: 0.27,
-                                                color: Color.fromARGB(
-                                                    255, 13, 0, 255),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 15),
-                                          Container(
-                                            child: Text(
-                                              widget.datoProyecto.cui!,
-                                              textAlign: TextAlign.left,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                letterSpacing: 0.27,
-                                                color: Color.fromARGB(
-                                                    255, 13, 0, 255),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 15),
-                                          Container(
-                                            child: ScaleTransition(
-                                              alignment: Alignment.center,
-                                              scale: CurvedAnimation(
-                                                  parent: animationController!,
-                                                  curve: Curves.fastOutSlowIn),
-                                              child: Container(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(1.0),
-                                                  child:
-                                                      CircularPercentIndicator(
-                                                    radius: 40.0,
-                                                    lineWidth: 15.0,
-                                                    percent: double.parse(widget
-                                                        .datoProyecto
-                                                        .avanceFisico
-                                                        .toString()),
-                                                    center: Text(
-                                                      "${((double.parse(widget.datoProyecto.avanceFisico.toString()) * 100).toStringAsFixed(2)).toString()}%",
-                                                      style: const TextStyle(
-                                                          fontSize: 11,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    progressColor: ((double.parse(widget
-                                                                    .datoProyecto
-                                                                    .avanceFisico
-                                                                    .toString()) *
-                                                                100) ==
-                                                            100
-                                                        ? Colors.blue
-                                                        : (double.parse(widget
-                                                                        .datoProyecto
-                                                                        .avanceFisico
-                                                                        .toString()) *
-                                                                    100) >=
-                                                                50
-                                                            ? Colors.green
-                                                            : (double.parse(widget
-                                                                            .datoProyecto
-                                                                            .avanceFisico
-                                                                            .toString()) *
-                                                                        100) <=
-                                                                    30
-                                                                ? Colors.red
-                                                                : Colors
-                                                                    .yellow),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-
-                                          //detalle
-                                        ],
-                                      ),
+                                        //detalle
+                                      ],
                                     ),
                                   ),
                                 ),
-                                //Detalle Proyecto
+
+                                /**
+                                 * BODY
+                                 */
+
+                                const Divider(),
                                 Padding(
-                                  padding: EdgeInsets.all(20),
+                                  padding: const EdgeInsets.all(20),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.stretch,

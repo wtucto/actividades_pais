@@ -2,7 +2,7 @@ import 'package:actividades_pais/src/pages/seguimientoMonitoreo/detalleProyecto.
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class ListaProyectos extends StatelessWidget {
   ListaProyectos({
@@ -16,6 +16,36 @@ class ListaProyectos extends StatelessWidget {
 
   final MainController mainController = MainController();
 
+  Color getColorAvancefisico(dynamic oProyecto) {
+    try {
+      return ((double.parse(oProyecto.avanceFisico.toString()) * 100) == 100
+          ? Colors.blue
+          : (double.parse(oProyecto.avanceFisico.toString()) * 100) >= 50
+              ? Colors.green
+              : (double.parse(oProyecto.avanceFisico.toString()) * 100) <= 30
+                  ? Colors.red
+                  : Colors.yellow);
+    } catch (oError) {
+      return Colors.black;
+    }
+  }
+
+  double getAvancefisico(dynamic oProyecto) {
+    try {
+      return double.parse(oProyecto.avanceFisico.toString());
+    } catch (oError) {
+      return 1;
+    }
+  }
+
+  String getAvancefisicoText(dynamic oProyecto) {
+    try {
+      return "${((double.parse(oProyecto.avanceFisico.toString()) * 100).toStringAsFixed(2)).toString()}%";
+    } catch (oError) {
+      return "NAN %";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // String experienceLevelColor = '4495FF';
@@ -27,120 +57,122 @@ class ListaProyectos extends StatelessWidget {
           ),
         );
       },
-      child: Card(
-        margin: const EdgeInsets.all(5),
-        color: ((double.parse(oProyecto.avanceFisico.toString()) * 100) == 100
-            ? Colors.blue.shade300
-            : (double.parse(oProyecto.avanceFisico.toString()) * 100) >= 50
-                ? Colors.green.shade300
-                : (double.parse(oProyecto.avanceFisico.toString()) * 100) <= 30
-                    ? Colors.red.shade300
-                    : Colors.yellow.shade200),
-        elevation: 1,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+          border: Border.all(
+            width: 1,
+            color: getColorAvancefisico(oProyecto),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.9),
+              spreadRadius: 0,
+              blurRadius: 2,
+              offset: const Offset(0, 1),
+            ),
+          ],
         ),
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 10),
-                        Flexible(
-                          child: Column(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: CircularPercentIndicator(
+                          radius: 30.0,
+                          lineWidth: 5.0,
+                          percent: getAvancefisico(oProyecto),
+                          center: Text(
+                            getAvancefisicoText(oProyecto),
+                            style: const TextStyle(
+                                fontSize: 11, fontWeight: FontWeight.bold),
+                          ),
+                          progressColor: getColorAvancefisico(oProyecto),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Flexible(
+                        child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Container(
-                                  child: Text(
-                                    oProyecto.cui!,
-                                    style: const TextStyle(
-                                      color: Color.fromARGB(255, 13, 0, 255),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              const SizedBox(height: 10),
                               Text(
                                 oProyecto.tambo!,
                                 style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500),
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                               const SizedBox(height: 5),
                               Text(
                                 oProyecto.estado!,
                                 style: const TextStyle(
-                                    color: Color.fromARGB(255, 37, 36, 36)),
+                                  color: Color.fromARGB(255, 73, 72, 72),
+                                ),
                               ),
-                              const SizedBox(height: 5),
                               Text(
                                 "${oProyecto.departamento!} / ${oProyecto.provincia!} / ${oProyecto.distrito!}",
                                 style: const TextStyle(
-                                    color: Color.fromARGB(255, 37, 36, 36)),
+                                  color: Color.fromARGB(255, 73, 72, 72),
+                                ),
                               ),
-                              const SizedBox(height: 5),
                               Text(
                                 oProyecto.fechaTerminoEstimado!,
                                 style: const TextStyle(
                                     color: Color.fromARGB(255, 37, 36, 36)),
                               ),
-                            ],
+                            ]),
+                      )
+                    ],
+                  ),
+                ),
+                /*Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [],
+                        ),
+                        Text(
+                          oProyecto.cui!,
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 13, 0, 255),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
                           ),
                         )
                       ],
                     ),
-                  ),
-                ],
-              ),
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: LinearPercentIndicator(
-                        width: MediaQuery.of(context).size.width - 90,
-                        lineHeight: 25.0,
-                        animation: true,
-                        animationDuration: 1000,
-                        percent:
-                            double.parse(oProyecto.avanceFisico.toString()),
-                        center: Text(
-                          "${((double.parse(oProyecto.avanceFisico.toString()) * 100).toStringAsFixed(2)).toString()}%",
-                          style: const TextStyle(
-                              fontSize: 11, fontWeight: FontWeight.bold),
-                        ),
-                        progressColor: ((double.parse(
-                                        oProyecto.avanceFisico.toString()) *
-                                    100) ==
-                                100
-                            ? Colors.blue
-                            : (double.parse(oProyecto.avanceFisico.toString()) *
-                                        100) >=
-                                    50
-                                ? Colors.green
-                                : (double.parse(oProyecto.avanceFisico
-                                                .toString()) *
-                                            100) <=
-                                        30
-                                    ? Colors.red
-                                    : Colors.yellow),
-                      ),
-                    ),
-                  ],
+                  )*/
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [],
                 ),
-              )
-            ],
-          ),
+                Text(
+                  oProyecto.cui!,
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 13, 0, 255),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              ],
+            )
+          ],
         ),
       ),
     );
