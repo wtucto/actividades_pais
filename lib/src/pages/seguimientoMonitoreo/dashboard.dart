@@ -21,6 +21,7 @@ class _DashboardState extends State<Dashboard> {
   List<TramaProyectoModel> aProyecto2 = [];
   List<TramaProyectoModel> aProyecto3 = [];
   List<TramaProyectoModel> aProyecto4 = [];
+  List<TramaProyectoModel> aProyectoAll = [];
 
   List<TramaProyectoModel> aProyecto = [];
   ScrollController scrollController = ScrollController();
@@ -42,12 +43,16 @@ class _DashboardState extends State<Dashboard> {
   ];
 
   Future<void> buildData() async {
-    List<TramaProyectoModel> response =
-        await mainController.getAllProyectoDashboard("");
+    aProyecto1 = [];
+    aProyecto2 = [];
+    aProyecto3 = [];
+    aProyecto4 = [];
 
-    response.sort((a, b) => a.avanceFisico!.compareTo(b.avanceFisico!));
+    aProyectoAll = await mainController.getAllProyectoDashboard("");
 
-    for (var o in response) {
+    aProyectoAll.sort((a, b) => a.avanceFisico!.compareTo(b.avanceFisico!));
+
+    for (var o in aProyectoAll) {
       int iSection = getAvancefisicoChar(o);
       switch (iSection) {
         case 1: /* MUL ALTO*/
@@ -67,7 +72,7 @@ class _DashboardState extends State<Dashboard> {
     }
 
     setState(() {
-      aProyecto = response;
+      aProyecto = aProyectoAll;
       chartData = [
         //1 - Verde       80D8A4
         //2 - Amarillo    FEE191
@@ -137,9 +142,13 @@ class _DashboardState extends State<Dashboard> {
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
               iconSize: 30,
-              onPressed: () {},
+              onPressed: () async {
+                BusyIndicator.show(context);
+                await buildData();
+                BusyIndicator.hide(context);
+              },
               icon: const Icon(
-                Icons.pie_chart_sharp,
+                Icons.restart_alt_outlined,
                 color: Color.fromARGB(255, 255, 255, 255),
               ),
             ),
