@@ -1,5 +1,8 @@
 import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/src/pages/Tambook/dashboard_tambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 class DetalleTambook extends StatefulWidget {
   const DetalleTambook({super.key, this.listTambo});
@@ -10,44 +13,7 @@ class DetalleTambook extends StatefulWidget {
 }
 
 class _DetalleTambookState extends State<DetalleTambook> {
-  StepperType stepperType = StepperType.vertical;
   ScrollController scrollController = ScrollController();
-
-  Widget _buildActions() {
-    Widget profile = GestureDetector(
-      onTap: () => {},
-      child: Container(
-        height: 30.0,
-        width: 45.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.grey,
-          image: const DecorationImage(
-            image: ExactAssetImage("assets/design_course/fondo2.jpg"),
-            fit: BoxFit.cover,
-          ),
-          border: Border.all(color: Colors.black, width: 2.0),
-        ),
-      ),
-    );
-
-    double scale;
-    if (scrollController.hasClients) {
-      scale = scrollController.offset / 200;
-      scale = scale * 2;
-      if (scale > 1) {
-        scale = 1.0;
-      }
-    } else {
-      scale = 0.0;
-    }
-
-    return Transform(
-      transform: Matrix4.identity()..scale(scale, scale),
-      alignment: Alignment.center,
-      child: profile,
-    );
-  }
 
   @override
   void dispose() {
@@ -65,81 +31,162 @@ class _DetalleTambookState extends State<DetalleTambook> {
   @override
   Widget build(BuildContext context) {
     var flexibleSpaceWidget = SliverAppBar(
-      expandedHeight: 200.0,
+      title: const Text(
+        "¡ BIENVENIDO A",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16.0,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      automaticallyImplyLeading: true,
+      expandedHeight: 200,
+      floating: false,
       pinned: true,
+      snap: false,
+      centerTitle: true,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => DashboardTambook(),
+              ));
+        },
+      ),
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(15),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Center(
+            child: Text(
+              "${widget.listTambo?.tambo} !",
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w700),
+            ),
+          ),
+        ),
+      ),
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
-        title: Text("¡BIENVENIDO A ${widget.listTambo?.tambo}!",
-            style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16.0,
-                fontWeight: FontWeight.w700)),
         background: Image.asset(
           "assets/design_course/fondo2.jpg",
           fit: BoxFit.fill,
         ),
       ),
       actions: [
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: _buildActions(),
-        ),
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () {
+            showSearch(
+              context: context,
+              delegate: SearchTambookDelegate(),
+            );
+          },
+        )
       ],
     );
     return Scaffold(
-      body: DefaultTabController(
-        length: 4,
-        child: NestedScrollView(
-          controller: scrollController,
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return [
-              flexibleSpaceWidget,
-              SliverPersistentHeader(
-                delegate: _SliverAppBarDelegate(
-                  const TabBar(
-                    labelColor: Colors.black87,
-                    unselectedLabelColor: Colors.black38,
-                    isScrollable: true,
-                    tabs: [
-                      Tab(
-                        icon: Icon(Icons.account_box),
-                        text: "GESTOR",
+      body: SafeArea(
+        child: Stack(
+          children: [
+            DefaultTabController(
+              length: 4,
+              child: NestedScrollView(
+                controller: scrollController,
+                headerSliverBuilder:
+                    (BuildContext context, bool innerBoxIsScrolled) {
+                  return [
+                    flexibleSpaceWidget,
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: _SliverAppBarDelegate(
+                        minHeight: 40,
+                        maxHeight: 40,
+                        child: Container(
+                          height: 800 * (1 / 11),
+                          width: double.infinity,
+                          color: const Color.fromARGB(255, 230, 234, 236),
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: const Center(
+                                  child: Text(
+                                    'OPERATIVO',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                      letterSpacing: 0.0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      Tab(
-                        icon: Icon(Icons.cloud),
-                        text: "SERVICIOS INTERNET",
+                    ),
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: _SliverAppBarDelegate(
+                        minHeight: 80,
+                        maxHeight: 80,
+                        child: Container(
+                          color: const Color.fromARGB(255, 230, 234, 236),
+                          child: const TabBar(
+                            labelColor: Colors.black,
+                            unselectedLabelColor: Colors.black38,
+                            indicatorColor: Colors.black,
+                            isScrollable: true,
+                            indicator: BoxDecoration(
+                              color: Colors.white70,
+                            ),
+                            tabs: [
+                              Tab(
+                                icon: Icon(Icons.account_box),
+                                text: "GESTOR",
+                              ),
+                              Tab(
+                                icon: Icon(Icons.cloud),
+                                text: "SERVICIOS INTERNET",
+                              ),
+                              Tab(
+                                icon: Icon(Icons.policy_rounded),
+                                text: "INTERVENCIONES",
+                              ),
+                              Tab(
+                                icon: Icon(Icons.computer),
+                                text: "EQUIPAMIENTO TECNOLÓGICO",
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      Tab(
-                        icon: Icon(Icons.policy_rounded),
-                        text: "INTERVENCIONES",
-                      ),
-                      Tab(
-                        icon: Icon(Icons.computer),
-                        text: "EQUIPAMIENTO TECNOLÓGICO",
-                      ),
-                    ],
-                  ),
+                      // pinned: true,
+                    ),
+                  ];
+                },
+                body: const TabBarView(
+                  physics: BouncingScrollPhysics(),
+                  children: [
+                    TabScreen("GESTOR"),
+                    TabScreen("SERVICIOS INTERNET"),
+                    TabScreen("INTERVENCIONES"),
+                    TabScreen("EQUIPAMIENTO TECNOLÓGICO DEL TAMBO"),
+                  ],
                 ),
-                pinned: true,
               ),
-            ];
-          },
-          body: const TabBarView(
-            children: [
-              TabScreen("GESTOR"),
-              TabScreen("SERVICIOS INTERNET"),
-              TabScreen("INTERVENCIONES"),
-              TabScreen("EQUIPAMIENTO TECNOLÓGICO DEL TAMBO"),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
-
-//  showProfile() {
-//     Navigator.pushNamed(context, '/profile');
-//   }
 
   Container newMethod() {
     return Container(
@@ -568,29 +615,32 @@ class _DetalleTambookState extends State<DetalleTambook> {
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  final TabBar _tabBar;
-
-  _SliverAppBarDelegate(this._tabBar);
+  _SliverAppBarDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
 
   @override
-  double get minExtent => _tabBar.preferredSize.height;
+  double get minExtent => minHeight;
 
   @override
-  double get maxExtent => _tabBar.preferredSize.height;
+  double get maxExtent => math.max(maxHeight, minHeight);
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      child: Column(
-        children: [Expanded(child: _tabBar)],
-      ),
-    );
+    return SizedBox.expand(child: child);
   }
 
   @override
   bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return false;
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
   }
 }
 
