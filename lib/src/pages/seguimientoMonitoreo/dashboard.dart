@@ -1,6 +1,7 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/listView/ListaProyectos.dart';
+import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -155,7 +156,9 @@ class _DashboardState extends State<Dashboard> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(
-                      color: const Color.fromRGBO(0, 0, 0, 0.12), width: 1.1),
+                    color: const Color.fromRGBO(0, 0, 0, 0.12),
+                    width: 1.1,
+                  ),
                   //borderRadius: const BorderRadius.all(Radius.circular(12)),
                 ),
                 child: Column(
@@ -196,10 +199,8 @@ class _DashboardState extends State<Dashboard> {
                                       color: Color.fromRGBO(0, 116, 227, 1),
                                     ),
                                   ),
-                                  onDataLabelRender:
-                                      (DataLabelRenderArgs args) {
-                                    double value = double.parse(args.text);
-                                    args.text = value.toStringAsFixed(0);
+                                  onLegendTapped: (LegendTapArgs args) {
+                                    //print(args.pointIndex);
                                   },
                                   series: [
                                     PieSeries<ChartData, String>(
@@ -218,9 +219,30 @@ class _DashboardState extends State<Dashboard> {
                                         margin: EdgeInsets.all(1),
                                       ),
                                       name: 'Data',
-                                      explode: true,
-                                      explodeIndex: 1,
+                                      //explode: true,
+                                      //explodeIndex: 1,
                                       radius: '80%',
+                                      onPointTap: (ChartPointDetails details) {
+                                        //print(details.pointIndex);
+                                        //print(details.seriesIndex);
+                                        int iIndex = details.pointIndex! + 1;
+                                        switch (iIndex) {
+                                          case 1: /* MUL ALTO*/
+                                            aProyecto = aProyecto1;
+                                            break;
+                                          case 2: /* ALTO*/
+                                            aProyecto = aProyecto2;
+                                            break;
+                                          case 3: /* BAJO*/
+                                            aProyecto = aProyecto3;
+                                            break;
+                                          case 4: /* MEDIO */
+                                            aProyecto = aProyecto4;
+                                            break;
+                                          default:
+                                        }
+                                        setState(() {});
+                                      },
                                     ),
                                   ],
                                 ),
