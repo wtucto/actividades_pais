@@ -87,6 +87,52 @@ class TramaMonitoreoFields {
   static String nivelRiesgo = 'nivelRiesgo';
   static String rol = 'rol';
   static String usuario = 'usuario';
+
+  /*
+item                       -> null
+idMonitoreo                -> "2153311_152549_2022-12-10"
+idEstadoMonitoreo          -> 0
+estadoMonitoreo            -> null
+idUsuario                  -> 3026
+usuario                    -> "302"
+idRol                      -> 0
+rol                        -> ""
+tambo                      -> "COPALLIN DE ARAMANGO"
+snip                       -> "259323"
+cui                        -> "2178298"
+fechaMonitoreo             -> "2022-11-22 00:00:00.0"
+avanceFisicoAcumulado      -> 1.0
+idEstadoAvance             -> 1
+actividadPartidaEjecutada  -> null
+avanceFisicoPartida        -> 0.0
+observaciones              -> "obs"
+imgActividad1              -> null
+imgActividad2              -> null
+imgActividad3              -> null
+problemaIdentificado       -> "CALCULO INEXACTO EN DURACIÓN DE LAS TAREAS"
+idProblemaIdentificado     -> 1
+imgProblema1               -> "/9j/4AAQSkZJRgABAQAAAQABAAD/7QBqUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAE0cAVoAAxslRxwCAAACAAAcAnQAOcKpIHZlcnloYWJvbGEgLSBodHRwOi8vd3d3…"
+imgProblema2               -> "iVBORw0KGgoAAAANSUhEUgAABIQAAAIpCAYAAADTgOM8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAHRaSURBVHhe7d1N…"
+imgProblema3               -> "iVBORw0KGgoAAAANSUhEUgAAADkAAAA6CAIAAACF7mZ8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAhdEVYdENyZWF0…"
+alternativaSolucion        -> ""
+idAlternativaSolucion      -> 0
+riesgoIdentificado         -> "INCUMPLIMIENTO DE LAS CARACTERÍSTICAS DE LOS COMPONENTES"
+idRiesgoIdentificado       -> 1
+imgRiesgo1                 -> "JVBERi0xLjcNCiW1tbW1DQoxIDAgb2JqDQo8PC9UeXBlL0NhdGFsb2cvUGFnZXMgMiAwIFIvTGFuZyhlcy1QRSkgL1N0cnVjdFRyZWVSb290IDI3IDAgUi9NYXJrSW5m…"
+imgRiesgo2                 -> "/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAEBAQICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIBAQEBAgIC…"
+imgRiesgo3                 -> "/9j/4AAQSkZJRgABAgAAZABkAAD/7AARRHVja3kAAQAEAAAAPAAA/+4ADkFkb2JlAGTAAAAAAf/bAIQABgQEBAUEBgUFBgkGBQYJCwgGBggLDAoKCwoKDBAMDAwMDAwQ…"
+fechaTerminoEstimado       -> "2022-06-01 00:00:00.0"
+latitud                    -> "-1"
+longitud                   -> "-1654213"
+txtIpReg                   -> null
+fechaInicio                -> null
+fechaFin                   -> null
+nomEstado                  -> ""
+pageIndex                  -> 0
+pageSize                   -> 0
+idAvanceFisicoPartida      -> 0
+estadoAvance               -> "PENDIENTE ASIGNACION"
+  */
 }
 
 class TramaMonitoreoModel {
@@ -439,52 +485,50 @@ class TramaMonitoreoModel {
         createdTime: json[TramaMonitoreoFields.time] != null
             ? DateTime.parse(json[TramaMonitoreoFields.time] as String)
             : null,
-        snip: json[TramaMonitoreoFields.snip] as String,
-        cui: json[TramaMonitoreoFields.cui] as String,
-        latitud: json[TramaMonitoreoFields.latitud] as String,
-        longitud: json[TramaMonitoreoFields.longitud] as String,
-        tambo: json[TramaMonitoreoFields.tambo] as String,
+        snip: _getString(json[TramaMonitoreoFields.snip]),
+        cui: _getString(json[TramaMonitoreoFields.cui]),
+        latitud: _getString(json[TramaMonitoreoFields.latitud]),
+        longitud: _getString(json[TramaMonitoreoFields.longitud]),
+        tambo: _getString(json[TramaMonitoreoFields.tambo]),
         fechaTerminoEstimado:
-            json[TramaMonitoreoFields.fechaTerminoEstimado] as String,
+            _getString(json[TramaMonitoreoFields.fechaTerminoEstimado]),
         actividadPartidaEjecutada:
-            json[TramaMonitoreoFields.actividadPartidaEjecutada] as String,
+            _getString(json[TramaMonitoreoFields.actividadPartidaEjecutada]),
         alternativaSolucion:
-            json[TramaMonitoreoFields.alternativaSolucion] as String,
+            _getString(json[TramaMonitoreoFields.alternativaSolucion]),
         avanceFisicoAcumulado: double.parse(
             (json[TramaMonitoreoFields.avanceFisicoAcumulado] ?? "0")
                 .toString()),
         avanceFisicoPartida: double.parse(
             (json[TramaMonitoreoFields.avanceFisicoPartida] ?? "0").toString()),
-        estadoAvance: json[TramaMonitoreoFields.estadoAvance] as String,
-        estadoMonitoreo: json[TramaMonitoreoFields.estadoMonitoreo] as String,
-        fechaMonitoreo: json[TramaMonitoreoFields.fechaMonitoreo] as String,
-        idMonitoreo: json[TramaMonitoreoFields.idMonitoreo] as String,
-        idUsuario: json[TramaMonitoreoFields.idUsuario] as String,
-        imgActividad: json[TramaMonitoreoFields.imgActividad] as String?,
-        imgActividad1: json[TramaMonitoreoFields.imgActividad1] as String?,
-        imgActividad2: json[TramaMonitoreoFields.imgActividad2] as String?,
-        imgActividad3: json[TramaMonitoreoFields.imgActividad3] as String?,
-        imgActividad4: json[TramaMonitoreoFields.imgActividad4] as String?,
-        imgProblema: json[TramaMonitoreoFields.imgProblema] as String?,
-        imgProblema1: json[TramaMonitoreoFields.imgProblema1] as String?,
-        imgProblema2: json[TramaMonitoreoFields.imgProblema2] as String?,
-        imgProblema3: json[TramaMonitoreoFields.imgProblema3] as String?,
-        imgProblema4: json[TramaMonitoreoFields.imgProblema4] as String?,
-        imgRiesgo: json[TramaMonitoreoFields.imgRiesgo] as String?,
-        imgRiesgo1: json[TramaMonitoreoFields.imgRiesgo1] as String?,
-        imgRiesgo2: json[TramaMonitoreoFields.imgRiesgo2] as String?,
-        imgRiesgo3: json[TramaMonitoreoFields.imgRiesgo3] as String?,
-        imgRiesgo4: json[TramaMonitoreoFields.imgRiesgo4] as String?,
-        observaciones: json[TramaMonitoreoFields.observaciones] as String,
+        estadoAvance: _getString(json[TramaMonitoreoFields.estadoAvance]),
+        estadoMonitoreo: _getString(json[TramaMonitoreoFields.estadoMonitoreo]),
+        fechaMonitoreo: _getString(json[TramaMonitoreoFields.fechaMonitoreo]),
+        idMonitoreo: _getString(json[TramaMonitoreoFields.idMonitoreo]),
+        idUsuario: _getString(json[TramaMonitoreoFields.idUsuario]),
+        imgActividad: _getString(json[TramaMonitoreoFields.imgActividad]),
+        imgActividad1: _getString(json[TramaMonitoreoFields.imgActividad1]),
+        imgActividad2: _getString(json[TramaMonitoreoFields.imgActividad2]),
+        imgActividad3: _getString(json[TramaMonitoreoFields.imgActividad3]),
+        imgActividad4: _getString(json[TramaMonitoreoFields.imgActividad4]),
+        imgProblema: _getString(json[TramaMonitoreoFields.imgProblema]),
+        imgProblema1: _getString(json[TramaMonitoreoFields.imgProblema1]),
+        imgProblema2: _getString(json[TramaMonitoreoFields.imgProblema2]),
+        imgProblema3: _getString(json[TramaMonitoreoFields.imgProblema3]),
+        imgProblema4: _getString(json[TramaMonitoreoFields.imgProblema4]),
+        imgRiesgo: _getString(json[TramaMonitoreoFields.imgRiesgo]),
+        imgRiesgo1: _getString(json[TramaMonitoreoFields.imgRiesgo1]),
+        imgRiesgo2: _getString(json[TramaMonitoreoFields.imgRiesgo2]),
+        imgRiesgo3: _getString(json[TramaMonitoreoFields.imgRiesgo3]),
+        imgRiesgo4: _getString(json[TramaMonitoreoFields.imgRiesgo4]),
+        observaciones: _getString(json[TramaMonitoreoFields.observaciones]),
         problemaIdentificado:
-            json[TramaMonitoreoFields.problemaIdentificado] as String,
+            _getString(json[TramaMonitoreoFields.problemaIdentificado]),
         riesgoIdentificado:
-            json[TramaMonitoreoFields.riesgoIdentificado] as String,
-        nivelRiesgo: json[TramaMonitoreoFields.nivelRiesgo] != null
-            ? json[TramaMonitoreoFields.nivelRiesgo] as String
-            : '',
-        rol: json[TramaMonitoreoFields.rol] as String,
-        usuario: json[TramaMonitoreoFields.usuario] as String,
+            _getString(json[TramaMonitoreoFields.riesgoIdentificado]),
+        nivelRiesgo: _getString(json[TramaMonitoreoFields.nivelRiesgo]),
+        rol: _getString(json[TramaMonitoreoFields.rol]),
+        usuario: _getString(json[TramaMonitoreoFields.usuario]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -575,31 +619,32 @@ class TramaMonitoreoModel {
 
   static Map<String, String> toJsonObjectApi(TramaMonitoreoModel o) {
     return {
-      TramaMonitoreoFields.snip: o.snip as String,
-      TramaMonitoreoFields.cui: o.cui as String,
-      TramaMonitoreoFields.latitud: o.latitud as String,
-      TramaMonitoreoFields.longitud: o.longitud as String,
-      TramaMonitoreoFields.tambo: o.tambo as String,
+      TramaMonitoreoFields.snip: _getString(o.snip),
+      TramaMonitoreoFields.cui: _getString(o.cui),
+      TramaMonitoreoFields.latitud: _getString(o.latitud),
+      TramaMonitoreoFields.longitud: _getString(o.longitud),
+      TramaMonitoreoFields.tambo: _getString(o.tambo),
       TramaMonitoreoFields.fechaTerminoEstimado:
-          o.fechaTerminoEstimado as String,
+          _getString(o.fechaTerminoEstimado),
       TramaMonitoreoFields.actividadPartidaEjecutada:
-          o.actividadPartidaEjecutada as String,
-      TramaMonitoreoFields.alternativaSolucion: o.alternativaSolucion as String,
+          _getString(o.actividadPartidaEjecutada),
+      TramaMonitoreoFields.alternativaSolucion:
+          _getString(o.alternativaSolucion),
       TramaMonitoreoFields.avanceFisicoAcumulado:
-          o.avanceFisicoAcumulado.toString(),
+          _getString(o.avanceFisicoAcumulado),
       TramaMonitoreoFields.avanceFisicoPartida:
-          o.avanceFisicoPartida.toString(),
-      TramaMonitoreoFields.estadoAvance: o.estadoAvance as String,
-      TramaMonitoreoFields.estadoMonitoreo: o.estadoMonitoreo as String,
-      TramaMonitoreoFields.fechaMonitoreo: o.fechaMonitoreo as String,
-      TramaMonitoreoFields.idMonitoreo: o.idMonitoreo as String,
-      TramaMonitoreoFields.idUsuario: o.idUsuario as String,
-      TramaMonitoreoFields.observaciones: o.observaciones as String,
+          _getString(o.avanceFisicoPartida),
+      TramaMonitoreoFields.estadoAvance: _getString(o.estadoAvance),
+      TramaMonitoreoFields.estadoMonitoreo: _getString(o.estadoMonitoreo),
+      TramaMonitoreoFields.fechaMonitoreo: _getString(o.fechaMonitoreo),
+      TramaMonitoreoFields.idMonitoreo: _getString(o.idMonitoreo),
+      TramaMonitoreoFields.idUsuario: _getString(o.idUsuario),
+      TramaMonitoreoFields.observaciones: _getString(o.observaciones),
       TramaMonitoreoFields.problemaIdentificado:
-          o.problemaIdentificado as String,
-      TramaMonitoreoFields.riesgoIdentificado: o.riesgoIdentificado as String,
-      TramaMonitoreoFields.rol: o.rol as String,
-      TramaMonitoreoFields.usuario: o.usuario as String,
+          _getString(o.problemaIdentificado),
+      TramaMonitoreoFields.riesgoIdentificado: _getString(o.riesgoIdentificado),
+      TramaMonitoreoFields.rol: _getString(o.rol),
+      TramaMonitoreoFields.usuario: _getString(o.usuario),
     };
   }
 
@@ -621,5 +666,17 @@ class TramaMonitoreoModel {
   String userToJson(List<TramaMonitoreoModel> aTramaMonitoreo) {
     final dyn = List<dynamic>.from(aTramaMonitoreo.map((x) => x.toJson()));
     return json.encode(dyn);
+  }
+
+  static String _getString(dynamic data) {
+    return data != null ? data.toString() as String : '';
+  }
+
+  static DateTime _getDateTime(dynamic data) {
+    return data != null ? DateTime.parse(data as String) : DateTime.now();
+  }
+
+  static int _getInt(dynamic data) {
+    return data != null ? data as int : 0;
   }
 }

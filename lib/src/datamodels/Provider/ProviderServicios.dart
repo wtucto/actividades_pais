@@ -22,12 +22,11 @@ class ProviderServicios {
   }
 
   serv() async {
-
     await DatabasePr.db.initDB();
     await DatabasePr.db.deleteTabla();
     await getSaveTipoPlataforma();
     await getUnidadesTerr();
-   // await getUnidadesTablaPlataforma();
+    // await getUnidadesTablaPlataforma();
     await getLugarPrestacion();
     await getPuesto();
     await getUnidadesOrg();
@@ -35,7 +34,6 @@ class ProviderServicios {
     await getProvincias();
     await getTipoDocumento();
     await getSexo();
-
   }
 
   Map<String, String> get headers {
@@ -167,7 +165,6 @@ class ProviderServicios {
   }
 
   Future<List<TipoDocumento>> getTipoDocumento() async {
-
     await DatabasePr.db.deleteTipoDocumento();
     String jsonString = await servicios.loadTipoDocumento();
     final jsonResponse = json.decode(jsonString);
@@ -226,11 +223,11 @@ class ProviderServicios {
 
     for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = TipoPlataforma(
-        cod:  listadoDepart.items[i].cod,
+        cod: listadoDepart.items[i].cod,
         descripcion: listadoDepart.items[i].descripcion,
-        id:  listadoDepart.items[i].id,
+        id: listadoDepart.items[i].id,
       );
-    await  DatabasePr.db.insertTipoPlataforma(rspt);
+      await DatabasePr.db.insertTipoPlataforma(rspt);
     }
     return listadoDepart.items;
   }
@@ -240,7 +237,7 @@ class ProviderServicios {
 
     final jsonResponse = json.decode(jsonString);
     final listadoDepart =
-    new ListaParticipantesSer.fromJsonList(jsonResponse["response"]);
+        new ListaParticipantesSer.fromJsonList(jsonResponse["response"]);
     for (var i = 0; i < listadoDepart.items.length; i++) {
       if (listadoDepart.items[i].dni == dni) {
         return listadoDepart.items[i];
@@ -249,6 +246,7 @@ class ProviderServicios {
 
     return new Participantes();
   }
+
   Future<List<Unidad>> getUnidad() async {
     await DatabasePr.db.deletesexo();
 

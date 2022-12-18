@@ -25,6 +25,8 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   //OBoxDbPnPais = await ObjectBoxDbPnPais.init();
+  await DatabasePr.db.initDB();
+  await DatabasePr.db.createUserDemo();
 
   final mainApi = GetIt.instance<PnPaisApi>();
   final mainApi2 = GetIt.instance<PnPaisApi2>();
@@ -70,6 +72,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   mostrarDatos() async {
     await DatabasePr.db.initDB();
+
     var abc = await DatabasePr.db.getAllConfigPersonal();
     cantidad = abc.length;
 

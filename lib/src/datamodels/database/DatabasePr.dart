@@ -35,9 +35,11 @@ import 'package:actividades_pais/src/datamodels/Clases/porcentajesEnvio.dart';
 import 'package:actividades_pais/src/datamodels/Clases/tipoPlataforma.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabaseParticipantes.dart';
 import 'package:actividades_pais/src/pages/Pias/Incidentes_Actividades/incidentesNovedades.dart';
+import 'package:logger/logger.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabasePr {
+  final Logger _log = Logger();
   Database? _db;
 
   static final DatabasePr db = DatabasePr._();
@@ -138,33 +140,48 @@ class DatabasePr {
             'CREATE TABLE participanteEjecucion (id INTEGER PRIMARY KEY, id_entidad,id_servicio,'
             'nombre_servicio,id_programacion)');
 
-        await db.execute(
-            "CREATE TABLE DatConfigInicio (idConfigInicio INTEGER PRIMARY KEY,  nombreConfigInicio,	idLugarPrestacion, lugarPrestacion,	idUnidadesOrganicas, unidadesOrganicas,	idPuesto,	puesto, idUnidTerritoriales, unidTerritoriales,	idTambo,	nombreTambo, snip, tipoPlataforma,campania,codCampania,modalidad)");
+        db.execute(
+            "CREATE TABLE DatConfigInicio (idConfigInicio INTEGER PRIMARY KEY,  nombreConfigInicio,	idLugarPrestacion, lugarPrestacion,	idUnidadesOrganicas, unidadesOrganicas,	idPuesto,	puesto, idUnidTerritoriales, unidTerritoriales,	idTambo,	nombreTambo, snip, tipoPlataforma,campania,codCampania,modalidad, tipoUsuario)");
 
-        await db.execute(
+        db.execute(
             "CREATE TABLE ConfigPersonal (id INTEGER PRIMARY KEY,unidad, codigo, nombres, rol,fechaNacimento,numeroDni,contrasenia,apellidoMaterno, apellidoPaterno, cargo, tipoUsuario)");
-
-        /**
-         * GENERAR USUARIO DEMO
-         */
-
-        await db.execute(
-          "INSERT INTO DatConfigInicio (idLugarPrestacion, lugarPrestacion, idUnidadesOrganicas, unidadesOrganicas, idPuesto, puesto, idUnidTerritoriales, unidTerritoriales, idTambo, nombreTambo, tipoPlataforma, snip, campania, codCampania, modalidad) VALUES (2, 'UNIDADES TERRITORIALES', 2, 'UNIDAD DE ADMINISTRACION', 1, 'GESTOR INSTITUCIONAL', 1, 'AMAZONAS', 20491, 'PUERTO PACUY', 'TAMBO', 342434, '', '0', '')",
-        );
-        /*
-        await db.execute(
-          "INSERT INTO DatConfigInicio (idLugarPrestacion, lugarPrestacion, idUnidadesOrganicas, unidadesOrganicas, idPuesto, puesto, idUnidTerritoriales, unidTerritoriales, idTambo, nombreTambo, tipoPlataforma, snip, campania, codCampania, modalidad) VALUES (2, 'UNIDADES TERRITORIALES', 2, 'UNIDAD DE ADMINISTRACION', 1, 'GESTOR INSTITUCIONAL', 1, 'AMAZONAS', 20491, 'PUERTO PACUY', 'PIAS', 342434, '', '0', '1')",
-        );
-        */
-
-        await db.execute(
-          "INSERT INTO ConfigPersonal (codigo, nombres, rol, fechaNacimento, numeroDni, contrasenia, apellidoPaterno, apellidoMaterno, unidad, tipoUsuario) VALUES ('', 'JULIO ARMANDO ', '', '1994-07-26', 48400113, '111222', 'VEGA', 'SALVADOR', 'UAGS', 'DEMO')",
-        );
-        await db.execute(
-          "INSERT INTO ConfigPersonal (codigo, nombres, rol, fechaNacimento, numeroDni, contrasenia, apellidoPaterno, apellidoMaterno, unidad, tipoUsuario) VALUES ('CIP_92822', 'Freddy Ramos Espinoza', 'CRP', '1994-07-26', 48400113, '111222', '', '', 'UPS', 'DEMO')",
-        );
       },
     );
+  }
+
+  Future createUserDemo() async {
+    initDB();
+    _log.i('Inicio: Creación de USUARIO DEMO');
+
+    await _db!.execute(
+      "DELETE FROM DatConfigInicio WHERE tipoUsuario = 'DEMO'",
+    );
+    await _db!.execute(
+      "DELETE FROM ConfigPersonal WHERE tipoUsuario = 'DEMO'",
+    );
+
+    /**
+     * GENERAR USUARIO DEMO
+     */
+
+    await _db!.execute(
+      "INSERT INTO DatConfigInicio (idLugarPrestacion, lugarPrestacion, idUnidadesOrganicas, unidadesOrganicas, idPuesto, puesto, idUnidTerritoriales, unidTerritoriales, idTambo, nombreTambo, tipoPlataforma, snip, campania, codCampania, modalidad, tipoUsuario) VALUES (2, 'UNIDADES TERRITORIALES', 2, 'UNIDAD DE ADMINISTRACION', 1, 'GESTOR INSTITUCIONAL', 1, 'AMAZONAS', 20491, 'PUERTO PACUY', 'TAMBO', 342434, '', '0', '', 'DEMO')",
+    );
+
+    /*
+    await db.execute(
+      "INSERT INTO DatConfigInicio (idLugarPrestacion, lugarPrestacion, idUnidadesOrganicas, unidadesOrganicas, idPuesto, puesto, idUnidTerritoriales, unidTerritoriales, idTambo, nombreTambo, tipoPlataforma, snip, campania, codCampania, modalidad) VALUES (2, 'UNIDADES TERRITORIALES', 2, 'UNIDAD DE ADMINISTRACION', 1, 'GESTOR INSTITUCIONAL', 1, 'AMAZONAS', 20491, 'PUERTO PACUY', 'PIAS', 342434, '', '0', '1', 'DEMO')",
+    );
+    */
+
+    await _db!.execute(
+      "INSERT INTO ConfigPersonal (codigo, nombres, rol, fechaNacimento, numeroDni, contrasenia, apellidoPaterno, apellidoMaterno, unidad, tipoUsuario) VALUES ('', 'JULIO ARMANDO ', '', '1994-07-26', 48400113, '111222', 'VEGA', 'SALVADOR', 'UAGS', 'DEMO')",
+    );
+    await _db!.execute(
+      "INSERT INTO ConfigPersonal (codigo, nombres, rol, fechaNacimento, numeroDni, contrasenia, apellidoPaterno, apellidoMaterno, unidad, tipoUsuario) VALUES ('CIP_92822', 'Freddy Ramos Espinoza', 'CRP', '1994-07-26', 48400113, '111222', '', '', 'UPS', 'DEMO')",
+    );
+
+    _log.i('Fin: Creación de USUARIO DEMO');
   }
 
   Future deleteTabla() async {
