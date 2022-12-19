@@ -999,7 +999,7 @@ class _MonitoringDetailNewEditPageState
                                           100),
                                       fechaMonitoreo: _dateMonitor.text,
                                       idMonitoreo: _idMonitor.text,
-                                      idUsuario: oUser.codigo,
+                                      //idUsuario: oUser.codigo,
                                       imgActividad: imgPE,
                                       imgProblema: imgPI,
                                       imgRiesgo: imgRI,
@@ -1019,7 +1019,7 @@ class _MonitoringDetailNewEditPageState
                                       nivelRiesgo:
                                           getValueSelected(_valueNivelRiesgo!),
                                       rol: oUser.rol,
-                                      usuario: oUser.nombres,
+                                      usuario: oUser.codigo,
                                     ));
 
                                     BusyIndicator.hide(context);
@@ -1174,7 +1174,7 @@ class _MonitoringDetailNewEditPageState
                                                 100),
                                             fechaMonitoreo: _dateMonitor.text,
                                             idMonitoreo: _idMonitor.text,
-                                            idUsuario: oUser.codigo,
+                                            //idUsuario: oUser.codigo,
                                             imgActividad: imgPE,
                                             imgProblema: imgPI,
                                             imgRiesgo: imgRI,
@@ -1197,7 +1197,7 @@ class _MonitoringDetailNewEditPageState
                                             nivelRiesgo: getValueSelected(
                                                 _valueNivelRiesgo!),
                                             rol: oUser.rol,
-                                            usuario: oUser.nombres,
+                                            usuario: oUser.codigo,
                                           )
                                         ]);
                                         BusyIndicator.hide(context);

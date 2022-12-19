@@ -53,9 +53,9 @@ class DatabasePnPais {
     int version,
   ) async {
     var constFields = '''
-      ${TramaMonitoreoFields.id} $idType, 
-      ${TramaMonitoreoFields.time} $textType,
-      ${TramaMonitoreoFields.isEdit} $boolType $notNull
+      ${MonitorFields.id} $idType, 
+      ${MonitorFields.time} $textType,
+      ${MonitorFields.isEdit} $boolType $notNull
       ''';
 
     await db.execute('''
@@ -73,43 +73,54 @@ class DatabasePnPais {
     $createTable $tableNameTramaMonitoreos ( 
       $constFields,
 
-      ${TramaMonitoreoFields.cui} $textType,
-      ${TramaMonitoreoFields.snip} $textType $notNull,
-      ${TramaMonitoreoFields.tambo} $textType,
-      ${TramaMonitoreoFields.latitud} $textType,
-      ${TramaMonitoreoFields.longitud} $textType,
-      ${TramaMonitoreoFields.fechaTerminoEstimado} $textType,
-      ${TramaMonitoreoFields.actividadPartidaEjecutada} $textType,
-      ${TramaMonitoreoFields.alternativaSolucion} $textType,
-      ${TramaMonitoreoFields.avanceFisicoAcumulado} $textType,
-      ${TramaMonitoreoFields.avanceFisicoPartida} $textType,
-      ${TramaMonitoreoFields.estadoAvance} $textType,
-      ${TramaMonitoreoFields.estadoMonitoreo} $textType,
-      ${TramaMonitoreoFields.fechaMonitoreo} $textType,
-      ${TramaMonitoreoFields.idMonitoreo} $textType,
-      ${TramaMonitoreoFields.idUsuario} $textType,
-      ${TramaMonitoreoFields.imgActividad} $textType,
-      ${TramaMonitoreoFields.imgActividad1} $textType,
-      ${TramaMonitoreoFields.imgActividad2} $textType,
-      ${TramaMonitoreoFields.imgActividad3} $textType,
-      ${TramaMonitoreoFields.imgActividad4} $textType,
-      ${TramaMonitoreoFields.imgProblema} $textType,
-      ${TramaMonitoreoFields.imgProblema1} $textType,
-      ${TramaMonitoreoFields.imgProblema2} $textType,
-      ${TramaMonitoreoFields.imgProblema3} $textType,
-      ${TramaMonitoreoFields.imgProblema4} $textType,
-      ${TramaMonitoreoFields.imgRiesgo} $textType,
-      ${TramaMonitoreoFields.imgRiesgo1} $textType,
-      ${TramaMonitoreoFields.imgRiesgo2} $textType,
-      ${TramaMonitoreoFields.imgRiesgo3} $textType,
-      ${TramaMonitoreoFields.imgRiesgo4} $textType,
-      ${TramaMonitoreoFields.observaciones} $textType,
-      ${TramaMonitoreoFields.problemaIdentificado} $textType,
-      ${TramaMonitoreoFields.riesgoIdentificado} $textType,
-      ${TramaMonitoreoFields.nivelRiesgo} $textType,
-      
-      ${TramaMonitoreoFields.rol} $textType,
-      ${TramaMonitoreoFields.usuario} $textType
+      ${MonitorFields.item} $textType,
+      ${MonitorFields.idMonitoreo} $textType,
+      ${MonitorFields.idEstadoMonitoreo} $textType,
+      ${MonitorFields.estadoMonitoreo} $textType,
+      ${MonitorFields.idUsuario} $textType,
+      ${MonitorFields.usuario} $textType,
+      ${MonitorFields.idRol} $textType,
+      ${MonitorFields.rol} $textType,
+      ${MonitorFields.tambo} $textType,
+      ${MonitorFields.snip} $textType,
+      ${MonitorFields.cui} $textType,
+      ${MonitorFields.fechaMonitoreo} $textType,
+      ${MonitorFields.avanceFisicoAcumulado} $textType,
+      ${MonitorFields.idEstadoAvance} $textType,
+      ${MonitorFields.estadoAvance} $textType,
+      ${MonitorFields.actividadPartidaEjecutada} $textType,
+      ${MonitorFields.idAvanceFisicoPartida} $textType,
+      ${MonitorFields.avanceFisicoPartida} $textType,
+      ${MonitorFields.observaciones} $textType,
+      ${MonitorFields.imgActividad} $textType,
+      ${MonitorFields.imgActividad1} $textType,
+      ${MonitorFields.imgActividad2} $textType,
+      ${MonitorFields.imgActividad3} $textType,
+      ${MonitorFields.imgActividad4} $textType,
+      ${MonitorFields.problemaIdentificado} $textType,
+      ${MonitorFields.idProblemaIdentificado} $textType,
+      ${MonitorFields.imgProblema} $textType,
+      ${MonitorFields.imgProblema1} $textType,
+      ${MonitorFields.imgProblema2} $textType,
+      ${MonitorFields.imgProblema3} $textType,
+      ${MonitorFields.imgProblema4} $textType,
+      ${MonitorFields.alternativaSolucion} $textType,
+      ${MonitorFields.idAlternativaSolucion} $textType,
+      ${MonitorFields.riesgoIdentificado} $textType,
+      ${MonitorFields.idRiesgoIdentificado} $textType,
+      ${MonitorFields.imgRiesgo} $textType,
+      ${MonitorFields.imgRiesgo1} $textType,
+      ${MonitorFields.imgRiesgo2} $textType,
+      ${MonitorFields.imgRiesgo3} $textType,
+      ${MonitorFields.imgRiesgo4} $textType,
+      ${MonitorFields.fechaTerminoEstimado} $textType,
+      ${MonitorFields.latitud} $textType,
+      ${MonitorFields.longitud} $textType,
+      ${MonitorFields.txtIpReg} $textType,
+      ${MonitorFields.fechaInicio} $textType,
+      ${MonitorFields.fechaFin} $textType,
+      ${MonitorFields.nomEstado} $textType,
+      ${MonitorFields.nivelRiesgo} $textType
       )
     ''');
 
@@ -241,7 +252,7 @@ class DatabasePnPais {
   Future deleteMonitorByEstadoENV() async {
     final db = await instance.database;
     db.execute(
-        "DELETE FROM $tableNameTramaMonitoreos WHERE ${TramaMonitoreoFields.estadoMonitoreo} = '${TramaMonitoreoModel.sEstadoENV}'");
+        "DELETE FROM $tableNameTramaMonitoreos WHERE ${MonitorFields.estadoMonitoreo} = '${TramaMonitoreoModel.sEstadoENV}'");
   }
 
   Future _upgradeDB(
@@ -502,12 +513,12 @@ class DatabasePnPais {
   ) async {
     final db = await instance.database;
 
-    final orderBy = '${TramaMonitoreoFields.fechaMonitoreo} ASC';
+    final orderBy = '${MonitorFields.fechaMonitoreo} ASC';
 
     dynamic result = await db.query(
       tableNameTramaMonitoreos,
       where:
-          '${TramaMonitoreoFields.snip} = ? AND ${TramaMonitoreoFields.actividadPartidaEjecutada} = ?',
+          '${MonitorFields.snip} = ? AND ${MonitorFields.actividadPartidaEjecutada} = ?',
       whereArgs: [o.numSnip, sTypePartida],
       orderBy: orderBy,
     );
@@ -525,7 +536,7 @@ class DatabasePnPais {
 
     dynamic result = await db.query(
       tableNameTramaMonitoreos,
-      where: '${TramaMonitoreoFields.idMonitoreo} = ?',
+      where: '${MonitorFields.idMonitoreo} = ?',
       whereArgs: [sIdMonitoreo],
     );
 
@@ -554,12 +565,12 @@ class DatabasePnPais {
     TramaProyectoModel? o,
   ) async {
     final db = await instance.database;
-    final orderBy = '${TramaMonitoreoFields.idMonitoreo} ASC';
+    final orderBy = '${MonitorFields.idMonitoreo} ASC';
 
-    String sWhere = '${TramaMonitoreoFields.estadoMonitoreo} = ?';
+    String sWhere = '${MonitorFields.estadoMonitoreo} = ?';
     List<Object?> arg = [TramaMonitoreoModel.sEstadoPEN];
     if (o!.cui != "") {
-      sWhere = '$sWhere AND ${TramaMonitoreoFields.cui} = ?';
+      sWhere = '$sWhere AND ${MonitorFields.cui} = ?';
       arg.add(o.cui);
     }
 
@@ -593,7 +604,7 @@ class DatabasePnPais {
     int? offset,
   ) async {
     final db = await instance.database;
-    final orderBy = '${TramaMonitoreoFields.idMonitoreo} ASC';
+    final orderBy = '${MonitorFields.idMonitoreo} ASC';
 
     dynamic result;
     if (limit! > 0) {
@@ -622,7 +633,7 @@ class DatabasePnPais {
     int? offset,
   ) async {
     final db = await instance.database;
-    final orderBy = '${TramaMonitoreoFields.idMonitoreo} ASC';
+    final orderBy = '${MonitorFields.idMonitoreo} ASC';
 
     String sWhere = '';
     if (o.rol == UserModel.sRolRES) {
@@ -642,7 +653,7 @@ class DatabasePnPais {
       b.${TramaProyectoFields.codCrp}
     FROM $tableNameTramaMonitoreos AS a  
     LEFT JOIN $tableNameTramaProyectos AS b 
-           ON b.${TramaProyectoFields.cui} = a.${TramaMonitoreoFields.cui}
+           ON b.${TramaProyectoFields.cui} = a.${MonitorFields.cui}
     WHERE b.$sWhere != ?
     ORDER BY a.$orderBy
 
@@ -667,13 +678,13 @@ class DatabasePnPais {
     TramaProyectoModel o,
   ) async {
     final db = await instance.database;
-    final orderBy = '${TramaMonitoreoFields.idMonitoreo} ASC';
+    final orderBy = '${MonitorFields.idMonitoreo} ASC';
 
     dynamic result;
     if (limit! > 0) {
       result = await db.query(
         tableNameTramaMonitoreos,
-        where: '${TramaMonitoreoFields.cui} = ?',
+        where: '${MonitorFields.cui} = ?',
         whereArgs: [o.cui],
         orderBy: orderBy,
         limit: limit,
@@ -682,7 +693,7 @@ class DatabasePnPais {
     } else {
       result = await db.query(
         tableNameTramaMonitoreos,
-        where: '${TramaMonitoreoFields.cui} = ?',
+        where: '${MonitorFields.cui} = ?',
         whereArgs: [o.cui],
         orderBy: orderBy,
       );
@@ -747,7 +758,7 @@ class DatabasePnPais {
     return db.update(
       tableNameTramaMonitoreos,
       o.toJson(),
-      where: '${TramaMonitoreoFields.id} = ?',
+      where: '${MonitorFields.id} = ?',
       whereArgs: [o.id],
     );
   }
@@ -758,7 +769,7 @@ class DatabasePnPais {
     final db = await instance.database;
     return await db.delete(
       tableNameTramaMonitoreos,
-      where: '${TramaMonitoreoFields.id} = ?',
+      where: '${MonitorFields.id} = ?',
       whereArgs: [i],
     );
   }

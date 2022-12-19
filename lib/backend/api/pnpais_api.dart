@@ -71,6 +71,22 @@ class PnPaisApi {
     );
   }
 
+  Future<HttpResponse<List<TramaMonitoreoModel>>>
+      listarTramaMonitoreoMovilPaginado(
+    TramaMonitoreoModel oBody,
+  ) async {
+    return await _http.request<List<TramaMonitoreoModel>>(
+      '${basePathApp2}listarTramaMonitoreoMovilPaginado',
+      method: "POST",
+      data: TramaMonitoreoModel.toJsonObjectApi(oBody),
+      parser: (data) {
+        return (data as List)
+            .map((e) => TramaMonitoreoModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
   Future<HttpResponse<TramaRespApiDto>> insertProgramaIntervencion({
     required ProgramacionActividadModel oBody,
   }) async {
@@ -117,21 +133,21 @@ class PnPaisApi {
     if (oBody.imgActividad != '') {
       final aImgActividad = oBody.imgActividad!.split(',');
       for (var oValue in aImgActividad) {
-        aFile.add({TramaMonitoreoFields.imgActividad: oValue.trim()});
+        aFile.add({MonitorFields.imgActividad: oValue.trim()});
       }
     }
 
     if (oBody.imgProblema != '') {
       final aImgProblema = oBody.imgProblema!.split(',');
       for (var oValue in aImgProblema) {
-        aFile.add({TramaMonitoreoFields.imgProblema: oValue.trim()});
+        aFile.add({MonitorFields.imgProblema: oValue.trim()});
       }
     }
 
     if (oBody.imgRiesgo != '') {
       final aImgRiesgo = oBody.imgRiesgo!.split(',');
       for (var oValue in aImgRiesgo) {
-        aFile.add({TramaMonitoreoFields.imgRiesgo: oValue.trim()});
+        aFile.add({MonitorFields.imgRiesgo: oValue.trim()});
       }
     }
 

@@ -2,91 +2,167 @@ import 'dart:convert';
 
 String tableNameTramaMonitoreos = 'listar_trama_monitoreo';
 
-class TramaMonitoreoFields {
+class MonitorFields {
   static final List<String> values = [
     ////Add all fields
     id,
     isEdit,
     time,
 
+    item,
+    idMonitoreo,
+    idEstadoMonitoreo,
+    estadoMonitoreo,
+    idUsuario,
+    usuario,
+    idRol,
+    rol,
+    tambo,
     snip,
     cui,
-    latitud,
-    longitud,
-    tambo,
-    fechaTerminoEstimado,
-    actividadPartidaEjecutada,
-    alternativaSolucion,
-    avanceFisicoAcumulado,
-    avanceFisicoPartida,
-    estadoAvance,
-    estadoMonitoreo,
     fechaMonitoreo,
-    idMonitoreo,
-    idUsuario,
+    avanceFisicoAcumulado,
+    idEstadoAvance,
+    estadoAvance,
+    actividadPartidaEjecutada,
+    idAvanceFisicoPartida,
+    avanceFisicoPartida,
+    observaciones,
     imgActividad,
     imgActividad1,
     imgActividad2,
     imgActividad3,
     imgActividad4,
+    problemaIdentificado,
+    idProblemaIdentificado,
     imgProblema,
     imgProblema1,
     imgProblema2,
     imgProblema3,
     imgProblema4,
+    alternativaSolucion,
+    idAlternativaSolucion,
+    riesgoIdentificado,
+    idRiesgoIdentificado,
     imgRiesgo,
     imgRiesgo1,
     imgRiesgo2,
     imgRiesgo3,
     imgRiesgo4,
-    observaciones,
-    problemaIdentificado,
-    riesgoIdentificado,
+    fechaTerminoEstimado,
+    latitud,
+    longitud,
+    txtIpReg,
+    fechaInicio,
+    fechaFin,
+    nomEstado,
     nivelRiesgo,
-    rol,
-    usuario,
   ];
 
+  /*
+   * Propiedades DB
+   */
   static String id = '_id';
   static String isEdit = 'isEdit';
   static String time = 'time';
 
+  static String item = 'item';
+  static String idMonitoreo = 'idMonitoreo';
+  static String idEstadoMonitoreo = 'idEstadoMonitoreo';
+  static String estadoMonitoreo = 'estadoMonitoreo';
+  static String idUsuario = 'idUsuario';
+  static String usuario = 'usuario';
+  static String idRol = 'idRol';
+  static String rol = 'rol';
+  static String tambo = 'tambo';
   static String snip = 'snip';
   static String cui = 'cui';
-  static String latitud = 'latitud';
-  static String longitud = 'longitud';
-  static String tambo = 'tambo';
-  static String fechaTerminoEstimado = 'fechaTerminoEstimado';
-  static String actividadPartidaEjecutada = 'actividadPartidaEjecutada';
-  static String alternativaSolucion = 'alternativaSolucion';
-  static String avanceFisicoAcumulado = 'avanceFisicoAcumulado';
-  static String avanceFisicoPartida = 'avanceFisicoPartida';
-  static String estadoAvance = 'estadoAvance';
-  static String estadoMonitoreo = 'estadoMonitoreo';
   static String fechaMonitoreo = 'fechaMonitoreo';
-  static String idMonitoreo = 'idMonitoreo';
-  static String idUsuario = 'idUsuario';
+  static String avanceFisicoAcumulado = 'avanceFisicoAcumulado';
+  static String idEstadoAvance = 'idEstadoAvance';
+  static String estadoAvance = 'EstadoAvance';
+  static String actividadPartidaEjecutada = 'actividadPartidaEjecutada';
+  static String idAvanceFisicoPartida = 'idAvanceFisicoPartida';
+  static String avanceFisicoPartida = 'avanceFisicoPartida';
+  static String observaciones = 'observaciones';
   static String imgActividad = 'imgActividad';
   static String imgActividad1 = 'imgActividad1';
   static String imgActividad2 = 'imgActividad2';
   static String imgActividad3 = 'imgActividad3';
   static String imgActividad4 = 'imgActividad4';
+  static String problemaIdentificado = 'problemaIdentificado';
+  static String idProblemaIdentificado = 'idProblemaIdentificado';
   static String imgProblema = 'imgProblema';
   static String imgProblema1 = 'imgProblema1';
   static String imgProblema2 = 'imgProblema2';
   static String imgProblema3 = 'imgProblema3';
   static String imgProblema4 = 'imgProblema4';
+  static String alternativaSolucion = 'alternativaSolucion';
+  static String idAlternativaSolucion = 'idAlternativaSolucion';
+  static String riesgoIdentificado = 'riesgoIdentificado';
+  static String idRiesgoIdentificado = 'idRiesgoIdentificado';
   static String imgRiesgo = 'imgRiesgo';
   static String imgRiesgo1 = 'imgRiesgo1';
   static String imgRiesgo2 = 'imgRiesgo2';
   static String imgRiesgo3 = 'imgRiesgo3';
   static String imgRiesgo4 = 'imgRiesgo4';
-  static String observaciones = 'observaciones';
-  static String problemaIdentificado = 'problemaIdentificado';
-  static String riesgoIdentificado = 'riesgoIdentificado';
+  static String fechaTerminoEstimado = 'fechaTerminoEstimado';
+  static String latitud = 'latitud';
+  static String longitud = 'longitud';
+  static String txtIpReg = 'txtIpReg';
+  static String fechaInicio = 'fechaInicio';
+  static String fechaFin = 'fechaFin';
+  static String nomEstado = 'nomEstado';
   static String nivelRiesgo = 'nivelRiesgo';
-  static String rol = 'rol';
-  static String usuario = 'usuario';
+  static String pageIndex = 'pageIndex';
+  static String pageSize = 'pageSize';
+
+  /*
+   * Propiedades API
+   */
+  static String item_ = 'item';
+  static String idMonitoreo_ = 'idMonitoreo';
+  static String idEstadoMonitoreo_ = 'idEstadoMonitoreo';
+  static String estadoMonitoreo_ = 'estadoMonitoreo';
+  static String idUsuario_ = 'idUsuario';
+  static String usuario_ = 'usuario';
+  static String idRol_ = 'idRol';
+  static String rol_ = 'rol';
+  static String tambo_ = 'tambo';
+  static String snip_ = 'snip';
+  static String cui_ = 'cui';
+  static String fechaMonitoreo_ = 'fechaMonitoreo';
+  static String avanceFisicoAcumulado_ = 'avanceFisicoAcumulado';
+  static String idEstadoAvance_ = 'idEstadoAvance';
+  static String estadoAvance_ = 'EstadoAvance';
+  static String actividadPartidaEjecutada_ = 'actividadPartidaEjecutada';
+  static String idAvanceFisicoPartida_ = 'idAvanceFisicoPartida';
+  static String avanceFisicoPartida_ = 'avanceFisicoPartida';
+  static String observaciones_ = 'observaciones';
+  static String imgActividad1_ = 'imgActividad1';
+  static String imgActividad2_ = 'imgActividad2';
+  static String imgActividad3_ = 'imgActividad3';
+  static String problemaIdentificado_ = 'problemaIdentificado';
+  static String idProblemaIdentificado_ = 'idProblemaIdentificado';
+  static String imgProblema1_ = 'imgProblema1';
+  static String imgProblema2_ = 'imgProblema2';
+  static String imgProblema3_ = 'imgProblema3';
+  static String alternativaSolucion_ = 'alternativaSolucion';
+  static String idAlternativaSolucion_ = 'idAlternativaSolucion';
+  static String riesgoIdentificado_ = 'riesgoIdentificado';
+  static String idRiesgoIdentificado_ = 'idRiesgoIdentificado';
+  static String imgRiesgo1_ = 'imgRiesgo1';
+  static String imgRiesgo2_ = 'imgRiesgo2';
+  static String imgRiesgo3_ = 'imgRiesgo3';
+  static String fechaTerminoEstimado_ = 'fechaTerminoEstimado';
+  static String latitud_ = 'latitud';
+  static String longitud_ = 'longitud';
+  static String txtIpReg_ = 'txtIpReg';
+  static String fechaInicio_ = 'fechaInicio';
+  static String fechaFin_ = 'fechaFin';
+  static String nomEstado_ = 'nomEstado';
+  static String pageIndex_ = 'pageIndex';
+  static String pageSize_ = 'pageSize';
 
   /*
 item                       -> null
@@ -244,85 +320,78 @@ class TramaMonitoreoModel {
     // sNivelRies06,
   ];
 
-/*
-"fechaMonitoreo": "2022-06-01 00:00:00.0",
-
-
-
-"imgActividad1": "/opt/uploads/8000002492.docx",
-"imgActividad2": "/opt/uploads/8000002497.docx",
-"imgActividad3": "/opt/uploads/8000002765.docx",
-"imgActividad4": "/opt/uploads/8000002765.docx",
-
-"imgProblema1": "/opt/uploads/8000002492.docx",
-"imgProblema2": "/opt/uploads/8000002497.docx",
-"imgProblema3": "/opt/uploads/8000002765.docx",
-"imgProblema4": "/opt/uploads/8000002765.docx",
-
-"imgRiesgo1": "/opt/uploads/8000002765.docx",
-"imgRiesgo2": "/opt/uploads/8000002497.docx",
-"imgRiesgo3": "",
-"imgRiesgo4": "",
-*/
   int? id = 0;
   int? isEdit = 0;
   DateTime? createdTime = null;
 
+  String? item = '';
+
   ///identificador autogenerado (CUI_IDE_FechaMonitoreo)
   String? idMonitoreo = '';
-
-  /// Código único del proyecto
-  String? cui = '';
-
-  /// Código de SNIP del proyecto
-  String? snip = '';
-
-  /// nombre del proyecto
-  String? tambo = '';
-
-  ///(Obligatorio) Latitud del monitoreo: si el APP está en OnLine: se debe obtener automáticamente. Si el APP está en Offline: no se muestra valor.
-  String? latitud = '';
-
-  /// (Obligatorio) Longitud del monitoreo: si el APP está en OnLine: se debe obtener automáticamente. Si el APP está en Offline: no se muestra valor.
-  String? longitud = '';
-
-  /// (Obligatorio) Fecha Termino Estimada Obra: se obtiene de los datos generales del proyecto como referencia, y luego el usuario puede modificar su valor.
-  String? fechaTerminoEstimado = '';
-
-  /// (Obligatorio) Partida ejecutada: selección de partida
-  String? actividadPartidaEjecutada = '';
-
-  /// (Obligatorio) Alternativa de Solución: selección de la solución.
-  String? alternativaSolucion = '';
-
-  /// (Obligatorio) % Avance Físico Estimado Acumulado: se obtiene de los datos generales del proyecto como referencia, y luego el usuario puede modificar su valor.
-  double? avanceFisicoAcumulado = 0;
-
-  ///% Av. Físico Acum. Partida: % Avance Físico acumulado de la partida
-  double? avanceFisicoPartida = 0;
-
-  /// (Obligatorio) Estado de Avance: selección del estado.
-  String? estadoAvance = '';
+  int? idEstadoMonitoreo;
 
   /// Estado del Registro del Monitoreo
   String? estadoMonitoreo = '';
 
+  int? idUsuario;
+  String? usuario = '';
+  int? idRol;
+  String? rol = '';
+
+  /// nombre del proyecto
+  String? tambo = '';
+
+  /// Código de SNIP del proyecto
+  String? snip = '';
+
+  /// Código único del proyecto
+  String? cui = '';
+
   /// (Obligatorio) se muestra la fecha del sistema APP por defecto (sólo lectura).
   String? fechaMonitoreo = '';
 
-  // (Obligatorio) Fotos de la partida ejecutada
+  /// (Obligatorio) % Avance Físico Estimado Acumulado: se obtiene de los datos generales del proyecto como referencia, y luego el usuario puede modificar su valor.
+  double? avanceFisicoAcumulado = 0;
+  int? idEstadoAvance;
+
+  /// (Obligatorio) Estado de Avance: selección del estado.
+  String? estadoAvance = '';
+
+  /// (Obligatorio) Partida ejecutada: selección de partida
+  String? actividadPartidaEjecutada = '';
+  int? idAvanceFisicoPartida;
+
+  /// % Av. Físico Acum. Partida: % Avance Físico acumulado de la partida
+  double? avanceFisicoPartida = 0;
+
+  /// Observaciones: descripción de la observación sobre la ejecución de la partida
+  String? observaciones = '';
+
+  /// (Obligatorio) Fotos de la partida ejecutada
   String? imgActividad = '';
-  String? imgActividad1 = '';
-  String? imgActividad2 = '';
-  String? imgActividad3 = '';
+  String? imgActividad1;
+  String? imgActividad2;
+  String? imgActividad3;
   String? imgActividad4 = '';
+
+  /// (Obligatorio) Problema identificado: selección del problema identificado en la obra.
+  String? problemaIdentificado = '';
+  int? idProblemaIdentificado;
 
   /// (Opcional) Fotos del problema identificado
   String? imgProblema = '';
-  String? imgProblema1 = '';
-  String? imgProblema2 = '';
-  String? imgProblema3 = '';
+  String? imgProblema1;
+  String? imgProblema2;
+  String? imgProblema3;
   String? imgProblema4 = '';
+
+  /// (Obligatorio) Alternativa de Solución: selección de la solución.
+  String? alternativaSolucion = '';
+  int? idAlternativaSolucion;
+
+  /// (Opcional) Riesgo Identificado: selección del riesgo identificado.
+  String? riesgoIdentificado = '';
+  int? idRiesgoIdentificado;
 
   /// (Opcional) Fotos del riesgo identificado
   String? imgRiesgo = '';
@@ -331,21 +400,23 @@ class TramaMonitoreoModel {
   String? imgRiesgo3 = '';
   String? imgRiesgo4 = '';
 
-  /// Observaciones: descripción de la observación sobre la ejecución de la partida
-  String? observaciones = '';
+  /// (Obligatorio) Fecha Termino Estimada Obra: se obtiene de los datos generales del proyecto como referencia, y luego el usuario puede modificar su valor.
+  String? fechaTerminoEstimado = '';
 
-  /// (Obligatorio) Problema identificado: selección del problema identificado en la obra.
-  String? problemaIdentificado = '';
+  /// (Obligatorio) Latitud del monitoreo: si el APP está en OnLine: se debe obtener automáticamente. Si el APP está en Offline: no se muestra valor.
+  String? latitud = '';
 
-  /// (Opcional) Riesgo Identificado: selección del riesgo identificado.
-  String? riesgoIdentificado = '';
+  /// (Obligatorio) Longitud del monitoreo: si el APP está en OnLine: se debe obtener automáticamente. Si el APP está en Offline: no se muestra valor.
+  String? longitud = '';
+  String? txtIpReg;
+  String? fechaInicio;
+  String? fechaFin;
+  String? nomEstado;
 
   /// (Opcional) Nivel de Riesgo: selección del nivel de riesgo.
   String? nivelRiesgo = '';
-
-  String? idUsuario = '';
-  String? usuario = '';
-  String? rol = '';
+  int? pageIndex;
+  int? pageSize;
 
   TramaMonitoreoModel.empty() {}
 
@@ -353,298 +424,469 @@ class TramaMonitoreoModel {
     this.id,
     this.isEdit,
     this.createdTime,
+    this.item,
+    this.idMonitoreo,
+    this.idEstadoMonitoreo,
+    this.estadoMonitoreo,
+    this.idUsuario,
+    this.usuario,
+    this.idRol,
+    this.rol,
+    this.tambo,
     this.snip,
     this.cui,
-    this.latitud,
-    this.longitud,
-    this.tambo,
-    this.fechaTerminoEstimado,
-    this.actividadPartidaEjecutada,
-    this.alternativaSolucion,
-    this.avanceFisicoAcumulado,
-    this.avanceFisicoPartida,
-    this.estadoAvance,
-    this.estadoMonitoreo,
     this.fechaMonitoreo,
-    this.idMonitoreo,
-    this.idUsuario,
+    this.avanceFisicoAcumulado,
+    this.idEstadoAvance,
+    this.estadoAvance,
+    this.actividadPartidaEjecutada,
+    this.idAvanceFisicoPartida,
+    this.avanceFisicoPartida,
+    this.observaciones,
     this.imgActividad,
     this.imgActividad1,
     this.imgActividad2,
     this.imgActividad3,
     this.imgActividad4,
+    this.problemaIdentificado,
+    this.idProblemaIdentificado,
     this.imgProblema,
     this.imgProblema1,
     this.imgProblema2,
     this.imgProblema3,
     this.imgProblema4,
+    this.alternativaSolucion,
+    this.idAlternativaSolucion,
+    this.riesgoIdentificado,
+    this.idRiesgoIdentificado,
     this.imgRiesgo,
     this.imgRiesgo1,
     this.imgRiesgo2,
     this.imgRiesgo3,
     this.imgRiesgo4,
-    this.observaciones,
-    this.problemaIdentificado,
-    this.riesgoIdentificado,
+    this.fechaTerminoEstimado,
+    this.latitud,
+    this.longitud,
+    this.txtIpReg,
+    this.fechaInicio,
+    this.fechaFin,
+    this.nomEstado,
     this.nivelRiesgo,
-    this.rol,
-    this.usuario,
+    this.pageIndex,
+    this.pageSize,
   });
 
   TramaMonitoreoModel copy({
     int? id,
     int? isEdit,
     DateTime? createdTime,
+    String? item,
+    String? idMonitoreo,
+    int? idEstadoMonitoreo,
+    String? estadoMonitoreo,
+    int? idUsuario,
+    String? usuario,
+    int? idRol,
+    String? rol,
+    String? tambo,
     String? snip,
     String? cui,
-    String? latitud,
-    String? longitud,
-    String? tambo,
-    String? fechaTerminoEstimado,
-    String? actividadPartidaEjecutada,
-    String? alternativaSolucion,
-    double? avanceFisicoAcumulado,
-    double? avanceFisicoPartida,
-    String? estadoAvance,
-    String? estadoMonitoreo,
     String? fechaMonitoreo,
-    String? idMonitoreo,
-    String? idUsuario,
+    double? avanceFisicoAcumulado,
+    int? idEstadoAvance,
+    String? estadoAvance,
+    String? actividadPartidaEjecutada,
+    int? idAvanceFisicoPartida,
+    double? avanceFisicoPartida,
+    String? observaciones,
     String? imgActividad,
     String? imgActividad1,
     String? imgActividad2,
     String? imgActividad3,
     String? imgActividad4,
+    String? problemaIdentificado,
+    int? idProblemaIdentificado,
     String? imgProblema,
     String? imgProblema1,
     String? imgProblema2,
     String? imgProblema3,
     String? imgProblema4,
+    String? alternativaSolucion,
+    int? idAlternativaSolucion,
+    String? riesgoIdentificado,
+    int? idRiesgoIdentificado,
     String? imgRiesgo,
     String? imgRiesgo1,
     String? imgRiesgo2,
     String? imgRiesgo3,
     String? imgRiesgo4,
-    String? observaciones,
-    String? problemaIdentificado,
-    String? riesgoIdentificado,
+    String? fechaTerminoEstimado,
+    String? latitud,
+    String? longitud,
+    String? txtIpReg,
+    String? fechaInicio,
+    String? fechaFin,
+    String? nomEstado,
     String? nivelRiesgo,
-    String? rol,
-    String? usuario,
+    int? pageIndex,
+    int? pageSize,
   }) =>
       TramaMonitoreoModel(
         id: id ?? this.id,
         isEdit: isEdit ?? this.isEdit,
         createdTime: createdTime ?? this.createdTime,
+        item: item ?? this.item,
+        idMonitoreo: idMonitoreo ?? this.idMonitoreo,
+        idEstadoMonitoreo: idEstadoMonitoreo ?? this.idEstadoMonitoreo,
+        estadoMonitoreo: estadoMonitoreo ?? this.estadoMonitoreo,
+        idUsuario: idUsuario ?? this.idUsuario,
+        usuario: usuario ?? this.usuario,
+        idRol: idRol ?? this.idRol,
+        rol: rol ?? this.rol,
+        tambo: tambo ?? this.tambo,
         snip: snip ?? this.snip,
         cui: cui ?? this.cui,
-        latitud: latitud ?? this.latitud,
-        longitud: longitud ?? this.longitud,
-        tambo: tambo ?? this.tambo,
-        fechaTerminoEstimado: fechaTerminoEstimado ?? this.fechaTerminoEstimado,
-        actividadPartidaEjecutada:
-            actividadPartidaEjecutada ?? this.actividadPartidaEjecutada,
-        alternativaSolucion: alternativaSolucion ?? this.alternativaSolucion,
+        fechaMonitoreo: fechaMonitoreo ?? this.fechaMonitoreo,
         avanceFisicoAcumulado:
             avanceFisicoAcumulado ?? this.avanceFisicoAcumulado,
-        avanceFisicoPartida: avanceFisicoPartida ?? this.avanceFisicoPartida,
+        idEstadoAvance: idEstadoAvance ?? this.idEstadoAvance,
         estadoAvance: estadoAvance ?? this.estadoAvance,
-        estadoMonitoreo: estadoMonitoreo ?? this.estadoMonitoreo,
-        fechaMonitoreo: fechaMonitoreo ?? this.fechaMonitoreo,
-        idMonitoreo: idMonitoreo ?? this.idMonitoreo,
-        idUsuario: idUsuario ?? this.idUsuario,
-        imgActividad: imgActividad ?? this.imgActividad,
-        imgActividad1: imgActividad ?? this.imgActividad1,
-        imgActividad2: imgActividad ?? this.imgActividad2,
-        imgActividad3: imgActividad ?? this.imgActividad3,
-        imgActividad4: imgActividad ?? this.imgActividad4,
-        imgProblema: imgProblema ?? this.imgProblema,
-        imgProblema1: imgProblema ?? this.imgProblema1,
-        imgProblema2: imgProblema ?? this.imgProblema2,
-        imgProblema3: imgProblema ?? this.imgProblema3,
-        imgProblema4: imgProblema ?? this.imgProblema4,
-        imgRiesgo: imgRiesgo ?? this.imgRiesgo,
-        imgRiesgo1: imgRiesgo ?? this.imgRiesgo1,
-        imgRiesgo2: imgRiesgo ?? this.imgRiesgo2,
-        imgRiesgo3: imgRiesgo ?? this.imgRiesgo3,
-        imgRiesgo4: imgRiesgo ?? this.imgRiesgo4,
+        actividadPartidaEjecutada:
+            actividadPartidaEjecutada ?? this.actividadPartidaEjecutada,
+        idAvanceFisicoPartida:
+            idAvanceFisicoPartida ?? this.idAvanceFisicoPartida,
+        avanceFisicoPartida: avanceFisicoPartida ?? this.avanceFisicoPartida,
         observaciones: observaciones ?? this.observaciones,
+        imgActividad: imgActividad ?? this.imgActividad,
+        imgActividad1: imgActividad1 ?? this.imgActividad1,
+        imgActividad2: imgActividad2 ?? this.imgActividad2,
+        imgActividad3: imgActividad3 ?? this.imgActividad3,
+        imgActividad4: imgActividad4 ?? this.imgActividad4,
         problemaIdentificado: problemaIdentificado ?? this.problemaIdentificado,
+        idProblemaIdentificado:
+            idProblemaIdentificado ?? this.idProblemaIdentificado,
+        imgProblema: imgProblema ?? this.imgProblema,
+        imgProblema1: imgProblema1 ?? this.imgProblema1,
+        imgProblema2: imgProblema2 ?? this.imgProblema2,
+        imgProblema3: imgProblema3 ?? this.imgProblema3,
+        imgProblema4: imgProblema4 ?? this.imgProblema4,
+        alternativaSolucion: alternativaSolucion ?? this.alternativaSolucion,
+        idAlternativaSolucion:
+            idAlternativaSolucion ?? this.idAlternativaSolucion,
         riesgoIdentificado: riesgoIdentificado ?? this.riesgoIdentificado,
+        idRiesgoIdentificado: idRiesgoIdentificado ?? this.idRiesgoIdentificado,
+        imgRiesgo: imgRiesgo ?? this.imgRiesgo,
+        imgRiesgo1: imgRiesgo1 ?? this.imgRiesgo1,
+        imgRiesgo2: imgRiesgo2 ?? this.imgRiesgo2,
+        imgRiesgo3: imgRiesgo3 ?? this.imgRiesgo3,
+        imgRiesgo4: imgRiesgo4 ?? this.imgRiesgo4,
+        fechaTerminoEstimado: fechaTerminoEstimado ?? this.fechaTerminoEstimado,
+        latitud: latitud ?? this.latitud,
+        longitud: longitud ?? this.longitud,
+        txtIpReg: txtIpReg ?? this.txtIpReg,
+        fechaInicio: fechaInicio ?? this.fechaInicio,
+        fechaFin: fechaFin ?? this.fechaFin,
+        nomEstado: nomEstado ?? this.nomEstado,
         nivelRiesgo: nivelRiesgo ?? this.nivelRiesgo,
-        rol: rol ?? this.rol,
-        usuario: usuario ?? this.usuario,
+        pageIndex: pageIndex ?? this.pageIndex,
+        pageSize: pageSize ?? this.pageSize,
       );
 
   static TramaMonitoreoModel fromJson(Map<String, Object?> json) =>
       TramaMonitoreoModel(
-        id: json[TramaMonitoreoFields.id] as int?,
-        isEdit: json[TramaMonitoreoFields.isEdit] == null
+        id: json[MonitorFields.id] as int?,
+        isEdit: json[MonitorFields.isEdit] == null
             ? 0
-            : json[TramaMonitoreoFields.isEdit] as int,
-        createdTime: json[TramaMonitoreoFields.time] != null
-            ? DateTime.parse(json[TramaMonitoreoFields.time] as String)
+            : json[MonitorFields.isEdit] as int,
+        createdTime: json[MonitorFields.time] != null
+            ? DateTime.parse(json[MonitorFields.time] as String)
             : null,
-        snip: _getString(json[TramaMonitoreoFields.snip]),
-        cui: _getString(json[TramaMonitoreoFields.cui]),
-        latitud: _getString(json[TramaMonitoreoFields.latitud]),
-        longitud: _getString(json[TramaMonitoreoFields.longitud]),
-        tambo: _getString(json[TramaMonitoreoFields.tambo]),
-        fechaTerminoEstimado:
-            _getString(json[TramaMonitoreoFields.fechaTerminoEstimado]),
+        item: _getString(json[MonitorFields.item]),
+        idMonitoreo: _getString(json[MonitorFields.idMonitoreo]),
+        idEstadoMonitoreo: _getInt(json[MonitorFields.idEstadoMonitoreo]),
+        estadoMonitoreo: _getString(json[MonitorFields.estadoMonitoreo]),
+        idUsuario: _getInt(json[MonitorFields.idUsuario]),
+        usuario: _getString(json[MonitorFields.usuario]),
+        idRol: _getInt(json[MonitorFields.idRol]),
+        rol: _getString(json[MonitorFields.rol]),
+        tambo: _getString(json[MonitorFields.tambo]),
+        snip: _getString(json[MonitorFields.snip]),
+        cui: _getString(json[MonitorFields.cui]),
+        fechaMonitoreo: _getString(json[MonitorFields.fechaMonitoreo]),
+        avanceFisicoAcumulado:
+            _getDouble(json[MonitorFields.avanceFisicoAcumulado]),
+        idEstadoAvance: _getInt(json[MonitorFields.idEstadoAvance]),
+        estadoAvance: _getString(json[MonitorFields.estadoAvance]),
         actividadPartidaEjecutada:
-            _getString(json[TramaMonitoreoFields.actividadPartidaEjecutada]),
-        alternativaSolucion:
-            _getString(json[TramaMonitoreoFields.alternativaSolucion]),
-        avanceFisicoAcumulado: double.parse(
-            (json[TramaMonitoreoFields.avanceFisicoAcumulado] ?? "0")
-                .toString()),
-        avanceFisicoPartida: double.parse(
-            (json[TramaMonitoreoFields.avanceFisicoPartida] ?? "0").toString()),
-        estadoAvance: _getString(json[TramaMonitoreoFields.estadoAvance]),
-        estadoMonitoreo: _getString(json[TramaMonitoreoFields.estadoMonitoreo]),
-        fechaMonitoreo: _getString(json[TramaMonitoreoFields.fechaMonitoreo]),
-        idMonitoreo: _getString(json[TramaMonitoreoFields.idMonitoreo]),
-        idUsuario: _getString(json[TramaMonitoreoFields.idUsuario]),
-        imgActividad: _getString(json[TramaMonitoreoFields.imgActividad]),
-        imgActividad1: _getString(json[TramaMonitoreoFields.imgActividad1]),
-        imgActividad2: _getString(json[TramaMonitoreoFields.imgActividad2]),
-        imgActividad3: _getString(json[TramaMonitoreoFields.imgActividad3]),
-        imgActividad4: _getString(json[TramaMonitoreoFields.imgActividad4]),
-        imgProblema: _getString(json[TramaMonitoreoFields.imgProblema]),
-        imgProblema1: _getString(json[TramaMonitoreoFields.imgProblema1]),
-        imgProblema2: _getString(json[TramaMonitoreoFields.imgProblema2]),
-        imgProblema3: _getString(json[TramaMonitoreoFields.imgProblema3]),
-        imgProblema4: _getString(json[TramaMonitoreoFields.imgProblema4]),
-        imgRiesgo: _getString(json[TramaMonitoreoFields.imgRiesgo]),
-        imgRiesgo1: _getString(json[TramaMonitoreoFields.imgRiesgo1]),
-        imgRiesgo2: _getString(json[TramaMonitoreoFields.imgRiesgo2]),
-        imgRiesgo3: _getString(json[TramaMonitoreoFields.imgRiesgo3]),
-        imgRiesgo4: _getString(json[TramaMonitoreoFields.imgRiesgo4]),
-        observaciones: _getString(json[TramaMonitoreoFields.observaciones]),
+            _getString(json[MonitorFields.actividadPartidaEjecutada]),
+        idAvanceFisicoPartida:
+            _getInt(json[MonitorFields.idAvanceFisicoPartida]),
+        avanceFisicoPartida:
+            _getDouble(json[MonitorFields.avanceFisicoPartida]),
+        observaciones: _getString(json[MonitorFields.observaciones]),
+        imgActividad: _getString(json[MonitorFields.imgActividad]),
+        imgActividad1: _getString(json[MonitorFields.imgActividad1]),
+        imgActividad2: _getString(json[MonitorFields.imgActividad2]),
+        imgActividad3: _getString(json[MonitorFields.imgActividad3]),
+        imgActividad4: _getString(json[MonitorFields.imgActividad4]),
         problemaIdentificado:
-            _getString(json[TramaMonitoreoFields.problemaIdentificado]),
-        riesgoIdentificado:
-            _getString(json[TramaMonitoreoFields.riesgoIdentificado]),
-        nivelRiesgo: _getString(json[TramaMonitoreoFields.nivelRiesgo]),
-        rol: _getString(json[TramaMonitoreoFields.rol]),
-        usuario: _getString(json[TramaMonitoreoFields.usuario]),
+            _getString(json[MonitorFields.problemaIdentificado]),
+        idProblemaIdentificado:
+            _getInt(json[MonitorFields.idProblemaIdentificado]),
+        imgProblema: _getString(json[MonitorFields.imgProblema]),
+        imgProblema1: _getString(json[MonitorFields.imgProblema1]),
+        imgProblema2: _getString(json[MonitorFields.imgProblema2]),
+        imgProblema3: _getString(json[MonitorFields.imgProblema3]),
+        imgProblema4: _getString(json[MonitorFields.imgProblema4]),
+        alternativaSolucion:
+            _getString(json[MonitorFields.alternativaSolucion]),
+        idAlternativaSolucion:
+            _getInt(json[MonitorFields.idAlternativaSolucion]),
+        riesgoIdentificado: _getString(json[MonitorFields.riesgoIdentificado]),
+        idRiesgoIdentificado: _getInt(json[MonitorFields.idRiesgoIdentificado]),
+        imgRiesgo: _getString(json[MonitorFields.imgRiesgo]),
+        imgRiesgo1: _getString(json[MonitorFields.imgRiesgo1]),
+        imgRiesgo2: _getString(json[MonitorFields.imgRiesgo2]),
+        imgRiesgo3: _getString(json[MonitorFields.imgRiesgo3]),
+        imgRiesgo4: _getString(json[MonitorFields.imgRiesgo4]),
+        fechaTerminoEstimado:
+            _getString(json[MonitorFields.fechaTerminoEstimado]),
+        latitud: _getString(json[MonitorFields.latitud]),
+        longitud: _getString(json[MonitorFields.longitud]),
+        txtIpReg: _getString(json[MonitorFields.txtIpReg]),
+        fechaInicio: _getString(json[MonitorFields.fechaInicio]),
+        fechaFin: _getString(json[MonitorFields.fechaFin]),
+        nomEstado: _getString(json[MonitorFields.nomEstado]),
+        nivelRiesgo: _getString(json[MonitorFields.nivelRiesgo]),
+        pageIndex: _getInt(json[MonitorFields.pageIndex]),
+        pageSize: _getInt(json[MonitorFields.pageSize]),
       );
 
   Map<String, dynamic> toJson() => {
         //TramaMonitoreoFields.id: id,
-        TramaMonitoreoFields.isEdit: isEdit,
+        MonitorFields.isEdit: isEdit,
         //TramaMonitoreoFields.time: createdTime.toIso8601String(),
-        TramaMonitoreoFields.snip: snip,
-        TramaMonitoreoFields.cui: cui,
-        TramaMonitoreoFields.latitud: latitud,
-        TramaMonitoreoFields.longitud: longitud,
-        TramaMonitoreoFields.tambo: tambo,
-        TramaMonitoreoFields.fechaTerminoEstimado: fechaTerminoEstimado,
-        TramaMonitoreoFields.actividadPartidaEjecutada:
-            actividadPartidaEjecutada,
-        TramaMonitoreoFields.alternativaSolucion: alternativaSolucion,
-        TramaMonitoreoFields.avanceFisicoAcumulado: avanceFisicoAcumulado,
-        TramaMonitoreoFields.avanceFisicoPartida: avanceFisicoPartida,
-        TramaMonitoreoFields.estadoAvance: estadoAvance,
-        TramaMonitoreoFields.estadoMonitoreo: estadoMonitoreo,
-        TramaMonitoreoFields.fechaMonitoreo: fechaMonitoreo,
-        TramaMonitoreoFields.idMonitoreo: idMonitoreo,
-        TramaMonitoreoFields.idUsuario: idUsuario,
-        TramaMonitoreoFields.imgActividad: imgActividad,
-        TramaMonitoreoFields.imgActividad1: imgActividad1,
-        TramaMonitoreoFields.imgActividad2: imgActividad2,
-        TramaMonitoreoFields.imgActividad3: imgActividad3,
-        TramaMonitoreoFields.imgActividad4: imgActividad4,
-        TramaMonitoreoFields.imgProblema: imgProblema,
-        TramaMonitoreoFields.imgProblema1: imgProblema1,
-        TramaMonitoreoFields.imgProblema2: imgProblema2,
-        TramaMonitoreoFields.imgProblema3: imgProblema3,
-        TramaMonitoreoFields.imgProblema4: imgProblema4,
-        TramaMonitoreoFields.imgRiesgo: imgRiesgo,
-        TramaMonitoreoFields.imgRiesgo1: imgRiesgo1,
-        TramaMonitoreoFields.imgRiesgo2: imgRiesgo2,
-        TramaMonitoreoFields.imgRiesgo3: imgRiesgo3,
-        TramaMonitoreoFields.imgRiesgo4: imgRiesgo4,
-        TramaMonitoreoFields.observaciones: observaciones,
-        TramaMonitoreoFields.problemaIdentificado: problemaIdentificado,
-        TramaMonitoreoFields.riesgoIdentificado: riesgoIdentificado,
-        TramaMonitoreoFields.nivelRiesgo: nivelRiesgo,
 
-        TramaMonitoreoFields.rol: rol,
-        TramaMonitoreoFields.usuario: usuario,
+        MonitorFields.item: item,
+        MonitorFields.idMonitoreo: idMonitoreo,
+        MonitorFields.idEstadoMonitoreo: idEstadoMonitoreo,
+        MonitorFields.estadoMonitoreo: estadoMonitoreo,
+        MonitorFields.idUsuario: idUsuario,
+        MonitorFields.usuario: usuario,
+        MonitorFields.idRol: idRol,
+        MonitorFields.rol: rol,
+        MonitorFields.tambo: tambo,
+        MonitorFields.snip: snip,
+        MonitorFields.cui: cui,
+        MonitorFields.fechaMonitoreo: fechaMonitoreo,
+        MonitorFields.avanceFisicoAcumulado: avanceFisicoAcumulado,
+        MonitorFields.idEstadoAvance: idEstadoAvance,
+        MonitorFields.estadoAvance: estadoAvance,
+        MonitorFields.actividadPartidaEjecutada: actividadPartidaEjecutada,
+        MonitorFields.idAvanceFisicoPartida: idAvanceFisicoPartida,
+        MonitorFields.avanceFisicoPartida: avanceFisicoPartida,
+        MonitorFields.observaciones: observaciones,
+        MonitorFields.imgActividad: imgActividad,
+        MonitorFields.imgActividad1: imgActividad1,
+        MonitorFields.imgActividad2: imgActividad2,
+        MonitorFields.imgActividad3: imgActividad3,
+        MonitorFields.imgActividad4: imgActividad4,
+        MonitorFields.problemaIdentificado: problemaIdentificado,
+        MonitorFields.idProblemaIdentificado: idProblemaIdentificado,
+        MonitorFields.imgProblema: imgProblema,
+        MonitorFields.imgProblema1: imgProblema1,
+        MonitorFields.imgProblema2: imgProblema2,
+        MonitorFields.imgProblema3: imgProblema3,
+        MonitorFields.imgProblema4: imgProblema4,
+        MonitorFields.alternativaSolucion: alternativaSolucion,
+        MonitorFields.idAlternativaSolucion: idAlternativaSolucion,
+        MonitorFields.riesgoIdentificado: riesgoIdentificado,
+        MonitorFields.idRiesgoIdentificado: idRiesgoIdentificado,
+        MonitorFields.imgRiesgo: imgRiesgo,
+        MonitorFields.imgRiesgo1: imgRiesgo1,
+        MonitorFields.imgRiesgo2: imgRiesgo2,
+        MonitorFields.imgRiesgo3: imgRiesgo3,
+        MonitorFields.imgRiesgo4: imgRiesgo4,
+        MonitorFields.fechaTerminoEstimado: fechaTerminoEstimado,
+        MonitorFields.latitud: latitud,
+        MonitorFields.longitud: longitud,
+        MonitorFields.txtIpReg: txtIpReg,
+        MonitorFields.fechaInicio: fechaInicio,
+        MonitorFields.fechaFin: fechaFin,
+        MonitorFields.nomEstado: nomEstado,
+        MonitorFields.nivelRiesgo: nivelRiesgo,
+        //MonitorFields.pageIndex: pageIndex,
+        //MonitorFields.pageSize: pageSize,
       };
 
   static Map<String, dynamic> toJsonObject(TramaMonitoreoModel o) {
     return {
-      TramaMonitoreoFields.snip: o.snip,
-      TramaMonitoreoFields.cui: o.cui,
-      TramaMonitoreoFields.latitud: o.latitud,
-      TramaMonitoreoFields.longitud: o.longitud,
-      TramaMonitoreoFields.tambo: o.tambo,
-      TramaMonitoreoFields.fechaTerminoEstimado: o.fechaTerminoEstimado,
-      TramaMonitoreoFields.actividadPartidaEjecutada:
-          o.actividadPartidaEjecutada,
-      TramaMonitoreoFields.alternativaSolucion: o.alternativaSolucion,
-      TramaMonitoreoFields.avanceFisicoAcumulado: o.avanceFisicoAcumulado,
-      TramaMonitoreoFields.avanceFisicoPartida: o.avanceFisicoPartida,
-      TramaMonitoreoFields.estadoAvance: o.estadoAvance,
-      TramaMonitoreoFields.estadoMonitoreo: o.estadoMonitoreo,
-      TramaMonitoreoFields.fechaMonitoreo: o.fechaMonitoreo,
-      TramaMonitoreoFields.idMonitoreo: o.idMonitoreo,
-      TramaMonitoreoFields.idUsuario: o.idUsuario,
-      TramaMonitoreoFields.imgActividad: o.imgActividad,
-      TramaMonitoreoFields.imgActividad1: o.imgActividad1,
-      TramaMonitoreoFields.imgActividad2: o.imgActividad2,
-      TramaMonitoreoFields.imgActividad3: o.imgActividad3,
-      TramaMonitoreoFields.imgActividad4: o.imgActividad4,
-      TramaMonitoreoFields.imgProblema: o.imgProblema,
-      TramaMonitoreoFields.imgProblema1: o.imgProblema1,
-      TramaMonitoreoFields.imgProblema2: o.imgProblema2,
-      TramaMonitoreoFields.imgProblema3: o.imgProblema3,
-      TramaMonitoreoFields.imgProblema4: o.imgProblema4,
-      TramaMonitoreoFields.imgRiesgo: o.imgRiesgo,
-      TramaMonitoreoFields.imgRiesgo1: o.imgRiesgo1,
-      TramaMonitoreoFields.imgRiesgo2: o.imgRiesgo2,
-      TramaMonitoreoFields.imgRiesgo3: o.imgRiesgo3,
-      TramaMonitoreoFields.imgRiesgo4: o.imgRiesgo4,
-      TramaMonitoreoFields.observaciones: o.observaciones,
-      TramaMonitoreoFields.problemaIdentificado: o.problemaIdentificado,
-      TramaMonitoreoFields.riesgoIdentificado: o.riesgoIdentificado,
-      TramaMonitoreoFields.nivelRiesgo: o.nivelRiesgo,
-      TramaMonitoreoFields.rol: o.rol,
-      TramaMonitoreoFields.usuario: o.usuario,
+      MonitorFields.item: o.item,
+      MonitorFields.idMonitoreo: o.idMonitoreo,
+      MonitorFields.idEstadoMonitoreo: o.idEstadoMonitoreo,
+      MonitorFields.estadoMonitoreo: o.estadoMonitoreo,
+      MonitorFields.idUsuario: o.idUsuario,
+      MonitorFields.usuario: o.usuario,
+      MonitorFields.idRol: o.idRol,
+      MonitorFields.rol: o.rol,
+      MonitorFields.tambo: o.tambo,
+      MonitorFields.snip: o.snip,
+      MonitorFields.cui: o.cui,
+      MonitorFields.fechaMonitoreo: o.fechaMonitoreo,
+      MonitorFields.avanceFisicoAcumulado: o.avanceFisicoAcumulado,
+      MonitorFields.idEstadoAvance: o.idEstadoAvance,
+      MonitorFields.estadoAvance: o.estadoAvance,
+      MonitorFields.actividadPartidaEjecutada: o.actividadPartidaEjecutada,
+      MonitorFields.idAvanceFisicoPartida: o.idAvanceFisicoPartida,
+      MonitorFields.avanceFisicoPartida: o.avanceFisicoPartida,
+      MonitorFields.observaciones: o.observaciones,
+      MonitorFields.imgActividad: o.imgActividad,
+      MonitorFields.imgActividad1: o.imgActividad1,
+      MonitorFields.imgActividad2: o.imgActividad2,
+      MonitorFields.imgActividad3: o.imgActividad3,
+      MonitorFields.imgActividad4: o.imgActividad4,
+      MonitorFields.problemaIdentificado: o.problemaIdentificado,
+      MonitorFields.idProblemaIdentificado: o.idProblemaIdentificado,
+      MonitorFields.imgProblema: o.imgProblema,
+      MonitorFields.imgProblema1: o.imgProblema1,
+      MonitorFields.imgProblema2: o.imgProblema2,
+      MonitorFields.imgProblema3: o.imgProblema3,
+      MonitorFields.imgProblema4: o.imgProblema4,
+      MonitorFields.alternativaSolucion: o.alternativaSolucion,
+      MonitorFields.idAlternativaSolucion: o.idAlternativaSolucion,
+      MonitorFields.riesgoIdentificado: o.riesgoIdentificado,
+      MonitorFields.idRiesgoIdentificado: o.idRiesgoIdentificado,
+      MonitorFields.imgRiesgo: o.imgRiesgo,
+      MonitorFields.imgRiesgo1: o.imgRiesgo1,
+      MonitorFields.imgRiesgo2: o.imgRiesgo2,
+      MonitorFields.imgRiesgo3: o.imgRiesgo3,
+      MonitorFields.imgRiesgo4: o.imgRiesgo4,
+      MonitorFields.fechaTerminoEstimado: o.fechaTerminoEstimado,
+      MonitorFields.latitud: o.latitud,
+      MonitorFields.longitud: o.longitud,
+      MonitorFields.txtIpReg: o.txtIpReg,
+      MonitorFields.fechaInicio: o.fechaInicio,
+      MonitorFields.fechaFin: o.fechaFin,
+      MonitorFields.nomEstado: o.nomEstado,
+      MonitorFields.nivelRiesgo: o.nivelRiesgo,
+      //MonitorFields.pageIndex: o.pageIndex,
+      //MonitorFields.pageSize: o.pageSize,
     };
   }
 
   static Map<String, String> toJsonObjectApi(TramaMonitoreoModel o) {
     return {
-      TramaMonitoreoFields.snip: _getString(o.snip),
-      TramaMonitoreoFields.cui: _getString(o.cui),
-      TramaMonitoreoFields.latitud: _getString(o.latitud),
-      TramaMonitoreoFields.longitud: _getString(o.longitud),
-      TramaMonitoreoFields.tambo: _getString(o.tambo),
-      TramaMonitoreoFields.fechaTerminoEstimado:
-          _getString(o.fechaTerminoEstimado),
-      TramaMonitoreoFields.actividadPartidaEjecutada:
+// MonitorFields.item_: _getString(o.item),
+      MonitorFields.idMonitoreo_: _getString(o.idMonitoreo),
+// MonitorFields.idEstadoMonitoreo_: _getString(o.idEstadoMonitoreo),
+      MonitorFields.estadoMonitoreo_: _getString(o.estadoMonitoreo),
+      MonitorFields.idUsuario_: _getString(o.idUsuario, type: 'I'),
+      MonitorFields.usuario_: _getString(o.usuario),
+// MonitorFields.idRol_: _getString(o.idRol),
+      MonitorFields.rol_: _getString(o.rol),
+      MonitorFields.tambo_: _getString(o.tambo),
+      MonitorFields.snip_: _getString(o.snip),
+      MonitorFields.cui_: _getString(o.cui),
+      MonitorFields.fechaMonitoreo_: _getString(o.fechaMonitoreo),
+      MonitorFields.avanceFisicoAcumulado_: _getString(o.avanceFisicoAcumulado),
+// MonitorFields.idEstadoAvance_: _getString(o.idEstadoAvance),
+      MonitorFields.estadoAvance_: _getString(o.estadoAvance),
+      MonitorFields.actividadPartidaEjecutada_:
           _getString(o.actividadPartidaEjecutada),
-      TramaMonitoreoFields.alternativaSolucion:
-          _getString(o.alternativaSolucion),
-      TramaMonitoreoFields.avanceFisicoAcumulado:
-          _getString(o.avanceFisicoAcumulado),
-      TramaMonitoreoFields.avanceFisicoPartida:
-          _getString(o.avanceFisicoPartida),
-      TramaMonitoreoFields.estadoAvance: _getString(o.estadoAvance),
-      TramaMonitoreoFields.estadoMonitoreo: _getString(o.estadoMonitoreo),
-      TramaMonitoreoFields.fechaMonitoreo: _getString(o.fechaMonitoreo),
-      TramaMonitoreoFields.idMonitoreo: _getString(o.idMonitoreo),
-      TramaMonitoreoFields.idUsuario: _getString(o.idUsuario),
-      TramaMonitoreoFields.observaciones: _getString(o.observaciones),
-      TramaMonitoreoFields.problemaIdentificado:
-          _getString(o.problemaIdentificado),
-      TramaMonitoreoFields.riesgoIdentificado: _getString(o.riesgoIdentificado),
-      TramaMonitoreoFields.rol: _getString(o.rol),
-      TramaMonitoreoFields.usuario: _getString(o.usuario),
+// MonitorFields.idAvanceFisicoPartida_: _getString(o.idAvanceFisicoPartida, type: 'I'),
+      MonitorFields.avanceFisicoPartida_: _getString(o.avanceFisicoPartida),
+      MonitorFields.observaciones_: _getString(o.observaciones),
+// MonitorFields.imgActividad1_: _getString(o.imgActividad1),
+// MonitorFields.imgActividad2_: _getString(o.imgActividad2),
+// MonitorFields.imgActividad3_: _getString(o.imgActividad3),
+      MonitorFields.problemaIdentificado_: _getString(o.problemaIdentificado),
+// MonitorFields.idProblemaIdentificado_: _getString(o.idProblemaIdentificado),
+// MonitorFields.imgProblema1_: _getString(o.imgProblema1),
+// MonitorFields.imgProblema2_: _getString(o.imgProblema2),
+// MonitorFields.imgProblema3_: _getString(o.imgProblema3),
+      MonitorFields.alternativaSolucion_: _getString(o.alternativaSolucion),
+// MonitorFields.idAlternativaSolucion_: _getString(o.idAlternativaSolucion),
+      MonitorFields.riesgoIdentificado_: _getString(o.riesgoIdentificado),
+// MonitorFields.idRiesgoIdentificado_: _getString(o.idRiesgoIdentificado),
+// MonitorFields.imgRiesgo1_: _getString(o.imgRiesgo1),
+// MonitorFields.imgRiesgo2_: _getString(o.imgRiesgo2),
+// MonitorFields.imgRiesgo3_: _getString(o.imgRiesgo3),
+      MonitorFields.fechaTerminoEstimado_: _getString(o.fechaTerminoEstimado),
+      MonitorFields.latitud_: _getString(o.latitud),
+      MonitorFields.longitud_: _getString(o.longitud),
+// MonitorFields.txtIpReg_: _getString(o.txtIpReg),
+// MonitorFields.fechaInicio_: _getString(o.fechaInicio),
+// MonitorFields.fechaFin_: _getString(o.fechaFin),
+// MonitorFields.nomEstado_: _getString(o.nomEstado),
+// MonitorFields.pageIndex_: _getString(o.pageIndex),
+// MonitorFields.pageSize_: _getString(o.pageSize),
+    };
+  }
+
+  /*
+   * POST: .../registrarAvanceAcumuladoPartidaMonitereoMovil
+   */
+  static Map<String, String> toJsonObjectApi2(TramaMonitoreoModel o) {
+    return {
+// MonitorFields.item_: _getString(o.item),
+      MonitorFields.idMonitoreo_: _getString(o.idMonitoreo),
+      MonitorFields.idEstadoMonitoreo_:
+          _getString(o.idEstadoMonitoreo, type: 'I'),
+
+      // MonitorFields.estadoMonitoreo_: _getString(o.estadoMonitoreo),
+      MonitorFields.idUsuario_: _getString(o.idUsuario, type: 'I'),
+      MonitorFields.usuario_: _getString(o.usuario),
+      MonitorFields.idRol_: _getString(o.idRol, type: 'I'),
+      MonitorFields.rol_: _getString(o.rol),
+
+      MonitorFields.tambo_: _getString(o.tambo),
+      MonitorFields.snip_: _getString(o.snip),
+      MonitorFields.cui_: _getString(o.cui),
+      MonitorFields.fechaMonitoreo_: _getString(o.fechaMonitoreo),
+      MonitorFields.avanceFisicoAcumulado_: _getString(o.avanceFisicoAcumulado),
+      MonitorFields.idEstadoAvance_: _getString(o.idEstadoAvance, type: 'I'),
+
+//      MonitorFields.estadoAvance_: _getString(o.estadoAvance),
+      MonitorFields.actividadPartidaEjecutada_:
+          _getString(o.actividadPartidaEjecutada),
+
+      MonitorFields.idAvanceFisicoPartida_:
+          _getString(o.idAvanceFisicoPartida, type: 'I'),
+      MonitorFields.avanceFisicoPartida_: _getString(o.avanceFisicoPartida),
+      MonitorFields.observaciones_: _getString(o.observaciones),
+// MonitorFields.imgActividad1_: _getString(o.imgActividad1),
+// MonitorFields.imgActividad2_: _getString(o.imgActividad2),
+// MonitorFields.imgActividad3_: _getString(o.imgActividad3),
+      MonitorFields.problemaIdentificado_: _getString(o.problemaIdentificado),
+      MonitorFields.idProblemaIdentificado_:
+          _getString(o.idProblemaIdentificado, type: 'I'),
+// MonitorFields.imgProblema1_: _getString(o.imgProblema1),
+// MonitorFields.imgProblema2_: _getString(o.imgProblema2),
+// MonitorFields.imgProblema3_: _getString(o.imgProblema3),
+      MonitorFields.alternativaSolucion_: _getString(o.alternativaSolucion),
+      MonitorFields.idAlternativaSolucion_:
+          _getString(o.idAlternativaSolucion, type: 'I'),
+      MonitorFields.riesgoIdentificado_: _getString(o.riesgoIdentificado),
+      MonitorFields.idRiesgoIdentificado_:
+          _getString(o.idRiesgoIdentificado, type: 'I'),
+// MonitorFields.imgRiesgo1_: _getString(o.imgRiesgo1),
+// MonitorFields.imgRiesgo2_: _getString(o.imgRiesgo2),
+// MonitorFields.imgRiesgo3_: _getString(o.imgRiesgo3),
+      MonitorFields.fechaTerminoEstimado_: _getString(o.fechaTerminoEstimado),
+      MonitorFields.latitud_: _getString(o.latitud),
+      MonitorFields.longitud_: _getString(o.longitud),
+      MonitorFields.txtIpReg_: _getString(o.txtIpReg),
+// MonitorFields.fechaInicio_: _getString(o.fechaInicio),
+// MonitorFields.fechaFin_: _getString(o.fechaFin),
+// MonitorFields.nomEstado_: _getString(o.nomEstado),
+// MonitorFields.pageIndex_: _getString(o.pageIndex),
+// MonitorFields.pageSize_: _getString(o.pageSize),
+
+/*
+  List<MultipartFile> imgActividad;
+  List<MultipartFile> imgProblema;
+  List<MultipartFile> imgRiesgo;
+ */
     };
   }
 
@@ -668,8 +910,17 @@ class TramaMonitoreoModel {
     return json.encode(dyn);
   }
 
-  static String _getString(dynamic data) {
-    return data != null ? data.toString() as String : '';
+  static double _getDouble(dynamic data) {
+    return data != null ? double.parse(data.toString()) : 0.000;
+  }
+
+  static String _getString(dynamic data, {String? type}) {
+    String resp = data != null ? data.toString() as String : '';
+    if (type != null && type == "I") {
+      if (resp == '') resp = '0';
+    }
+
+    return resp;
   }
 
   static DateTime _getDateTime(dynamic data) {
@@ -677,6 +928,6 @@ class TramaMonitoreoModel {
   }
 
   static int _getInt(dynamic data) {
-    return data != null ? data as int : 0;
+    return data != null ? int.parse(data.toString()) : 0;
   }
 }
