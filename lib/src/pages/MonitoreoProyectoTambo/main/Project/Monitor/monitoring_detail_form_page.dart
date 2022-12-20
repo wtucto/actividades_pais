@@ -28,13 +28,13 @@ class MonitoringDetailNewEditPage extends StatefulWidget {
   TramaProyectoModel? datoProyecto;
   TramaMonitoreoModel? datoMonitor;
 
-  List<String> cbEMONI = [];
-  List<String> cbNRIES = [];
-  List<String> cbEAVAN = [];
-  List<String> cbPEJEC = [];
-  List<String> cbPIDEO = [];
-  List<String> cbASOLU = [];
-  List<String> cbRIDEN = [];
+  List<ComboItemModel> cbEMONI = [];
+  List<ComboItemModel> cbNRIES = [];
+  List<ComboItemModel> cbEAVAN = [];
+  List<ComboItemModel> cbPEJEC = [];
+  List<ComboItemModel> cbPIDEO = [];
+  List<ComboItemModel> cbASOLU = [];
+  List<ComboItemModel> cbRIDEN = [];
 
   final String? statusM;
   MonitoringDetailNewEditPage(
@@ -69,13 +69,13 @@ class _MonitoringDetailNewEditPageState
 
   TramaMonitoreoModel oMonitoreo = TramaMonitoreoModel.empty();
 
-  String? _statusMonitor = "";
-  String? _statusAdvance = "";
-  String? _valuePartidaEje = "";
-  String? _valueProblemaIO = "";
-  String? _valueAlternSolucion = "";
-  String? _valueRiesgo = "";
-  String? _valueNivelRiesgo = "";
+  String? _statusMonitor;
+  String? _statusAdvance;
+  String? _valuePartidaEje;
+  String? _valueProblemaIO;
+  String? _valueAlternSolucion;
+  String? _valueRiesgo;
+  String? _valueNivelRiesgo;
 
   final MainController mainController = MainController();
   ImageController controller = ImageController();
@@ -166,21 +166,30 @@ class _MonitoringDetailNewEditPageState
         widget.cbRIDEN = await mainController.getListComboItemByType(
             ComboItemModel.cbRIDEN, 0, 0);
 
-        widget.cbASOLU = LinkedHashSet<String>.from(widget.cbASOLU).toList();
-        widget.cbEAVAN = LinkedHashSet<String>.from(widget.cbEAVAN).toList();
-        widget.cbEMONI = LinkedHashSet<String>.from(widget.cbEMONI).toList();
-        widget.cbNRIES = LinkedHashSet<String>.from(widget.cbNRIES).toList();
-        widget.cbPEJEC = LinkedHashSet<String>.from(widget.cbPEJEC).toList();
-        widget.cbPIDEO = LinkedHashSet<String>.from(widget.cbPIDEO).toList();
-        widget.cbRIDEN = LinkedHashSet<String>.from(widget.cbRIDEN).toList();
+        print(widget.cbRIDEN);
+
+        widget.cbASOLU =
+            LinkedHashSet<ComboItemModel>.from(widget.cbASOLU).toList();
+        widget.cbEAVAN =
+            LinkedHashSet<ComboItemModel>.from(widget.cbEAVAN).toList();
+        widget.cbEMONI =
+            LinkedHashSet<ComboItemModel>.from(widget.cbEMONI).toList();
+        widget.cbNRIES =
+            LinkedHashSet<ComboItemModel>.from(widget.cbNRIES).toList();
+        widget.cbPEJEC =
+            LinkedHashSet<ComboItemModel>.from(widget.cbPEJEC).toList();
+        widget.cbPIDEO =
+            LinkedHashSet<ComboItemModel>.from(widget.cbPIDEO).toList();
+        widget.cbRIDEN =
+            LinkedHashSet<ComboItemModel>.from(widget.cbRIDEN).toList();
       } catch (oError) {
-        widget.cbASOLU = TramaMonitoreoModel.aAlternativaSolucion;
-        widget.cbEAVAN = TramaMonitoreoModel.aEstadoAvance;
-        widget.cbEMONI = TramaMonitoreoModel.aEstadoMonitoreo;
-        widget.cbNRIES = TramaMonitoreoModel.aNivelRiesgo;
-        widget.cbPEJEC = TramaMonitoreoModel.aActividadPartidaEjecutada;
-        widget.cbPIDEO = TramaMonitoreoModel.aProblemaIdentificado;
-        widget.cbRIDEN = TramaMonitoreoModel.aRiesgoIdentificado;
+        // widget.cbASOLU = TramaMonitoreoModel.aAlternativaSolucion;
+        // widget.cbEAVAN = TramaMonitoreoModel.aEstadoAvance;
+        // widget.cbEMONI = TramaMonitoreoModel.aEstadoMonitoreo;
+        // widget.cbNRIES = TramaMonitoreoModel.aNivelRiesgo;
+        // widget.cbPEJEC = TramaMonitoreoModel.aActividadPartidaEjecutada;
+        // widget.cbPIDEO = TramaMonitoreoModel.aProblemaIdentificado;
+        // widget.cbRIDEN = TramaMonitoreoModel.aRiesgoIdentificado;
       }
 
       /**
@@ -190,26 +199,52 @@ class _MonitoringDetailNewEditPageState
        */
 
       String sPlaceholder = TramaMonitoreoModel.sOptDropdownDefault;
-      widget.cbASOLU.insert(0, "$sPlaceholder para: ALTERNATIVA SOLUCION");
-      widget.cbEAVAN.insert(0, "$sPlaceholder para: ESTADO AVANCE");
-      widget.cbEMONI.insert(0, "$sPlaceholder para: ESTADO MONITOREO");
-      widget.cbNRIES.insert(0, "$sPlaceholder para: NIVEL RIESGO");
-      widget.cbPEJEC.insert(0, "$sPlaceholder para: PARTIDA EJECUTADA");
-      widget.cbPIDEO
-          .insert(0, "$sPlaceholder para: PROBLEMA IDENTIFICADO OBRA");
-      widget.cbRIDEN.insert(0, "$sPlaceholder para: RIESGO IDENTIFICADO");
+      widget.cbASOLU.insert(
+          0,
+          ComboItemModel(
+              codigo1: "0",
+              descripcion: "$sPlaceholder para: ALTERNATIVA SOLUCION"));
+      widget.cbEAVAN.insert(
+          0,
+          ComboItemModel(
+              codigo1: "0", descripcion: "$sPlaceholder para: ESTADO AVANCE"));
+      widget.cbEMONI.insert(
+          0,
+          ComboItemModel(
+              codigo1: "0",
+              descripcion: "$sPlaceholder para: ESTADO MONITOREO"));
+      widget.cbNRIES.insert(
+          0,
+          ComboItemModel(
+              codigo1: "0", descripcion: "$sPlaceholder  para: NIVEL RIESGO"));
+
+      widget.cbPEJEC.insert(
+          0,
+          ComboItemModel(
+              codigo1: "0",
+              descripcion: "$sPlaceholder  para: PARTIDA EJECUTADA"));
+      widget.cbPIDEO.insert(
+          0,
+          ComboItemModel(
+              codigo1: "0",
+              descripcion: "$sPlaceholder  para: PROBLEMA IDENTIFICADO OBRA"));
+      widget.cbRIDEN.insert(
+          0,
+          ComboItemModel(
+              codigo1: "0",
+              descripcion: "$sPlaceholder  para: RIESGO IDENTIFICADO"));
 
       /**
        * Seleccionar el valor por defecto de los combos
        * - Seleccione una opción
        */
-      _statusMonitor = widget.cbEMONI[0];
-      _statusAdvance = widget.cbEAVAN[0];
-      _valuePartidaEje = widget.cbPEJEC[0];
-      _valueProblemaIO = widget.cbPIDEO[0];
-      _valueAlternSolucion = widget.cbASOLU[0];
-      _valueRiesgo = widget.cbRIDEN[0];
-      _valueNivelRiesgo = widget.cbNRIES[0];
+      // _statusMonitor = widget.cbEMONI;
+      // _statusAdvance = widget.cbEAVAN[0];
+      // _valuePartidaEje = widget.cbPEJEC[0];
+      // _valueProblemaIO = widget.cbPIDEO[0];
+      // _valueAlternSolucion = widget.cbASOLU[0];
+      // _valueRiesgo = widget.cbRIDEN[0];
+      // _valueNivelRiesgo = widget.cbNRIES[0];
     } catch (oError) {
       var sTitle = 'Error';
       var sMessage = oError.toString();
@@ -285,23 +320,23 @@ class _MonitoringDetailNewEditPageState
       _longitud.text = m.longitud!;
       _latitud.text = m.latitud!;
 
-      _statusMonitor =
-          m.estadoMonitoreo == "" ? widget.cbEMONI[0] : m.estadoMonitoreo;
-      _statusAdvance =
-          m.estadoAvance == "" ? widget.cbEAVAN[0] : m.estadoAvance;
-      _valuePartidaEje = m.actividadPartidaEjecutada == ""
-          ? widget.cbPEJEC[0]
-          : m.actividadPartidaEjecutada;
-      _valueProblemaIO = m.problemaIdentificado == ""
-          ? widget.cbPIDEO[0]
-          : m.problemaIdentificado;
-      _valueAlternSolucion = m.alternativaSolucion == ""
-          ? widget.cbASOLU[0]
-          : m.alternativaSolucion;
-      _valueRiesgo =
-          m.riesgoIdentificado == "" ? widget.cbRIDEN[0] : m.riesgoIdentificado;
-      _valueNivelRiesgo =
-          m.nivelRiesgo == "" ? widget.cbNRIES[0] : m.nivelRiesgo;
+      // _statusMonitor =
+      //     m.estadoMonitoreo == "" ? widget.cbEMONI[0] : m.estadoMonitoreo;
+      // _statusAdvance =
+      //     m.estadoAvance == "" ? widget.cbEAVAN[0] : m.estadoAvance;
+      // _valuePartidaEje = m.actividadPartidaEjecutada == ""
+      //     ? widget.cbPEJEC[0]
+      //     : m.actividadPartidaEjecutada;
+      // _valueProblemaIO = m.problemaIdentificado == ""
+      //     ? widget.cbPIDEO[0]
+      //     : m.problemaIdentificado;
+      // _valueAlternSolucion = m.alternativaSolucion == ""
+      //     ? widget.cbASOLU[0]
+      //     : m.alternativaSolucion;
+      // _valueRiesgo =
+      //     m.riesgoIdentificado == "" ? widget.cbRIDEN[0] : m.riesgoIdentificado;
+      // _valueNivelRiesgo =
+      //     m.nivelRiesgo == "" ? widget.cbNRIES[0] : m.nivelRiesgo;
 
       List<String?> listaImage = [];
       listaImage.addAll([
@@ -484,7 +519,7 @@ class _MonitoringDetailNewEditPageState
               items: widget.cbEMONI,
               isDense: false,
               onChanged: null,
-              isRequired: false,
+              isRequired: true,
             ),
 
             /**
@@ -1431,7 +1466,7 @@ class MyDropdownButtonFormField extends StatelessWidget {
       required this.isRequired})
       : super(key: key);
 
-  final List<dynamic> items;
+  final List<ComboItemModel> items;
   final String value;
   final bool isDense;
   final void Function(Object?)? onChanged;
@@ -1440,16 +1475,9 @@ class MyDropdownButtonFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
-      // hint: Text(
-      //   'seleccione una opción',
-      //   style: TextStyle(
-      //     fontSize: 14,
-      //     color: Theme.of(context).hintColor,
-      //   ),
-      // ),
       isExpanded: true,
       isDense: isDense,
-      value: value.isNotEmpty ? value : null,
+      // value: value,
       style: const TextStyle(
         color: Colors.black,
         fontSize: 15,
@@ -1466,25 +1494,32 @@ class MyDropdownButtonFormField extends StatelessWidget {
               : null
           : null,
       items: items.isNotEmpty
-          ? items
-              .map(
-                (e) => DropdownMenuItem(
-                    value: e,
-                    child: e.toUpperCase().contains("SELECCIONE UNA OPCIÓN")
-                        ? Text(
-                            e,
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).hintColor),
-                          )
-                        : Text(
-                            e,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400),
-                          )),
-              )
-              .toList()
+          ? items.map((ComboItemModel map) {
+              return DropdownMenuItem<String>(
+                value: map.codigo1.toString(),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: map.descripcion
+                                .toString()
+                                .toUpperCase()
+                                .contains("SELECCIONE UNA OPCIÓN")
+                            ? Text(
+                                map.descripcion.toString(),
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Theme.of(context).hintColor),
+                              )
+                            : Text(
+                                map.descripcion.toString(),
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400),
+                              )),
+                  ],
+                ),
+              );
+            }).toList()
           : null,
     );
   }
