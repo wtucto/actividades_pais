@@ -125,17 +125,13 @@ class PnPaisApi {
     );
   }
 
-  Future<HttpResponse<TramaRespApiDto>> insertarMonitoreo({
+  /*
+   * POST: .../insertarMonitoreo
+   */
+  Future<HttpResponse<TramaRespApiDto>> insertarMonitoreoP1({
     required TramaMonitoreoModel oBody,
   }) {
     List<Map<String, String>> aFile = [];
-
-    if (oBody.imgActividad != '') {
-      final aImgActividad = oBody.imgActividad!.split(',');
-      for (var oValue in aImgActividad) {
-        aFile.add({MonitorFields.imgActividad: oValue.trim()});
-      }
-    }
 
     if (oBody.imgProblema != '') {
       final aImgProblema = oBody.imgProblema!.split(',');
@@ -152,8 +148,33 @@ class PnPaisApi {
     }
 
     return _http.postMultipartFile2<TramaRespApiDto>(
+      '${basePathApp}insertarMonitoreo',
+      data: TramaMonitoreoModel.toJsonObjectApi2(oBody),
+      aFile: aFile,
+      parser: (data) {
+        return TramaRespApiDto.fromJson(data);
+      },
+    );
+  }
+
+  /*
+   * POST: .../registrarAvanceAcumuladoPartidaMonitereoMovil
+   */
+  Future<HttpResponse<TramaRespApiDto>> insertarMonitoreoP2({
+    required TramaMonitoreoModel oBody,
+  }) {
+    List<Map<String, String>> aFile = [];
+
+    if (oBody.imgActividad != '') {
+      final aImgActividad = oBody.imgActividad!.split(',');
+      for (var oValue in aImgActividad) {
+        aFile.add({MonitorFields.imgActividad: oValue.trim()});
+      }
+    }
+
+    return _http.postMultipartFile2<TramaRespApiDto>(
       '${basePathApp2}registrarAvanceAcumuladoPartidaMonitereoMovil',
-      data: TramaMonitoreoModel.toJsonObjectApi(oBody),
+      data: TramaMonitoreoModel.toJsonObjectApi4(oBody),
       aFile: aFile,
       parser: (data) {
         return TramaRespApiDto.fromJson(data);

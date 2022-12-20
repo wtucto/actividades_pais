@@ -235,7 +235,8 @@ class MainRepository {
   Future<TramaMonitoreoModel> insertarMonitoreo(
     TramaMonitoreoModel o,
   ) async {
-    final response = await _pnPaisApi.insertarMonitoreo(oBody: o);
+    final response = await _pnPaisApi.insertarMonitoreoP1(oBody: o);
+    final responseP2 = await _pnPaisApi.insertarMonitoreoP2(oBody: o);
     if (response.error != null) {
       _log.e(response.error.message);
       return Future.error(
