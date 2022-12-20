@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -165,31 +164,8 @@ class _MonitoringDetailNewEditPageState
 
         widget.cbRIDEN = await mainController.getListComboItemByType(
             ComboItemModel.cbRIDEN, 0, 0);
-
-        print(widget.cbRIDEN);
-
-        widget.cbASOLU =
-            LinkedHashSet<ComboItemModel>.from(widget.cbASOLU).toList();
-        widget.cbEAVAN =
-            LinkedHashSet<ComboItemModel>.from(widget.cbEAVAN).toList();
-        widget.cbEMONI =
-            LinkedHashSet<ComboItemModel>.from(widget.cbEMONI).toList();
-        widget.cbNRIES =
-            LinkedHashSet<ComboItemModel>.from(widget.cbNRIES).toList();
-        widget.cbPEJEC =
-            LinkedHashSet<ComboItemModel>.from(widget.cbPEJEC).toList();
-        widget.cbPIDEO =
-            LinkedHashSet<ComboItemModel>.from(widget.cbPIDEO).toList();
-        widget.cbRIDEN =
-            LinkedHashSet<ComboItemModel>.from(widget.cbRIDEN).toList();
       } catch (oError) {
-        // widget.cbASOLU = TramaMonitoreoModel.aAlternativaSolucion;
-        // widget.cbEAVAN = TramaMonitoreoModel.aEstadoAvance;
-        // widget.cbEMONI = TramaMonitoreoModel.aEstadoMonitoreo;
-        // widget.cbNRIES = TramaMonitoreoModel.aNivelRiesgo;
-        // widget.cbPEJEC = TramaMonitoreoModel.aActividadPartidaEjecutada;
-        // widget.cbPIDEO = TramaMonitoreoModel.aProblemaIdentificado;
-        // widget.cbRIDEN = TramaMonitoreoModel.aRiesgoIdentificado;
+        print(oError);
       }
 
       /**
@@ -238,13 +214,13 @@ class _MonitoringDetailNewEditPageState
        * Seleccionar el valor por defecto de los combos
        * - Seleccione una opción
        */
-      // _statusMonitor = widget.cbEMONI;
-      // _statusAdvance = widget.cbEAVAN[0];
-      // _valuePartidaEje = widget.cbPEJEC[0];
-      // _valueProblemaIO = widget.cbPIDEO[0];
-      // _valueAlternSolucion = widget.cbASOLU[0];
-      // _valueRiesgo = widget.cbRIDEN[0];
-      // _valueNivelRiesgo = widget.cbNRIES[0];
+      _statusMonitor = "43";
+      _statusAdvance = "0";
+      _valuePartidaEje = "0";
+      _valueProblemaIO = "0";
+      _valueAlternSolucion = "0";
+      _valueRiesgo = "0";
+      _valueNivelRiesgo = "0";
     } catch (oError) {
       var sTitle = 'Error';
       var sMessage = oError.toString();
@@ -283,7 +259,9 @@ class _MonitoringDetailNewEditPageState
         _longitud.text = oMonitoreo.longitud!;
         _latitud.text = oMonitoreo.latitud!;
         if (oMonitoreo.estadoMonitoreo != "") {
-          _statusMonitor = oMonitoreo.estadoMonitoreo;
+          // _statusMonitor = oMonitoreo.idEstadoMonitoreo.toString() == null
+          //     ? "0"
+          //     : oMonitoreo.idEstadoMonitoreo.toString();
         }
       });
     } catch (error) {
@@ -514,13 +492,45 @@ class _MonitoringDetailNewEditPageState
                 fontWeight: FontWeight.w700,
               ),
             ),
-            MyDropdownButtonFormField(
-              value: _statusMonitor!,
-              items: widget.cbEMONI,
-              isDense: false,
-              onChanged: null,
-              isRequired: true,
-            ),
+            DropdownButtonFormField(
+                isExpanded: true,
+                isDense: false,
+                value: _statusMonitor,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                ),
+                items: widget.cbEMONI.isNotEmpty
+                    ? widget.cbEMONI.map((ComboItemModel map) {
+                        return DropdownMenuItem<String>(
+                          value: map.codigo1.toString(),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  child: map.descripcion
+                                          .toString()
+                                          .toUpperCase()
+                                          .contains("SELECCIONE UNA OPCIÓN")
+                                      ? Text(
+                                          map.descripcion.toString(),
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color:
+                                                  Theme.of(context).hintColor),
+                                        )
+                                      : Text(
+                                          map.descripcion.toString(),
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w400),
+                                        )),
+                            ],
+                          ),
+                        );
+                      }).toList()
+                    : null,
+                onChanged: null),
 
             /**
              * FECHA MONITOREO
@@ -592,19 +602,57 @@ class _MonitoringDetailNewEditPageState
                 fontWeight: FontWeight.w700,
               ),
             ),
-            MyDropdownButtonFormField(
-              value: _statusAdvance!,
-              items: widget.cbEAVAN,
+            DropdownButtonFormField(
+              isExpanded: true,
               isDense: false,
-              isRequired: true,
+              value: _statusAdvance,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+              ),
+              validator: (value) => value
+                          .toString()
+                          .toUpperCase()
+                          .contains("SELECCIONE UNA OPCIÓN") ||
+                      value == ""
+                  ? 'Required'.tr
+                  : null,
+              items: widget.cbEAVAN.isNotEmpty
+                  ? widget.cbEAVAN.map((ComboItemModel map) {
+                      return DropdownMenuItem<String>(
+                        value: map.codigo1.toString(),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: map.descripcion
+                                        .toString()
+                                        .toUpperCase()
+                                        .contains("SELECCIONE UNA OPCIÓN")
+                                    ? Text(
+                                        map.descripcion.toString(),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Theme.of(context).hintColor),
+                                      )
+                                    : Text(
+                                        map.descripcion.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400),
+                                      )),
+                          ],
+                        ),
+                      );
+                    }).toList()
+                  : null,
               onChanged: _enabledF
-                  ? (val) {
-                      setState(() {
-                        _statusAdvance = val.toString();
-                      });
+                  ? (String? value) {
+                      _statusAdvance = value;
                     }
                   : null,
             ),
+
             /**
              * PARTIDA EJECUTADA
              */
@@ -617,15 +665,57 @@ class _MonitoringDetailNewEditPageState
                 fontWeight: FontWeight.w700,
               ),
             ),
-            MyDropdownButtonFormField(
-              value: _valuePartidaEje!,
-              items: widget.cbPEJEC,
+            DropdownButtonFormField(
+              isExpanded: true,
               isDense: false,
-              isRequired: true,
+              value: _valuePartidaEje,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+              ),
+              validator: (value) => value
+                          .toString()
+                          .toUpperCase()
+                          .contains("SELECCIONE UNA OPCIÓN") ||
+                      value == ""
+                  ? 'Required'.tr
+                  : null,
+              items: widget.cbPEJEC.isNotEmpty
+                  ? widget.cbPEJEC.map(
+                      (ComboItemModel map) {
+                        return DropdownMenuItem<String>(
+                          value: map.codigo1.toString(),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: map.descripcion
+                                        .toString()
+                                        .toUpperCase()
+                                        .contains("SELECCIONE UNA OPCIÓN")
+                                    ? Text(
+                                        map.descripcion.toString(),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Theme.of(context).hintColor),
+                                      )
+                                    : Text(
+                                        map.descripcion.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ).toList()
+                  : null,
               onChanged: _enabledF
-                  ? (val) async {
-                      String sValue = val.toString().toUpperCase();
-                      _valuePartidaEje = val.toString();
+                  ? (String? value) async {
+                      String sValue = value.toString().toUpperCase();
+                      _valuePartidaEje = value.toString();
                       try {
                         TramaProyectoModel oProyect =
                             TramaProyectoModel.empty();
@@ -731,16 +821,53 @@ class _MonitoringDetailNewEditPageState
                 fontWeight: FontWeight.w700,
               ),
             ),
-            MyDropdownButtonFormField(
-              value: _valueProblemaIO!,
-              items: widget.cbPIDEO,
+            DropdownButtonFormField(
+              isExpanded: true,
               isDense: false,
-              isRequired: true,
+              value: _valueProblemaIO,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+              ),
+              validator: (value) => value
+                          .toString()
+                          .toUpperCase()
+                          .contains("SELECCIONE UNA OPCIÓN") ||
+                      value == ""
+                  ? 'Required'.tr
+                  : null,
+              items: widget.cbPIDEO.isNotEmpty
+                  ? widget.cbPIDEO.map((ComboItemModel map) {
+                      return DropdownMenuItem<String>(
+                        value: map.codigo1.toString(),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: map.descripcion
+                                        .toString()
+                                        .toUpperCase()
+                                        .contains("SELECCIONE UNA OPCIÓN")
+                                    ? Text(
+                                        map.descripcion.toString(),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Theme.of(context).hintColor),
+                                      )
+                                    : Text(
+                                        map.descripcion.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400),
+                                      )),
+                          ],
+                        ),
+                      );
+                    }).toList()
+                  : null,
               onChanged: _enabledF
-                  ? (val) {
-                      setState(() {
-                        _valueProblemaIO = val.toString();
-                      });
+                  ? (String? value) {
+                      _valueProblemaIO = value;
                     }
                   : null,
             ),
@@ -790,16 +917,53 @@ class _MonitoringDetailNewEditPageState
                 fontWeight: FontWeight.w700,
               ),
             ),
-            MyDropdownButtonFormField(
-              value: _valueAlternSolucion!,
-              items: widget.cbASOLU,
+            DropdownButtonFormField(
+              isExpanded: true,
               isDense: false,
-              isRequired: true,
+              value: _valueAlternSolucion,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+              ),
+              validator: (value) => value
+                          .toString()
+                          .toUpperCase()
+                          .contains("SELECCIONE UNA OPCIÓN") ||
+                      value == ""
+                  ? 'Required'.tr
+                  : null,
+              items: widget.cbASOLU.isNotEmpty
+                  ? widget.cbASOLU.map((ComboItemModel map) {
+                      return DropdownMenuItem<String>(
+                        value: map.codigo1.toString(),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: map.descripcion
+                                        .toString()
+                                        .toUpperCase()
+                                        .contains("SELECCIONE UNA OPCIÓN")
+                                    ? Text(
+                                        map.descripcion.toString(),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Theme.of(context).hintColor),
+                                      )
+                                    : Text(
+                                        map.descripcion.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400),
+                                      )),
+                          ],
+                        ),
+                      );
+                    }).toList()
+                  : null,
               onChanged: _enabledF
-                  ? (val) {
-                      setState(() {
-                        _valueAlternSolucion = val.toString();
-                      });
+                  ? (String? value) {
+                      _valueAlternSolucion = value;
                     }
                   : null,
             ),
@@ -815,16 +979,46 @@ class _MonitoringDetailNewEditPageState
                 fontWeight: FontWeight.w700,
               ),
             ),
-            MyDropdownButtonFormField(
-              value: _valueRiesgo!,
-              items: widget.cbRIDEN,
+            DropdownButtonFormField(
+              isExpanded: true,
               isDense: false,
-              isRequired: false,
+              value: _valueRiesgo,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+              ),
+              items: widget.cbRIDEN.isNotEmpty
+                  ? widget.cbRIDEN.map((ComboItemModel map) {
+                      return DropdownMenuItem<String>(
+                        value: map.codigo1.toString(),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: map.descripcion
+                                        .toString()
+                                        .toUpperCase()
+                                        .contains("SELECCIONE UNA OPCIÓN")
+                                    ? Text(
+                                        map.descripcion.toString(),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Theme.of(context).hintColor),
+                                      )
+                                    : Text(
+                                        map.descripcion.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400),
+                                      )),
+                          ],
+                        ),
+                      );
+                    }).toList()
+                  : null,
               onChanged: _enabledF
-                  ? (val) {
-                      setState(() {
-                        _valueRiesgo = val.toString();
-                      });
+                  ? (String? value) {
+                      _valueRiesgo = value;
                     }
                   : null,
             ),
@@ -873,20 +1067,49 @@ class _MonitoringDetailNewEditPageState
                 fontWeight: FontWeight.w700,
               ),
             ),
-            MyDropdownButtonFormField(
-              value: _valueNivelRiesgo!,
-              items: widget.cbNRIES,
+            DropdownButtonFormField(
+              isExpanded: true,
               isDense: false,
-              isRequired: false,
+              value: _valueNivelRiesgo,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+              ),
+              items: widget.cbNRIES.isNotEmpty
+                  ? widget.cbNRIES.map((ComboItemModel map) {
+                      return DropdownMenuItem<String>(
+                        value: map.codigo1.toString(),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: map.descripcion
+                                        .toString()
+                                        .toUpperCase()
+                                        .contains("SELECCIONE UNA OPCIÓN")
+                                    ? Text(
+                                        map.descripcion.toString(),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Theme.of(context).hintColor),
+                                      )
+                                    : Text(
+                                        map.descripcion.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400),
+                                      )),
+                          ],
+                        ),
+                      );
+                    }).toList()
+                  : null,
               onChanged: _enabledF
-                  ? (val) {
-                      setState(() {
-                        _valueNivelRiesgo = val.toString();
-                      });
+                  ? (String? value) {
+                      _valueNivelRiesgo = value;
                     }
                   : null,
             ),
-
             /**
              * FECHA TERMINO OBRA
              */
@@ -1453,74 +1676,5 @@ class _MonitoringDetailNewEditPageState
             ),
           );
         });
-  }
-}
-
-class MyDropdownButtonFormField extends StatelessWidget {
-  const MyDropdownButtonFormField(
-      {Key? key,
-      required this.items,
-      required this.value,
-      required this.isDense,
-      this.onChanged,
-      required this.isRequired})
-      : super(key: key);
-
-  final List<ComboItemModel> items;
-  final String value;
-  final bool isDense;
-  final void Function(Object?)? onChanged;
-  final bool isRequired;
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButtonFormField(
-      isExpanded: true,
-      isDense: isDense,
-      // value: value,
-      style: const TextStyle(
-        color: Colors.black,
-        fontSize: 15,
-        fontWeight: FontWeight.w400,
-      ),
-      onChanged: onChanged,
-      validator: isRequired
-          ? (value) => value
-                      .toString()
-                      .toUpperCase()
-                      .contains("SELECCIONE UNA OPCIÓN") ||
-                  value == ""
-              ? 'Required'.tr
-              : null
-          : null,
-      items: items.isNotEmpty
-          ? items.map((ComboItemModel map) {
-              return DropdownMenuItem<String>(
-                value: map.codigo1.toString(),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: map.descripcion
-                                .toString()
-                                .toUpperCase()
-                                .contains("SELECCIONE UNA OPCIÓN")
-                            ? Text(
-                                map.descripcion.toString(),
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Theme.of(context).hintColor),
-                              )
-                            : Text(
-                                map.descripcion.toString(),
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400),
-                              )),
-                  ],
-                ),
-              );
-            }).toList()
-          : null,
-    );
   }
 }
