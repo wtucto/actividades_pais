@@ -824,69 +824,47 @@ class TramaMonitoreoModel {
   }
 
   /*
-   * POST: .../registrarAvanceAcumuladoPartidaMonitereoMovil
+   * POST: .../insertarMonitoreo
    */
   static Map<String, String> toJsonObjectApi2(TramaMonitoreoModel o) {
     return {
-// MonitorFields.item_: _getString(o.item),
       MonitorFields.idMonitoreo_: _getString(o.idMonitoreo),
       MonitorFields.idEstadoMonitoreo_:
           _getString(o.idEstadoMonitoreo, type: 'I'),
-
-      // MonitorFields.estadoMonitoreo_: _getString(o.estadoMonitoreo),
       MonitorFields.idUsuario_: _getString(o.idUsuario, type: 'I'),
       MonitorFields.usuario_: _getString(o.usuario),
       MonitorFields.idRol_: _getString(o.idRol, type: 'I'),
-      MonitorFields.rol_: _getString(o.rol),
-
       MonitorFields.tambo_: _getString(o.tambo),
       MonitorFields.snip_: _getString(o.snip),
       MonitorFields.cui_: _getString(o.cui),
       MonitorFields.fechaMonitoreo_: _getString(o.fechaMonitoreo),
       MonitorFields.avanceFisicoAcumulado_: _getString(o.avanceFisicoAcumulado),
       MonitorFields.idEstadoAvance_: _getString(o.idEstadoAvance, type: 'I'),
-
-//      MonitorFields.estadoAvance_: _getString(o.estadoAvance),
-      MonitorFields.actividadPartidaEjecutada_:
-          _getString(o.actividadPartidaEjecutada),
-
-      MonitorFields.idAvanceFisicoPartida_:
-          _getString(o.idAvanceFisicoPartida, type: 'I'),
-      MonitorFields.avanceFisicoPartida_: _getString(o.avanceFisicoPartida),
       MonitorFields.observaciones_: _getString(o.observaciones),
-// MonitorFields.imgActividad1_: _getString(o.imgActividad1),
-// MonitorFields.imgActividad2_: _getString(o.imgActividad2),
-// MonitorFields.imgActividad3_: _getString(o.imgActividad3),
-      MonitorFields.problemaIdentificado_: _getString(o.problemaIdentificado),
       MonitorFields.idProblemaIdentificado_:
           _getString(o.idProblemaIdentificado, type: 'I'),
-// MonitorFields.imgProblema1_: _getString(o.imgProblema1),
-// MonitorFields.imgProblema2_: _getString(o.imgProblema2),
-// MonitorFields.imgProblema3_: _getString(o.imgProblema3),
-      MonitorFields.alternativaSolucion_: _getString(o.alternativaSolucion),
       MonitorFields.idAlternativaSolucion_:
           _getString(o.idAlternativaSolucion, type: 'I'),
-      MonitorFields.riesgoIdentificado_: _getString(o.riesgoIdentificado),
       MonitorFields.idRiesgoIdentificado_:
           _getString(o.idRiesgoIdentificado, type: 'I'),
-// MonitorFields.imgRiesgo1_: _getString(o.imgRiesgo1),
-// MonitorFields.imgRiesgo2_: _getString(o.imgRiesgo2),
-// MonitorFields.imgRiesgo3_: _getString(o.imgRiesgo3),
       MonitorFields.fechaTerminoEstimado_: _getString(o.fechaTerminoEstimado),
       MonitorFields.latitud_: _getString(o.latitud),
       MonitorFields.longitud_: _getString(o.longitud),
       MonitorFields.txtIpReg_: _getString(o.txtIpReg),
-// MonitorFields.fechaInicio_: _getString(o.fechaInicio),
-// MonitorFields.fechaFin_: _getString(o.fechaFin),
-// MonitorFields.nomEstado_: _getString(o.nomEstado),
-// MonitorFields.pageIndex_: _getString(o.pageIndex),
-// MonitorFields.pageSize_: _getString(o.pageSize),
+    };
+  }
 
-/*
-  List<MultipartFile> imgActividad;
-  List<MultipartFile> imgProblema;
-  List<MultipartFile> imgRiesgo;
- */
+  /*
+   * POST: .../registrarAvanceAcumuladoPartidaMonitereoMovil
+   */
+  static Map<String, String> toJsonObjectApi4(TramaMonitoreoModel o) {
+    return {
+      MonitorFields.idAvanceFisicoPartida: _getString(o.idAvanceFisicoPartida),
+      MonitorFields.avanceFisicoAcumulado_:
+          _getString(o.avanceFisicoAcumulado, type: 'D'),
+      MonitorFields.snip: _getString(o.snip),
+      MonitorFields.idUsuario_: _getString(o.idUsuario, type: 'I'),
+      MonitorFields.txtIpReg_: _getString(o.txtIpReg),
     };
   }
 
@@ -923,9 +901,11 @@ class TramaMonitoreoModel {
   }
 
   static String _getString(dynamic data, {String? type}) {
-    String resp = data != null ? data.toString() as String : '';
+    String resp = data != null ? data.toString() : '';
     if (type != null && type == "I") {
       if (resp == '') resp = '0';
+    } else if (type != null && type == "D") {
+      if (resp == '') resp = '0.00';
     }
 
     return resp;

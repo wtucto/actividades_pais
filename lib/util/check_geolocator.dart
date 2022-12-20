@@ -2,10 +2,10 @@ import 'package:actividades_pais/util/throw-exception.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
-import 'package:permission_handler/permission_handler.dart';
+//import 'package:permission_handler/permission_handler.dart';
 
 class CheckGeolocator {
-  Future<bool> check2() async {
+  /*Future<bool> check2() async {
     late LocationSettings locationSettings;
 
     if (await Permission.location.serviceStatus.isEnabled) {
@@ -30,7 +30,7 @@ class CheckGeolocator {
     }
 
     return true;
-  }
+  }*/
 
   Future<bool> check() async {
     late LocationSettings locationSettings;
@@ -75,7 +75,8 @@ class CheckGeolocator {
   Future<List<Position>> getPosition() async {
     List<Position> aPosition = [];
     try {
-      bool isAutorice = await check2();
+      //bool isAutorice = await check2();
+      bool isAutorice = await check();
 
       if (isAutorice) {
         aPosition.add(
@@ -84,9 +85,7 @@ class CheckGeolocator {
           ),
         );
       }
-    } catch (oError) {
-      //
-    }
+    } catch (oError) {}
 
     return aPosition;
   }
