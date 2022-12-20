@@ -100,7 +100,6 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                                   Util().showAlertDialogokno(
                                       'Actividades', context, () async {
                                     await EnvioActividades();
-
                                   }, () {
                                     Navigator.pop(context);
                                   }, 'Estas seguro de sincronizar las Actividades');
@@ -236,53 +235,54 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
             ),
             Card(
                 child: Container(
-                  margin: EdgeInsets.only(left: 10, right: 10),
-                  child: Column(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                              '\n Listas de Evidencias \n \n  Cantidad:   $cantidadEvidencias \n'),
-                          envioEvidencias
-                              ? new InkWell(
-                            child: Icon(
-                              Icons.send,
-                              color: Colors.blue[900],
-                            ),
-                            onTap: () {
-                              cargarListas();
-                              if (cantidadEvidencias > 0) {
-                                Util().showAlertDialogokno(
-                                    'Evidencias', context, () async {
-                                  await EnvioEvidencias();
-                                  Navigator.pop(context);
-                                }, () {
-                                  Navigator.pop(context);
-                                }, 'Estas seguro de sincronizar las Evidencias');
-                              }
-                            },
-                          )
-                              : new Container()
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: new LinearPercentIndicator(
-                          width: MediaQuery.of(context).size.width - 60,
-                          animation: true,
-                          lineHeight: 20.0,
-                          animationDuration: 2500,
-                          percent: sincronizadoEvidencias,
-                          center: Text(
-                              "Sincronizado ${sincronizadoEvidencias * 100}%"),
-                          linearStrokeCap: LinearStrokeCap.roundAll,
-                          progressColor: Colors.green,
-                        ),
-                      ),
+                      Text(
+                          '\n Listas de Evidencias \n \n  Cantidad:   $cantidadEvidencias \n'),
+                      envioEvidencias
+                          ? new InkWell(
+                              child: Icon(
+                                Icons.send,
+                                color: Colors.blue[900],
+                              ),
+                              onTap: () {
+                                cargarListas();
+                                if (cantidadEvidencias > 0) {
+                                  Util().showAlertDialogokno(
+                                      'Evidencias', context, () async {
+                                    await EnvioEvidencias();
+                                    Navigator.pop(context);
+                                  }, () {
+                                    Navigator.pop(context);
+                                  }, 'Estas seguro de sincronizar las Evidencias');
+                                }
+                              },
+                            )
+                          : new Container()
                     ],
                   ),
-                )),SizedBox(
+                  Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: new LinearPercentIndicator(
+                      width: MediaQuery.of(context).size.width - 60,
+                      animation: true,
+                      lineHeight: 20.0,
+                      animationDuration: 2500,
+                      percent: sincronizadoEvidencias,
+                      center:
+                          Text("Sincronizado ${sincronizadoEvidencias * 100}%"),
+                      linearStrokeCap: LinearStrokeCap.roundAll,
+                      progressColor: Colors.green,
+                    ),
+                  ),
+                ],
+              ),
+            )),
+            SizedBox(
               height: 5,
             ),
             Card(
@@ -308,7 +308,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                                     Util().showAlertDialogokno(
                                         'Participantes Extranjeros', context,
                                         () async {
-                                       EnvioNacidos();
+                                      EnvioNacidos();
                                       Navigator.pop(context);
                                     }, () {
                                       Navigator.pop(context);
@@ -350,10 +350,11 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                       minimumSize: Size.fromHeight(72),
                       shape: StadiumBorder()),
                   onPressed: () async {
-                    Util().showAlertDialogokno('Pendientes Envio', context, () async{
+                    Util().showAlertDialogokno('Pendientes Envio', context,
+                        () async {
                       print("swwws");
                       Navigator.pop(context);
-                    await  EnvioParte();
+                      await EnvioParte();
                     }, () {
                       Navigator.pop(context);
                     }, 'Estas seguro de guardar');
@@ -465,7 +466,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
   }
 
   Future EnvioParte() async {
-    print("1::"+widget.reportesPias.idUnicoReporte);
+    print("1::" + widget.reportesPias.idUnicoReporte);
     if (_isloading) return;
     setState(() {
       _isloading = true;
@@ -482,12 +483,10 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
       await EnvioAtenciones();
       await EnvioIncidente();
 
-
       await Future.delayed(Duration(seconds: 5));
       cargarListas();
       _isloading = false;
-      if (
-          cantidadActividades == 0 &&
+      if (cantidadActividades == 0 &&
           cantidadAtenciones == 0 &&
           cantidadIncidentes == 0) {
         await DatabasePias.db
@@ -497,7 +496,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
         _isloading = false;
         Navigator.pop(context);
       }
-     Navigator.pop(context);
+      Navigator.pop(context);
       Navigator.pop(context);
       setState(() {});
     }
@@ -514,8 +513,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
         await EnvioIncidente();
 
         await Future.delayed(Duration(seconds: 5));
-        if (
-            cantidadActividades == 0 &&
+        if (cantidadActividades == 0 &&
             cantidadAtenciones == 0 &&
             cantidadIncidentes == 0) {
           await DatabasePias.db
@@ -564,14 +562,14 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
     for (var i = 0; i < listaParticipantes.length; i++) {
       var resp = await ProviderServiciosRest()
           .guardarNacimientos(listaParticipantes[i]);
-      listNacidos.add(resp);
+      listNacidos.add(resp!);
       sincronizadoNacidos = double.parse(
           ((((listNacidos.length) * 100) / listaParticipantes.length) / 100)
               .toString());
       cargarListas();
       setState(() {});
       if (resp == 200) {
-       /// await DatabasePias.db.eliminarNacidos(listaParticipantes[i].id);
+        /// await DatabasePias.db.eliminarNacidos(listaParticipantes[i].id);
         cargarListas();
         setState(() {});
       }
@@ -581,7 +579,6 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
     penv.porcentaje = sincronizadoNacidos;
     penv.tipo = 4;
     DatabasePias.db.insertPorcentajesEnvio(penv);
-
   }
 
   Future EnvioEvidencias() async {

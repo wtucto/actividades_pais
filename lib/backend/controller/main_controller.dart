@@ -209,6 +209,18 @@ class MainController extends GetxController {
   }
 
   /*
+    Obtiene la lista de Monitoreos segun el Proyecto seleccionado (online)
+   @TramaProyectoModel o
+   */
+  Future<List<TramaMonitoreoModel>> getTramaMonitoreo(
+    TramaMonitoreoModel o,
+  ) async {
+    List<TramaMonitoreoModel> aResp =
+        await Get.find<MainService>().getTramaMonitoreo(o);
+    return aResp;
+  }
+
+  /*
    Obtiene los datos de generales del Monitoreo por el idMonitoreo
    @String idMonitoreo
    */

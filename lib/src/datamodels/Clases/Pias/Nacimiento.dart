@@ -1,17 +1,20 @@
-
-
 import 'dart:io';
 
 class Nacimiento {
   int? id;
-  int? idUsuario=0;
-  int? idParteDiario=0;
+  int? idUsuario = 0;
+  int? idParteDiario = 0;
   String? detalle;
   String? idUnicoReporte;
   int? idParteDiarioNacimiento;
 
   Nacimiento(
-      {this.id, this.detalle,  this.idUnicoReporte, this.idUsuario=0, this.idParteDiario=0, this.idParteDiarioNacimiento=0});
+      {this.id,
+      this.detalle,
+      this.idUnicoReporte,
+      this.idUsuario = 0,
+      this.idParteDiario = 0,
+      this.idParteDiarioNacimiento = 0});
 
   Nacimiento.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -24,12 +27,12 @@ class Nacimiento {
 
   factory Nacimiento.fromMap(Map<String, dynamic> json) => Nacimiento(
         id: json['id'],
-    idUsuario: json['idUsuario'],
-    idParteDiario: json['idParteDiario'],
+        // idUsuario: json['idUsuario'],
+        //idParteDiario: json['idParteDiario'],
         detalle: json['detalle'],
 
         idUnicoReporte: json['idUnicoReporte'],
-    idParteDiarioNacimiento: json['idParteDiarioNacimiento'],
+        idParteDiarioNacimiento: json['idParteDiarioNacimiento'],
       );
 
   Map<String, dynamic> toJson() {
@@ -48,7 +51,6 @@ class Nacimiento {
   Map<String, dynamic> toMap() {
     return {
       "detalle": detalle,
-
       "idUnicoReporte": idUnicoReporte,
       "idParteDiarioNacimiento": idParteDiarioNacimiento,
     };

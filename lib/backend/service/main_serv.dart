@@ -470,6 +470,14 @@ class MainService {
     return aFind;
   }
 
+  Future<List<TramaMonitoreoModel>> getTramaMonitoreo(
+    TramaMonitoreoModel o,
+  ) async {
+    List<TramaMonitoreoModel> aResp =
+        await Get.find<MainRepository>().getTramaMonitoreo(o);
+    return aResp;
+  }
+
   Future<TramaMonitoreoModel> insertMonitorDb(
     TramaMonitoreoModel o,
   ) async {

@@ -162,6 +162,19 @@ class MainRepository {
     return aResp;
   }
 
+  Future<List<TramaMonitoreoModel>> getTramaMonitoreo(
+    TramaMonitoreoModel o,
+  ) async {
+    List<TramaMonitoreoModel> aResp = [];
+    final response = await _pnPaisApi.listarTramaMonitoreoMovilPaginado(o);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
   Future<TramaMonitoreoModel> insertMonitorDb(
     TramaMonitoreoModel o,
   ) async {

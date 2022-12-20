@@ -11,9 +11,11 @@ import 'package:actividades_pais/src/datamodels/Clases/actividadesPias.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/util/app-config.dart';
+import 'package:logger/logger.dart';
 
 class ProviderServiciosRest {
   Dio dio = new Dio();
+  final Logger _log = Logger();
 
   // ignore: non_constant_identifier_names
   static Map<String, String> get headers {
@@ -43,12 +45,11 @@ class ProviderServiciosRest {
     );
 
     if (response.statusCode == 200) {
-
       final jsonResponse = json.decode(response.body);
       print(jsonResponse["codResultado"]);
-      if(jsonResponse["codResultado"]!=2){
+      if (jsonResponse["codResultado"] != 2) {
         final listadostraba =
-        new ListaPuntoAtencionPias.fromJsonList(jsonResponse["response"]);
+            new ListaPuntoAtencionPias.fromJsonList(jsonResponse["response"]);
         for (var i = 0; i < listadostraba.items.length; i++) {
           final rspt = PuntoAtencionPias(
             longitud: listadostraba.items[i].longitud,
@@ -64,10 +65,9 @@ class ProviderServiciosRest {
           await DatabasePias.db.insertPuntoAtencionPias(rspt);
         }
         return listadostraba.items;
-      } else{
+      } else {
         return List.empty();
       }
-
     } else if (response.statusCode == 400) {}
     return List.empty();
   }
@@ -149,17 +149,16 @@ class ProviderServiciosRest {
   }
 
   Future<int> guardarEvidencias(ArchivosEvidencia archivosEvidencia) async {
-
     var listareportePias =
-    await DatabasePias.db.reportePias(archivosEvidencia.idUnicoReporte);
+        await DatabasePias.db.reportePias(archivosEvidencia.idUnicoReporte);
     print('"idParteDiario":${listareportePias[0].idParteDiario},');
     var respuesta = 0;
     var request = http.MultipartRequest(
         'POST', Uri.parse(AppConfig.backendsismonitor + '/upload/*'));
 
     request.fields.addAll({'storage': 'reportespias'});
-    request.files.add(await http.MultipartFile.fromPath(
-        'file', archivosEvidencia.file!));
+    request.files.add(
+        await http.MultipartFile.fromPath('file', archivosEvidencia.file!));
 
     http.StreamedResponse response = await request.send();
 
@@ -169,7 +168,6 @@ class ProviderServiciosRest {
       await response.stream.bytesToString().then((value) {
         jsonResponse = json.decode(value.toString());
       });
-
 
       print("=============>>>>>>");
       print('{"path":"${jsonResponse["path"]}",'
@@ -181,26 +179,24 @@ class ProviderServiciosRest {
           '"idUsuario":${await user()}}');
       print("=============>>>>>>");
 
-
       http.Response responsee = await http.post(
           Uri.parse(AppConfig.urlBackndServicioSeguro +
               '/api-pnpais/pias/app/registrarParteDiarioEvidencia'),
           headers: headers,
-          body:  '{"path":"${jsonResponse["path"]}",'
-                  '"url":"${jsonResponse["url"]}",'
-                  '"name":"${jsonResponse["name"]}",'
-                  '"extension":"${jsonResponse["extension"]}",'
-                  '"idParteDiario":${listareportePias[0].idParteDiario},'
-                  '"txtIpmaq": "movil",'
+          body: '{"path":"${jsonResponse["path"]}",'
+              '"url":"${jsonResponse["url"]}",'
+              '"name":"${jsonResponse["name"]}",'
+              '"extension":"${jsonResponse["extension"]}",'
+              '"idParteDiario":${listareportePias[0].idParteDiario},'
+              '"txtIpmaq": "movil",'
               '"idUsuario":${await user()}}');
-           respuesta = responsee.statusCode;
-           print(respuesta);
+      respuesta = responsee.statusCode;
+      print(respuesta);
     } else {}
     return respuesta;
   }
 
-  Future guardarNacimientos(Nacimiento nacimiento) async {
-
+  Future<int?> guardarNacimientos(Nacimiento nacimiento) async {
     var rspt = await DatabasePias.db
         .ListarNacimientoPiasEn(nacimiento.idUnicoReporte, nacimiento.id);
     var listareportePias =
@@ -213,31 +209,37 @@ class ProviderServiciosRest {
               '/api-pnpais/pias/app/registrarParteDiarioNacimientoMovil'),
           body: jsonEncode(rspt[i]),
           headers: headers);
-
+      _log.i(AppConfig.urlBackndServicioSeguro +
+          '/api-pnpais/pias/app/registrarParteDiarioNacimientoMovil');
+      _log.i(jsonEncode(rspt[i]));
+      _log.i(response.body);
       rspt[i].idParteDiarioNacimiento =
           int.parse(jsonDecode(response.body)["response"].toString());
 
-      await DatabasePias.db.updateNacimiento(rspt[i]);
+      var upnac = await DatabasePias.db.updateNacimiento(rspt[i]);
+
       await DatabasePias.db
           .updateArchivos(rspt[i].idParteDiarioNacimiento, rspt[i].id);
       var img = await DatabasePias.db.traerArchivosParte(
           rspt[i].idUnicoReporte, rspt[i].id, rspt[i].idParteDiarioNacimiento);
-
+      _log.i(img);
 
       for (var i = 0; i < img.length; i++) {
-        var request = http.MultipartRequest('POST',
-            Uri.parse(AppConfig.backendsismonitor +'/upload/*'));
+        var request = http.MultipartRequest(
+            'POST', Uri.parse(AppConfig.backendsismonitor + '/upload/*'));
         request.fields.addAll({'storage': 'reportespias'});
         request.files
             .add(await http.MultipartFile.fromPath('file', img[i].file!));
-
         http.StreamedResponse rsesponse = await request.send();
-
         var jsonResponse;
 
         await rsesponse.stream.bytesToString().then((value) {
           jsonResponse = json.decode(value.toString());
         });
+
+        _log.i(jsonResponse);
+        _log.i(Uri.parse(AppConfig.urlBackndServicioSeguro +
+            '/api-pnpais/pias/app/registrarParteDiarioNacimientoImagenMovil'));
 
         http.Response responses = await http.post(
             Uri.parse(AppConfig.urlBackndServicioSeguro +
@@ -248,13 +250,22 @@ class ProviderServiciosRest {
                 '"idParteDiarioNacimiento": ${img[i].idParteDiarioNacimiento},'
                 '"idUsuario": ${await user()},'
                 '"txtIpmaq":""}');
+
+        _log.i('{"path":"${jsonResponse["path"]}",'
+            '"name":"${jsonResponse["name"]}",'
+            '"idParteDiarioNacimiento": ${img[i].idParteDiarioNacimiento},'
+            '"idUsuario": ${await user()},'
+            '"txtIpmaq":""}');
+
         await DatabasePias.db.DeleteArchivosParte(img[i].idUnicoReporte,
             img[i].idNacimiento, img[i].idParteDiarioNacimiento);
-        print("errr ${responses.body}");
+        _log.i(responses.body);
+
         await DatabasePias.db.eliminarNacidos(img[i].idUnicoReporte);
         await DatabasePias.db
             .ListarNacimientoPiasEn(nacimiento.idUnicoReporte, nacimiento.id);
       }
+      return response.statusCode;
     }
   }
 }

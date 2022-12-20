@@ -890,6 +890,14 @@ class TramaMonitoreoModel {
     };
   }
 
+  static Map<String, dynamic> toJsonObjectApi3(TramaMonitoreoModel o) {
+    return {
+      MonitorFields.snip_: _getString(o.snip),
+      MonitorFields.pageIndex_: 1,
+      MonitorFields.pageSize_: 100,
+    };
+  }
+
   static List<Map<String, dynamic>> toJsonArray(
       List<TramaMonitoreoModel> aTramaMonitoreo) {
     List<Map<String, dynamic>> aList = [];

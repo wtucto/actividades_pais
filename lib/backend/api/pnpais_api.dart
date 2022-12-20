@@ -78,7 +78,7 @@ class PnPaisApi {
     return await _http.request<List<TramaMonitoreoModel>>(
       '${basePathApp2}listarTramaMonitoreoMovilPaginado',
       method: "POST",
-      data: TramaMonitoreoModel.toJsonObjectApi(oBody),
+      data: TramaMonitoreoModel.toJsonObjectApi3(oBody),
       parser: (data) {
         return (data as List)
             .map((e) => TramaMonitoreoModel.fromJson(e))
