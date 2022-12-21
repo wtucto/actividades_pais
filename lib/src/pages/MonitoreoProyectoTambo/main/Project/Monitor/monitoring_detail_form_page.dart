@@ -258,10 +258,10 @@ class _MonitoringDetailNewEditPageState
         _dateObra.text = oMonitoreo.fechaTerminoEstimado!;
         _longitud.text = oMonitoreo.longitud!;
         _latitud.text = oMonitoreo.latitud!;
-        if (oMonitoreo.estadoMonitoreo != "") {
-          // _statusMonitor = oMonitoreo.idEstadoMonitoreo.toString() == null
-          //     ? "0"
-          //     : oMonitoreo.idEstadoMonitoreo.toString();
+        if (oMonitoreo.idEstadoMonitoreo.toString() == "") {
+          _statusMonitor = oMonitoreo.idEstadoMonitoreo.toString() == ""
+              ? "43"
+              : oMonitoreo.idEstadoMonitoreo.toString();
         }
       });
     } catch (error) {
@@ -273,11 +273,8 @@ class _MonitoringDetailNewEditPageState
     return ((value * 100).toStringAsFixed(2)).toString();
   }
 
-  String getValueSelected(String value) {
-    return (value.toUpperCase().contains("SELECCIONE UNA OPCIÓN") ||
-            value == "")
-        ? ""
-        : value;
+  int getValueSelected(int value) {
+    return (value == 0) ? 0 : value;
   }
 
   getDataMonitor(TramaMonitoreoModel m) {
@@ -298,23 +295,18 @@ class _MonitoringDetailNewEditPageState
       _longitud.text = m.longitud!;
       _latitud.text = m.latitud!;
 
-      // _statusMonitor =
-      //     m.estadoMonitoreo == "" ? widget.cbEMONI[0] : m.estadoMonitoreo;
-      // _statusAdvance =
-      //     m.estadoAvance == "" ? widget.cbEAVAN[0] : m.estadoAvance;
-      // _valuePartidaEje = m.actividadPartidaEjecutada == ""
-      //     ? widget.cbPEJEC[0]
-      //     : m.actividadPartidaEjecutada;
-      // _valueProblemaIO = m.problemaIdentificado == ""
-      //     ? widget.cbPIDEO[0]
-      //     : m.problemaIdentificado;
-      // _valueAlternSolucion = m.alternativaSolucion == ""
-      //     ? widget.cbASOLU[0]
-      //     : m.alternativaSolucion;
-      // _valueRiesgo =
-      //     m.riesgoIdentificado == "" ? widget.cbRIDEN[0] : m.riesgoIdentificado;
-      // _valueNivelRiesgo =
-      //     m.nivelRiesgo == "" ? widget.cbNRIES[0] : m.nivelRiesgo;
+      _statusMonitor = (m.idEstadoMonitoreo.toString() == ""
+          ? "0"
+          : m.idEstadoMonitoreo) as String?;
+      _statusAdvance = m.estadoAvance == "" ? "0" : m.estadoAvance;
+      _valuePartidaEje =
+          m.actividadPartidaEjecutada == "" ? "0" : m.actividadPartidaEjecutada;
+      _valueProblemaIO =
+          m.problemaIdentificado == "" ? "0" : m.problemaIdentificado;
+      _valueAlternSolucion =
+          m.alternativaSolucion == "" ? "0" : m.alternativaSolucion;
+      _valueRiesgo = m.riesgoIdentificado == "" ? "0" : m.riesgoIdentificado;
+      _valueNivelRiesgo = m.nivelRiesgo == "" ? "0" : m.nivelRiesgo;
 
       List<String?> listaImage = [];
       listaImage.addAll([
@@ -1262,20 +1254,24 @@ class _MonitoringDetailNewEditPageState
                                       imgProblema: imgPI,
                                       imgRiesgo: imgRI,
                                       observaciones: _obsMonitor.text,
-                                      estadoAvance:
-                                          getValueSelected(_statusAdvance!),
-                                      estadoMonitoreo:
-                                          getValueSelected(_statusMonitor!),
-                                      actividadPartidaEjecutada:
-                                          getValueSelected(_valuePartidaEje!),
-                                      alternativaSolucion: getValueSelected(
-                                          _valueAlternSolucion!),
-                                      problemaIdentificado:
-                                          getValueSelected(_valueProblemaIO!),
-                                      riesgoIdentificado:
-                                          getValueSelected(_valueRiesgo!),
-                                      nivelRiesgo:
-                                          getValueSelected(_valueNivelRiesgo!),
+                                      idEstadoAvance: getValueSelected(
+                                          int.parse(_statusAdvance!)),
+                                      idEstadoMonitoreo: getValueSelected(
+                                          int.parse(_statusMonitor!)),
+
+                                      idAvanceFisicoPartida: getValueSelected(
+                                          int.parse(_valuePartidaEje!)),
+
+                                      idAlternativaSolucion: getValueSelected(
+                                          int.parse(_valueAlternSolucion!)),
+
+                                      idProblemaIdentificado: getValueSelected(
+                                          int.parse(_valueProblemaIO!)),
+                                      idRiesgoIdentificado: getValueSelected(
+                                          int.parse(_valueRiesgo!)),
+                                      riesgoIdentificado: getValueSelected(
+                                              int.parse(_valueNivelRiesgo!))
+                                          .toString(),
                                       rol: oUser.rol,
                                       usuario: oUser.codigo,
                                     ));
@@ -1437,23 +1433,29 @@ class _MonitoringDetailNewEditPageState
                                             imgProblema: imgPI,
                                             imgRiesgo: imgRI,
                                             observaciones: _obsMonitor.text,
-                                            estadoAvance: getValueSelected(
-                                                _statusAdvance!),
-                                            estadoMonitoreo: getValueSelected(
-                                                _statusMonitor!),
-                                            actividadPartidaEjecutada:
+                                            idEstadoAvance: getValueSelected(
+                                                int.parse(_statusAdvance!)),
+                                            idEstadoMonitoreo: getValueSelected(
+                                                int.parse(_statusMonitor!)),
+
+                                            idAvanceFisicoPartida:
+                                                getValueSelected(int.parse(
+                                                    _valuePartidaEje!)),
+
+                                            idAlternativaSolucion:
+                                                getValueSelected(int.parse(
+                                                    _valueAlternSolucion!)),
+
+                                            idProblemaIdentificado:
+                                                getValueSelected(int.parse(
+                                                    _valueProblemaIO!)),
+                                            idRiesgoIdentificado:
                                                 getValueSelected(
-                                                    _valuePartidaEje!),
-                                            alternativaSolucion:
-                                                getValueSelected(
-                                                    _valueAlternSolucion!),
-                                            problemaIdentificado:
-                                                getValueSelected(
-                                                    _valueProblemaIO!),
+                                                    int.parse(_valueRiesgo!)),
                                             riesgoIdentificado:
-                                                getValueSelected(_valueRiesgo!),
-                                            nivelRiesgo: getValueSelected(
-                                                _valueNivelRiesgo!),
+                                                getValueSelected(int.parse(
+                                                        _valueNivelRiesgo!))
+                                                    .toString(),
                                             rol: oUser.rol,
                                             usuario: oUser.codigo,
                                           )
