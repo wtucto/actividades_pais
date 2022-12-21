@@ -518,7 +518,7 @@ class DatabasePnPais {
     dynamic result = await db.query(
       tableNameTramaMonitoreos,
       where:
-          '${MonitorFields.snip} = ? AND ${MonitorFields.actividadPartidaEjecutada} = ?',
+          '${MonitorFields.snip} = ? AND ${MonitorFields.idAvanceFisicoPartida} = ?',
       whereArgs: [o.numSnip, sTypePartida],
       orderBy: orderBy,
     );
