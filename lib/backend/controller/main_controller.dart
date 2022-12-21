@@ -77,7 +77,7 @@ class MainController extends GetxController {
         .getComboItemByType(sType, limit, offset);
   }
 
-  Future<List<String>> getListComboItemByType(
+  Future<List<ComboItemModel>> getListComboItemByType(
     String sType,
     int? limit,
     int? offset,
@@ -85,9 +85,9 @@ class MainController extends GetxController {
     List<ComboItemModel> aComboItem =
         await getComboItemByType(sType, limit, offset);
 
-    List<String?> aList = aComboItem.map((o) => o.descripcion).toList();
-
-    return aList.whereType<String>().toList();
+    // List<ComboItemModel> aList = aComboItem.map((o) => o.descripcion).toList();
+    // return aList.whereType<ComboItemModel>().toList();
+    return aComboItem;
   }
 
   /*
