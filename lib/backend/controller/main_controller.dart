@@ -508,7 +508,7 @@ class MainController extends GetxController {
       /// POR ENVIAR
       bool isOk = true;
       a.forEach((o) {
-        if (o.estadoMonitoreo != TramaMonitoreoModel.sEstadoPEN) {
+        if (o.idEstadoMonitoreo != TramaMonitoreoModel.sIdEstadoPEN) {
           isOk = false;
         }
       });
@@ -692,6 +692,7 @@ class MainController extends GetxController {
         o.fechaMonitoreo = oDFormat.format(DateTime.now());
       }
 
+      o.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoINC;
       o.estadoMonitoreo = TramaMonitoreoModel.sEstadoINC;
 
       List<TramaProyectoModel> aSearh =
@@ -748,8 +749,10 @@ class MainController extends GetxController {
     bool isComplete = await validateMonitor(o);
 
     if (isComplete) {
+      o.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoPEN;
       o.estadoMonitoreo = TramaMonitoreoModel.sEstadoPEN;
     } else {
+      o.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoINC;
       o.estadoMonitoreo = TramaMonitoreoModel.sEstadoINC;
     }
 

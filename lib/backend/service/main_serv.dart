@@ -149,6 +149,8 @@ class MainService {
       for (var oMonit in a) {
         /// (1)...
         String estadoMonitoreo = oMonit.estadoMonitoreo!;
+        int idEstadoMonitoreo = oMonit.idEstadoMonitoreo!;
+        oMonit.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoENV;
         oMonit.estadoMonitoreo = TramaMonitoreoModel.sEstadoENV;
 
         if (isOnlines) {
@@ -159,6 +161,7 @@ class MainService {
               /// (2)...
               TramaMonitoreoModel? oSend = oResp;
               oSend.id = oMonit.id;
+
               await Get.find<MainRepository>().insertMonitorDb(oSend);
 
               /// (3)...
@@ -166,6 +169,7 @@ class MainService {
             }
           } catch (oError) {
             oMonit.estadoMonitoreo = estadoMonitoreo;
+            oMonit.idEstadoMonitoreo = idEstadoMonitoreo;
 
             /// (4)...
             aError.add(oMonit);
@@ -421,7 +425,8 @@ class MainService {
             _log.e(oError);
           }
           if (oDataFind != null || oDataFind!.id == 0) {
-            if (oDataFind.estadoMonitoreo != TramaMonitoreoModel.sEstadoENV) {
+            if (oDataFind.idEstadoMonitoreo !=
+                TramaMonitoreoModel.sIdEstadoENV) {
               /*
                 Si el estado del monitoreo en la nube es diferente a la data local, 
                 se actualiza el registro local.

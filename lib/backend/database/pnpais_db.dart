@@ -567,8 +567,8 @@ class DatabasePnPais {
     final db = await instance.database;
     final orderBy = '${MonitorFields.idMonitoreo} ASC';
 
-    String sWhere = '${MonitorFields.estadoMonitoreo} = ?';
-    List<Object?> arg = [TramaMonitoreoModel.sEstadoPEN];
+    String sWhere = '${MonitorFields.idEstadoMonitoreo} = ?';
+    List<Object?> arg = [TramaMonitoreoModel.sIdEstadoPEN];
     if (o!.cui != "") {
       sWhere = '$sWhere AND ${MonitorFields.cui} = ?';
       arg.add(o.cui);
