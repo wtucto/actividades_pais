@@ -1,4 +1,5 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_detail_form_page.dart';
@@ -27,20 +28,70 @@ class ListViewMonitores extends StatefulWidget {
 }
 
 class _ListViewMonitoresState extends State<ListViewMonitores> {
-  Color getColorByStatus(String estadoMonitoreo) {
+  List<ComboItemModel> cbEMONI = [];
+  List<ComboItemModel> cbEAVAN = [];
+  List<ComboItemModel> cbPEJEC = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getMaestra();
+    setState(() {});
+  }
+
+  Color getColorByStatus(int idEstadoMonitoreo) {
     Color c = Colors.green;
-    switch (estadoMonitoreo) {
-      case TramaMonitoreoModel.sEstadoINC:
+    switch (idEstadoMonitoreo) {
+      case TramaMonitoreoModel.sIdEstadoINC:
         c = const Color.fromARGB(255, 255, 115, 96);
         break;
-      case TramaMonitoreoModel.sEstadoPEN:
+      case TramaMonitoreoModel.sIdEstadoPEN:
         c = const Color.fromARGB(249, 255, 152, 0);
         break;
-      case TramaMonitoreoModel.sEstadoENV:
+      case TramaMonitoreoModel.sIdEstadoENV:
         c = Colors.green;
         break;
     }
     return c;
+  }
+
+  Future<void> getMaestra() async {
+    try {
+      cbEMONI = await mainController.getListComboItemByType(
+          ComboItemModel.cbEMONI, 0, 0);
+
+      cbEAVAN = await mainController.getListComboItemByType(
+          ComboItemModel.cbEAVAN, 0, 0);
+      cbPEJEC = await mainController.getListComboItemByType(
+          ComboItemModel.cbPEJEC, 0, 0);
+    } catch (oErro) {}
+  }
+
+  String getDescripcionCombo(String tipo, int id) {
+    String respuesta = "";
+    if (tipo == "EM") {
+      for (var item in cbEMONI) {
+        if (int.parse(item.codigo1!) == id) {
+          respuesta = item.descripcion!;
+        }
+      }
+    }
+    if (tipo == "EA") {
+      for (var item in cbEAVAN) {
+        if (int.parse(item.codigo1!) == id) {
+          respuesta = item.descripcion!;
+        }
+      }
+    }
+
+    if (tipo == "PJ") {
+      for (var item in cbPEJEC) {
+        if (int.parse(item.codigo1!) == id) {
+          respuesta = item.descripcion!;
+        }
+      }
+    }
+    return respuesta;
   }
 
   bool isUpdate(String estadoMonitoreo) {
@@ -153,15 +204,18 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
               Row(
                 children: [
                   Chip(
-                      label: Text(
-                          widget.oMonitoreo[index].actividadPartidaEjecutada!),
+                      label: Text(getDescripcionCombo("PJ",
+                          widget.oMonitoreo[index].idAvanceFisicoPartida!)),
                       backgroundColor: Colors.green,
                       labelStyle: const TextStyle(color: Colors.white)),
                   const Padding(padding: EdgeInsets.all(10.0)),
                   Chip(
-                    label: Text(widget.oMonitoreo[index].estadoMonitoreo!),
+                    label: Text(
+                      getDescripcionCombo(
+                          "EM", widget.oMonitoreo[index].idEstadoMonitoreo!),
+                    ),
                     backgroundColor: getColorByStatus(
-                        widget.oMonitoreo[index].estadoMonitoreo!),
+                        widget.oMonitoreo[index].idEstadoMonitoreo!),
                     labelStyle: const TextStyle(color: Colors.white),
                   ),
                 ],
@@ -187,7 +241,10 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                                     ),
                                   ),
                                   Text(
-                                    widget.oMonitoreo[index].estadoAvance!,
+                                    getDescripcionCombo(
+                                        "EA",
+                                        widget
+                                            .oMonitoreo[index].idEstadoAvance!),
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,

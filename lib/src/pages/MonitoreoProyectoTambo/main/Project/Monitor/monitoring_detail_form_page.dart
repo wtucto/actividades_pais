@@ -68,13 +68,13 @@ class _MonitoringDetailNewEditPageState
 
   TramaMonitoreoModel oMonitoreo = TramaMonitoreoModel.empty();
 
-  String? _statusMonitor;
-  String? _statusAdvance;
-  String? _valuePartidaEje;
-  String? _valueProblemaIO;
-  String? _valueAlternSolucion;
-  String? _valueRiesgo;
-  String? _valueNivelRiesgo;
+  String? _statusMonitor; //Estado Monitoreo
+  String? _statusAdvance; // Estado Avance
+  String? _valuePartidaEje; //Partida Ejecutada
+  String? _valueProblemaIO; //Problema Identificado
+  String? _valueAlternSolucion; //Alternativa solucion
+  String? _valueRiesgo; // Riesgo Identificado
+  String? _valueNivelRiesgo; //Nivel Riesgo Identificado XXX
 
   final MainController mainController = MainController();
   ImageController controller = ImageController();
@@ -220,7 +220,7 @@ class _MonitoringDetailNewEditPageState
       _valueProblemaIO = "0";
       _valueAlternSolucion = "0";
       _valueRiesgo = "0";
-      _valueNivelRiesgo = "0";
+      _valueNivelRiesgo = widget.cbNRIES[0].descripcion;
     } catch (oError) {
       var sTitle = 'Error';
       var sMessage = oError.toString();
@@ -295,18 +295,29 @@ class _MonitoringDetailNewEditPageState
       _longitud.text = m.longitud!;
       _latitud.text = m.latitud!;
 
-      _statusMonitor = (m.idEstadoMonitoreo.toString() == ""
+      _statusMonitor =
+          (m.idEstadoMonitoreo.toString() == "" ? "0" : m.idEstadoMonitoreo)
+              .toString();
+      _statusAdvance = m.idEstadoAvance.toString() == "0"
           ? "0"
-          : m.idEstadoMonitoreo) as String?;
-      _statusAdvance = m.estadoAvance == "" ? "0" : m.estadoAvance;
-      _valuePartidaEje =
-          m.actividadPartidaEjecutada == "" ? "0" : m.actividadPartidaEjecutada;
-      _valueProblemaIO =
-          m.problemaIdentificado == "" ? "0" : m.problemaIdentificado;
-      _valueAlternSolucion =
-          m.alternativaSolucion == "" ? "0" : m.alternativaSolucion;
-      _valueRiesgo = m.riesgoIdentificado == "" ? "0" : m.riesgoIdentificado;
-      _valueNivelRiesgo = m.nivelRiesgo == "" ? "0" : m.nivelRiesgo;
+          : m.idEstadoAvance.toString();
+      _valuePartidaEje = m.idAvanceFisicoPartida.toString() == "0"
+          ? "0"
+          : m.idAvanceFisicoPartida.toString();
+
+      _valueProblemaIO = m.idProblemaIdentificado.toString() == "0"
+          ? "0"
+          : m.idProblemaIdentificado.toString();
+
+      _valueAlternSolucion = m.idAlternativaSolucion.toString() == ""
+          ? "0"
+          : m.idAlternativaSolucion.toString();
+      _valueRiesgo = m.idRiesgoIdentificado.toString() == ""
+          ? "0"
+          : m.idRiesgoIdentificado.toString();
+
+      _valueNivelRiesgo =
+          m.nivelRiesgo == "" ? widget.cbNRIES[0].descripcion : m.nivelRiesgo;
 
       List<String?> listaImage = [];
       listaImage.addAll([
@@ -1071,7 +1082,7 @@ class _MonitoringDetailNewEditPageState
               items: widget.cbNRIES.isNotEmpty
                   ? widget.cbNRIES.map((ComboItemModel map) {
                       return DropdownMenuItem<String>(
-                        value: map.codigo1.toString(),
+                        value: map.descripcion.toString(),
                         child: Row(
                           children: [
                             Expanded(
@@ -1269,9 +1280,16 @@ class _MonitoringDetailNewEditPageState
                                           int.parse(_valueProblemaIO!)),
                                       idRiesgoIdentificado: getValueSelected(
                                           int.parse(_valueRiesgo!)),
-                                      riesgoIdentificado: getValueSelected(
-                                              int.parse(_valueNivelRiesgo!))
-                                          .toString(),
+
+                                      nivelRiesgo: _valueNivelRiesgo!
+                                              .toUpperCase()
+                                              .contains("SELECCIONE UNA OPCIÓN")
+                                          ? ""
+                                          : _valueNivelRiesgo!,
+                                      // nivelRiesgo: getValueSelected(
+                                      //         int.parse(_valueNivelRiesgo!))
+                                      //     .toString(), //xx
+
                                       rol: oUser.rol,
                                       usuario: oUser.codigo,
                                     ));
@@ -1452,10 +1470,17 @@ class _MonitoringDetailNewEditPageState
                                             idRiesgoIdentificado:
                                                 getValueSelected(
                                                     int.parse(_valueRiesgo!)),
-                                            riesgoIdentificado:
-                                                getValueSelected(int.parse(
-                                                        _valueNivelRiesgo!))
-                                                    .toString(),
+
+                                            // nivelRiesgo: getValueSelected(
+                                            //         int.parse(
+                                            //             _valueNivelRiesgo!))
+                                            //     .toString(),
+                                            nivelRiesgo: _valueNivelRiesgo!
+                                                    .toUpperCase()
+                                                    .contains(
+                                                        "SELECCIONE UNA OPCIÓN")
+                                                ? ""
+                                                : _valueNivelRiesgo!,
                                             rol: oUser.rol,
                                             usuario: oUser.codigo,
                                           )
