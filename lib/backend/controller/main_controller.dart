@@ -290,8 +290,7 @@ class MainController extends GetxController {
       );
     }
 
-    if (o.estadoMonitoreo!.trim().toUpperCase() ==
-        TramaMonitoreoModel.sEstadoENV) {
+    if (o.idEstadoMonitoreo == TramaMonitoreoModel.sIdEstadoENV) {
       loading.value = false;
       return Future.error(
         'Imposible modificar un Monitoreo con el estado: ${TramaMonitoreoModel.sEstadoENV}',
@@ -354,8 +353,10 @@ class MainController extends GetxController {
     bool isComplete = await validateMonitor(o);
 
     if (isComplete) {
+      o.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoPEN;
       o.estadoMonitoreo = TramaMonitoreoModel.sEstadoPEN;
     } else {
+      o.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoINC;
       o.estadoMonitoreo = TramaMonitoreoModel.sEstadoINC;
     }
 
@@ -648,17 +649,18 @@ class MainController extends GetxController {
       isComplete = false;
     } else if (o.fechaTerminoEstimado!.trim() == '') {
       isComplete = false;
-    } else if (o.actividadPartidaEjecutada!.trim() == '') {
+    } /*else if (o.actividadPartidaEjecutada!.trim() == '') {
       isComplete = false;
-    } else if (o.alternativaSolucion!.trim() == '') {
+    }*/
+    else if (o.idAlternativaSolucion == 0) {
       isComplete = false;
     } else if (o.avanceFisicoAcumulado! == 0) {
       isComplete = false;
-    } else if (o.estadoAvance!.trim() == '') {
+    } else if (o.idEstadoAvance == 0) {
       isComplete = false;
     } else if (o.imgActividad!.trim() == '') {
       isComplete = false;
-    } else if (o.problemaIdentificado!.trim() == '') {
+    } else if (o.idProblemaIdentificado == 0) {
       isComplete = false;
     }
 
