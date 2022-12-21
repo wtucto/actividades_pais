@@ -94,16 +94,16 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
     return respuesta;
   }
 
-  bool isUpdate(String estadoMonitoreo) {
+  bool isUpdate(int idEstadoMonitoreo) {
     bool isUpdae = false;
-    switch (estadoMonitoreo) {
-      case TramaMonitoreoModel.sEstadoINC:
+    switch (idEstadoMonitoreo) {
+      case TramaMonitoreoModel.sIdEstadoINC:
         isUpdae = false;
         break;
-      case TramaMonitoreoModel.sEstadoPEN:
+      case TramaMonitoreoModel.sIdEstadoPEN:
         isUpdae = true;
         break;
-      case TramaMonitoreoModel.sEstadoENV:
+      case TramaMonitoreoModel.sIdEstadoENV:
         isUpdae = false;
         break;
       default:
@@ -111,16 +111,16 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
     return isUpdae;
   }
 
-  bool isEditDelete(String estadoMonitoreo) {
+  bool isEditDelete(int idEstadoMonitoreo) {
     bool isUpdae = false;
-    switch (estadoMonitoreo) {
-      case TramaMonitoreoModel.sEstadoINC:
+    switch (idEstadoMonitoreo) {
+      case TramaMonitoreoModel.sIdEstadoINC:
         isUpdae = true;
         break;
-      case TramaMonitoreoModel.sEstadoPEN:
+      case TramaMonitoreoModel.sIdEstadoPEN:
         isUpdae = true;
         break;
-      case TramaMonitoreoModel.sEstadoENV:
+      case TramaMonitoreoModel.sIdEstadoENV:
         isUpdae = false;
         break;
       default:
@@ -318,7 +318,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                       )
                     ]),
                   ),
-                  if (isUpdate(widget.oMonitoreo[index].estadoMonitoreo!))
+                  if (isUpdate(widget.oMonitoreo[index].idEstadoMonitoreo!))
                     GestureDetector(
                       onTap: () async {
                         final alert = AlertQuestion(
@@ -386,7 +386,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                     Row(
                       children: [
                         if (isEditDelete(
-                            widget.oMonitoreo[index].estadoMonitoreo!))
+                            widget.oMonitoreo[index].idEstadoMonitoreo!))
                           GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
@@ -453,7 +453,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                         ),
                         const SizedBox(width: 10),
                         if (isEditDelete(
-                            widget.oMonitoreo[index].estadoMonitoreo!))
+                            widget.oMonitoreo[index].idEstadoMonitoreo!))
                           GestureDetector(
                             onTap: () async {
                               final alert = AlertQuestion(
