@@ -1,9 +1,13 @@
+import 'dart:convert';
+
+import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import 'package:get/get.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class DetalleProyecto extends StatefulWidget {
   const DetalleProyecto({super.key, required this.datoProyecto});
@@ -14,7 +18,10 @@ class DetalleProyecto extends StatefulWidget {
 
 class _DetalleProyectoState extends State<DetalleProyecto>
     with TickerProviderStateMixin {
+  MainController mainController = MainController();
+  List<TramaMonitoreoModel> imagenMonitor = [];
   late TramaProyectoModel _oProject;
+  bool isOKImage = false;
 
   late final _numSnip;
   late final _cui;
@@ -48,6 +55,8 @@ class _DetalleProyectoState extends State<DetalleProyecto>
   double opacity2 = 0.0;
   double opacity3 = 0.0;
 
+  List<ImagenesCourrusel> _listImges = [];
+
   @override
   void initState() {
     animationController = AnimationController(
@@ -56,6 +65,7 @@ class _DetalleProyectoState extends State<DetalleProyecto>
         parent: animationController!,
         curve: const Interval(0, 1.0, curve: Curves.fastOutSlowIn)));
     setData();
+
     _oProject = widget.datoProyecto;
     _numSnip = TextEditingController(text: _oProject.numSnip);
     _cui = TextEditingController(text: _oProject.cui);
@@ -86,23 +96,90 @@ class _DetalleProyectoState extends State<DetalleProyecto>
     _codResidente = TextEditingController(text: _oProject.codResidente);
     _codSupervisor = TextEditingController(text: _oProject.codSupervisor);
     _codCrp = TextEditingController(text: _oProject.codCrp);
+
+    getImgMonitor(_oProject.numSnip.toString());
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Future<void> setData() async {
     animationController?.forward();
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
+    await Future<dynamic>.delayed(const Duration(milliseconds: 20000));
     setState(() {
       opacity1 = 1.0;
     });
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
+    await Future<dynamic>.delayed(const Duration(milliseconds: 20000));
     setState(() {
       opacity2 = 1.0;
     });
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
+    await Future<dynamic>.delayed(const Duration(milliseconds: 20000));
     setState(() {
       opacity3 = 1.0;
     });
+  }
+
+  Future<void> getImgMonitor(String snip) async {
+    imagenMonitor =
+        await mainController.getTramaMonitoreo(TramaMonitoreoModel(snip: snip));
+    int count = 1;
+    isOKImage = imagenMonitor.isEmpty ? true : false;
+    for (var item in imagenMonitor) {
+      List<ImagenesCourrusel> _lisImg = [
+        if (item.imgActividad1!.length > 10)
+          ImagenesCourrusel(
+              num: count,
+              descripcion: item.problemaIdentificado,
+              imagen: Image.memory(base64Decode(item.imgActividad1!))),
+        if (item.imgActividad2!.length > 10)
+          ImagenesCourrusel(
+              num: count,
+              descripcion: item.problemaIdentificado,
+              imagen: Image.memory(base64Decode(item.imgActividad2!))),
+        if (item.imgActividad3!.length > 10)
+          ImagenesCourrusel(
+              num: count,
+              descripcion: item.problemaIdentificado,
+              imagen: Image.memory(base64Decode(item.imgActividad3!))),
+        if (item.imgProblema1!.length > 10)
+          ImagenesCourrusel(
+              num: count,
+              descripcion: item.problemaIdentificado,
+              imagen: Image.memory(base64Decode(item.imgProblema1!))),
+        if (item.imgProblema2!.length > 10)
+          ImagenesCourrusel(
+              num: count,
+              descripcion: item.problemaIdentificado,
+              imagen: Image.memory(base64Decode(item.imgProblema2!))),
+        if (item.imgProblema3!.length > 10)
+          ImagenesCourrusel(
+              num: count,
+              descripcion: item.problemaIdentificado,
+              imagen: Image.memory(base64Decode(item.imgProblema3!))),
+        if (item.imgRiesgo1!.length > 10)
+          ImagenesCourrusel(
+              descripcion: item.problemaIdentificado,
+              num: count,
+              imagen: Image.memory(base64Decode(item.imgRiesgo1!))),
+        if (item.imgRiesgo2!.length > 10)
+          ImagenesCourrusel(
+              descripcion: item.problemaIdentificado,
+              num: count,
+              imagen: Image.memory(base64Decode(item.imgRiesgo2!))),
+        if (item.imgRiesgo3!.length > 10)
+          ImagenesCourrusel(
+              descripcion: item.problemaIdentificado,
+              num: count,
+              imagen: Image.memory(base64Decode(item.imgRiesgo3!)))
+      ];
+      _listImges.addAll(_lisImg);
+      count++;
+    }
+    isOKImage = _listImges.isEmpty ? true : false;
+    setState(() {});
   }
 
   Color getColorAvancefisico(dynamic oProyecto) {
@@ -192,44 +269,6 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 CarouselSlider(
-                                  items: [
-                                    Container(
-                                      margin: const EdgeInsets.all(8.0),
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        image: const DecorationImage(
-                                          image: NetworkImage(
-                                              "https://www.pais.gob.pe/backendsismonitor/public/storage/programaciones-git/temp/4Lfp9n78LrRQqc8rOQ246sWlRa2I5pCjtAEDBA9r.JPG"),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.all(8.0),
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        image: const DecorationImage(
-                                          image: NetworkImage(
-                                              "https://portal.andina.pe/EDPfotografia3/Thumbnail/2016/06/27/000363320W.jpg"),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.all(2.0),
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        image: const DecorationImage(
-                                          image: NetworkImage(
-                                              "https://www.pais.gob.pe/backendsismonitor/public/storage/programaciones-git/temp/Gfp7ZihgLWrYbc9BqY0cnDGC2zXdhpftyaXQUX0D.jpg"),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
                                   options: CarouselOptions(
                                     // height: 380.0,
                                     enlargeCenterPage: true,
@@ -241,6 +280,98 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                         const Duration(milliseconds: 1000),
                                     viewportFraction: 0.8,
                                   ),
+                                  items: _listImges.isNotEmpty
+                                      ? _listImges.map((ImagenesCourrusel map) {
+                                          return Builder(
+                                            builder: (BuildContext context) {
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child: Card(
+                                                  margin: const EdgeInsets.only(
+                                                    top: 10.0,
+                                                    bottom: 10.0,
+                                                  ),
+                                                  elevation: 6.0,
+                                                  shadowColor:
+                                                      const Color.fromARGB(
+                                                          255, 28, 117, 190),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30.0),
+                                                  ),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                      Radius.circular(30.0),
+                                                    ),
+                                                    child: Stack(
+                                                      children: [
+                                                        Image(
+                                                          image: (map.imagen)!
+                                                              .image,
+                                                          errorBuilder: (context,
+                                                                  url, error) =>
+                                                              const Icon(
+                                                                  Icons.image),
+                                                          fit: BoxFit.fill,
+                                                          width:
+                                                              double.infinity,
+                                                          height:
+                                                              double.infinity,
+                                                        ),
+                                                        const Center(
+                                                          child: Text(
+                                                            '',
+                                                            // map.descripcion!,
+                                                            style: TextStyle(
+                                                              fontSize: 24.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .black45,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        }).toList()
+                                      : [
+                                          Container(
+                                              padding:
+                                                  const EdgeInsets.all(10.0),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.white,
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                      color: Colors.black54,
+                                                      blurRadius: 15.0,
+                                                      offset: Offset(0.0, 0.75))
+                                                ],
+                                              ),
+                                              child: isOKImage
+                                                  ? const Center(
+                                                      child: Icon(
+                                                        Icons.image,
+                                                        size: 50,
+                                                      ),
+                                                    )
+                                                  : Center(
+                                                      child: Image.asset(
+                                                          'assets/loading_icon.gif'))),
+                                        ],
                                 ),
 
                                 /**
@@ -727,27 +858,18 @@ class MyListTitle extends StatelessWidget {
   }
 }
 
-class CustomAppBarShape extends ContinuousRectangleBorder {
-  final double multi;
-  const CustomAppBarShape({this.multi = 0.5});
-  @override
-  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    double height = rect.height;
-    double width = rect.width;
-    var path = Path();
-    path.lineTo(0, height + width * multi);
-    path.arcToPoint(
-      Offset(width * multi, height),
-      radius: Radius.circular(width * multi),
-    );
-    path.lineTo(width * (1 - multi), height);
-    path.arcToPoint(
-      Offset(width, height + width * multi),
-      radius: Radius.circular(width * multi),
-    );
-    path.lineTo(width, 0);
-    path.close();
+class ImagenesCourrusel {
+  int? num;
+  String? imagenB64;
+  Image? imagen;
+  String? descripcion;
 
-    return path;
-  }
+  ImagenesCourrusel.empty() {}
+
+  ImagenesCourrusel({
+    this.num,
+    this.imagenB64,
+    this.imagen,
+    this.descripcion,
+  });
 }
