@@ -1,12 +1,12 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
+import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/listView/ListaProyectos.dart';
+import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/search/project_search.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-SharedPreferences? _prefs;
 MainController mainController = MainController();
 
 class Dashboard extends StatefulWidget {
@@ -136,6 +136,16 @@ class _DashboardState extends State<Dashboard> {
         title: const Center(
           child: Text("Dashboard Monitor"),
         ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => HomePagePais(),
+                ));
+          },
+        ),
         //shape: const CustomAppBarShape(multi: 0.05),
         actions: [
           Padding(
@@ -152,7 +162,16 @@ class _DashboardState extends State<Dashboard> {
                 color: Color.fromARGB(255, 255, 255, 255),
               ),
             ),
-          )
+          ),
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: ProjectSMSearchDelegate(aProyecto: aProyectoAll),
+              );
+            },
+          ),
         ],
       ),
       body: Container(
@@ -231,9 +250,11 @@ class _DashboardState extends State<Dashboard> {
                                       //explode: true,
                                       //explodeIndex: 1,
                                       radius: '80%',
-                                      onPointTap: (ChartPointDetails details) {
-                                        //print(details.pointIndex);
-                                        //print(details.seriesIndex);
+                                      onPointTap:
+                                          (ChartPointDetails details) async {
+                                        BusyIndicator.show(context);
+                                        await Future<dynamic>.delayed(
+                                            const Duration(milliseconds: 1000));
                                         int iIndex = details.pointIndex! + 1;
                                         switch (iIndex) {
                                           case 1: /* MUL ALTO*/
@@ -251,6 +272,7 @@ class _DashboardState extends State<Dashboard> {
                                           default:
                                         }
                                         setState(() {});
+                                        BusyIndicator.hide(context);
                                       },
                                     ),
                                   ],
@@ -263,29 +285,41 @@ class _DashboardState extends State<Dashboard> {
                               const SizedBox(height: 15),
                               Container(
                                 padding: const EdgeInsets.all(10),
-                                child: const Text(
-                                  "PROYECTOS TAMBOS",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Color.fromRGBO(0, 116, 227, 1),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w800,
-                                    fontFamily: 'Roboto-Bold',
+                                child: const Center(
+                                  child: Text(
+                                    "PROYECTOS TAMBOS",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(0, 116, 227, 1),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w800,
+                                      fontFamily: 'Roboto-Bold',
+                                    ),
                                   ),
                                 ),
                               ),
-                              ListView.builder(
-                                itemCount: aProyecto.length,
-                                physics: const ClampingScrollPhysics(),
-                                shrinkWrap: true,
-                                padding: const EdgeInsets.all(10),
-                                itemBuilder: (context, index) {
-                                  return ListaProyectos(
-                                    context: context,
-                                    oProyecto: aProyecto[index],
-                                  );
-                                },
-                              ),
+                              aProyecto.isNotEmpty
+                                  ? ListView.builder(
+                                      itemCount: aProyecto.length,
+                                      physics: const ClampingScrollPhysics(),
+                                      shrinkWrap: true,
+                                      padding: const EdgeInsets.all(10),
+                                      itemBuilder: (context, index) {
+                                        return ListaProyectos(
+                                          context: context,
+                                          oProyecto: aProyecto[index],
+                                        );
+                                      },
+                                    )
+                                  : Container(
+                                      padding: const EdgeInsets.only(top: 40),
+                                      child: const Center(
+                                        child: CircularProgressIndicator(
+                                          color:
+                                              Color.fromARGB(255, 0, 102, 255),
+                                        ),
+                                      ),
+                                    ),
                             ],
                           );
                         },
@@ -307,29 +341,4 @@ class ChartData {
   final String x;
   final int y;
   final Color color;
-}
-
-class CustomAppBarShape extends ContinuousRectangleBorder {
-  final double multi;
-  const CustomAppBarShape({this.multi = 0.5});
-  @override
-  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    double height = rect.height;
-    double width = rect.width;
-    var path = Path();
-    path.lineTo(0, height + width * multi);
-    path.arcToPoint(
-      Offset(width * multi, height),
-      radius: Radius.circular(width * multi),
-    );
-    path.lineTo(width * (1 - multi), height);
-    path.arcToPoint(
-      Offset(width, height + width * multi),
-      radius: Radius.circular(width * multi),
-    );
-    path.lineTo(width, 0);
-    path.close();
-
-    return path;
-  }
 }

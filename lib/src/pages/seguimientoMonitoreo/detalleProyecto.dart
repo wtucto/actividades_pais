@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
+import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/dashboard.dart';
+import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/gallery/image_view.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
@@ -101,25 +103,15 @@ class _DetalleProyectoState extends State<DetalleProyecto>
     super.initState();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   Future<void> setData() async {
     animationController?.forward();
     await Future<dynamic>.delayed(const Duration(milliseconds: 20000));
-    setState(() {
-      opacity1 = 1.0;
-    });
+    opacity1 = 1.0;
     await Future<dynamic>.delayed(const Duration(milliseconds: 20000));
-    setState(() {
-      opacity2 = 1.0;
-    });
+
+    opacity2 = 1.0;
     await Future<dynamic>.delayed(const Duration(milliseconds: 20000));
-    setState(() {
-      opacity3 = 1.0;
-    });
+    opacity3 = 1.0;
   }
 
   Future<void> getImgMonitor(String snip) async {
@@ -236,6 +228,16 @@ class _DetalleProyectoState extends State<DetalleProyecto>
         title: Center(
           child: Text(widget.datoProyecto.tambo!),
         ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => Dashboard(),
+                ));
+          },
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -286,59 +288,47 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                             builder: (BuildContext context) {
                                               return Padding(
                                                 padding:
-                                                    const EdgeInsets.all(5.0),
-                                                child: Card(
-                                                  margin: const EdgeInsets.only(
-                                                    top: 10.0,
-                                                    bottom: 10.0,
-                                                  ),
-                                                  elevation: 6.0,
-                                                  shadowColor:
-                                                      const Color.fromARGB(
-                                                          255, 28, 117, 190),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            30.0),
-                                                  ),
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                      Radius.circular(30.0),
-                                                    ),
-                                                    child: Stack(
-                                                      children: [
-                                                        Image(
-                                                          image: (map.imagen)!
-                                                              .image,
-                                                          errorBuilder: (context,
-                                                                  url, error) =>
-                                                              const Icon(
-                                                                  Icons.image),
-                                                          fit: BoxFit.fill,
-                                                          width:
-                                                              double.infinity,
-                                                          height:
-                                                              double.infinity,
-                                                        ),
-                                                        const Center(
-                                                          child: Text(
-                                                            '',
-                                                            // map.descripcion!,
-                                                            style: TextStyle(
-                                                              fontSize: 24.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              backgroundColor:
-                                                                  Colors
-                                                                      .black45,
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                          ),
-                                                        ),
+                                                    const EdgeInsets.all(10.0),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (BuildContext
+                                                                context) =>
+                                                            ImageView(
+                                                                datoProyecto: widget
+                                                                    .datoProyecto,
+                                                                galleria:
+                                                                    map.imagen),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      color: Colors.white,
+                                                      boxShadow: const [
+                                                        BoxShadow(
+                                                            color:
+                                                                Colors.black54,
+                                                            blurRadius: 15.0,
+                                                            offset: Offset(
+                                                                0.0, 0.75))
                                                       ],
+                                                    ),
+                                                    child: Image(
+                                                      image:
+                                                          (map.imagen)!.image,
+                                                      errorBuilder: (context,
+                                                              url, error) =>
+                                                          const Icon(
+                                                              Icons.image),
+                                                      fit: BoxFit.fill,
+                                                      width: double.infinity,
+                                                      height: double.infinity,
                                                     ),
                                                   ),
                                                 ),
@@ -347,9 +337,9 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                           );
                                         }).toList()
                                       : [
-                                          Container(
-                                              padding:
-                                                  const EdgeInsets.all(10.0),
+                                          Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Container(
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
@@ -370,7 +360,10 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                                     )
                                                   : Center(
                                                       child: Image.asset(
-                                                          'assets/loading_icon.gif'))),
+                                                          'assets/loading_icon.gif'),
+                                                    ),
+                                            ),
+                                          ),
                                         ],
                                 ),
 

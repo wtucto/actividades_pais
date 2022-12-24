@@ -135,24 +135,6 @@ class ListaProyectos extends StatelessWidget {
                     ],
                   ),
                 ),
-                /*Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [],
-                        ),
-                        Text(
-                          oProyecto.cui!,
-                          style: const TextStyle(
-                            color: Color.fromARGB(255, 13, 0, 255),
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                  )*/
               ],
             ),
             const SizedBox(height: 10),
