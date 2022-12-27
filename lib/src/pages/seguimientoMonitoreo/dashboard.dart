@@ -25,6 +25,7 @@ class _DashboardState extends State<Dashboard> {
 
   List<TramaProyectoModel> aProyecto = [];
   ScrollController scrollController = ScrollController();
+  final _txtSearch = TextEditingController();
 
   @override
   void initState() {
@@ -134,7 +135,7 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       appBar: AppBar(
         title: const Center(
-          child: Text("Dashboard Monitor"),
+          child: Text("Dashboard Proyectos"),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -163,16 +164,48 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: ProjectSMSearchDelegate(aProyecto: aProyectoAll),
-              );
-            },
-          ),
+          // IconButton(
+          //   icon: const Icon(Icons.search),
+          //   onPressed: () {
+          //     showSearch(
+          //       context: context,
+          //       delegate: ProjectSMSearchDelegate(aProyecto: aProyectoAll),
+          //     );
+          //   },
+          // ),
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: Container(
+            height: 48,
+            margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.white,
+              border: Border.all(color: Colors.blue),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: TextField(
+              controller: _txtSearch,
+              decoration: InputDecoration(
+                icon: const Icon(Icons.search),
+                suffixIcon: _txtSearch.text.isNotEmpty
+                    ? GestureDetector(
+                        child: const Icon(Icons.close),
+                        onTap: () {
+                          _txtSearch.clear();
+                          searhProyectos("");
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
+                      )
+                    : null,
+                hintText: 'Buscar Tambo',
+                border: InputBorder.none,
+              ),
+              onChanged: searhProyectos,
+            ),
+          ),
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -333,6 +366,19 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
     );
+  }
+
+  void searhProyectos(String query) {
+    final suggestions = aProyectoAll.where((item) {
+      final nombre = item.tambo!.toLowerCase();
+      final input = query.toLowerCase();
+      return nombre.contains(input);
+    }).toList();
+    if (suggestions.isEmpty) {
+      aProyecto = aProyectoAll;
+    } else {
+      setState(() => aProyecto = suggestions);
+    }
   }
 }
 

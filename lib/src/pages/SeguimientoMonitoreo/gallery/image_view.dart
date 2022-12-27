@@ -4,11 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
 class ImageView extends StatefulWidget {
-  ImageView({
-    super.key,
-    this.galleria,
-    required this.datoProyecto,
-  });
+  ImageView({super.key, this.galleria, required this.datoProyecto});
   Image? galleria;
   TramaProyectoModel datoProyecto;
   @override
@@ -16,8 +12,12 @@ class ImageView extends StatefulWidget {
 }
 
 class _ImageViewState extends State<ImageView> {
+  List imageList = [];
   @override
   Widget build(BuildContext context) {
+    imageList = [
+      widget.galleria!.image,
+    ];
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -36,8 +36,28 @@ class _ImageViewState extends State<ImageView> {
         ),
       ),
       body: Container(
-        child: PhotoView(imageProvider: widget.galleria!.image),
+        color: Colors.white,
+        child: PhotoView(
+          backgroundDecoration: const BoxDecoration(color: Colors.white),
+          enableRotation: true,
+          imageProvider: widget.galleria!.image,
+          maxScale: 200.0,
+        ),
       ),
+      /* body: PhotoViewGallery.builder(
+        itemCount: imageList.length,
+        builder: (context, index) {
+          return PhotoViewGalleryPageOptions(
+            imageProvider: imageList[index],
+            minScale: PhotoViewComputedScale.contained * 0.8,
+            maxScale: PhotoViewComputedScale.covered * 2,
+          );
+        },
+        scrollPhysics: BouncingScrollPhysics(),
+        backgroundDecoration: BoxDecoration(
+          color: Theme.of(context).canvasColor,
+        ),
+      ), */
     );
   }
 }

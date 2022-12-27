@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:photo_view/photo_view.dart';
 
 class DetalleProyecto extends StatefulWidget {
   const DetalleProyecto({super.key, required this.datoProyecto});
@@ -57,10 +58,11 @@ class _DetalleProyectoState extends State<DetalleProyecto>
   double opacity2 = 0.0;
   double opacity3 = 0.0;
 
-  List<ImagenesCourrusel> _listImges = [];
+  List<ImagenesCourrusel> listImges = [];
 
   @override
   void initState() {
+    super.initState();
     animationController = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
     animation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
@@ -100,7 +102,6 @@ class _DetalleProyectoState extends State<DetalleProyecto>
     _codCrp = TextEditingController(text: _oProject.codCrp);
 
     getImgMonitor(_oProject.numSnip.toString());
-    super.initState();
   }
 
   Future<void> setData() async {
@@ -167,10 +168,10 @@ class _DetalleProyectoState extends State<DetalleProyecto>
               num: count,
               imagen: Image.memory(base64Decode(item.imgRiesgo3!)))
       ];
-      _listImges.addAll(_lisImg);
+      listImges.addAll(_lisImg);
       count++;
     }
-    isOKImage = _listImges.isEmpty ? true : false;
+    isOKImage = listImges.isEmpty ? true : false;
     setState(() {});
   }
 
@@ -232,10 +233,11 @@ class _DetalleProyectoState extends State<DetalleProyecto>
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => Dashboard(),
-                ));
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => Dashboard(),
+              ),
+            );
           },
         ),
         actions: [
@@ -282,8 +284,8 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                         const Duration(milliseconds: 1000),
                                     viewportFraction: 0.8,
                                   ),
-                                  items: _listImges.isNotEmpty
-                                      ? _listImges.map((ImagenesCourrusel map) {
+                                  items: listImges.isNotEmpty
+                                      ? listImges.map((ImagenesCourrusel map) {
                                           return Builder(
                                             builder: (BuildContext context) {
                                               return Padding(
@@ -299,8 +301,8 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                                             ImageView(
                                                                 datoProyecto: widget
                                                                     .datoProyecto,
-                                                                galleria:
-                                                                    map.imagen),
+                                                                galleria: map
+                                                                    .imagen!),
                                                       ),
                                                     );
                                                   },
