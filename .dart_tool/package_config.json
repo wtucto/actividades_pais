@@ -422,8 +422,8 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "open_file",
-      "rootUri": "file:///Users/egarciti/Documents/Projects/flutter/.pub-cache/hosted/pub.dartlang.org/open_file-3.2.1",
+      "name": "open_file_safe",
+      "rootUri": "file:///Users/egarciti/Documents/Projects/flutter/.pub-cache/hosted/pub.dartlang.org/open_file_safe-3.2.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -508,36 +508,6 @@
     {
       "name": "percent_indicator",
       "rootUri": "file:///Users/egarciti/Documents/Projects/flutter/.pub-cache/hosted/pub.dartlang.org/percent_indicator-4.2.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
-      "name": "permission_handler",
-      "rootUri": "file:///Users/egarciti/Documents/Projects/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-10.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.15"
-    },
-    {
-      "name": "permission_handler_android",
-      "rootUri": "file:///Users/egarciti/Documents/Projects/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_android-10.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.15"
-    },
-    {
-      "name": "permission_handler_apple",
-      "rootUri": "file:///Users/egarciti/Documents/Projects/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_apple-9.0.7",
-      "packageUri": "lib/",
-      "languageVersion": "2.15"
-    },
-    {
-      "name": "permission_handler_platform_interface",
-      "rootUri": "file:///Users/egarciti/Documents/Projects/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_platform_interface-3.9.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.14"
-    },
-    {
-      "name": "permission_handler_windows",
-      "rootUri": "file:///Users/egarciti/Documents/Projects/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_windows-0.1.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -812,7 +782,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2022-12-19T00:40:13.559003Z",
+  "generated": "2022-12-24T00:19:06.397702Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }

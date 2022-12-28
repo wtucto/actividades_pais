@@ -16,7 +16,7 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 ## Create Project
-flutter create --org com.pnpais.sifpnpais actividades_pais
+flutter create --org com.pnpais.sifpnpais.app actividades_pais
 
 ## Git Ignore
 Clear cache
@@ -116,7 +116,7 @@ flutter pub upgrade --major-versions -> Actualiza dependencias a la ultima versi
 ## Cambiar el NameSpace y Nombre del proyecto  (--org)
 ```sh
 flutter pub global activate rename  (instalar)
-flutter pub global run rename --bundleId com.pnpais.sifpnpais (Cambia la --org)
+flutter pub global run rename --bundleId com.pnpais.sifpnpais.app (Cambia la --org)
 flutter pub global run rename --appname "SIFPNPAIS" (Cambia en nombre)
 ```
 

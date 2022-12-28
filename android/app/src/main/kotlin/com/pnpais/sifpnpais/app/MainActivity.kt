@@ -1,4 +1,4 @@
-package com.pnpais.sifpnpais
+package com.pnpais.sifpnpais.app
 
 import io.flutter.embedding.android.FlutterActivity
 
