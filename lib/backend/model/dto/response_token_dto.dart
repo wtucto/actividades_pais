@@ -37,23 +37,23 @@ class RespTokenDto {
 
   static RespTokenDto fromJson(Map<String, Object?> json) => RespTokenDto(
         id: _getInt(json[RespTokenFields.id]),
-        token: _getString(json[RespTokenFields.name]),
-        name: _getString(json[RespTokenFields.token]),
+        token: _getString(json[RespTokenFields.token]),
+        name: _getString(json[RespTokenFields.name]),
         rol: _getString(json[RespTokenFields.rol]),
       );
 
   Map<String, dynamic> toJson() => {
         RespTokenFields.id: id,
-        RespTokenFields.name: token,
-        RespTokenFields.token: name,
+        RespTokenFields.token: token,
+        RespTokenFields.name: name,
         RespTokenFields.rol: rol,
       };
 
   static Map<String, dynamic> toJsonObject(RespTokenDto o) {
     return {
       RespTokenFields.id: o.id,
-      RespTokenFields.name: o.token,
-      RespTokenFields.token: o.name,
+      RespTokenFields.token: o.token,
+      RespTokenFields.name: o.name,
       RespTokenFields.rol: o.rol,
     };
   }

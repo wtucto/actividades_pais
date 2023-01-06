@@ -74,12 +74,14 @@ class Http {
           headers: headers,
         ),
         queryParameters: queryParameters,
-        data: formData != null ? FormData.fromMap(formData) : data,
+        data: formData != null ? FormData.fromMap(formData) : json.encode(data),
       );
 
       var oData;
       try {
-        oData = response.data["response"];
+        oData = response.data["response"] == null
+            ? response.data
+            : response.data["response"];
       } catch (oError) {
         oData = jsonDecode(response.data);
       }

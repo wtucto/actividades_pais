@@ -2,7 +2,8 @@
 
 import 'dart:async';
 
-import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
+import 'package:actividades_pais/backend/model/dto/login_dto.dart';
+import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/configuracion/ResetContrasenia.dart';
@@ -177,78 +178,107 @@ class __FormState extends State<_Form> {
   final emailCtrl = TextEditingController(text: "");
   final passCtrl = TextEditingController();
   final passCtrl2 = TextEditingController();
+  int tipoUsuario = 1;
 
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    Future LoginUser(usn, psw, rpsw) async {
-      try {
-        var prefixUserDemo = 'D';
+    Future LoginUser(usn, psw, rpsw, tipoUser) async {
+      if (tipoUser == 1) {
+        try {
+          var prefixUserDemo = 'D';
 
-        var res = await DatabasePr.db
-            .getLoginUser(dni: int.parse(usn), contrasenia: psw);
-        if (res.isNotEmpty) {
-          ConfigPersonal oUserInfo = res[0];
-          List<String> aUnidad = [];
-          String codigo = '';
-          List<String> aPass = [];
-          for (var u in res) {
-            aUnidad.add(u.unidad);
-            aPass.add(u.contrasenia);
-            if (u.unidad == 'UPS') codigo = u.codigo;
-          }
-
-          if (codigo == '') {
-            if (!aUnidad.contains('UPS')) {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => HomePagePais()),
-              );
-              return;
+          var res = await DatabasePr.db
+              .getLoginUser(dni: int.parse(usn), contrasenia: psw);
+          if (res.isNotEmpty) {
+            ConfigPersonal oUserInfo = res[0];
+            List<String> aUnidad = [];
+            String codigo = '';
+            List<String> aPass = [];
+            for (var u in res) {
+              aUnidad.add(u.unidad);
+              aPass.add(u.contrasenia);
+              if (u.unidad == 'UPS') codigo = u.codigo;
             }
-          } else {
-            UserModel oUser;
-            try {
-              oUser = await mainController.getUserLogin(codigo, '');
 
-              if ((oUser.codigo == codigo && (aPass.contains(psw)))) {
-                check = _prefs!.getBool("check");
-                if (_prefs != null && check == true) {
-                  _prefs!.setString("clave", oUser.clave!);
-                } else {
-                  _prefs!.setString("clave", "");
-                }
-
-                _prefs!.setString("nombres", oUser.nombres!);
-                _prefs!.setString("codigo", oUser.codigo!);
-                _prefs!.setString("rol", oUser.rol!);
-                _prefs!.setString("dni", oUserInfo.numeroDni.toString());
-
+            if (codigo == '') {
+              if (!aUnidad.contains('UPS')) {
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (_) => HomePagePais(),
-                  ),
+                  MaterialPageRoute(builder: (_) => HomePagePais()),
                 );
                 return;
-              } else {
+              }
+            } else {
+              UserModel oUser;
+              try {
+                oUser = await mainController.getUserLogin(codigo, '');
+
+                if ((oUser.codigo == codigo && (aPass.contains(psw)))) {
+                  check = _prefs!.getBool("check");
+                  if (_prefs != null && check == true) {
+                    _prefs!.setString("clave", oUser.clave!);
+                  } else {
+                    _prefs!.setString("clave", "");
+                  }
+
+                  _prefs!.setString("nombres", oUser.nombres!);
+                  _prefs!.setString("codigo", oUser.codigo!);
+                  _prefs!.setString("rol", oUser.rol!);
+                  _prefs!.setString("dni", oUserInfo.numeroDni.toString());
+
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => HomePagePais(),
+                    ),
+                  );
+                  return;
+                } else {
+                  mostrarAlerta(
+                    context,
+                    'Login incorrecto',
+                    'Revise sus credenciales nuevamente',
+                  );
+                }
+              } catch (oError) {
                 mostrarAlerta(
                   context,
                   'Login incorrecto',
-                  'Revise sus credenciales nuevamente',
+                  oError.toString(),
                 );
               }
-            } catch (oError) {
-              mostrarAlerta(
-                context,
-                'Login incorrecto',
-                oError.toString(),
-              );
             }
           }
+        } catch (oError) {
+          mostrarAlerta(context, 'Login incorrecto',
+              'Revise sus credenciales nuevamente');
         }
-      } catch (oError) {
-        mostrarAlerta(
-            context, 'Login incorrecto', 'Revise sus credenciales nuevamente');
+        //usuario Jefe
+      } else {
+        try {
+          LoginDto paramUser = LoginDto(
+              username: usn, password: psw, codigo: tipoUser.toString());
+          RespTokenDto resp = await mainController.login(paramUser);
+          if (resp.token!.isNotEmpty) {
+            _prefs!.setString("nombres", resp.name!);
+            _prefs!.setString("codigo", resp.id.toString());
+            _prefs!.setString("rol", resp.rol!);
+            _prefs!.setString("dni", usn);
+            _prefs!.setString("token", resp.token!);
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (_) => HomePagePais(),
+              ),
+            );
+            return;
+          } else {
+            mostrarAlerta(context, 'Login incorrecto',
+                'Revise sus credenciales nuevamente');
+          }
+        } catch (oError) {
+          mostrarAlerta(context, 'Login incorrecto',
+              'Revise sus credenciales nuevamente');
+        }
       }
 
       return;
@@ -259,6 +289,31 @@ class __FormState extends State<_Form> {
       padding: EdgeInsets.symmetric(horizontal: w / 16),
       child: Column(
         children: <Widget>[
+          DropdownButtonFormField(
+            items: const <DropdownMenuItem<int>>[
+              DropdownMenuItem<int>(
+                value: 1,
+                child: Text("USUARIO"),
+              ),
+              DropdownMenuItem<int>(
+                value: 2,
+                child: Text("JEFE"),
+              ),
+            ],
+            value: tipoUsuario,
+            onChanged: (value) {
+              setState(() {
+                tipoUsuario = value!;
+              });
+            },
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.supervised_user_circle),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
           CustomInput(
             icon: Icons.supervised_user_circle,
             placeholder: 'Ingrerse su DNI',
@@ -296,7 +351,8 @@ class __FormState extends State<_Form> {
           BotonLog(
             text: 'Ingresar',
             onPressed: () async {
-              await LoginUser(emailCtrl.text, passCtrl.text, passCtrl.text);
+              await LoginUser(
+                  emailCtrl.text, passCtrl.text, passCtrl.text, tipoUsuario);
             },
           ),
           CheckboxListTile(

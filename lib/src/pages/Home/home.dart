@@ -21,8 +21,11 @@ import 'package:actividades_pais/src/pages/Pias/ListaReportesPias.dart';
 import 'package:actividades_pais/src/pages/configuracion/Asistencia.dart';
 import 'package:actividades_pais/src/pages/configuracion/pantallainicio.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'appbar/AppBar.dart';
+
+SharedPreferences? _prefs;
 
 class HomePagePais extends StatefulWidget {
   static String route = '/';
@@ -47,6 +50,7 @@ class _HomePagePais extends State<HomePagePais> {
   var tipoPlataforma = '';
   var campaniaCod = '';
   var modalidad = '';
+  String? token;
 
   String long = '';
   String lat = '';
@@ -129,11 +133,17 @@ class _HomePagePais extends State<HomePagePais> {
   Future mostrarNombre() async {
     DatabasePr.db.initDB();
     var abc = await DatabasePr.db.getAllConfigPersonal();
-    if (abc.isNotEmpty) {
+    _prefs = await SharedPreferences.getInstance();
+    token = _prefs!.getString("token");
+    if (abc.isNotEmpty && token == null) {
       setState(() {
         _nombrePersona = abc[abc.length - 1].nombres.toUpperCase();
         _apellidosPersona =
             '${abc[abc.length - 1].apellidoPaterno.toUpperCase()} ${abc[abc.length - 1].apellidoMaterno.toUpperCase()}';
+      });
+    } else {
+      setState(() {
+        _nombrePersona = _prefs!.getString("nombres")!;
       });
     }
   }
@@ -173,7 +183,7 @@ class _HomePagePais extends State<HomePagePais> {
         ),
       );
     } else {
-      if (aUnidad.contains("UAGS")) {
+      if (aUnidad.contains("UAGS") && token == null) {
         if (tipoPlataforma == 'TAMBO') {
           aHomeOptions.add(
             HomeOptions(
@@ -216,34 +226,36 @@ class _HomePagePais extends State<HomePagePais> {
     }
 
     if (aUnidad.contains("UPS")) {
-      aHomeOptions.add(
-        HomeOptions(
-          code: 'OPT1005',
-          name: 'TileProyectTambo'.tr,
-          types: const ['Ver'],
-          image: icon5,
-          color: lightBlue,
-        ),
-      );
-
-      aHomeOptions.add(
-        HomeOptions(
-          code: 'OPT1007',
-          name: 'SEGUIMINETO Y MONITOREO',
-          types: const ['Ver'],
-          image: icon1,
-          color: lightBlue,
-        ),
-      );
-      aHomeOptions.add(
-        HomeOptions(
-          code: 'OPT1008',
-          name: 'TAMBOOK',
-          types: const ['Ver'],
-          image: icon8,
-          color: lightBlue,
-        ),
-      );
+      if (token != null) {
+        aHomeOptions.add(
+          HomeOptions(
+            code: 'OPT1007',
+            name: 'SEGUIMINETO Y MONITOREO',
+            types: const ['Ver'],
+            image: icon1,
+            color: lightBlue,
+          ),
+        );
+        aHomeOptions.add(
+          HomeOptions(
+            code: 'OPT1008',
+            name: 'TAMBOOK',
+            types: const ['Ver'],
+            image: icon8,
+            color: lightBlue,
+          ),
+        );
+      } else {
+        aHomeOptions.add(
+          HomeOptions(
+            code: 'OPT1005',
+            name: 'TileProyectTambo'.tr,
+            types: const ['Ver'],
+            image: icon5,
+            color: lightBlue,
+          ),
+        );
+      }
     }
 
     void _intervencionOptions(BuildContext context) {
@@ -441,7 +453,7 @@ class _HomePagePais extends State<HomePagePais> {
       body: Stack(
         children: <Widget>[
           AppBarPais(
-            datoUt: unidadTerritorial,
+            datoUt: token == null ? unidadTerritorial : '',
             plataforma: variable,
             nombre: '$_nombrePersona $_apellidosPersona',
             snip: snip,
