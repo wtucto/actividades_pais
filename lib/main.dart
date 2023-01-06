@@ -31,8 +31,8 @@ void main() async {
   final mainApi = GetIt.instance<PnPaisApi>();
   final mainApi2 = GetIt.instance<PnPaisApi2>();
   final mainDb = await DatabasePnPais.instance;
-  final mainRepo = MainRepository(mainApi, mainDb);
-  final mainRepo2 = Main2Repository(mainApi2, mainDb);
+  final mainRepo = MainRepo(mainApi, mainDb);
+  final mainRepo2 = Main2Repo(mainApi2, mainDb);
   final mainServ = MainService();
   Get.put(mainRepo);
   Get.put(mainRepo2);

@@ -1,6 +1,5 @@
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
-import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
@@ -9,13 +8,13 @@ import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart'
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:logger/logger.dart';
 
-class MainRepository {
+class MainRepo {
   final Logger _log = Logger();
 
   final DatabasePnPais _dbPnPais;
   final PnPaisApi _pnPaisApi;
 
-  MainRepository(this._pnPaisApi, this._dbPnPais);
+  MainRepo(this._pnPaisApi, this._dbPnPais);
 
   Future<List<ComboItemModel>> getAllComboItemByType(
     String search,

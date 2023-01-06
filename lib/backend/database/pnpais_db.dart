@@ -893,7 +893,7 @@ class DatabasePnPais {
               .toList();
 
           for (var oProg in aProg) {
-            oProg.registroEntidadActividades = aFormat
+            oProg.aTambo = aFormat
                 .where(
                   (e) => (e.idProgramacionIntervenciones ==
                       oProg.idProgramacionIntervenciones),

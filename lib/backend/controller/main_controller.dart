@@ -1,9 +1,14 @@
 import 'package:actividades_pais/backend/model/atenciones_model.dart';
+import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
+import 'package:actividades_pais/backend/model/dto/login_dto.dart';
+import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
+import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/util/check_geolocator.dart';
@@ -765,6 +770,75 @@ class MainController extends GetxController {
     ///Obtiene los registros de la DB Local
     List<TamboModel> aFind = await Get.find<MainService>().searchTambo(search);
     return aFind;
+  }
+
+  Future<RespTokenDto> login(
+    LoginDto oBody,
+  ) async {
+    RespTokenDto oResp = await Get.find<MainService>().login(oBody);
+    return oResp;
+  }
+
+  Future<List<CombosDto>> getTipoUsuario() async {
+    List<CombosDto> aResp = await Get.find<MainService>().getTipoUsuario();
+    return aResp;
+  }
+
+  Future<List<CombosDto>> getSector(int key) async {
+    List<CombosDto> aResp = await Get.find<MainService>().getSector(key);
+    return aResp;
+  }
+
+  Future<List<CombosDto>> getPrograma(int key) async {
+    List<CombosDto> aResp = await Get.find<MainService>().getPrograma(key);
+    return aResp;
+  }
+
+  Future<List<CombosDto>> getDocAcredita() async {
+    List<CombosDto> oResp = await Get.find<MainService>().getDocAcredita();
+    return oResp;
+  }
+
+  Future<List<CombosDto>> getArticulacionOrientada() async {
+    List<CombosDto> aResp =
+        await Get.find<MainService>().getArticulacionOrientada();
+    return aResp;
+  }
+
+  Future<List<CombosDto>> getAccion() async {
+    List<CombosDto> aResp = await Get.find<MainService>().getAccion();
+    return aResp;
+  }
+
+  Future<List<CombosDto>> getTipoActividad() async {
+    List<CombosDto> oResp = await Get.find<MainService>().getTipoActividad();
+    return oResp;
+  }
+
+  Future<ProgramRespDto> sendCoordinacionArticulacion(
+      ProgActModel oBody) async {
+    ProgramRespDto oResp =
+        await Get.find<MainService>().sendCoordinacionArticulacion(oBody);
+    return oResp;
+  }
+
+  Future<ProgramRespDto> sendMonitoreoSupervision(
+    ProgActModel oBody,
+  ) async {
+    ProgramRespDto oResp =
+        await Get.find<MainService>().sendMonitoreoSupervision(
+      oBody,
+    );
+    return oResp;
+  }
+
+  Future<ProgramRespDto> sendActividadesPNPAIS(
+    ProgActModel oBody,
+  ) async {
+    ProgramRespDto oResp = await Get.find<MainService>().sendActividadesPNPAIS(
+      oBody,
+    );
+    return oResp;
   }
 
   Future<List<AtencionesModel>> getResumeAtenciones() async {

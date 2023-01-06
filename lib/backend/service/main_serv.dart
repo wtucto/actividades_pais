@@ -1,16 +1,23 @@
+import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
+import 'package:actividades_pais/backend/model/dto/login_dto.dart';
+import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
+import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/repository/main2_repo.dart';
 import 'package:actividades_pais/util/check_connection.dart';
 import 'package:get/get.dart';
 import 'package:actividades_pais/backend/repository/main_repo.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainService {
+  SharedPreferences? _prefs;
   final Logger _log = Logger();
 
   /// Returns `true` si existe conexion a internet por wifi/Mobile.
@@ -29,8 +36,8 @@ class MainService {
     int? offset,
   ) async {
     ///Obtiene los registros de la DB Local
-    List<ComboItemModel> aFind = await Get.find<MainRepository>()
-        .getAllComboItemByType(search, limit, offset);
+    List<ComboItemModel> aFind =
+        await Get.find<MainRepo>().getAllComboItemByType(search, limit, offset);
     return aFind;
   }
 
@@ -71,14 +78,13 @@ class MainService {
 
         if (isOnlines) {
           try {
-            final oResp = await Get.find<MainRepository>()
-                .insertProgramaIntervencion(oMonit);
+            final oResp =
+                await Get.find<MainRepo>().insertProgramaIntervencion(oMonit);
             if (oResp.idProgramacionIntervenciones != "") {
               /// (2)...
               ProgramacionActividadModel? oSend = oResp;
               oSend.id = oMonit.id;
-              await Get.find<MainRepository>()
-                  .insertProgramaIntervencionDb(oSend);
+              await Get.find<MainRepo>().insertProgramaIntervencionDb(oSend);
 
               /// (3)...
               aResp.add(oSend);
@@ -155,14 +161,13 @@ class MainService {
 
         if (isOnlines) {
           try {
-            final oResp =
-                await Get.find<MainRepository>().insertarMonitoreo(oMonit);
+            final oResp = await Get.find<MainRepo>().insertarMonitoreo(oMonit);
             if (oResp.idMonitoreo != "") {
               /// (2)...
               TramaMonitoreoModel? oSend = oResp;
               oSend.id = oMonit.id;
 
-              await Get.find<MainRepository>().insertMonitorDb(oSend);
+              await Get.find<MainRepo>().insertMonitorDb(oSend);
 
               /// (3)...
               aResp.add(oSend);
@@ -208,7 +213,7 @@ class MainService {
     int? offset,
   ) async {
     ///Obtiene los registros de la DB Local
-    List<TramaProyectoModel> aFind = await Get.find<MainRepository>()
+    List<TramaProyectoModel> aFind = await Get.find<MainRepo>()
         .getAllProyectoByUserSearch(o, search, limit, offset);
     return aFind;
   }
@@ -217,7 +222,7 @@ class MainService {
     String search,
   ) async {
     List<TramaProyectoModel> aFind =
-        await Get.find<MainRepository>().getAllProyectoApi();
+        await Get.find<MainRepo>().getAllProyectoApi();
     return aFind;
   }
 
@@ -228,7 +233,7 @@ class MainService {
     int? offset,
   ) async {
     ///Obtiene los registros de la DB Local
-    List<TramaProyectoModel> aFind = await Get.find<MainRepository>()
+    List<TramaProyectoModel> aFind = await Get.find<MainRepo>()
         .getAllProyectoByNeUserSearch(o, search, limit, offset);
     return aFind;
   }
@@ -238,7 +243,7 @@ class MainService {
   ) async {
     ///Obtiene los registros de la DB Local
     List<TramaProyectoModel> aFind =
-        await Get.find<MainRepository>().getProyectoByCUI(cui);
+        await Get.find<MainRepo>().getProyectoByCUI(cui);
     return aFind;
   }
 
@@ -248,8 +253,8 @@ class MainService {
     int? offset,
   ) async {
     ///Obtiene los registros de la DB Local de los monitoreos cuyo proyecto no pertence al usuario
-    List<TramaMonitoreoModel> aFind = await Get.find<MainRepository>()
-        .readAllOtherMonitoreo(o, limit, offset);
+    List<TramaMonitoreoModel> aFind =
+        await Get.find<MainRepo>().readAllOtherMonitoreo(o, limit, offset);
     return aFind;
   }
 
@@ -258,8 +263,8 @@ class MainService {
     String sTypePartida,
   ) async {
     ///Obtiene los registros de la DB Local
-    List<TramaMonitoreoModel> aFind = await Get.find<MainRepository>()
-        .getMonitoreoByTypePartida(o, sTypePartida);
+    List<TramaMonitoreoModel> aFind =
+        await Get.find<MainRepo>().getMonitoreoByTypePartida(o, sTypePartida);
     return aFind;
   }
 
@@ -268,7 +273,7 @@ class MainService {
   ) async {
     ///Obtiene los registros de la DB Local
     List<TramaMonitoreoModel> aFind =
-        await Get.find<MainRepository>().getMonitoreoByIdMonitor(idMonitoreo);
+        await Get.find<MainRepo>().getMonitoreoByIdMonitor(idMonitoreo);
     return aFind;
   }
 
@@ -282,11 +287,11 @@ class MainService {
     if (await isOnline()) {
       ///Obtiene los registros de la DB Local
       List<TramaProyectoModel> aDb =
-          await Get.find<MainRepository>().getAllProyectoDb(limit, offset);
+          await Get.find<MainRepo>().getAllProyectoDb(limit, offset);
 
       ///Obtiene los registros de la nube consumiento la API REST
       List<TramaProyectoModel> aApi =
-          await Get.find<MainRepository>().getAllProyectoApi();
+          await Get.find<MainRepo>().getAllProyectoApi();
 
       /**
        * Se realiza:
@@ -313,7 +318,7 @@ class MainService {
 
         /// (2)
         TramaProyectoModel? response =
-            await Get.find<MainRepository>().insertProyectoDb(oApi);
+            await Get.find<MainRepo>().insertProyectoDb(oApi);
         if (response != null) {
           aNewProject.add(response!);
         } else {
@@ -334,29 +339,29 @@ class MainService {
   ) async {
     List<ComboItemModel> aNewMonitoreo = [];
     if (await isOnline()) {
-      List<ComboItemModel> aDb = await Get.find<MainRepository>()
-          .getAllComboItemByType('', limit, offset);
+      List<ComboItemModel> aDb =
+          await Get.find<MainRepo>().getAllComboItemByType('', limit, offset);
 
-      List<ComboItemModel> aApi1 = await Get.find<MainRepository>()
-          .getMaestraByType(ComboItemModel.cbASOLU);
+      List<ComboItemModel> aApi1 =
+          await Get.find<MainRepo>().getMaestraByType(ComboItemModel.cbASOLU);
 
-      List<ComboItemModel> aApi2 = await Get.find<MainRepository>()
-          .getMaestraByType(ComboItemModel.cbEAVAN);
+      List<ComboItemModel> aApi2 =
+          await Get.find<MainRepo>().getMaestraByType(ComboItemModel.cbEAVAN);
 
-      List<ComboItemModel> aApi3 = await Get.find<MainRepository>()
-          .getMaestraByType(ComboItemModel.cbEMONI);
+      List<ComboItemModel> aApi3 =
+          await Get.find<MainRepo>().getMaestraByType(ComboItemModel.cbEMONI);
 
-      List<ComboItemModel> aApi4 = await Get.find<MainRepository>()
-          .getMaestraByType(ComboItemModel.cbNRIES);
+      List<ComboItemModel> aApi4 =
+          await Get.find<MainRepo>().getMaestraByType(ComboItemModel.cbNRIES);
 
-      List<ComboItemModel> aApi5 = await Get.find<MainRepository>()
-          .getMaestraByType(ComboItemModel.cbPEJEC);
+      List<ComboItemModel> aApi5 =
+          await Get.find<MainRepo>().getMaestraByType(ComboItemModel.cbPEJEC);
 
-      List<ComboItemModel> aApi6 = await Get.find<MainRepository>()
-          .getMaestraByType(ComboItemModel.cbPIDEO);
+      List<ComboItemModel> aApi6 =
+          await Get.find<MainRepo>().getMaestraByType(ComboItemModel.cbPIDEO);
 
-      List<ComboItemModel> aApi7 = await Get.find<MainRepository>()
-          .getMaestraByType(ComboItemModel.cbRIDEN);
+      List<ComboItemModel> aApi7 =
+          await Get.find<MainRepo>().getMaestraByType(ComboItemModel.cbRIDEN);
 
       List<ComboItemModel> aApi = [];
 
@@ -383,14 +388,14 @@ class MainService {
           if (oDataFind != null || oDataFind!.id == 0) {
             oApi.id = oDataFind.id;
             oApi.isEdit = 0;
-            await Get.find<MainRepository>().insertMaestraDb(oApi);
+            await Get.find<MainRepo>().insertMaestraDb(oApi);
 
             continue;
           }
         }
 
         ComboItemModel? response =
-            await Get.find<MainRepository>().insertMaestraDb(oApi);
+            await Get.find<MainRepo>().insertMaestraDb(oApi);
         if (response != null) {
           aNewMonitoreo.add(response!);
         } else {
@@ -411,9 +416,9 @@ class MainService {
     List<TramaMonitoreoModel> aNewMonitoreo = [];
     if (await isOnline()) {
       List<TramaMonitoreoModel> aDb =
-          await Get.find<MainRepository>().getAllMonitoreoDb(limit, offset);
+          await Get.find<MainRepo>().getAllMonitoreoDb(limit, offset);
       List<TramaMonitoreoModel> aApi =
-          await Get.find<MainRepository>().getAllMonitoreoApi();
+          await Get.find<MainRepo>().getAllMonitoreoApi();
 
       for (TramaMonitoreoModel oApi in aApi) {
         if (aDb.isNotEmpty) {
@@ -433,14 +438,14 @@ class MainService {
                */
               oApi.id = oDataFind.id;
               oApi.isEdit = 0;
-              await Get.find<MainRepository>().insertMonitorDb(oApi);
+              await Get.find<MainRepo>().insertMonitorDb(oApi);
             }
             continue;
           }
         }
 
         TramaMonitoreoModel? response =
-            await Get.find<MainRepository>().insertMonitorDb(oApi);
+            await Get.find<MainRepo>().insertMonitorDb(oApi);
         if (response != null) {
           aNewMonitoreo.add(response!);
         } else {
@@ -459,7 +464,7 @@ class MainService {
     TramaProyectoModel? o,
   ) async {
     //if (await isOnline()) {}
-    return await Get.find<MainRepository>()
+    return await Get.find<MainRepo>()
         .getAllMonitorPorEnviarDB(limit, offset, o!);
   }
 
@@ -469,7 +474,7 @@ class MainService {
     int? offset,
   ) async {
     ///Obtiene los registros de la DB Local
-    List<TramaMonitoreoModel> aFind = await Get.find<MainRepository>()
+    List<TramaMonitoreoModel> aFind = await Get.find<MainRepo>()
         .getAllMonitoreoByIdProyectoDb(o, limit, offset);
 
     return aFind;
@@ -479,20 +484,20 @@ class MainService {
     TramaMonitoreoModel o,
   ) async {
     List<TramaMonitoreoModel> aResp =
-        await Get.find<MainRepository>().getTramaMonitoreo(o);
+        await Get.find<MainRepo>().getTramaMonitoreo(o);
     return aResp;
   }
 
   Future<TramaMonitoreoModel> insertMonitorDb(
     TramaMonitoreoModel o,
   ) async {
-    return await Get.find<MainRepository>().insertMonitorDb(o);
+    return await Get.find<MainRepo>().insertMonitorDb(o);
   }
 
   Future<int> deleteMonitorDb(
     TramaMonitoreoModel o,
   ) async {
-    final result = await Get.find<MainRepository>().deleteMonitorDb(o);
+    final result = await Get.find<MainRepo>().deleteMonitorDb(o);
     return result;
   }
 
@@ -502,8 +507,8 @@ class MainService {
     int? offset,
   ) async {
     ///Obtiene los registros de la DB Local
-    List<ProgramacionActividadModel> aFind = await Get.find<MainRepository>()
-        .getProgramaIntervencionDb(id, limit, offset);
+    List<ProgramacionActividadModel> aFind =
+        await Get.find<MainRepo>().getProgramaIntervencionDb(id, limit, offset);
 
     return aFind;
   }
@@ -511,8 +516,7 @@ class MainService {
   Future<ProgramacionActividadModel> insertProgramaIntervencionDb(
     ProgramacionActividadModel o,
   ) async {
-    var oProgResp =
-        await Get.find<MainRepository>().insertProgramaIntervencionDb(o);
+    var oProgResp = await Get.find<MainRepo>().insertProgramaIntervencionDb(o);
 
     if (o.registroEntidadActividades!.isNotEmpty) {
       o.registroEntidadActividades!.forEach((object) {
@@ -520,7 +524,7 @@ class MainService {
             oProgResp.idProgramacionIntervenciones;
       });
 
-      var aActResp = await Get.find<MainRepository>()
+      var aActResp = await Get.find<MainRepo>()
           .insertRegistroEntidadActividadMasiveDb(
               o.registroEntidadActividades!);
       oProgResp.registroEntidadActividades = aActResp;
@@ -532,15 +536,14 @@ class MainService {
   Future<int> deleteProgramaIntervencionDb(
     ProgramacionActividadModel o,
   ) async {
-    final result =
-        await Get.find<MainRepository>().deleteProgramaIntervencionDb(o);
+    final result = await Get.find<MainRepo>().deleteProgramaIntervencionDb(o);
     return result;
   }
 
   /// USUARIO APP
 
   Future<UserModel> insertUserDb(UserModel o) async {
-    UserModel? response = await Get.find<MainRepository>().insertUserDb(o);
+    UserModel? response = await Get.find<MainRepo>().insertUserDb(o);
     return response;
   }
 
@@ -551,8 +554,8 @@ class MainService {
     List<UserModel> aNewLoadUser = [];
     if (await isOnline()) {
       List<UserModel> aDb =
-          await Get.find<MainRepository>().getAllUserDb(limit, offset);
-      List<UserModel> aApi = await Get.find<MainRepository>().getAllUserApi();
+          await Get.find<MainRepo>().getAllUserDb(limit, offset);
+      List<UserModel> aApi = await Get.find<MainRepo>().getAllUserApi();
 
       for (UserModel oApi in aApi) {
         if (aDb.length > 0) {
@@ -562,8 +565,7 @@ class MainService {
           }
         }
 
-        UserModel? response =
-            await Get.find<MainRepository>().insertUserDb(oApi);
+        UserModel? response = await Get.find<MainRepo>().insertUserDb(oApi);
         if (response != null) {
           aNewLoadUser.add(response!);
         } else {
@@ -579,7 +581,7 @@ class MainService {
     String codigo,
   ) async {
     try {
-      UserModel oUser = await Get.find<MainRepository>().readUserByCode(codigo);
+      UserModel oUser = await Get.find<MainRepo>().readUserByCode(codigo);
       return oUser;
     } catch (oError) {
       _log.e(oError);
@@ -590,11 +592,11 @@ class MainService {
   }
 
   Future deleteAllData() async {
-    return await Get.find<MainRepository>().deleteAllData();
+    return await Get.find<MainRepo>().deleteAllData();
   }
 
   Future deleteAllMonitorByEstadoENV() async {
-    return await Get.find<MainRepository>().deleteAllMonitorByEstadoENV();
+    return await Get.find<MainRepo>().deleteAllMonitorByEstadoENV();
   }
 
   /*
@@ -605,8 +607,120 @@ class MainService {
     String? search,
   ) async {
     ///Obtiene los registros de la DB Local
-    List<TamboModel> aFind =
-        await Get.find<Main2Repository>().searchTambo(search);
+    List<TamboModel> aFind = await Get.find<Main2Repo>().searchTambo(search);
     return aFind;
+  }
+
+  Future<RespTokenDto> login(
+    LoginDto oBody,
+  ) async {
+    RespTokenDto oResp = await Get.find<Main2Repo>().login(oBody);
+
+    /*
+     * Guardar el Token en la memoria 
+     */
+    _prefs = await SharedPreferences.getInstance();
+    _prefs!.setString("tokenDate", DateTime.now().toString());
+    _prefs!.setString("token", oResp.token!);
+    _prefs!.setInt("tokenId", oResp.id!);
+    _prefs!.setString("tokenName", oResp.name!);
+    _prefs!.setString("tokenRol", oResp.rol!);
+
+    return oResp;
+  }
+
+  Future<RespTokenDto> getToken() async {
+    _prefs = await SharedPreferences.getInstance();
+    RespTokenDto oResp = RespTokenDto.empty();
+    //String tokenDate = _prefs!.getString("tokenDate") ?? "";
+    String token = _prefs!.getString("token") ?? "";
+    int tokenId = _prefs!.getInt("tokenId") ?? 0;
+    String tokenName = _prefs!.getString("tokenName") ?? "";
+    String tokenRol = _prefs!.getString("tokenRol") ?? "";
+
+    oResp.id = tokenId;
+    oResp.name = tokenName;
+    oResp.rol = tokenRol;
+    oResp.token = token;
+
+    return oResp;
+  }
+
+  Future<List<CombosDto>> getTipoUsuario() async {
+    List<CombosDto> aResp =
+        await Get.find<Main2Repo>().getListDropDown(CombosDto.cbCod001);
+    return aResp;
+  }
+
+  Future<List<CombosDto>> getSector(int key) async {
+    List<CombosDto> aResp = await Get.find<Main2Repo>().getListDropDown(
+      CombosDto.cbCod002,
+      key: key,
+    );
+    return aResp;
+  }
+
+  Future<List<CombosDto>> getPrograma(int key) async {
+    List<CombosDto> aResp = await Get.find<Main2Repo>().getListDropDown(
+      CombosDto.cbCod003,
+      key: key,
+    );
+    return aResp;
+  }
+
+  Future<List<CombosDto>> getDocAcredita() async {
+    List<CombosDto> oResp =
+        await Get.find<Main2Repo>().getListDropDown(CombosDto.cbCod004);
+    return oResp;
+  }
+
+  Future<List<CombosDto>> getArticulacionOrientada() async {
+    List<CombosDto> aResp =
+        await Get.find<Main2Repo>().getListDropDown(CombosDto.cbCod005);
+    return aResp;
+  }
+
+  Future<List<CombosDto>> getAccion() async {
+    List<CombosDto> aResp = [];
+    aResp.add(CombosDto(
+      id: 1,
+      descrip: 'Coordinación con entidades',
+    ));
+    aResp.add(CombosDto(
+      id: 2,
+      descrip: 'Articulación - Plan de trabajo',
+    ));
+    return aResp;
+  }
+
+  Future<List<CombosDto>> getTipoActividad() async {
+    List<CombosDto> oResp =
+        await Get.find<Main2Repo>().getListDropDown(CombosDto.cbCod006);
+    return oResp;
+  }
+
+  Future<ProgramRespDto> sendCoordinacionArticulacion(
+      ProgActModel oBody) async {
+    ProgramRespDto oResp =
+        await Get.find<Main2Repo>().postCoordinacionArticulacion(oBody);
+    return oResp;
+  }
+
+  Future<ProgramRespDto> sendMonitoreoSupervision(
+    ProgActModel oBody,
+  ) async {
+    ProgramRespDto oResp = await Get.find<Main2Repo>().postMonitoreoSupervision(
+      oBody,
+    );
+    return oResp;
+  }
+
+  Future<ProgramRespDto> sendActividadesPNPAIS(
+    ProgActModel oBody,
+  ) async {
+    ProgramRespDto oResp = await Get.find<Main2Repo>().postActividadesPNPAIS(
+      oBody,
+    );
+    return oResp;
   }
 }
