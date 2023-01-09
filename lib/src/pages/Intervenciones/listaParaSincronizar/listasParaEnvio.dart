@@ -254,10 +254,10 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
     if (cantidadFuncionarios > 0) {
       await EnvioFuncionarios();
     }
-    if (cantidadFuncionarios > 0) {
+    if (cantidadParticipantes > 0) {
       await EnvioParticipantes();
     }
-    if (cantidadFuncionarios > 0) {
+    if (cantidadPartExtranjeros > 0) {
       await EnvioExtrangeros();
     }
     cargarListas();
@@ -485,7 +485,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                             color: Colors.blue[900],
                           ),
                           onTap: () {
-                           /* cargarListas();
+                             cargarListas();
                             if (cantidadPartExtranjeros > 0) {
                               Util().showAlertDialogokno(
                                   'Participantes Extranjeros', context,
@@ -495,7 +495,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                               }, () {
                                 Navigator.pop(context);
                               }, 'Estas seguro de sincronizar Extranjeros');
-                            }*/
+                            }
                           },
                         )
                       ],

@@ -17,7 +17,7 @@ class Paises {
   Paises({this.idPais = 0, this.paisNombre = ''});
 
   factory Paises.fromJson(Map<String, dynamic> json) {
-    return Paises(idPais: json['id_pais'], paisNombre: json['pais_nombre']);
+    return Paises(idPais: json['id_pais']??0, paisNombre: json['pais_nombre']??'');
   }
 
   Map<String, dynamic> toJson() {

@@ -65,23 +65,25 @@ class ProviderLogin {
             Uri.parse(AppConfig.urlBackndServicioSeguro +
                 '/api-pnpais/app/datosLoginUsuario/${loginClass.id}'),
             headers: headers);
-
         final parsedJson2 = jsonDecode(responseUsuario.body);
         final data = parsedJson2["response"];
 
         if (responseUsuario.statusCode == 200) {
           if (parsedJson2["total"] > 0) {
+
             var r2 = ConfigPersonal(
-                unidad: '1',
+                unidad: '',
                 nombres: data[0]["empleado_nombre"] ?? '',
                 apellidoMaterno: data[0]["empleado_apellido_materno"] ?? '',
                 apellidoPaterno: data[0]["empleado_apellido_paterno"] ?? '',
                 contrasenia: password ?? '',
                 fechaNacimento: data[0]["empleado_fecha_nacimiento"] ?? '',
                 numeroDni: int.parse(username ?? 0));
+
             await DatabasePr.db.insertConfigPersonal(r2);
 
             for (var i = 0; i < data.length; i++) {
+              _log.i(data[0]["empleado_nombre"]);
               var configIni = ConfigInicio(
                   idLugarPrestacion: 0,
                   idPuesto: data[i]["id_puesto"] ?? 0,
@@ -99,6 +101,7 @@ class ProviderLogin {
                   campania: '',
                   codCampania: '',
                   modalidad: data[i]["modalidad"] ?? '');
+
               if (configIni.tipoPlataforma == 'PIAS') {
                 await ProviderServiciosRest().listarPuntoAtencionPias(
                     '0', data[i]["id_plataforma"] ?? 0, 0);
