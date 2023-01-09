@@ -38,6 +38,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   var contador = 0;
+
   @override
   void initState() {
     loadPreferences();
@@ -180,18 +181,21 @@ class __FormState extends State<_Form> {
   final passCtrl = TextEditingController();
   final passCtrl2 = TextEditingController();
   int tipoUsuario = 1;
-
+  var esperar = 'Ingresar';
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     Future LoginUser(usn, psw, rpsw, tipoUser) async {
+      print(tipoUser);
       if (tipoUser == 1) {
 
         try {
+         setState(() {
+           esperar='Espere un monento...';
+         });
       var resLogin =    await  ProviderLogin().Login(username: usn,password: psw);
-      print("resLogin.toString()");
-      print(resLogin.toString());
+          esperar='Ingresar';
       if(resLogin >=1){
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => HomePagePais()),
@@ -260,6 +264,7 @@ class __FormState extends State<_Form> {
             }
           }*/
         } catch (oError) {
+          esperar='Ingresar';
           mostrarAlerta(context, 'Login incorrecto',
               'Revise sus credenciales nuevamente');
         }
@@ -299,7 +304,7 @@ class __FormState extends State<_Form> {
       padding: EdgeInsets.symmetric(horizontal: w / 16),
       child: Column(
         children: <Widget>[
-          DropdownButtonFormField(
+        /*  DropdownButtonFormField(
             items: const <DropdownMenuItem<int>>[
               DropdownMenuItem<int>(
                 value: 1,
@@ -322,7 +327,7 @@ class __FormState extends State<_Form> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-          ),
+          ),*/
           const SizedBox(height: 10),
           CustomInput(
             icon: Icons.supervised_user_circle,
@@ -359,13 +364,13 @@ class __FormState extends State<_Form> {
           ),
           SizedBox(height: h / 50),
           BotonLog(
-            text: 'Ingresar',
+            text: esperar,
             onPressed: () async {
               await LoginUser(
                   emailCtrl.text, passCtrl.text, passCtrl.text, tipoUsuario);
             },
           ),
-          CheckboxListTile(
+        /*   CheckboxListTile(
             value: checkGuardarDatos,
             title: const Text('Recordar'),
             onChanged: (value) {
@@ -375,7 +380,7 @@ class __FormState extends State<_Form> {
               });
             },
             secondary: const Icon(Icons.safety_check),
-          ),
+          ),*/
         ],
       ),
     );
