@@ -285,7 +285,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
             builder: (context) =>
-                PendienteSincronizar(int.parse(listaParticipantes[0].snip!))),
+                PendienteSincronizar()),
       );
       setState(() {});
     }

@@ -21,6 +21,7 @@ import 'package:actividades_pais/src/pages/Pias/ListaReportesPias.dart';
 import 'package:actividades_pais/src/pages/configuracion/Asistencia.dart';
 import 'package:actividades_pais/src/pages/configuracion/pantallainicio.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'appbar/AppBar.dart';
@@ -36,6 +37,7 @@ class HomePagePais extends StatefulWidget {
 
 class _HomePagePais extends State<HomePagePais> {
   TextStyle style = const TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  final Logger _log = Logger();
 
   int currenIndex = 0;
   var cantidadDB = 0;
@@ -45,11 +47,13 @@ class _HomePagePais extends State<HomePagePais> {
   var _apellidosPersona = '';
   var unidadTerritorial = '';
   var variable = '';
-  var snip = 0;
+  //var snip = 0;
+  //List<int> snips = [];
   var idPlataforma = 0;
   var tipoPlataforma = '';
   var campaniaCod = '';
   var modalidad = '';
+
   String? token;
 
   String long = '';
@@ -99,6 +103,9 @@ class _HomePagePais extends State<HomePagePais> {
   mostrarTmbo() async {
     DatabasePr.db.initDB();
     var abc = await DatabasePr.db.getAllTasksConfigInicio();
+
+    _log.i(abc[0].nombreTambo);
+   // print(object)
     if (abc.isNotEmpty) {
       var idlp = abc[abc.length - 1].idLugarPrestacion;
       var iduo = abc[abc.length - 1].idUnidadesOrganicas;
@@ -106,7 +113,10 @@ class _HomePagePais extends State<HomePagePais> {
       setState(() {
         mostrarNombre();
         if (abc.isNotEmpty) {
-          mostrarNombre();
+          tipoPlataforma = abc[0].tipoPlataforma;
+          unidadTerritorial = abc[0].unidTerritoriales;
+
+       /*   mostrarNombre();
           cantidadDB = 1;
           changecolor = (Colors.blue[400])!;
           _isVisible = false;
@@ -124,7 +134,7 @@ class _HomePagePais extends State<HomePagePais> {
             modalidad = abc[abc.length - 1].modalidad;
 
             //print('campaniaCod $campaniaCod');
-          }
+          }*/
         }
       });
     }
@@ -133,9 +143,12 @@ class _HomePagePais extends State<HomePagePais> {
   Future mostrarNombre() async {
     DatabasePr.db.initDB();
     var abc = await DatabasePr.db.getAllConfigPersonal();
+    print("abc[0].nombres");
+    print(abc[0].nombres);
     _prefs = await SharedPreferences.getInstance();
     token = _prefs!.getString("token");
-    if (abc.isNotEmpty && token == null) {
+    //&& token == null
+    if (abc.isNotEmpty ) {
       setState(() {
         _nombrePersona = abc[abc.length - 1].nombres.toUpperCase();
         _apellidosPersona =
@@ -183,7 +196,34 @@ class _HomePagePais extends State<HomePagePais> {
         ),
       );
     } else {
-      if (aUnidad.contains("UAGS") && token == null) {
+          print("tipoPlataforma");
+          print(tipoPlataforma);
+
+        if(tipoPlataforma == 'JF'){
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1003',
+              name: 'TileIntervencion'.tr,
+              types: const ['Ver'],
+              image: icon4,
+              color: lightBlue,
+            ),
+          );
+          String sImagePias = modalidad == '1'
+              ? icon2
+              : modalidad == '2'
+              ? icon3
+              : icon1;
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1004',
+              name: 'TilePias'.tr,
+              types: const ['Ver'],
+              image: sImagePias,
+              color: lightBlue,
+            ),
+          );
+        }
         if (tipoPlataforma == 'TAMBO') {
           aHomeOptions.add(
             HomeOptions(
@@ -212,6 +252,7 @@ class _HomePagePais extends State<HomePagePais> {
               ),
             );
           }
+
         }
         aHomeOptions.add(
           HomeOptions(
@@ -222,7 +263,7 @@ class _HomePagePais extends State<HomePagePais> {
             color: lightBlue,
           ),
         );
-      }
+
     }
 
     if (aUnidad.contains("UPS")) {
@@ -389,7 +430,7 @@ class _HomePagePais extends State<HomePagePais> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  Intervenciones(snip, unidadTerritorial),
+                                  Intervenciones(unidadTerritorial),
                             ),
                           );
                           break;
@@ -456,7 +497,7 @@ class _HomePagePais extends State<HomePagePais> {
             datoUt: token == null ? unidadTerritorial : '',
             plataforma: variable,
             nombre: '$_nombrePersona $_apellidosPersona',
-            snip: snip,
+           // snip: snip,
           ),
           listPages[currenIndex]
         ],

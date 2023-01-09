@@ -188,7 +188,7 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                       builder: (context) => Intervenciones(
-                          int.parse(widget.tramaIntervencion.snip!), '')),
+                            '')),
                 );
               }, () {
                 Navigator.pop(context);

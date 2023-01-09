@@ -14,8 +14,8 @@ import 'package:actividades_pais/src/pages/Intervenciones/listaParaSincronizar/l
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 
 class PendienteSincronizar extends StatefulWidget {
-  int snip;
-  PendienteSincronizar(this.snip);
+ // int snip;
+ // PendienteSincronizar(this.snip);
   @override
   State<PendienteSincronizar> createState() => _PendienteSincronizarState();
 }
@@ -76,7 +76,7 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
           title: Text("Pendientes Envio"),
           leading: Util().iconbuton(() => Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                    builder: (context) => Intervenciones(widget.snip, '')),
+                    builder: (context) => Intervenciones( '')),
               )),
           actions: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -95,7 +95,7 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
           ],
         ),
         body: FutureBuilder<List<TramaIntervencion>>(
-          future: DatabasePr.db.listarIntervencionesPs(widget.snip),
+          future: DatabasePr.db.listarIntervencionesPs(),
           builder: (BuildContext context,
               AsyncSnapshot<List<TramaIntervencion>> snapshot) {
             if (snapshot.hasData) {
@@ -262,7 +262,7 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
 
   Future<bool> systemBackButtonPressed() async {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => Intervenciones(widget.snip, '')));
+        builder: (context) => Intervenciones('')));
     return true;
   }
 }

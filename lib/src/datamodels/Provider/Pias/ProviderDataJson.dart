@@ -51,7 +51,7 @@ class ProviderDataJson {
     String jsonString = await servicios.loadCampanias();
     final jsonResponse = json.decode(jsonString);
     final listadoDepart = new ListasCampanias.fromJsonList(jsonResponse);
-
+/*
     for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = Campania(
         cod: listadoDepart.items[i].cod,
@@ -59,7 +59,7 @@ class ProviderDataJson {
         id: listadoDepart.items[i].id,
       );
       await DatabasePias.db.insertCampanias(rspt);
-    }
+    }*/
     return listadoDepart.items;
   }
 }

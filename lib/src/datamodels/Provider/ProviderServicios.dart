@@ -64,13 +64,6 @@ class ProviderServicios {
     final listadoDepart =
         new ListarUnidadesTerritoriales.fromJsonList(jsonResponse);
 
-    for (var i = 0; i < listadoDepart.items.length; i++) {
-      final rspt = UnidadesTerritoriales(
-          id_UnidadesTerritoriales:
-              listadoDepart.items[i].id_UnidadesTerritoriales,
-          unidadTerritorial: listadoDepart.items[i].unidadTerritorial);
-      DatabasePr.db.insertUnidadesTerritoriales(rspt);
-    }
     return listadoDepart.items;
   }
 

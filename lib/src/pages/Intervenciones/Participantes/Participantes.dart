@@ -226,8 +226,16 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                       var usuario =
                       await provider.getUsuarioParticipanteDni(
                           controllerNumeroDoc.text);
+                       print("usuario!.dni");
+                       if ( usuario == null) {
+                        showAlertDialog(context,
+                            "Datos no encontrados en nuestra base de datos, registrar los datos manualmente.");
 
-                      if ( usuario!.dni  == '') {
+                        ///_fetchData(context);
+                        closeTraerDni = false;
+                        setState(() {});
+                      }
+                      if ( usuario!.dni == '') {
                         showAlertDialog(context,
                             "Datos no encontrados en nuestra base de datos, registrar los datos manualmente.");
 
@@ -439,7 +447,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                     ? Container(
                   width: 350,
                   child: FutureBuilder<List<ListarCcpp>>(
-                    future: DatabasePr.db.ListarCcpps(widget.snip),
+                    future: DatabasePr.db.ListarCcpps(),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<ListarCcpp>> snapshot) {
                       ListarCcpp depatalits;

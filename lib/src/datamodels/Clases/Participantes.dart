@@ -96,15 +96,15 @@ class Participantes {
       this.idParticipante = 0});
 
   Participantes.fromJsonSERICIO(Map<String, dynamic> json) {
-    id = json['id'];
-    idParticipante = json['id_participante'];
-    dni = json['DNI'];
-    primerNombre = json['PRIMER_NOMBRE'];
-    segundoNombre = json['SEGUNDO_NOMBRE'];
-    apellidoPaterno = json['APELLIDO_PATERNO'];
-    apellidoMaterno = json['APELLIDO_MATERNO'];
-    sexo = json['SEXO'];
-    fechaNacimiento = json['FECHA_NACIMIENTO'];
+    id = json['id']??0;
+    idParticipante = json['id_participante']??0;
+    dni = json['DNI']??'';
+    primerNombre = json['PRIMER_NOMBRE']??'';
+    segundoNombre = json['SEGUNDO_NOMBRE']??'';
+    apellidoPaterno = json['APELLIDO_PATERNO']??'';
+    apellidoMaterno = json['APELLIDO_MATERNO']??'';
+    sexo = json['SEXO']??'';
+    fechaNacimiento = json['FECHA_NACIMIENTO']??'';
     // un = json['UNIDAD_TERRITORIAL'];
 
   }

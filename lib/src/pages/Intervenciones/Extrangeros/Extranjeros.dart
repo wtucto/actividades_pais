@@ -173,7 +173,7 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                       ? SizedBox(
                           width: 350,
                           child: new FutureBuilder<List<TipoDocumento>>(
-                            future: DatabasePr.db.listarTipoDocumento(),
+                            future: ProviderServicios().getTipoDocumento(),
                             builder: (BuildContext context,
                                 AsyncSnapshot<List<TipoDocumento>> snapshot) {
                               if (snapshot.hasData) {
@@ -325,7 +325,7 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                       ? SizedBox(
                           width: 350,
                           child: new FutureBuilder<List<Sexo>>(
-                            future: DatabasePr.db.listarSexo(),
+                            future: ProviderServicios().getSexo(),
                             builder: (BuildContext context,
                                 AsyncSnapshot<List<Sexo>> snapshot) {
                               if (snapshot.hasData) {

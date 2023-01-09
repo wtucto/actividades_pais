@@ -14,6 +14,7 @@ import 'package:actividades_pais/src/datamodels/Clases/Funcionarios.dart';
 import 'package:actividades_pais/src/datamodels/Clases/IncidentesNovedadesPias.dart';
 import 'package:actividades_pais/src/datamodels/Clases/InfoTelefono.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ListarEntidadFuncionario.dart';
+import 'package:actividades_pais/src/datamodels/Clases/LoginClass.dart';
 import 'package:actividades_pais/src/datamodels/Clases/LugarPrestacion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/NumeroTelefono.dart';
 import 'package:actividades_pais/src/datamodels/Clases/PartExtrangeros.dart';
@@ -145,11 +146,29 @@ class DatabasePr {
 
         db.execute(
             "CREATE TABLE ConfigPersonal (id INTEGER PRIMARY KEY,unidad, codigo, nombres, rol,fechaNacimento,numeroDni,contrasenia,apellidoMaterno, apellidoPaterno, cargo, tipoUsuario)");
+
+        db.execute(
+            "CREATE TABLE login (id, name,username,password, token, rol)");
       },
     );
   }
+  Future Login(LoginClass loginClass) async{
+    _log.i(loginClass.token);
+    initDB();
+    await _db!.execute(
+      "DELETE FROM login",
+    );
+    await _db!.execute(
+      "DELETE FROM ConfigPersonal",
+    );
+    await _db!.execute(
+      "DELETE FROM DatConfigInicio",
+    );
 
-  Future createUserDemo() async {
+    var a = await _db!.insert("login", loginClass.toMap());
+    return a;
+  }
+/*  Future createUserDemo() async {
     initDB();
     _log.i('Inicio: Creación de USUARIO DEMO');
 
@@ -183,7 +202,7 @@ class DatabasePr {
 
     _log.i('Fin: Creación de USUARIO DEMO');
   }
-
+*/
   Future deleteTabla() async {
     var sql = "DELETE FROM ";
     initDB();
@@ -208,8 +227,10 @@ class DatabasePr {
 
 //
   Future<List<ConfigPersonal>> getLoginUser(
-      {required int dni, contrasenia}) async {
+      { dni, contrasenia}) async {
     initDB();
+    _log.i(dni);
+    _log.i(contrasenia);
     final res = await _db!.rawQuery(
         "select * from ConfigPersonal where numeroDni=$dni and contrasenia = '$contrasenia'");
     List<ConfigPersonal> list = res.isNotEmpty
@@ -270,14 +291,19 @@ class DatabasePr {
   }
 
   ////////////////////////////////////
-  Future<List<ListarCcpp>> ListarCcpps(snip) async {
-    await DatabasePr.db.initDB();
+  Future<List<ListarCcpp>> ListarCcpps() async {
 
-    final res = await _db
-        ?.rawQuery("SELECT DISTINCT * from listarCcpp where snip = $snip ");
-    List<ListarCcpp> list =
-        res!.isNotEmpty ? res.map((e) => ListarCcpp.fromMap(e)).toList() : [];
-    return list;
+    await DatabasePr.db.initDB();
+    var abc = await DatabasePr.db.getAllTasksConfigInicio();
+
+    for (var i = 0; i < abc.length; i++) {
+      final res = await _db
+          ?.rawQuery("SELECT DISTINCT * from listarCcpp where snip = ${abc[i].snip} ");
+      List<ListarCcpp> list =
+      res!.isNotEmpty ? res.map((e) => ListarCcpp.fromMap(e)).toList() : [];
+      return list;
+    }
+    return List.empty();
   }
 
   Future eliminarTodoListarCcpp() async {
@@ -468,16 +494,20 @@ class DatabasePr {
     print(_db!.insert("tramaIntervenciones", tramaIntervencion.toMap()));
   }
 
-  Future<List<TramaIntervencion>> listarIntervencionesPs(snip) async {
+  Future<List<TramaIntervencion>> listarIntervencionesPs() async {
     await DatabasePr.db.initDB();
-    final res = await _db?.rawQuery(
-        "SELECT DISTINCT * from tramaIntervencionesUs a where snip ='$snip' ");
+    var abc = await DatabasePr.db.getAllTasksConfigInicio();
 
-    List<TramaIntervencion> list = res!.isNotEmpty
-        ? res.map((e) => TramaIntervencion.fromMap(e)).toList()
-        : [];
-    print(list[0].codigoIntervencion);
-    return list;
+    for (var i = 0; i < abc.length; i++) {
+      final res = await _db?.rawQuery(
+          "SELECT DISTINCT * from tramaIntervencionesUs a where snip ='${abc[i].snip}' ");
+      List<TramaIntervencion> list = res!.isNotEmpty
+          ? res.map((e) => TramaIntervencion.fromMap(e)).toList()
+          : [];
+      return list;
+    }
+ return List.empty();
+
   }
 
   Future<List<TramaIntervencion>> cierreTRama(codigoIntervencion) async {
@@ -492,16 +522,22 @@ class DatabasePr {
     return list;
   }
 
-  Future<List<TramaIntervencion>> listarInterciones(snip) async {
+  Future<List<TramaIntervencion>> listarInterciones({snip}) async {
+
     await DatabasePr.db.initDB();
-    final res = await _db?.rawQuery(
-        "SELECT DISTINCT * from tramaIntervenciones a where snip ='$snip' and a.codigoIntervencion NOT IN (SELECT b.codigoIntervencion from tramaIntervencionesUs b) ORDER by codigoIntervencion DESC;");
-    List<TramaIntervencion> list = res!.isNotEmpty
-        ? res.map((e) => TramaIntervencion.fromMap(e)).toList()
-        : [];
-    print(snip);
-    print(list.length);
-    return list;
+    var abc = await getAllTasksConfigInicio();
+
+    for (var i = 0; i < abc.length; i++) {
+      final res = await _db?.rawQuery(
+          "SELECT DISTINCT * from tramaIntervenciones a where snip ='${abc[i].snip}' and a.codigoIntervencion NOT IN (SELECT b.codigoIntervencion from tramaIntervencionesUs b) ORDER by codigoIntervencion DESC;");
+      List<TramaIntervencion> list = res!.isNotEmpty
+          ? res.map((e) => TramaIntervencion.fromMap(e)).toList()
+          : [];
+
+      return list;
+    }
+return List.empty();
+
   }
 
   Future eliminarArchivoPorid(i) async {
@@ -775,7 +811,9 @@ class DatabasePr {
   }
 
   Future<int> insertConfigPersonal(ConfigPersonal regitroCalificada) async {
+
     var a = await _db!.insert("ConfigPersonal", regitroCalificada.toMap());
+
     return a;
     // print(_db!.insert("ConfigPersonal", regitroCalificada.toMap()));
   }
@@ -785,6 +823,7 @@ class DatabasePr {
   }
 
   Future<void> insertConfigInicio(ConfigInicio regitroCalificada) async {
+
     print(_db!.insert("DatConfigInicio", regitroCalificada.toMap()));
   }
 

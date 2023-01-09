@@ -234,55 +234,58 @@ class ProviderDatos {
     await DatabasePr.db.eliminarTodoEntidadFuncionario();
     await DatabasePr.db.eliminarTodoParticipanteEjecucion();
     await DatabasePr.db.deleteIntervenciones();
-
+    print(snip);
     http.Response response = await http.get(
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listarTramaIntervencion/$snip'),
     );
+    print(  Uri.parse(AppConfig.urlBackndServicioSeguro +
+        '/api-pnpais/app/listarTramaIntervencion/$snip'));
     if (response.statusCode == 200) {
       await getlistarCcpp(snip);
 
       final jsonResponse = json.decode(response.body);
-      final listadostraba =
-          new TramaIntervenciones.fromJsonList(jsonResponse["response"]);
-
-      for (var i = 0; i < listadostraba.items.length; i++) {
-        final rspt = TramaIntervencion(
-          atencion: listadostraba.items[i].atencion,
-          beneficiario: listadostraba.items[i].beneficiario,
-          categoria: listadostraba.items[i].categoria,
-          codigoInterno: listadostraba.items[i].codigoInterno,
-          codigoIntervencion: listadostraba.items[i].codigoIntervencion,
-          departamento: listadostraba.items[i].departamento,
-          distrito: listadostraba.items[i].distrito,
-          estado: listadostraba.items[i].estado,
-          fecha: listadostraba.items[i].fecha,
-          fechaRegistro: listadostraba.items[i].fechaRegistro,
-          descripcionEvento: listadostraba.items[i].descripcionEvento,
-          horaFin: listadostraba.items[i].horaFin,
-          horaInicio: listadostraba.items[i].horaInicio,
-          idDepartamento: listadostraba.items[i].idDepartamento,
-          identificacionIntervencion:
-              listadostraba.items[i].identificacionIntervencion,
-          lugarIntervencion: listadostraba.items[i].lugarIntervencion,
-          poblacion: listadostraba.items[i].poblacion,
-          programa: listadostraba.items[i].programa,
-          provincia: listadostraba.items[i].provincia,
-          sector: listadostraba.items[i].sector,
-          servicio: listadostraba.items[i].servicio,
-          snip: listadostraba.items[i].snip,
-          subCategoria: listadostraba.items[i].subCategoria,
-          tambo: listadostraba.items[i].tambo,
-          tipoActividad: listadostraba.items[i].tipoActividad,
-          tipoGobierno: listadostraba.items[i].tipoGobierno,
-          tipoIntervencion: listadostraba.items[i].tipoIntervencion,
-          idTipoIntervencion: listadostraba.items[i].idTipoIntervencion,
-        );
-        await DatabasePr.db.insertTramaIntervenciones(rspt);
-        await listarEntidadFuncionario(rspt.codigoIntervencion);
+      if(jsonResponse["response"] != null){
+        final listadostraba =
+        new TramaIntervenciones.fromJsonList(jsonResponse["response"]);
+        for (var i = 0; i < listadostraba.items.length; i++) {
+          final rspt = TramaIntervencion(
+            atencion: listadostraba.items[i].atencion,
+            beneficiario: listadostraba.items[i].beneficiario,
+            categoria: listadostraba.items[i].categoria,
+            codigoInterno: listadostraba.items[i].codigoInterno,
+            codigoIntervencion: listadostraba.items[i].codigoIntervencion,
+            departamento: listadostraba.items[i].departamento,
+            distrito: listadostraba.items[i].distrito,
+            estado: listadostraba.items[i].estado,
+            fecha: listadostraba.items[i].fecha,
+            fechaRegistro: listadostraba.items[i].fechaRegistro,
+            descripcionEvento: listadostraba.items[i].descripcionEvento,
+            horaFin: listadostraba.items[i].horaFin,
+            horaInicio: listadostraba.items[i].horaInicio,
+            idDepartamento: listadostraba.items[i].idDepartamento,
+            identificacionIntervencion:
+            listadostraba.items[i].identificacionIntervencion,
+            lugarIntervencion: listadostraba.items[i].lugarIntervencion,
+            poblacion: listadostraba.items[i].poblacion,
+            programa: listadostraba.items[i].programa,
+            provincia: listadostraba.items[i].provincia,
+            sector: listadostraba.items[i].sector,
+            servicio: listadostraba.items[i].servicio,
+            snip: listadostraba.items[i].snip,
+            subCategoria: listadostraba.items[i].subCategoria,
+            tambo: listadostraba.items[i].tambo,
+            tipoActividad: listadostraba.items[i].tipoActividad,
+            tipoGobierno: listadostraba.items[i].tipoGobierno,
+            tipoIntervencion: listadostraba.items[i].tipoIntervencion,
+            idTipoIntervencion: listadostraba.items[i].idTipoIntervencion,
+          );
+          await DatabasePr.db.insertTramaIntervenciones(rspt);
+          await listarEntidadFuncionario(rspt.codigoIntervencion);
+        }
       }
       /*consulta por snip idRegion */
-      final listardb = DatabasePr.db.listarInterciones(snip);
+      final listardb = DatabasePr.db.listarInterciones();
       return listardb;
     } else if (response.statusCode == 400) {}
     return List.empty();
@@ -290,7 +293,7 @@ class ProviderDatos {
 
   Future<List<TramaIntervencion>> getListaIntervencion(snip) async {
     /*consulta por snip idRegion */
-    final listardb = DatabasePr.db.listarInterciones(snip);
+    final listardb = DatabasePr.db.listarInterciones();
     return listardb;
   }
 
@@ -354,7 +357,7 @@ class ProviderDatos {
       var resdb =
           //  await DatabaseParticipantes.db.getUsuarioParticipanteDniSQLites(dni);
           await ProviderServicios().getBuscarParticipante(dni);
-
+       print(resdb.dni);
       if (resdb.dni!.isNotEmpty) {
         print("3....");
 
@@ -435,21 +438,25 @@ class ProviderDatos {
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listarCcpp/$snip'),
     );
+
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listadostraba =
-          new ListarCcppes.fromJsonList(jsonResponse["response"]);
-      print(listadostraba.items.length);
-      for (var i = 0; i < listadostraba.items.length; i++) {
-        final rspt = ListarCcpp(
-          nombreCcpp: listadostraba.items[i].nombreCcpp,
-          ubigeoCcpp: listadostraba.items[i].ubigeoCcpp,
-          snip: listadostraba.items[i].snip,
-        );
-        await DatabasePr.db.insertlistarCcpp(rspt);
+      if(jsonResponse["total"]>0){
+        final listadostraba =
+        new ListarCcppes.fromJsonList(jsonResponse["response"]);
+        print(listadostraba.items.length);
+        for (var i = 0; i < listadostraba.items.length; i++) {
+          final rspt = ListarCcpp(
+            nombreCcpp: listadostraba.items[i].nombreCcpp,
+            ubigeoCcpp: listadostraba.items[i].ubigeoCcpp,
+            snip: listadostraba.items[i].snip,
+          );
+          await DatabasePr.db.insertlistarCcpp(rspt);
+        }
+
+        return listadostraba.items;
       }
 
-      return listadostraba.items;
     } else if (response.statusCode == 400) {}
     return List.empty();
   }
@@ -658,6 +665,7 @@ class ProviderDatos {
   }
 
   Future<PartExtrangeros?> pintarExtranjerosBD(numDocExtrangero) async {
+    print(numDocExtrangero);
     var cnt = await _checkInternetConnection();
     if (cnt == false) {
       return null;
@@ -676,6 +684,7 @@ class ProviderDatos {
           Uri.parse(AppConfig.urlBackndServicioSeguro +
               '/api-pnpais/app/pintarExtranjerosBD/${jsonResponse["response"][0]["id_participante"]}'),
         );
+        print(response2.body);
         final jsonResponse2 = json.decode(response2.body);
         final listadostraba =
             new PartExtrangeros.fromJson(jsonResponse2["response"][0]);

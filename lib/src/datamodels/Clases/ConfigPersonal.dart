@@ -60,15 +60,15 @@ class ConfigPersonal {
   }
 
   ConfigPersonal.fromMap(Map<String, dynamic> map) {
-    id = map['id'];
-    numeroDni = map['numeroDni'];
-    nombres = map['nombres'];
-    apellidoPaterno = map['apellidoPaterno'];
-    apellidoMaterno = map['apellidoMaterno'];
-    contrasenia = map['contrasenia'];
-    unidad = map['unidad'];
-    codigo = map['codigo'];
-    rol = map['rol'];
+    id = map['id'] ??0;
+    numeroDni = map['numeroDni']??0;
+    nombres = map['nombres']??0;
+    apellidoPaterno = map['apellidoPaterno']??0;
+    apellidoMaterno = map['apellidoMaterno']??0;
+    contrasenia = map['contrasenia']??0;
+    unidad = map['unidad']??0;
+    codigo = map['codigo']??0;
+    rol = map['rol']??0;
     tipoUsuario = map['tipoUsuario'] ?? '';
   }
 }

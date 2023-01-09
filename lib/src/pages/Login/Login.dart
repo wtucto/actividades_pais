@@ -21,6 +21,7 @@ import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 
+import '../../datamodels/Provider/PorviderLogin.dart';
 import '../configuracion/pantallainicio.dart';
 
 SharedPreferences? _prefs;
@@ -186,8 +187,17 @@ class __FormState extends State<_Form> {
     double w = MediaQuery.of(context).size.width;
     Future LoginUser(usn, psw, rpsw, tipoUser) async {
       if (tipoUser == 1) {
+
         try {
-          var prefixUserDemo = 'D';
+      var resLogin =    await  ProviderLogin().Login(username: usn,password: psw);
+      print("resLogin.toString()");
+      print(resLogin.toString());
+      if(resLogin >=1){
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => HomePagePais()),
+        );
+      }
+      /*    var prefixUserDemo = 'D';
 
           var res = await DatabasePr.db
               .getLoginUser(dni: int.parse(usn), contrasenia: psw);
@@ -248,7 +258,7 @@ class __FormState extends State<_Form> {
                 );
               }
             }
-          }
+          }*/
         } catch (oError) {
           mostrarAlerta(context, 'Login incorrecto',
               'Revise sus credenciales nuevamente');
