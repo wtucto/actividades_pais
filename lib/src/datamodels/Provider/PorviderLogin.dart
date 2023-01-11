@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/dto/login_dto.dart';
+import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConfigInicio.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
 import 'package:actividades_pais/src/datamodels/Clases/LoginClass.dart';
@@ -37,28 +40,35 @@ class ProviderLogin {
   }
 
   Login({username, password}) async {
+    MainController mainController = MainController();
+    LoginDto oLogin = LoginDto.empty();
+    oLogin.username = username;
+    oLogin.password = password;
+
     var chekInternet = await _checkInternetConnection();
     if (chekInternet == true) {
       var headers = {'Content-Type': 'application/json'};
-      http.Response response = await http.post(
+
+      RespTokenDto oToken = await mainController.login(oLogin);
+      /*http.Response response = await http.post(
           Uri.parse(
               'https://www.pais.gob.pe/backendsismonitor/public/seguridad/login'),
           headers: headers,
           body: json.encode({
             "username": username,
             "password": password,
-          }));
+          }));*/
 
-      if (response.statusCode == 200) {
-        final parsedJson = jsonDecode(response.body);
-        final log = new LoginClass.fromJson(parsedJson);
+      if (oToken != null) {
+        //final parsedJson = jsonDecode(response.body);
+        //final log = new LoginClass.fromJson(parsedJson);
         var loginClass = LoginClass();
         loginClass.username = username;
         loginClass.password = password;
-        loginClass.name = log.name;
-        loginClass.rol = log.rol;
-        loginClass.token = log.token;
-        loginClass.id = log.id;
+        loginClass.name = oToken.name;
+        loginClass.rol = oToken.rol;
+        loginClass.token = oToken.token;
+        loginClass.id = oToken.id;
         var a = await DatabasePr.db.Login(loginClass);
 
         http.Response responseUsuario = await http.get(
@@ -70,7 +80,6 @@ class ProviderLogin {
 
         if (responseUsuario.statusCode == 200) {
           if (parsedJson2["total"] > 0) {
-
             var r2 = ConfigPersonal(
                 unidad: '',
                 nombres: data[0]["empleado_nombre"] ?? '',
@@ -117,8 +126,6 @@ class ProviderLogin {
           }
         }
         return a;
-      } else {
-        print(response.reasonPhrase);
       }
     } else if (chekInternet == false) {
       var rsp = await DatabasePr.db
