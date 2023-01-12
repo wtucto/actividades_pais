@@ -79,9 +79,13 @@ class Http {
 
       var oData;
       try {
+        // if (headers!["authorization"] != null) {
+        //   oData = response.data;
+        // } else {
         oData = response.data["response"] == null
             ? response.data
             : response.data["response"];
+        // }
       } catch (oError) {
         oData = jsonDecode(response.data);
       }

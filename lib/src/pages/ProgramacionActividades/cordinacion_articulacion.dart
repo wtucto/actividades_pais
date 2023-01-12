@@ -1,4 +1,5 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
@@ -22,41 +23,16 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
   final _timeFinal = TextEditingController();
   final _descripcionEvento = TextEditingController();
   final _evento = TextEditingController();
+  List<CombosDto> _tipoUsuario = [];
+  List<CombosDto> _sector = [];
+  List<CombosDto> _programa = [];
 
   static final _itemAccion = [
     "SELECCIONE UNA OPCIÓN",
     "Coordinación con entidades",
     "Articulación - Plan de trabajo",
   ];
-  static final _itemTipoUsuario = [
-    "SELECCIONE UNA OPCIÓN",
-    "GOBIERNO CENTRAL",
-    "GOBIERNO REGIONAL",
-    "GOBIERNO LOCAL",
-    "ORGANISMOS AUTONOMOS",
-    "COOPERACION INTERNACIONAL",
-    "ONG",
-    "ORGANIZACIONES CIVILES",
-    "ORGANIZACIONES RELIGIOSAS",
-    "SECTOR PRIVADO",
-    "UNIVERSIDADES",
-    "IAL",
-    "IAR"
-  ];
-  static final _itemSector = [
-    "SELECCIONE UNA OPCIÓN",
-    "MEF",
-    "MIDIS",
-    "MIMP",
-    "MIDAGRI"
-  ];
-  static final _itemPrograma = [
-    "SELECCIONE UNA OPCIÓN",
-    "PROINVERSION-AGENCIA DE PROMOCION DE LA INVERSION PRIVADA",
-    "PROCOMPITE",
-    "SUPERINTENDENCIA NACIONAL DE ADUANAS Y DE ADMINISTRACION TRIBUTARIA",
-    "ORGANISMO SUPERVISOR DE LAS CONTRATACIONES DEL ESTADO"
-  ];
+
   static final _itemDocAcredita = [
     "SELECCIONE UNA OPCIÓN",
     "ACTA",
@@ -84,16 +60,53 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
   ];
 
   String? _valueAccion = _itemAccion[0];
-  String? _valueTipoUsuario = _itemTipoUsuario[0];
-  String? _valueSector = _itemSector[0];
-  String? _valuePrograma = _itemPrograma[0];
+  String? _valueTipoUsuario = "0";
+  String? _valueSector = "0";
+  String? _valuePrograma = "0";
   String? _valueAcredita = _itemDocAcredita[0];
   String? _valueArOri = _itemArOri[0];
 
   @override
   void initState() {
     super.initState();
+    getMaestraCombo();
     setState(() {});
+  }
+
+  Future<void> getMaestraCombo() async {
+    try {
+      _tipoUsuario = await controller.getTipoUsuario();
+      insertCombo(_tipoUsuario);
+      setState(() {});
+    } catch (oError) {
+      print(oError);
+    }
+  }
+
+  insertCombo(List<CombosDto> item) {
+    item.insert(
+      0,
+      CombosDto(id: 0, descrip2: "SELECIONE UNA OPCIÓN"),
+    );
+  }
+
+  Future<void> getMaestroSector(int key) async {
+    try {
+      _sector = await controller.getSector(key);
+      insertCombo(_sector);
+      setState(() {});
+    } catch (oError) {
+      print(oError);
+    }
+  }
+
+  Future<void> getMaestroPrograma(int key) async {
+    try {
+      _programa = await controller.getPrograma(key);
+      setState(() {});
+    } catch (oError) {
+      print(oError);
+    }
   }
 
   void showSnackbar({required bool success, required String text}) {
@@ -251,25 +264,27 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
               isExpanded: true,
               isDense: false,
               value: _valueTipoUsuario,
-              validator: (value) =>
-                  value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
-                      ? 'Requerido *'
-                      : null,
-              onChanged: (String? value) {
+              validator: (value) => value! == "0" ? 'Requerido *' : null,
+              items: _tipoUsuario.isNotEmpty
+                  ? _tipoUsuario.map((CombosDto map) {
+                      return DropdownMenuItem<String>(
+                        value: map.id.toString(),
+                        child: Text(
+                          map.descrip2.toString(),
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      );
+                    }).toList()
+                  : null,
+              onChanged: (String? value) async {
+                BusyIndicator.show(context);
+                await getMaestroSector(int.parse(value!));
+                BusyIndicator.hide(context);
                 setState(() {
-                  _valueTipoUsuario = value!;
+                  _valueTipoUsuario = value;
+                  _valueSector = "0";
                 });
               },
-              items: _itemTipoUsuario
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                );
-              }).toList(),
             ),
             /**
              * Sector
@@ -278,25 +293,24 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
               decoration: const InputDecoration(labelText: "Sector"),
               isExpanded: true,
               isDense: false,
-              value: _valueSector,
-              validator: (value) =>
-                  value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
-                      ? 'Requerido *'
-                      : null,
-              onChanged: (String? value) {
-                setState(() {
-                  _valueSector = value!;
-                });
+              value: _valueSector != null ? "0" : null,
+              validator: (value) => value! == "0" ? 'Requerido *' : null,
+              onChanged: (String? value) async {
+                BusyIndicator.show(context);
+                await getMaestroPrograma(int.parse(value!));
+                BusyIndicator.hide(context);
               },
-              items: _itemSector.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                );
-              }).toList(),
+              items: _sector.isNotEmpty
+                  ? _sector.map((CombosDto map) {
+                      return DropdownMenuItem<String>(
+                        value: map.id.toString(),
+                        child: Text(
+                          map.descrip2.toString(),
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      );
+                    }).toList()
+                  : null,
             ),
             /**
              * Programa
@@ -306,25 +320,23 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
               isExpanded: true,
               isDense: false,
               value: _valuePrograma,
-              validator: (value) =>
-                  value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
-                      ? 'Requerido *'
-                      : null,
+              validator: (value) => value! == "0" ? 'Requerido *' : null,
               onChanged: (String? value) {
                 setState(() {
                   _valuePrograma = value!;
                 });
               },
-              items:
-                  _itemPrograma.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                );
-              }).toList(),
+              items: _programa.isNotEmpty
+                  ? _programa.map((CombosDto map) {
+                      return DropdownMenuItem<String>(
+                        value: map.id.toString(),
+                        child: Text(
+                          map.descrip2.toString(),
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      );
+                    }).toList()
+                  : null,
             ),
             /**
              * Documento que Acredita el Evento
@@ -426,9 +438,9 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                         oProg.horaInicio = _timeInicio.text;
                         oProg.horaFin = _timeFinal.text;
                         oProg.accion = _valueAccion;
-                        oProg.tipoUsuario = _valueTipoUsuario;
-                        oProg.sector = _valueSector;
-                        oProg.programa = _valuePrograma;
+                        // oProg.tipoUsuario = _valueTipoUsuario;
+                        // oProg.sector = _valueSector;
+                        // oProg.programa = _valuePrograma;
                         oProg.documentoQueAcreditaElEvento = _valueAcredita;
                         oProg.dondeSeRealizoElEvento = _evento.text;
                         oProg.articulacionOrientadaA = _valueArOri;
