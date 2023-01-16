@@ -26,19 +26,19 @@ class ProgramRespDto {
       );
 
   static ProgramRespDto fromJson(Map<String, Object?> o) => ProgramRespDto(
-        mensaje: _getString(o[ProgramRespFld.estado]),
-        estado: o[ProgramRespFld.mensaje] as bool,
+        mensaje: _getString(o[ProgramRespFld.mensaje]),
+        estado: o[ProgramRespFld.estado] as bool,
       );
 
   Map<String, dynamic> toJson() => {
-        ProgramRespFld.estado: mensaje,
-        ProgramRespFld.mensaje: estado,
+        ProgramRespFld.mensaje: mensaje,
+        ProgramRespFld.estado: estado,
       };
 
   static Map<String, dynamic> toJsonObject(ProgramRespDto o) {
     return {
-      ProgramRespFld.estado: o.mensaje,
-      ProgramRespFld.mensaje: o.estado,
+      ProgramRespFld.mensaje: o.mensaje,
+      ProgramRespFld.estado: o.estado,
     };
   }
 

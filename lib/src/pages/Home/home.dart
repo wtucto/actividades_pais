@@ -347,20 +347,20 @@ class _HomePagePais extends State<HomePagePais> {
               },
               child: Text('TileActividadPnpais'.tr),
             ),
-            CupertinoActionSheetAction(
-              onPressed: () async {
-                /*
-                 ACTIVIDADES PNPAIS
-                */
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProgramacionListPage(),
-                  ),
-                );
-              },
-              child: Text('TileProgramaciones'.tr),
-            ),
+            // CupertinoActionSheetAction(
+            //   onPressed: () async {
+            //     /*
+            //      ACTIVIDADES PNPAIS
+            //     */
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => ProgramacionListPage(),
+            //       ),
+            //     );
+            //   },
+            //   child: Text('TileProgramaciones'.tr),
+            // ),
           ],
           cancelButton: CupertinoActionSheetAction(
             isDestructiveAction: true,

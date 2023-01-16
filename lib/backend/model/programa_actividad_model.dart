@@ -79,7 +79,7 @@ class ProgActModel {
   String? descripcion = '';
   String? accion = '';
   String? realizo = '';
-  String? tipoActividad = '';
+  int? tipoActividad = 0;
   List<ActividadTamboModel>? aTambo = [];
 
   ProgActModel.empty() {}
@@ -126,7 +126,7 @@ class ProgActModel {
         descripcion: descripcion ?? this.descripcion,
         accion: accion ?? this.accion,
         realizo: realizo ?? this.realizo,
-        tipoActividad: tipoActividad ?? this.tipoActividad,
+        tipoActividad: this.tipoActividad,
       );
 
   static ProgActModel fromJson(Map<String, Object?> o) => ProgActModel(
@@ -141,7 +141,7 @@ class ProgActModel {
         descripcion: _getString(o[ProgActFld.descripcion]),
         accion: _getString(o[ProgActFld.accion]),
         realizo: _getString(o[ProgActFld.realizo]),
-        tipoActividad: _getString(o[ProgActFld.tipoActividad]),
+        tipoActividad: _getInt(o[ProgActFld.tipoActividad]),
         /*aTambo: o[ProgActFld.registroEntidadActividades] != null
             ? parseList(o[ProgActFld.registroEntidadActividades]
                 as List<ActividadTamboModel>)

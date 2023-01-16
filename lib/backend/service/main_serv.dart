@@ -684,11 +684,11 @@ class MainService {
     List<CombosDto> aResp = [];
     aResp.add(CombosDto(
       id: 1,
-      descrip: 'Coordinación con entidades',
+      descrip2: 'Coordinación con entidades',
     ));
     aResp.add(CombosDto(
       id: 2,
-      descrip: 'Articulación - Plan de trabajo',
+      descrip2: 'Articulación - Plan de trabajo',
     ));
     return aResp;
   }

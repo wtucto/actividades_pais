@@ -1,6 +1,7 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
-import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
+import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
+import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -23,60 +24,45 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
   final _timeFinal = TextEditingController();
   final _descripcionEvento = TextEditingController();
   final _evento = TextEditingController();
+  List<CombosDto> _itemAccion = [];
   List<CombosDto> _tipoUsuario = [];
   List<CombosDto> _sector = [];
   List<CombosDto> _programa = [];
+  List<CombosDto> _itemDocAcredita = [];
+  List<CombosDto> _itemArOri = [];
 
-  static final _itemAccion = [
-    "SELECCIONE UNA OPCIÓN",
-    "Coordinación con entidades",
-    "Articulación - Plan de trabajo",
-  ];
+  String? _valueAccion;
+  String? _valueTipoUsuario;
+  String? _valueSector;
+  String? _valuePrograma;
+  String? _valueAcredita;
+  String? _valueArOri;
 
-  static final _itemDocAcredita = [
-    "SELECCIONE UNA OPCIÓN",
-    "ACTA",
-    "INFORME",
-    "HOJA DE RUTA",
-    "PROGRAMACION INTERINSTITUCIONAL",
-    "PLAN DE TRABAJO",
-    "DOCUMENTO EXTERNO",
-    "POR CONFIRMAR"
-  ];
-  static final _itemArOri = [
-    "SELECCIONE UNA OPCIÓN",
-    "LUCHA CONTRA LA ANEMIA Y DCI",
-    "PROGRAMACION DE CARAVANA",
-    "EJECUCIÓN DE INTERVENCION MULTISECTORIAL",
-    "PLAN MULTISECTORIAL ANTE HELADAS Y FRIAJE",
-    "INTERVENCIÓN EN PLATAFORMA DE SERVICIOS",
-    "ELABORACIÓN DE PLAN TRABAJO",
-    "FIRMA DE CONVENIO",
-    "MESA REGIONAL",
-    "GESTIÓN DEL RIESGO DE DESASTRES",
-    "ASISTENCIA TÉCNICA IAR / ESPACIOS DE ARTICULACIÓN REGIONAL",
-    "PLANES DE TRABAJO REGIONAL - AGENDA HAMBRE 0",
-    "ASISTENCIA TÉCNICA PLAN DE TRABAJO EN TEMAS PRODUCTIVOS – IAR- HAMBRE 0"
-  ];
-
-  String? _valueAccion = _itemAccion[0];
-  String? _valueTipoUsuario = "0";
-  String? _valueSector = "0";
-  String? _valuePrograma = "0";
-  String? _valueAcredita = _itemDocAcredita[0];
-  String? _valueArOri = _itemArOri[0];
+  String? _fechaca;
 
   @override
   void initState() {
     super.initState();
     getMaestraCombo();
+    _valueAccion = "0";
+    _valueTipoUsuario = "0";
+    _valueSector = "0";
+    _valuePrograma = "0";
+    _valueAcredita = "0";
+    _valueArOri = "0";
     setState(() {});
   }
 
   Future<void> getMaestraCombo() async {
     try {
+      _itemAccion = await controller.getAccion();
+      insertCombo(_itemAccion);
       _tipoUsuario = await controller.getTipoUsuario();
       insertCombo(_tipoUsuario);
+      _itemDocAcredita = await controller.getDocAcredita();
+      insertCombo(_itemDocAcredita);
+      _itemArOri = await controller.getArticulacionOrientada();
+      insertCombo(_itemArOri);
       setState(() {});
     } catch (oError) {
       print(oError);
@@ -103,6 +89,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
   Future<void> getMaestroPrograma(int key) async {
     try {
       _programa = await controller.getPrograma(key);
+      insertCombo(_programa);
       setState(() {});
     } catch (oError) {
       print(oError);
@@ -177,6 +164,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                       DateFormat('dd/MM/yyyy').format(pickedDate);
                   setState(() {
                     _dateFecha.text = formattedDate;
+                    _fechaca = pickedDate.toIso8601String();
                   });
                 }
               },
@@ -198,7 +186,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                   DateTime parsedTime = DateFormat.jm()
                       .parse(pickedTime.format(context).toString());
                   String formattedTime =
-                      DateFormat('HH:mm:ss').format(parsedTime);
+                      DateFormat('hh:mm a').format(parsedTime);
                   setState(() {
                     _timeInicio.text = formattedTime;
                   });
@@ -222,7 +210,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                   DateTime parsedTime = DateFormat.jm()
                       .parse(pickedTime.format(context).toString());
                   String formattedTime =
-                      DateFormat('HH:mm:ss').format(parsedTime);
+                      DateFormat('hh:mm a').format(parsedTime);
                   setState(() {
                     _timeFinal.text = formattedTime;
                   });
@@ -236,25 +224,26 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
               decoration: const InputDecoration(labelText: "Accion"),
               isExpanded: true,
               isDense: false,
-              value: _valueAccion,
-              validator: (value) =>
-                  value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
-                      ? 'Requerido *'
-                      : null,
+              value: _valueAccion!,
+              validator: (value) => value! == "0" ? 'Requerido *' : null,
               onChanged: (String? value) {
                 setState(() {
                   _valueAccion = value!;
                 });
               },
-              items: _itemAccion.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                );
-              }).toList(),
+              items: _itemAccion.isNotEmpty
+                  ? _itemAccion.map((CombosDto map) {
+                      return DropdownMenuItem<String>(
+                        value: map.id.toString() == "0"
+                            ? "0"
+                            : map.descrip2.toString(),
+                        child: Text(
+                          map.descrip2.toString(),
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      );
+                    }).toList()
+                  : null,
             ),
             /**
              * Tipo Usuario
@@ -263,7 +252,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
               decoration: const InputDecoration(labelText: "Tipo Usuario"),
               isExpanded: true,
               isDense: false,
-              value: _valueTipoUsuario,
+              value: _valueTipoUsuario!,
               validator: (value) => value! == "0" ? 'Requerido *' : null,
               items: _tipoUsuario.isNotEmpty
                   ? _tipoUsuario.map((CombosDto map) {
@@ -277,6 +266,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                     }).toList()
                   : null,
               onChanged: (String? value) async {
+                _programa = [];
                 BusyIndicator.show(context);
                 await getMaestroSector(int.parse(value!));
                 BusyIndicator.hide(context);
@@ -293,12 +283,16 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
               decoration: const InputDecoration(labelText: "Sector"),
               isExpanded: true,
               isDense: false,
-              value: _valueSector != null ? "0" : null,
+              value: _valueSector!,
               validator: (value) => value! == "0" ? 'Requerido *' : null,
               onChanged: (String? value) async {
                 BusyIndicator.show(context);
                 await getMaestroPrograma(int.parse(value!));
                 BusyIndicator.hide(context);
+                setState(() {
+                  _valueSector = value;
+                  _valuePrograma = "0";
+                });
               },
               items: _sector.isNotEmpty
                   ? _sector.map((CombosDto map) {
@@ -319,7 +313,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
               decoration: const InputDecoration(labelText: "Programa"),
               isExpanded: true,
               isDense: false,
-              value: _valuePrograma,
+              value: _valuePrograma!,
               validator: (value) => value! == "0" ? 'Requerido *' : null,
               onChanged: (String? value) {
                 setState(() {
@@ -346,26 +340,24 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                   labelText: "Documento que Acredita el Evento"),
               isExpanded: true,
               isDense: false,
-              value: _valueAcredita,
-              validator: (value) =>
-                  value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
-                      ? 'Requerido *'
-                      : null,
+              value: _valueAcredita!,
+              validator: (value) => value! == "0" ? 'Requerido *' : null,
               onChanged: (String? value) {
                 setState(() {
                   _valueAcredita = value!;
                 });
               },
-              items: _itemDocAcredita
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                );
-              }).toList(),
+              items: _itemDocAcredita.isNotEmpty
+                  ? _itemDocAcredita.map((CombosDto map) {
+                      return DropdownMenuItem<String>(
+                        value: map.id.toString(),
+                        child: Text(
+                          map.descrip2.toString(),
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      );
+                    }).toList()
+                  : null,
             ),
             /**
              * ¿Dónde se Realizó el Evento?
@@ -386,25 +378,24 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                   const InputDecoration(labelText: "Articulación Orientada A."),
               isExpanded: true,
               isDense: false,
-              value: _valueArOri,
-              validator: (value) =>
-                  value!.toUpperCase() == "SELECCIONE UNA OPCIÓN"
-                      ? 'Requerido *'
-                      : null,
+              value: _valueArOri!,
+              validator: (value) => value! == "0" ? 'Requerido *' : null,
               onChanged: (String? value) {
                 setState(() {
                   _valueArOri = value!;
                 });
               },
-              items: _itemArOri.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                );
-              }).toList(),
+              items: _itemArOri.isNotEmpty
+                  ? _itemArOri.map((CombosDto map) {
+                      return DropdownMenuItem<String>(
+                        value: map.id.toString(),
+                        child: Text(
+                          map.descrip2.toString(),
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      );
+                    }).toList()
+                  : null,
             ),
             /**
              * Descripcion del Evento
@@ -429,30 +420,38 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                     if (_formKey.currentState!.validate()) {
                       try {
                         BusyIndicator.show(context);
-                        ProgramacionActividadModel oProg =
-                            ProgramacionActividadModel.empty();
-                        oProg.programacionActividades =
-                            ProgramacionActividadModel
-                                .sprogActividadCordArticulacion;
-                        oProg.fecha = _dateFecha.text;
+                        ProgActModel oProg = ProgActModel.empty();
+
+                        oProg.fecha = _fechaca;
+                        oProg.descripcion = _evento.text;
+                        oProg.tipoGobierno = int.parse(_valueTipoUsuario!);
+                        oProg.sector = int.parse(_valueSector!);
+                        oProg.programa = int.parse(_valuePrograma!);
+                        oProg.documento = int.parse(_valueAcredita!);
+                        oProg.articulacion = int.parse(_valueArOri!);
+                        oProg.realizo = _evento.text;
                         oProg.horaInicio = _timeInicio.text;
                         oProg.horaFin = _timeFinal.text;
                         oProg.accion = _valueAccion;
-                        // oProg.tipoUsuario = _valueTipoUsuario;
-                        // oProg.sector = _valueSector;
-                        // oProg.programa = _valuePrograma;
-                        oProg.documentoQueAcreditaElEvento = _valueAcredita;
-                        oProg.dondeSeRealizoElEvento = _evento.text;
-                        oProg.articulacionOrientadaA = _valueArOri;
-                        oProg.descripcionDelEvento = _evento.text;
-                        ProgramacionActividadModel response =
-                            await controller.saveProgramaIntervencion(oProg);
+
+                        ProgramRespDto response = await controller
+                            .sendCoordinacionArticulacion(oProg);
                         BusyIndicator.hide(context);
-                        showSnackbar(
-                          success: true,
-                          text: 'Datos Enviados Correctamente',
-                        );
-                        _formKey.currentState?.reset();
+                        if (response.estado!) {
+                          showSnackbar(
+                            success: true,
+                            text: 'Datos Enviados Correctamente',
+                          );
+                          _formKey.currentState?.reset();
+                        } else {
+                          AnimatedSnackBar.rectangle(
+                            'Error',
+                            response.mensaje!,
+                            type: AnimatedSnackBarType.error,
+                            brightness: Brightness.light,
+                            mobileSnackBarPosition: MobileSnackBarPosition.top,
+                          ).show(context);
+                        }
                       } catch (ex) {
                         BusyIndicator.hide(context);
                         AnimatedSnackBar.rectangle(

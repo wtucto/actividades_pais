@@ -1,5 +1,8 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
+import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
+import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -21,28 +24,29 @@ class _ActividadesPnpaisState extends State<ActividadesPnpais> {
   final _timeFinal = TextEditingController();
   final _descripcion = TextEditingController();
 
-  static final _itemTipoActividad = [
-    "Seleccionar Opción",
-    "Revisión de Intervenciones (INTRANET)",
-    "Reunión mensual",
-    "Asistencia a reuniones PN PAIS",
-    "Elaboracion de informes",
-    "Induccion/capacitacion",
-    "Asistencia tecnica",
-    "Atencion a publico y autoridades",
-    "Entrevista CAS",
-    "Asistencia a espacios de articulación",
-    "Actividades con enlace MIDIS",
-    "Auditorias",
-    "Recepción de tambos",
-    "Asistencia técnica a caravanas",
-  ];
-  String? _valueTipoActidad = _itemTipoActividad[0];
+  List<CombosDto> _itemTipoActividad = [];
+  String? _valueTipoActidad;
+  String? _fechaca;
 
   @override
   void initState() {
     super.initState();
+    getMaestraCombo();
+    _valueTipoActidad = "0";
     setState(() {});
+  }
+
+  Future<void> getMaestraCombo() async {
+    try {
+      _itemTipoActividad = await controller.getTipoActividad();
+      _itemTipoActividad.insert(
+        0,
+        CombosDto(id: 0, descrip2: "SELECIONE UNA OPCIÓN"),
+      );
+      setState(() {});
+    } catch (oError) {
+      print(oError);
+    }
   }
 
   void showSnackbar({required bool success, required String text}) {
@@ -115,6 +119,7 @@ class _ActividadesPnpaisState extends State<ActividadesPnpais> {
 
                   setState(() {
                     _dateFecha.text = formattedDate;
+                    _fechaca = pickedDate.toIso8601String();
                   });
                 }
               },
@@ -136,7 +141,7 @@ class _ActividadesPnpaisState extends State<ActividadesPnpais> {
                   DateTime parsedTime = DateFormat.jm()
                       .parse(pickedTime.format(context).toString());
                   String formattedTime =
-                      DateFormat('HH:mm:ss').format(parsedTime);
+                      DateFormat('hh:mm a').format(parsedTime);
                   setState(() {
                     _timeInicio.text = formattedTime;
                   });
@@ -160,7 +165,7 @@ class _ActividadesPnpaisState extends State<ActividadesPnpais> {
                   DateTime parsedTime = DateFormat.jm()
                       .parse(pickedTime.format(context).toString());
                   String formattedTime =
-                      DateFormat('HH:mm:ss').format(parsedTime);
+                      DateFormat('hh:mm a').format(parsedTime);
                   setState(() {
                     _timeFinal.text = formattedTime;
                   });
@@ -172,23 +177,28 @@ class _ActividadesPnpaisState extends State<ActividadesPnpais> {
              */
             DropdownButtonFormField(
               decoration: const InputDecoration(labelText: "Tipo Actividad"),
-              value: _valueTipoActidad,
+              value: _valueTipoActidad!,
+              validator: (value) => value! == "0" ? 'Requerido *' : null,
               onChanged: (String? value) {
                 setState(() {
                   _valueTipoActidad = value!;
                 });
               },
-              items: _itemTipoActividad
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                );
-              }).toList(),
+              items: _itemTipoActividad.isNotEmpty
+                  ? _itemTipoActividad.map((CombosDto map) {
+                      return DropdownMenuItem<String>(
+                        value: map.id.toString() == "0"
+                            ? "0"
+                            : map.descrip2.toString(),
+                        child: Text(
+                          map.descrip2.toString(),
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      );
+                    }).toList()
+                  : null,
             ),
+
             /**
              * Descripcion
              */
@@ -212,24 +222,31 @@ class _ActividadesPnpaisState extends State<ActividadesPnpais> {
                     if (_formKey.currentState!.validate()) {
                       try {
                         BusyIndicator.show(context);
-                        ProgramacionActividadModel oProg =
-                            ProgramacionActividadModel.empty();
-                        oProg.programacionActividades =
-                            ProgramacionActividadModel
-                                .sprogActividadActividadPnpais;
-                        oProg.fecha = _dateFecha.text;
+                        ProgActModel oProg = ProgActModel.empty();
+                        oProg.fecha = _fechaca;
+                        oProg.descripcion = _descripcion.text;
+                        oProg.tipoActividad = int.parse(_valueTipoActidad!);
                         oProg.horaInicio = _timeInicio.text;
                         oProg.horaFin = _timeFinal.text;
-                        oProg.tipoActividad = _valueTipoActidad;
-                        oProg.descripcionActividad = _descripcion.text;
-                        ProgramacionActividadModel response =
-                            await controller.saveProgramaIntervencion(oProg);
+                        ProgramRespDto response =
+                            await controller.sendActividadesPNPAIS(oProg);
+
                         BusyIndicator.hide(context);
-                        showSnackbar(
-                          success: true,
-                          text: 'Datos Enviados Correctamente',
-                        );
-                        _formKey.currentState?.reset();
+                        if (response.estado!) {
+                          showSnackbar(
+                            success: true,
+                            text: 'Datos Enviados Correctamente',
+                          );
+                          _formKey.currentState?.reset();
+                        } else {
+                          AnimatedSnackBar.rectangle(
+                            'Error',
+                            response.mensaje!,
+                            type: AnimatedSnackBarType.error,
+                            brightness: Brightness.light,
+                            mobileSnackBarPosition: MobileSnackBarPosition.top,
+                          ).show(context);
+                        }
                       } catch (ex) {
                         BusyIndicator.hide(context);
                         AnimatedSnackBar.rectangle(

@@ -1,6 +1,8 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
-import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
+import 'package:actividades_pais/backend/model/actividad_tambo_model.dart';
+import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
+import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,6 +24,9 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
   final _dateFecha = TextEditingController();
   List<DataRow> dataRows = [];
   late List<RegistroEntidadActividadModel> lisData = [];
+  List<ActividadTamboModel> aTambo = [];
+  String? _fechaca;
+
   var uuid = Uuid();
   @override
   void initState() {
@@ -96,6 +101,7 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                       DateFormat('dd/MM/yyyy').format(pickedDate);
                   setState(() {
                     _dateFecha.text = formattedDate;
+                    _fechaca = pickedDate.toIso8601String();
                   });
                 }
               },
@@ -173,21 +179,50 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                             text: 'Debe llenar La tabla de Actividades',
                           );
                         } else {
+                          aTambo = [];
                           BusyIndicator.show(context);
-                          ProgramacionActividadModel oProg =
-                              ProgramacionActividadModel.empty();
-                          oProg.programacionActividades =
-                              ProgramacionActividadModel
-                                  .sprogActividadMinitoreoSuper;
-                          oProg.fecha = _dateFecha.text;
-                          oProg.registroEntidadActividades = lisData;
-                          ProgramacionActividadModel response =
-                              await controller.saveProgramaIntervencion(oProg);
+                          List<ActividadTamboModel> dto = [];
+                          int count = 1;
+                          for (var key in lisData) {
+                            dto.add(ActividadTamboModel(
+                                idTambo: count, // cambiar por id
+                                descripcion:
+                                    key.descripcionDeLaActividadProgramada!,
+                                fecha: _fechaca!,
+                                hora: "${key.horaInicio!} - ${key.horaFin!}",
+                                ubicacion:
+                                    "${key.distrito!} / ${key.provincia!} / ${key.departamento!}"));
+                            count++;
+                          }
+                          aTambo.addAll(dto);
+                          ProgActModel oProg = ProgActModel.empty();
+                          oProg.fecha = _fechaca!;
+                          oProg.aTambo = aTambo;
+
+                          ProgramRespDto response =
+                              await controller.sendMonitoreoSupervision(oProg);
+
                           BusyIndicator.hide(context);
-                          showSnackbar(
-                            success: true,
-                            text: 'Datos Enviados Correctamente',
-                          );
+                          if (response.estado!) {
+                            showSnackbar(
+                              success: true,
+                              text: 'Datos Enviados Correctamente',
+                            );
+                            _formKey.currentState?.reset();
+                            dataRows = [];
+                            lisData = [];
+                            _dateFecha.text = "";
+                            setState(() {});
+                          } else {
+                            AnimatedSnackBar.rectangle(
+                              'Error',
+                              response.mensaje!,
+                              type: AnimatedSnackBarType.error,
+                              brightness: Brightness.light,
+                              mobileSnackBarPosition:
+                                  MobileSnackBarPosition.top,
+                            ).show(context);
+                          }
                         }
                       } catch (ex) {
                         BusyIndicator.hide(context);
@@ -326,7 +361,7 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
             if (pickedTime != null) {
               DateTime parsedTime =
                   DateFormat.jm().parse(pickedTime.format(context).toString());
-              String formattedTime = DateFormat('HH:mm:ss').format(parsedTime);
+              String formattedTime = DateFormat('hh:mm a').format(parsedTime);
               setState(() {
                 _timeInicio.text = formattedTime;
               });
@@ -349,7 +384,7 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
             if (pickedTime != null) {
               DateTime parsedTime =
                   DateFormat.jm().parse(pickedTime.format(context).toString());
-              String formattedTime = DateFormat('HH:mm:ss').format(parsedTime);
+              String formattedTime = DateFormat('hh:mm a').format(parsedTime);
               setState(() {
                 _timeFinal.text = formattedTime;
               });
