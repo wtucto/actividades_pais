@@ -212,7 +212,7 @@ class ProgActModel {
       ProgActFld.horaInicio: _getString(o.horaInicio),
       ProgActFld.horaFin: _getString(o.horaFin),
       ProgActFld.descripcion: _getString(o.descripcion),
-      ProgActFld.tipoActividad: _getString(o.tipoActividad),
+      ProgActFld.tipoActividad: _getInt(o.tipoActividad),
     };
   }
 

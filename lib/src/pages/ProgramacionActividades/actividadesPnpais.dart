@@ -177,19 +177,19 @@ class _ActividadesPnpaisState extends State<ActividadesPnpais> {
              */
             DropdownButtonFormField(
               decoration: const InputDecoration(labelText: "Tipo Actividad"),
+              isExpanded: true,
+              isDense: false,
               value: _valueTipoActidad!,
               validator: (value) => value! == "0" ? 'Requerido *' : null,
-              onChanged: (String? value) {
+              onChanged: (String? value) async {
                 setState(() {
-                  _valueTipoActidad = value!;
+                  _valueTipoActidad = value;
                 });
               },
               items: _itemTipoActividad.isNotEmpty
                   ? _itemTipoActividad.map((CombosDto map) {
                       return DropdownMenuItem<String>(
-                        value: map.id.toString() == "0"
-                            ? "0"
-                            : map.descrip2.toString(),
+                        value: map.id.toString(),
                         child: Text(
                           map.descrip2.toString(),
                           style: TextStyle(fontSize: 14),
