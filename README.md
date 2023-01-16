@@ -77,7 +77,7 @@ Runtime version: 11.0.13+0-b1751.21-8125866 aarch64
     PATH %ANDROID_SDK_ROOT%\tools
     PATH %ANDROID_SDK_ROOT%\tools\bin
     PATH %ANDROID_SDK_ROOT%\platform-tools
-    PATH %ANDROID_SDK_ROOT%\cmdline-tools/latest/bin/
+    PATH %ANDROID_SDK_ROOT%\cmdline-tools\latest\bin
     PATH %ANDROID_SDK_ROOT%\emulator
     PATH %GRADLE_HOME%\bin
 ```
