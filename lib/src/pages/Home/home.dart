@@ -274,6 +274,15 @@ class _HomePagePais extends State<HomePagePais> {
             color: lightBlue,
           ),
         );
+        aHomeOptions.add(
+          HomeOptions(
+            code: 'OPT1007',
+            name: 'SEGUIMINETO Y MONITOREO',
+            types: const ['Ver'],
+            image: icon1,
+            color: lightBlue,
+          ),
+        );
       }
     }
 
