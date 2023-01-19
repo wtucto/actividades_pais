@@ -20,9 +20,9 @@ class Modelo {
   Modelo({this.idModelo, this.descripcionModelo, this.idMarca});
 
   Modelo.fromJson(Map<String, dynamic> json) {
-    idModelo = json['id_modelo'];
-    descripcionModelo = json['descripcion_modelo'];
-    idMarca = json['id_marca'];
+    idModelo = json['id_modelo'] ?? 0;
+    descripcionModelo = json['descripcion_modelo']?? 0;
+    idMarca = json['id_marca']?? '';
   }
 
   Map<String, dynamic> toJson() {

@@ -1,7 +1,12 @@
+import 'package:actividades_pais/src/datamodels/Clases/Uti/FiltroListaEquipos.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaEquipoInformatico.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaMarca.dart';
+import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaModelo.dart';
+import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaUbicacion.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderSeguimientoParqueInformatico.dart';
+import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
+import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/DetalleEquipoInformatico.dart';
 import 'package:flutter/material.dart';
 
 class SeguimientoParqueInformatico extends StatefulWidget {
@@ -15,32 +20,91 @@ class SeguimientoParqueInformatico extends StatefulWidget {
 class _SeguimientoParqueInformaticoState
     extends State<SeguimientoParqueInformatico> {
   Listas listas = Listas();
+  FiltroParqueInformatico filtroParqueInformatico = FiltroParqueInformatico();
+
   var seleccionarMarca = "Seleccionar Marca";
   var seleccionarModelo = "Seleccionar Modelo";
+  var seleccionarUbicacion = "Seleccionar Ubicacion";
+
+  var pageIndex = 1;
+
+  final controller = ScrollController();
+  bool isLoading = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    ProviderSeguimientoParqueInformatico().listaParqueInformatico();
+    controller.addListener(_onlistener);
+    filtroParqueInformatico.pageSize = 10;
+    filtroParqueInformatico.pageIndex = pageIndex;
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    controller.removeListener(_onlistener);
+    super.dispose();
+  }
+
+  _onlistener() async {
+    if ((controller.offset >= controller.position.maxScrollExtent)) {
+      setState(() {
+        isLoading = true;
+        pageIndex = pageIndex + 1;
+      });
+      await traerPaguinado(10, pageIndex);
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("PARQUE INFORMATICO"),
+          title: const Text(
+            "PARQUE INFORMATICO",
+            style: TextStyle(fontSize: 17),
+          ),
           actions: [
+            /*    if (isLoading == true) ...[
+              new Center(
+                child: Container(
+                    height: 30,
+                    child: const CircularProgressIndicator(
+                      color: Colors.white,
+                    )),
+              )
+            ],*/
+            const SizedBox(width: 10),
             InkWell(
-              child: Icon(Icons.filter_list_rounded),
+              child: const Icon(Icons.filter_list_rounded),
               onTap: () {
+                resetlista();
                 _showAddNoteDialog(context);
+              },
+            ),
+            const SizedBox(width: 10),
+            InkWell(
+              child: const Icon(Icons.restart_alt_sharp),
+              onTap: () async {
+                setState(() {
+                  isLoading = true;
+                });
+                await resetlista();
+
+                setState(() {
+                  isLoading = false;
+                });
               },
             )
           ],
         ),
         body: FutureBuilder<List<ListaEquipoInformatico>>(
-          future:
-              ProviderSeguimientoParqueInformatico().listaParqueInformatico(),
+          future: ProviderSeguimientoParqueInformatico()
+              .listaParqueInformatico(filtroParqueInformatico),
           builder: (BuildContext context,
               AsyncSnapshot<List<ListaEquipoInformatico>> snapshot) {
             if (snapshot.hasData) {
@@ -58,55 +122,69 @@ class _SeguimientoParqueInformaticoState
                     ),
                   );
                 } else {
-                  return Container(
-                    child: RefreshIndicator(
-                        onRefresh: refreshList,
-                        child: ListView.builder(
-                          itemCount: listaPersonalAux.length,
-                          itemBuilder: (context, i) => Dismissible(
-                              key: UniqueKey(),
-                              background: buildSwipeActionLeft(),
-                              secondaryBackground: buildSwipeActionRigth(),
-                              onDismissed: (direction) async {
-                                switch (direction) {
-                                  case DismissDirection.endToStart:
-                                    break;
-                                  case DismissDirection.startToEnd:
-                                    break;
-                                }
-                              },
-                              child: listas.cardParqueInformatico(
-                                listaPersonalAux[i],
-                                () async {
-                                  /*  final respt = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            EjecucionProgramacionPage(
-                                                idProgramacion: int.parse(
-                                                    listaPersonalAux[i]
-                                                        .codigoIntervencion!),
-                                                descripcionEvento:
-                                                listaPersonalAux[i]
-                                                    .descripcionEvento!,
-                                                //   snip: widget.snip,
-                                                programa: listaPersonalAux[i]
-                                                    .programa!,
-                                                tramaIntervencion:
-                                                listaPersonalAux[i])),
-                                  );
-                                  if (respt == 'ok') {
-                                    print("aqioioo");
-                                    refreshList();
-                                  }*/
-                                },
-                              )),
-                        )),
+                  return Column(
+                    children: [
+                      Expanded(
+                          child: Container(
+                        child: RefreshIndicator(
+                            onRefresh: resetlista,
+                            child: ListView.builder(
+                              controller: controller,
+                              itemCount: listaPersonalAux.length,
+                              itemBuilder: (context, i) => Dismissible(
+                                  key: UniqueKey(),
+                                  background: buildSwipeActionLeft(),
+                                  secondaryBackground: buildSwipeActionRigth(),
+                                  onDismissed: (direction) async {
+                                    switch (direction) {
+                                      case DismissDirection.endToStart:
+                                        break;
+                                      case DismissDirection.startToEnd:
+                                        break;
+                                      case DismissDirection.vertical:
+                                        // TODO: Handle this case.
+                                        break;
+                                      case DismissDirection.horizontal:
+                                        // TODO: Handle this case.
+                                        break;
+                                      case DismissDirection.up:
+                                        // TODO: Handle this case.
+                                        break;
+                                      case DismissDirection.down:
+                                        // TODO: Handle this case.
+                                        break;
+                                      case DismissDirection.none:
+                                        // TODO: Handle this case.
+                                        break;
+                                    }
+                                  },
+                                  child: listas.cardParqueInformatico(
+                                    listaPersonalAux[i],
+                                    () async {
+                                      final respt = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                DetalleEquipoInformatico(listaPersonalAux[i]),
+                                          ));
+                                      if (respt == 'ok') {
+                                        print("aqioioo");
+                                        // refreshList();
+                                      }
+                                    },
+                                  )),
+                            )),
+                      )),
+                      if (isLoading == true)
+                        new Center(
+                          child: const CircularProgressIndicator(),
+                        )
+                    ],
                   );
                 }
               }
             }
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },
@@ -114,19 +192,15 @@ class _SeguimientoParqueInformaticoState
         floatingActionButton: FloatingActionButton(
           heroTag: 'ss',
           onPressed: () {},
-          child: Icon(Icons.playlist_add_outlined),
+          child: const Icon(Icons.playlist_add_outlined),
         ));
   }
 
   _showAddNoteDialog(BuildContext context) => showDialog(
         context: context,
         builder: (context) {
-
-          const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
-
-          String dropdownValue = list.first;
           return AlertDialog(
-            title: Text("FILTRO"),
+            title: const Text("FILTRO"),
             content: SingleChildScrollView(
               child: Container(
                 width: double.infinity,
@@ -135,144 +209,313 @@ class _SeguimientoParqueInformaticoState
                   children: [
                     TextFormField(
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           hintText: 'CODIGO PATRIMONIAL',
-                          icon: Icon(Icons.note_add)),
+                          icon: Icon(Icons.note_add, size: 15)),
+                      style: const TextStyle(fontSize: 10),
+                      onChanged: (value) {
+                        filtroParqueInformatico.codigoPatrimonial = value;
+                      },
                     ),
                     TextFormField(
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                          hintText: 'DENOMINACION', icon: Icon(Icons.note_add)),
+                      decoration: const InputDecoration(
+                          hintText: 'DENOMINACION',
+                          icon: Icon(Icons.note_add, size: 15)),
+                      style: const TextStyle(fontSize: 10),
+                      onChanged: (value) {
+                        filtroParqueInformatico.denominacion = value;
+                      },
                     ),
                     Container(
-                     margin: EdgeInsets.only(),
-                     child: FutureBuilder<List<Marca>>(
-                       future: ProviderSeguimientoParqueInformatico()
-                           .listaMarcas(),
-                       builder: (BuildContext context,
-                           AsyncSnapshot<List<Marca>> snapshot) {
+                      margin: const EdgeInsets.only(),
+                      child: FutureBuilder<List<Marca>>(
+                        future: ProviderSeguimientoParqueInformatico()
+                            .listaMarcas(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Marca>> snapshot) {
                           if (!snapshot.hasData) {
-                           return Center(
-                             child: CircularProgressIndicator(),
-                           );
-                         }
-                         final preguntas = snapshot.data;
-                         if (preguntas!.length == 0) {
-                           return Center(
-                             child: Text("sin dato"),
-                           );
-                         } else {
-                           return Container(
-                              child: StatefulBuilder(
-                                 builder: (BuildContext context, StateSetter dropDownState){
-                                   return DropdownButton<Marca>(
-                                     isExpanded: true,
-                                     underline: Container(),
-                                     items: snapshot.data
-                                         ?.map((user) {
-                                       return new DropdownMenuItem<Marca>(
-                                         value: user,
-                                         child: new Text(user.descripcionMarca!, style: TextStyle(fontWeight: FontWeight.w500),),
-                                       );
-                                     }).toList(),
-                                     onChanged: (Marca? value) {
-                                       dropDownState(() {
-                                         seleccionarMarca = value!.descripcionMarca!;
-                                       });
-                                     },hint: Text(seleccionarMarca),
-                                   );
-                                 }
-                             ),
-                           );
-                         }
-                       },
-                     ),
-                      ),Container(
-                     margin: EdgeInsets.only(),
-                     child: FutureBuilder<List<Marca>>(
-                       future: ProviderSeguimientoParqueInformatico()
-                           .listaMarcas(),
-                       builder: (BuildContext context,
-                           AsyncSnapshot<List<Marca>> snapshot) {
-                          if (!snapshot.hasData) {
-                           return Center(
-                             child: CircularProgressIndicator(),
-                           );
-                         }
-                         final preguntas = snapshot.data;
-                         if (preguntas!.length == 0) {
-                           return Center(
-                             child: Text("sin dato"),
-                           );
-                         } else {
-                           return Container(
-                              child: StatefulBuilder(
-                                 builder: (BuildContext context, StateSetter dropDownState){
-                                   return DropdownButton<Marca>(
-                                     isExpanded: true,
-                                     underline: Container(),
-                                     items: snapshot.data
-                                         ?.map((user) {
-                                       return new DropdownMenuItem<Marca>(
-                                         value: user,
-                                         child: new Text(user.descripcionMarca!, style: TextStyle(fontWeight: FontWeight.w500),),
-                                       );
-                                     }).toList(),
-                                     onChanged: (Marca? value) {
-                                       dropDownState(() {
-                                         seleccionarModelo = value!.descripcionMarca!;
-                                       });
-                                     },hint: Text(seleccionarModelo),
-                                   );
-                                 }
-                             ),
-                           );
-                         }
-                       },
-                     ),
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          final preguntas = snapshot.data;
+                          if (preguntas!.isEmpty) {
+                            return const Center(
+                              child: Text("sin dato"),
+                            );
+                          } else {
+                            return Row(
+                              children: [
+                                const Icon(
+                                    Icons.account_balance_wallet_outlined,
+                                    size: 15,
+                                    color: Colors.grey),
+                                SizedBox(width: 13),
+                                Expanded(
+                                  child: Container(
+                                    child: StatefulBuilder(builder:
+                                        (BuildContext context,
+                                            StateSetter dropDownState) {
+                                      return DropdownButtonFormField<Marca>(
+                                        isExpanded: true,
+                                        items: snapshot.data?.map((user) {
+                                          return new DropdownMenuItem<Marca>(
+                                            value: user,
+                                            child: new Text(
+                                              user.descripcionMarca!,
+                                              style:
+                                                  const TextStyle(fontSize: 10),
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (Marca? value) {
+                                          dropDownState(() {
+                                            seleccionarMarca =
+                                                value!.descripcionMarca!;
+                                            filtroParqueInformatico.idMarca =
+                                                value.idMarca.toString();
+                                          });
+                                        },
+                                        hint: Text(
+                                          seleccionarMarca,
+                                          style: const TextStyle(fontSize: 10),
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                        },
                       ),
-
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(),
+                      child: FutureBuilder<List<Modelo>>(
+                        future: ProviderSeguimientoParqueInformatico()
+                            .listaModelos(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Modelo>> snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          final preguntas = snapshot.data;
+                          if (preguntas!.length == 0) {
+                            return const Center(
+                              child: Text("sin dato"),
+                            );
+                          } else {
+                            return Row(
+                              children: [
+                                const Icon(Icons.account_tree_rounded,
+                                    size: 15, color: Colors.grey),
+                                SizedBox(width: 13),
+                                Expanded(
+                                  child: Container(
+                                    child: StatefulBuilder(builder:
+                                        (BuildContext context,
+                                            StateSetter dropDownState) {
+                                      return DropdownButtonFormField<Modelo?>(
+                                        isExpanded: true,
+                                        //underline: Container(),
+                                        items: snapshot.data?.map((user) {
+                                          return new DropdownMenuItem<Modelo?>(
+                                            value: user,
+                                            child: new Text(
+                                              user.descripcionModelo!,
+                                              style:
+                                                  const TextStyle(fontSize: 10),
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (Modelo? value) {
+                                          dropDownState(() {
+                                            seleccionarModelo =
+                                                value!.descripcionModelo!;
+                                            filtroParqueInformatico.idModelo =
+                                                value.idModelo.toString();
+                                          });
+                                        },
+                                        hint: Text(
+                                          seleccionarModelo,
+                                          style: const TextStyle(fontSize: 10),
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(),
+                      child: FutureBuilder<List<Ubicacion>>(
+                        future: ProviderSeguimientoParqueInformatico()
+                            .listaUbicacion(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Ubicacion>> snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          final preguntas = snapshot.data;
+                          if (preguntas!.length == 0) {
+                            return const Center(
+                              child: Text("sin dato"),
+                            );
+                          } else {
+                            return Row(
+                              children: [
+                                const Icon(Icons.place,
+                                    size: 15, color: Colors.grey),
+                                SizedBox(width: 13),
+                                Expanded(child: Container(
+                                  child: StatefulBuilder(builder:
+                                      (BuildContext context,
+                                          StateSetter dropDownState) {
+                                    return DropdownButtonFormField<Ubicacion>(
+                                      isExpanded: true,
+                                      items: snapshot.data?.map((user) {
+                                        return new DropdownMenuItem<Ubicacion>(
+                                          value: user,
+                                          child: new Text(
+                                            user.ubicacion!,
+                                            style:
+                                                const TextStyle(fontSize: 10),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (Ubicacion? value) {
+                                        dropDownState(() {
+                                          seleccionarUbicacion =
+                                              value!.ubicacion!;
+                                          filtroParqueInformatico.idUbicacion =
+                                              value.idUbicacion.toString();
+                                        });
+                                      },
+                                      hint: Text(
+                                        seleccionarUbicacion,
+                                        style: const TextStyle(fontSize: 10),
+                                      ),
+                                    );
+                                  }),
+                                ))
+                              ],
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                    TextFormField(
+                        keyboardType: TextInputType.text,
+                        decoration: const InputDecoration(
+                            hintText: 'RESPONSABLE ACTUAL',
+                            icon: Icon(
+                              Icons.note_add,
+                              size: 15,
+                            )),
+                        style: const TextStyle(fontSize: 10)),
                   ],
                 ),
               ),
             ),
             actions: [
-              /*  FlatButton(
-            child: Text("Yes"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),*/
+              Container(
+                  decoration: Servicios().myBoxDecoration(),
+                  margin: const EdgeInsets.only(right: 10, left: 10),
+                  height: 40.0,
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue[600],
+                    ),
+                    onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      await traerPaguinado(10, 1);
+                      Navigator.of(context).pop();
+
+                      setState(() {
+                        isLoading = false;
+                      });
+                    },
+                    child: const Text("FILTRAR"),
+                  ))
             ],
           );
         },
       );
 
-  Widget buildSwipeActionLeft() => Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      color: Colors.transparent,
-      child: Icon(
-        Icons.delete,
-        color: Colors.red[600],
-        size: 32,
-      ));
-
   Widget buildSwipeActionRigth() => Container(
       alignment: Alignment.centerRight,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       color: Colors.transparent,
-      child: Icon(
-        Icons.delete,
-        color: Colors.red[600],
-        size: 32,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text("Eliminar", style: TextStyle(color: Colors.red[600])),
+          Icon(
+            Icons.delete,
+            color: Colors.red[600],
+            size: 32,
+          )
+        ],
       ));
 
-  Future<Null> refreshList() async {
-    await Future.delayed(Duration(seconds: 0));
-    //  var abc = await DatabasePr.db.getAllTasksConfigInicio();
-    //if (abc.isNotEmpty) {
-    //    await DatabasePr.db.listarInterciones();
-    //  }
+  Widget buildSwipeActionLeft() => Container(
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      color: Colors.transparent,
+      child: Row(
+        children: [
+          Text(
+            "Editar",
+            style: TextStyle(color: Colors.green[600]),
+          ),
+          Icon(
+            Icons.edit,
+            color: Colors.green[600],
+            size: 32,
+          )
+        ],
+      ));
+
+  Future<Null> resetlista() async {
+    seleccionarMarca = "Seleccionar Marca";
+    seleccionarModelo = "Seleccionar Modelo";
+    seleccionarUbicacion = "Seleccionar Ubicacion";
+    pageIndex = 1;
+    filtroParqueInformatico.codigoPatrimonial = '';
+    filtroParqueInformatico.denominacion = '';
+    filtroParqueInformatico.idMarca = '';
+    filtroParqueInformatico.idModelo = '';
+    filtroParqueInformatico.idUbicacion = '';
+    filtroParqueInformatico.responsableactual = '';
+    filtroParqueInformatico.pageSize = 10;
+    filtroParqueInformatico.pageIndex = pageIndex;
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      ProviderSeguimientoParqueInformatico()
+          .listaParqueInformatico(filtroParqueInformatico);
+    });
+  }
+
+  Future<Null> traerPaguinado(pageSize, pageIndex) async {
+    filtroParqueInformatico.pageSize = pageSize;
+    filtroParqueInformatico.pageIndex = pageIndex;
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      ProviderSeguimientoParqueInformatico()
+          .listaParqueInformatico(filtroParqueInformatico);
+    });
   }
 }

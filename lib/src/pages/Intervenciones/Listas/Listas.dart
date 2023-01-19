@@ -1,3 +1,4 @@
+import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaTicketEquipos.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Funcionarios.dart';
@@ -549,6 +550,53 @@ class Listas {
                 ),
                 Text(
                   ' ${band.estado}',
+                  style: TextStyle(fontSize: 10),
+                ),
+              ],
+            ),
+            onTap: callback,
+          )
+        ],
+      ),
+    );
+  }
+
+  Card cardParqueInformaticoTicket(ListaEquiposInformaticosTicket band, callback) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      margin: EdgeInsets.all(10),
+      elevation: 10,
+      child: Column(
+        children: <Widget>[
+          ListTile(
+            leading: Icon(
+              Icons.text_snippet_sharp,
+              color: Colors.black,
+            ),
+            contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
+            title: Text('${band.idTicket} \n${band.usuarioAsignado}',
+                style: TextStyle(fontSize: 13)),
+            subtitle: new Text('${band.material}',
+                style: TextStyle(fontSize: 10)),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 70,
+                  child: Text(
+                    '${band.material}',
+                    style: TextStyle(fontSize: 10),
+                  ),
+                ),
+                Container(
+                  width: 70,
+                  child: Text(
+                    '${band.repuesto}',
+                    style: TextStyle(fontSize: 10),
+                  ),
+                ),
+                Text(
+                  '${band.estado}',
                   style: TextStyle(fontSize: 10),
                 ),
               ],

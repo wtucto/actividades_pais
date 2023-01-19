@@ -17,11 +17,11 @@ class Marca {
   int? idMarca;
   String? descripcionMarca;
 
-  Marca({this.idMarca, this.descripcionMarca});
+  Marca({this.idMarca =0, this.descripcionMarca = ''});
 
   Marca.fromJson(Map<String, dynamic> json) {
-    idMarca = json['id_marca'];
-    descripcionMarca = json['descripcion_marca'];
+    idMarca = json['id_marca']?? 0;
+    descripcionMarca = json['descripcion_marca']?? '';
   }
 
   Map<String, dynamic> toJson() {

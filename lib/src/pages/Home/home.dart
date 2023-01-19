@@ -5,6 +5,7 @@ import 'package:actividades_pais/src/pages/ProgramacionActividades/actividadesPn
 import 'package:actividades_pais/src/pages/ProgramacionActividades/cordinacion_articulacion.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_suspervicion.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/programacion_list_page.dart';
+import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/SeguimientoParqueInformatico.dart';
 import 'package:actividades_pais/src/pages/Tambook/dashboard_tambook.dart';
 import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/util/Constants.dart';
@@ -206,6 +207,15 @@ class _HomePagePais extends State<HomePagePais> {
           HomeOptions(
             code: 'OPT1003',
             name: 'TileIntervencion'.tr,
+            types: const ['Ver'],
+            image: icon4,
+            color: lightBlue,
+          ),
+        );
+        aHomeOptions.add(
+          HomeOptions(
+            code: 'OPT1009',
+            name: 'PAQUE INFORMATICO'.tr,
             types: const ['Ver'],
             image: icon4,
             color: lightBlue,
@@ -451,6 +461,15 @@ class _HomePagePais extends State<HomePagePais> {
                             MaterialPageRoute(
                               builder: (context) =>
                                   Intervenciones(unidadTerritorial),
+                            ),
+                          );
+                          break;
+                          case 'OPT1009':
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  SeguimientoParqueInformatico(),
                             ),
                           );
                           break;

@@ -320,7 +320,7 @@ class MainService {
         TramaProyectoModel? response =
             await Get.find<MainRepo>().insertProyectoDb(oApi);
         if (response != null) {
-          aNewProject.add(response!);
+          aNewProject.add(response);
         } else {
           _log.e('Error al ingresar proyectos a la Base de Datos');
         }
@@ -447,7 +447,7 @@ class MainService {
         TramaMonitoreoModel? response =
             await Get.find<MainRepo>().insertMonitorDb(oApi);
         if (response != null) {
-          aNewMonitoreo.add(response!);
+          aNewMonitoreo.add(response);
         } else {
           _log.e('Error al ingresar monitoreo a la Base de Datos');
         }
