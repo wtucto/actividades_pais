@@ -40,9 +40,6 @@ class _ReporteDiarioState extends State<ReporteDiario> {
     // TODO: implement initState
     super.initState();
     traerdato();
-    print("opp " + widget.long);
-    print(widget.lat);
-
   }
 
   traerdato() async {

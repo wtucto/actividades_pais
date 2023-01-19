@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/Clases/IncidentesNovedadesPias.dart';
@@ -143,9 +144,11 @@ class DatabasePias {
   }
 
   Future<int> insertReportePias(ReportesPias ser) async {
-    await DatabasePias.db.initDB();
+    print(  ser.toMap());
+     await DatabasePias.db.initDB();
     var a = await _db!.insert("reportesPias", ser.toMap());
     return a;
+
   }
 
   Future<List<ReportesPias>> getTodosReportePias() async {
@@ -168,14 +171,13 @@ class DatabasePias {
   Future<List<ReportesPias>> traerUtlimoPorId(idUnicoReporte) async {
     await DatabasePias.db.initDB();
     final res = await _db?.rawQuery(
-        "SELECT   * from  reportesPias where idUnicoReporte = '$idUnicoReporte'");
+        "SELECT * from  reportesPias where idUnicoReporte = '$idUnicoReporte'");
     if (res!.isNotEmpty) {
       final res2 = await _db?.rawQuery(
           "SELECT max(id), * from  reportesPias where idUnicoReporte = '$idUnicoReporte'");
       List<ReportesPias> list = res2!.isNotEmpty
           ? res.map((e) => ReportesPias.fromJson(e)).toList()
           : [];
-
       return list;
     } else {
       return List.empty();
@@ -369,8 +371,28 @@ class DatabasePias {
   }
 
   Future updateTask(ReportesPias task) async {
-    _db!.update("reportesPias", task.toMap(),
+    print(task.idUnidadTerritorial);
+    print(task.unidadTerritorial);
+    print(task.plataforma);
+    print(task.idPlataforma);
+    print(task.campania);
+    print(task.puntoAtencion);
+    print(task.fechaParteDiario);
+    print(task.detallePuntoAtencion);
+    print(task.personal);
+    print(task.estadoEquipos);
+    print(task.sismonitor);
+    print(task.clima);
+    print(task.idUnicoReporte);
+    print(task.idClima);
+    print(task.toMap());
+    print(_db!.update("reportesPias", task.toMap(),
+        where: "idUnicoReporte = ?", whereArgs: [task.idUnicoReporte]));
+
+    var a = await _db!.update("reportesPias", task.toMap(),
         where: "idUnicoReporte = ?", whereArgs: [task.idUnicoReporte]);
+
+    print(a);
   }
 
   Future updateNacimiento(Nacimiento task) async {
@@ -414,7 +436,6 @@ class DatabasePias {
     await DatabasePias.db.initDB();
     final res = await _db?.rawQuery(
         "SELECT DISTINCT * from PuntoAtencionPias where idPias = $idPia and idCampania=$campaniaCod ORDER BY id DESC;");
-
     List<PuntoAtencionPias> list = res!.isNotEmpty
         ? res.map((e) => PuntoAtencionPias.fromMap(e)).toList()
         : [];

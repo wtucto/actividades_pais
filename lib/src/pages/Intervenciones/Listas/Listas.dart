@@ -9,6 +9,8 @@ import 'package:actividades_pais/src/datamodels/Clases/TramaIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/actividadesPias.dart';
 import 'package:intl/intl.dart';
 
+import '../../../datamodels/Clases/Uti/ListaEquipoInformatico.dart';
+
 class Listas {
   BuildContext? get context => null;
 
@@ -48,8 +50,7 @@ class Listas {
         ],
       ),
       onTap: () {
-        print(band.telefono);
-      },
+       },
     );
   }
 
@@ -90,8 +91,7 @@ class Listas {
         ],
       ),
       onTap: () {
-        //  print(band.celular);
-      },
+       },
     );
   }
 
@@ -132,14 +132,12 @@ class Listas {
         ],
       ),
       onTap: () {
-        //  print(band.celular);
-      },
+       },
     );
   }
 
   Card miCardLisPartExtrangeros(Participantes band) {
-    print(band.pais);
-    return Card(
+     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: EdgeInsets.all(10),
       elevation: 10,
@@ -181,8 +179,7 @@ class Listas {
               ],
             ),
             onTap: () {
-              // print(band.celular);
-            },
+             },
           )
         ],
       ),
@@ -505,6 +502,53 @@ class Listas {
                 ),
                 Text(
                   ' ${band.clima}',
+                  style: TextStyle(fontSize: 10),
+                ),
+              ],
+            ),
+            onTap: callback,
+          )
+        ],
+      ),
+    );
+  }
+
+  Card cardParqueInformatico(ListaEquipoInformatico band, callback) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      margin: EdgeInsets.all(10),
+      elevation: 10,
+      child: Column(
+        children: <Widget>[
+          ListTile(
+            leading: Icon(
+              Icons.text_snippet_sharp,
+              color: Colors.black,
+            ),
+            contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
+            title: Text('${band.codigoPatrimonial} \n${band.descripcionEquipoInformatico}',
+                style: TextStyle(fontSize: 13)),
+            subtitle: new Text('${band.descripcionMarca}',
+                style: TextStyle(fontSize: 10)),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 70,
+                  child: Text(
+                    ' ${band.fecFinGarantiaProveedor}',
+                    style: TextStyle(fontSize: 10),
+                  ),
+                ),
+                Container(
+                  width: 70,
+                  child: Text(
+                    ' ',
+                    style: TextStyle(fontSize: 10),
+                  ),
+                ),
+                Text(
+                  ' ${band.estado}',
                   style: TextStyle(fontSize: 10),
                 ),
               ],

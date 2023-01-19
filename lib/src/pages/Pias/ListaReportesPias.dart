@@ -50,8 +50,6 @@ class _ListaReportesState extends State<ListaReportesPias> {
 
   traerdato() async {
     var art = await ProviderDatos().verificacionpesmiso();
-    print(art[0].latitude);
-    print(art[0].longitude);
     widget.lat = art[0].latitude.toString();
     widget.long = art[0].longitude.toString();
     setState(() {});
@@ -93,7 +91,6 @@ class _ListaReportesState extends State<ListaReportesPias> {
                       lat: widget.lat,
                       long: widget.long)),
             );
-            print(respuesta);
             if (respuesta == "OK") {
               refreshList();
               setState(() {});
@@ -118,8 +115,9 @@ class _ListaReportesState extends State<ListaReportesPias> {
               );
             },
           ),
-
-          SizedBox(width: 10,),
+          SizedBox(
+            width: 10,
+          ),
           InkWell(
             child: Icon(Icons.cloud_download),
             onTap: () async {
@@ -185,12 +183,12 @@ class _ListaReportesState extends State<ListaReportesPias> {
                                               widget.unidadTeritorial,
                                           idPlataforma: widget.idPlataforma,
                                           idUnicoReporte: listaPersonalAux[i]
-                                              .idUnicoReporte,
+                                              .fechaParteDiario,
                                           campaniaCod: widget.campaniaCod,
                                         )),
                               );
-                              print(respuesta);
-                              if (respuesta.toString() == 'participantes') {
+                               if (respuesta == "OK") {
+                                refreshList();
                                 setState(() {});
                               }
                             }),

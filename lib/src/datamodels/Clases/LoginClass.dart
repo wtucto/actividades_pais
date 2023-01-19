@@ -12,8 +12,6 @@ class LoginClass {
     // note the explicit cast to String
     // this is required if robust lint rules are enabled
 
-    print("holas");
-    print(data['id']);
     final id = data['id'];
     final name = data['name'];
     final  token = data['token'];

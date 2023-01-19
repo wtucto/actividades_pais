@@ -45,8 +45,9 @@ class ProviderServiciosRest {
     );
 
     if (response.statusCode == 200) {
+      await DatabasePias.db.deletePuntoAtencionPias();
+
       final jsonResponse = json.decode(response.body);
-      print(jsonResponse["codResultado"]);
       if (jsonResponse["codResultado"] != 2) {
         final listadostraba =
             new ListaPuntoAtencionPias.fromJsonList(jsonResponse["response"]);
@@ -61,7 +62,6 @@ class ProviderServiciosRest {
             latitud: listadostraba.items[i].latitud,
             pias: listadostraba.items[i].pias,
           );
-
           await DatabasePias.db.insertPuntoAtencionPias(rspt);
         }
         return listadostraba.items;

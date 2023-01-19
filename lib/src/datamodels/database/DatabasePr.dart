@@ -153,7 +153,6 @@ class DatabasePr {
     );
   }
   Future Login(LoginClass loginClass) async{
-    _log.i(loginClass.token);
     initDB();
     await _db!.execute(
       "DELETE FROM login",
@@ -167,6 +166,16 @@ class DatabasePr {
 
     var a = await _db!.insert("login", loginClass.toMap());
     return a;
+  }
+
+  Future<List<LoginClass>> loginUser() async {
+    initDB();
+    final res = await _db!.rawQuery(
+        "select * from login");
+    List<LoginClass> list = res.isNotEmpty
+        ? res.map((e) => LoginClass.fromMap(e)).toList()
+        : [];
+    return list;
   }
 /*  Future createUserDemo() async {
     initDB();
@@ -823,7 +832,8 @@ return List.empty();
   }
 
   Future<void> insertConfigInicio(ConfigInicio regitroCalificada) async {
-
+ print("   regitroCalificada.modalidad");
+ print(   regitroCalificada.modalidad);
     print(_db!.insert("DatConfigInicio", regitroCalificada.toMap()));
   }
 
@@ -915,7 +925,6 @@ return List.empty();
   Future<List<ConfigInicio>> getAllTasksConfigInicio() async {
     initDB();
     List<Map<String, dynamic>> result = await _db!.query("DatConfigInicio");
-
     return result.map((map) => ConfigInicio.fromMap(map)).toList();
   }
 
@@ -923,17 +932,14 @@ return List.empty();
     initDB();
 
     final res = await _db!.query('DatConfigInicio');
-    print(res);
-    List<ConfigInicio> list =
+     List<ConfigInicio> list =
         res.isNotEmpty ? res.map((e) => ConfigInicio.fromJson(e)).toList() : [];
-    print(list[0].toString());
-    return list;
+     return list;
   }
 
   Future<List<AsistenciaClass>> getAllasistenciaClass() async {
     List<Map<String, dynamic>> result = await _db!.query("asistenciaClass");
-    //  print(result[0].toString());
-    return result.map((map) => AsistenciaClass.fromMap(map)).toList();
+     return result.map((map) => AsistenciaClass.fromMap(map)).toList();
   }
 
 //update
@@ -945,15 +951,14 @@ return List.empty();
 
   Future<void> insertUnidadesTablaPlataforma(
       UnidadesTablaPlataforma regitroCalificada) async {
-    print(_db!.insert("DatUnidadesTablaPlataforma", regitroCalificada.toMap()));
-  }
+    _db!.insert("DatUnidadesTablaPlataforma", regitroCalificada.toMap());
+   }
 
   Future<List<UnidadesTablaPlataforma>>
       getAllTasksUnidadesTablaPlataforma() async {
     List<Map<String, dynamic>> result =
         await _db!.query("DatUnidadesTablaPlataforma");
-    //  print(result[0].toString());
-    return result.map((map) => UnidadesTablaPlataforma.fromMap(map)).toList();
+     return result.map((map) => UnidadesTablaPlataforma.fromMap(map)).toList();
   }
 
   Future updateTaskUnidadesTablaPlataforma(UnidadesTablaPlataforma task) async {

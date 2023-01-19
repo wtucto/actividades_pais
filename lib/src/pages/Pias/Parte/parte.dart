@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:actividades_pais/src/datamodels/Clases/ConfigInicio.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConsultarTambosPiasxUnidadTerritorial.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Pias/Campania.dart';
 import 'package:actividades_pais/src/datamodels/Clases/UnidadesTerritoriales.dart';
@@ -15,6 +16,7 @@ import 'package:actividades_pais/src/datamodels/Clases/Pias/reportesPias.dart';
 import 'package:intl/intl.dart';
 import 'package:actividades_pais/src/datamodels/Provider/Pias/ProviderDataJson.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
+import 'package:logger/logger.dart';
 
 class Parte extends StatefulWidget {
   String plataforma, unidadTerritorial, idUnicoReporte;
@@ -37,16 +39,17 @@ class Parte extends StatefulWidget {
 }
 
 class _ParteState extends State<Parte> {
-  var nombreUnidTerritoriales = "";
   var seleccionarUnidTerritoriales = "SELECCIONAR UNIDAD TERRITORIAL";
-  var tablaid = 1;
+  var seleccionarPuntoAte = 'Seleccionar';
+  var seleccionarClima = 'SELECCIONAR CLIMA';
+  String seleccionarTablaPlataforma = "SELECCIONAR";
+  String seleccionarCamapania = "SELECCIONAR";
   var idUnidTerritoriales = 0;
 
   TextEditingController fecha = TextEditingController();
   DateTime? nowfec = new DateTime.now();
   var formatter = new DateFormat('yyyy-MM-dd');
-  var seleccionarPuesto = 'Seleccionar';
-  var seleccionarClima = 'seleccionarClima';
+
   TextEditingController controllerfecha = TextEditingController();
   TextEditingController controllerDetalle = TextEditingController();
   TextEditingController controllerPersonal = TextEditingController();
@@ -55,69 +58,66 @@ class _ParteState extends State<Parte> {
   ReportesPias reportePias = ReportesPias();
   var acnuevo = 0;
   var contadorTextDetalle = 0;
-  Color colorTextDetalle = Colors.black;
-  var underlineCbo = Container(
-    height: 1,
-    color: Color(0xFF1E88E5),
-  );
-
   var seleccionarTpPla = "";
 
-  int idTambo = 0;
-
-  int snip = 0;
-
-  String seleccionarTablaPlataforma = "SELECCIONAR";
-
-  String nombreTambo = "";
-
-  String seleccionarCamapania = "SELECCIONAR";
-
-  String campania = "";
-
   int codCampania = 0;
+  int contarPias = 0;
+  int idtambo = 0;
+
+  int idPlataforma = 0;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    consultarTambo();
     traerUltimo();
-    reportePias.latitud = widget.lat;
-    reportePias.longitud = widget.long;
-    reportePias.unidadTerritorial = widget.unidadTerritorial;
-    reportePias.idPlataforma = widget.idPlataforma.toString();
-    reportePias.plataforma = widget.plataforma;
-    reportePias.idUnicoReporte = widget.idUnicoReporte;
-    controllerfecha.text = widget.idUnicoReporte;
-    reportePias.fechaParteDiario = widget.idUnicoReporte;
-    reportePias.campania = widget.campaniaCod;
+  }
+
+  consultarTambo() async {
+    var abc = await DatabasePr.db.getAllTasksConfigInicio();
+    setState(() {
+      reportePias.unidadTerritorial = abc[0].unidTerritoriales;
+      reportePias.idUnidadTerritorial = abc[0].idUnidTerritoriales;
+    });
   }
 
   traerUltimo() async {
     var ar = await DatabasePias.db.traerUtlimoPorId(widget.idUnicoReporte);
-    if (ar[0].id != null) {
-      if (ar.length > 0) {
-        controllerfecha.text = ar[0].fechaParteDiario;
-        seleccionarPuesto = ar[0].puntoAtencion;
+    setState(() {
+      if (ar.length == 0) {
+        controllerfecha.text = widget.idUnicoReporte;
+        reportePias.fechaParteDiario = controllerfecha.text;
+        reportePias.idUnicoReporte = widget.idUnicoReporte;
+      } else if (ar.length > 0) {
+        acnuevo = 1;
         controllerDetalle.text = ar[0].detallePuntoAtencion;
         controllerPersonal.text = ar[0].personal;
         controllerestadosEquipos.text = ar[0].estadoEquipos;
         controllerSismonitor.text = ar[0].sismonitor;
         seleccionarClima = ar[0].clima;
-        reportePias.idClima = ar[0].idClima;
-        reportePias.codigoUbigeo = ar[0].codigoUbigeo;
+
+        seleccionarTablaPlataforma = ar[0].plataforma;
+        seleccionarCamapania = ar[0].campania;
+        controllerfecha.text = ar[0].fechaParteDiario;
+        seleccionarPuntoAte = ar[0].puntoAtencion;
+
+        reportePias.idUnicoReporte = ar[0].fechaParteDiario;
+        controllerfecha.text = ar[0].fechaParteDiario;
         reportePias.fechaParteDiario = ar[0].fechaParteDiario;
-        reportePias.puntoAtencion = ar[0].puntoAtencion;
         reportePias.detallePuntoAtencion = ar[0].detallePuntoAtencion;
         reportePias.personal = ar[0].personal;
+        reportePias.idClima = ar[0].idClima;
+        reportePias.idPlataforma = ar[0].idPlataforma;
+        idPlataforma = int.parse(ar[0].idPlataforma);
+        reportePias.plataforma = ar[0].plataforma;
+        reportePias.puntoAtencion = ar[0].puntoAtencion;
+        reportePias.campania = ar[0].campania;
         reportePias.estadoEquipos = ar[0].estadoEquipos;
         reportePias.sismonitor = ar[0].sismonitor;
         reportePias.clima = ar[0].clima;
-        acnuevo = 1;
+        reportePias.codigoUbigeo = ar[0].codigoUbigeo;
       }
-    }
-
-    setState(() {});
+    });
   }
 
   @override
@@ -127,7 +127,7 @@ class _ParteState extends State<Parte> {
       body: ListView(
         children: [
           SizedBox(
-            width: 350,
+            width: 330,
             child: TextButton(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.transparent),
@@ -143,7 +143,7 @@ class _ParteState extends State<Parte> {
                     width: 5,
                   ),
                   Text(
-                    'Guardar',
+                    'GUARDAR',
                     style: TextStyle(color: Colors.blue[800]),
                   ),
                 ],
@@ -151,6 +151,7 @@ class _ParteState extends State<Parte> {
               onPressed: () async {
                 if (acnuevo == 0) {
                   await DatabasePias.db.insertReportePias(reportePias);
+                  acnuevo = 1;
                   traerUltimo();
                 } else {
                   await DatabasePias.db.updateTask(reportePias);
@@ -162,7 +163,7 @@ class _ParteState extends State<Parte> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(
-                height: 15,
+                height: 1,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -181,7 +182,6 @@ class _ParteState extends State<Parte> {
                                 builder: (BuildContext context,
                                     AsyncSnapshot<List<UnidadesTerritoriales>>
                                         snapshot) {
-                                  UnidadesTerritoriales depatalits;
                                   if (!snapshot.hasData) {
                                     return Center(
                                       child: CircularProgressIndicator(),
@@ -195,10 +195,10 @@ class _ParteState extends State<Parte> {
                                     );
                                   } else {
                                     return Container(
-                                        //decoration:   servicios.myBoxDecoration(),
                                         child: DropdownButton<
                                             UnidadesTerritoriales>(
-                                      underline: underlineCbo,
+                                      underline:
+                                          ProviderServicios().underline(),
                                       isExpanded: true,
                                       items: snapshot.data
                                           ?.map((user) => DropdownMenuItem<
@@ -211,24 +211,21 @@ class _ParteState extends State<Parte> {
                                       onChanged:
                                           (UnidadesTerritoriales? newVal) {
                                         setState(() {
-                                          nombreUnidTerritoriales =
-                                              newVal!.unidadTerritorial;
-                                          depatalits = newVal;
                                           seleccionarUnidTerritoriales =
-                                              newVal.unidadTerritorial;
-                                          tablaid =
+                                              newVal!.unidadTerritorial;
+                                          reportePias.idUnidadTerritorial =
                                               newVal.id_UnidadesTerritoriales;
-                                          idUnidTerritoriales =
-                                              newVal.id_UnidadesTerritoriales;
-                                          DatabasePr.db
-                                              .getporidUnidadTeritoria(tablaid);
+
+                                          DatabasePr.db.getporidUnidadTeritoria(
+                                              int.parse(reportePias
+                                                  .idUnidadTerritorial
+                                                  .toString()));
                                         });
                                       },
                                       hint: Text(
                                           "$seleccionarUnidTerritoriales",
                                           style:
                                               TextStyle(color: Colors.black)),
-                                      //     hint: Text("   $data_depara"),
                                     ));
                                   }
                                 },
@@ -238,7 +235,7 @@ class _ParteState extends State<Parte> {
                         )
                       : SizedBox(
                           width: 200.0,
-                          child: Text("${widget.unidadTerritorial}"),
+                          child: Text("${reportePias.unidadTerritorial}"),
                         ),
                 ],
               ),
@@ -252,7 +249,7 @@ class _ParteState extends State<Parte> {
                     width: 10,
                   ),
                   Text("Plataforma: "),
-                  (widget.plataforma == '')
+                  (widget.unidadTerritorial == '')
                       ? Container(
                           child: SizedBox(
                               width: 200.0,
@@ -260,15 +257,13 @@ class _ParteState extends State<Parte> {
                                 child: FutureBuilder<
                                     List<RspoTambosPiasxUnidadTerritorial>?>(
                                   future: ProviderConfiguracion()
-                                      .listaTambosPiasxUnidadTerritorial(
-                                          'PIAS', tablaid),
+                                      .listaTambosPiasxUnidadTerritorial('PIAS',
+                                          reportePias.idUnidadTerritorial),
                                   builder: (BuildContext context,
                                       AsyncSnapshot<
                                               List<
                                                   RspoTambosPiasxUnidadTerritorial>?>
                                           snapshot) {
-                                    RspoTambosPiasxUnidadTerritorial?
-                                        depatalits;
                                     if (!snapshot.hasData) {
                                       return Center(
                                         child: CircularProgressIndicator(),
@@ -282,10 +277,10 @@ class _ParteState extends State<Parte> {
                                       );
                                     } else {
                                       return Container(
-                                          // decoration: servicios.myBoxDecoration(),
                                           child: DropdownButton<
                                               RspoTambosPiasxUnidadTerritorial>(
-                                        underline: underlineCbo,
+                                        underline:
+                                            ProviderServicios().underline(),
                                         isExpanded: true,
                                         items: snapshot.data
                                             ?.map((user) => DropdownMenuItem<
@@ -299,17 +294,73 @@ class _ParteState extends State<Parte> {
                                             (RspoTambosPiasxUnidadTerritorial?
                                                 newVal) {
                                           setState(() {
-                                            depatalits = newVal!;
+                                            seleccionarCamapania =
+                                                "SELECCIONAR CAMPAÑA";
                                             seleccionarTablaPlataforma =
+                                                newVal!.nombreTambo!;
+                                            reportePias.plataforma =
                                                 newVal.nombreTambo!;
-                                            idTambo = newVal.idPlataforma!;
-                                            snip = newVal.snip!;
-                                            nombreTambo = newVal.nombreTambo!;
-                                            print(idTambo);
-
+                                            reportePias.idPlataforma =
+                                                newVal.idPlataforma as String;
+                                            idPlataforma = newVal.idPlataforma!;
                                           });
                                         },
-                                        value: depatalits,
+                                        hint: Text(seleccionarTablaPlataforma,
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15.0)),
+                                      ));
+                                    }
+                                  },
+                                ),
+                              )))
+                      : SizedBox(
+                          width: 200.0,
+                          child: SizedBox(
+                              width: 200.0,
+                              child: Container(
+                                child: FutureBuilder<List<ConfigInicio>?>(
+                                  future:
+                                      DatabasePr.db.getAllTasksConfigInicio(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<ConfigInicio>?>
+                                          snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    final preguntas = snapshot.data;
+
+                                    if (preguntas!.length == 0) {
+                                      return Center(
+                                        child: Text("sin dato"),
+                                      );
+                                    } else {
+                                      return Container(
+                                          child: DropdownButton<ConfigInicio>(
+                                        underline: SizedBox(),
+                                        isExpanded: true,
+                                        items: snapshot.data
+                                            ?.map((user) =>
+                                                DropdownMenuItem<ConfigInicio>(
+                                                  child: Text(user.nombreTambo),
+                                                  value: user,
+                                                ))
+                                            .toList(),
+                                        onChanged: (ConfigInicio? newVal) {
+                                          setState(() {
+                                            seleccionarCamapania =
+                                                "SELECCIONAL CAMPAÑA";
+                                            seleccionarTablaPlataforma =
+                                                newVal!.nombreTambo;
+                                            reportePias.idPlataforma =
+                                                newVal.idTambo.toString();
+                                            reportePias.plataforma =
+                                                newVal.nombreTambo;
+                                            idPlataforma = newVal.idTambo;
+                                          });
+                                        },
                                         hint: Text(
                                             "$seleccionarTablaPlataforma",
                                             style: TextStyle(
@@ -319,15 +370,7 @@ class _ParteState extends State<Parte> {
                                     }
                                   },
                                 ),
-
-                                ///getporidUnidadTeritoria
-                              )))
-                      : SizedBox(
-                          width: 200.0,
-                          child: SizedBox(
-                            width: 200.0,
-                            child: Text("${widget.plataforma}"),
-                          ),
+                              )),
                         ),
                 ],
               ),
@@ -335,7 +378,7 @@ class _ParteState extends State<Parte> {
                 SizedBox(
                   width: 10,
                 ),
-                Text("CAMPAÑA: "),
+                Text("Campaña: "),
                 SizedBox(
                   width: 200.0,
                   child: Container(
@@ -357,10 +400,8 @@ class _ParteState extends State<Parte> {
                           );
                         } else {
                           return Container(
-                              //  decoration:
-                              //    servicios.myBoxDecoration(),
                               child: DropdownButton<Campania>(
-                            underline: underlineCbo,
+                            underline: SizedBox(),
                             isExpanded: true,
                             items: snapshot.data
                                 ?.map((user) => DropdownMenuItem<Campania>(
@@ -370,17 +411,19 @@ class _ParteState extends State<Parte> {
                                 .toList(),
                             onChanged: (Campania? newVal) {
                               setState(() {
-//await
-
                                 depatalits = newVal!;
                                 seleccionarCamapania = newVal.descripcion;
-                                campania = newVal.descripcion;
                                 codCampania = int.parse(newVal.cod);
+                                reportePias.campania = newVal.cod;
+
+                                seleccionarPuntoAte =
+                                    'SELECCIONAR PUNTO ATENCION';
                               });
                             },
                             value: depatalits,
                             hint: Text("$seleccionarCamapania",
-                                style: TextStyle(color: Colors.black)),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 15.0)),
                           ));
                         }
                       },
@@ -396,110 +439,161 @@ class _ParteState extends State<Parte> {
                     width: 10,
                   ),
                   Text("Punto de Atencion: "),
-                  (widget.plataforma =='')?
-                  SizedBox(
-                    width: 200.0,
-                    child: Container(
-                      child: FutureBuilder<List<PuntoAtencionPias>>(
-                        future: ProviderServiciosRest().listarPuntoAtencionPias(
-                            codCampania.toString(), idTambo, 0),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<PuntoAtencionPias>> snapshot) {
-                          if (snapshot.hasData) {
-                            return Container(
-                                child: DropdownButton<PuntoAtencionPias>(
-                              underline: SizedBox(),
-                              isExpanded: true,
-                              items: snapshot.data
-                                  ?.map((user) =>
-                                      DropdownMenuItem<PuntoAtencionPias>(
-                                        child: Text(user.puntoAtencion!),
-                                        value: user,
-                                      ))
-                                  .toList(),
-                              onChanged: (PuntoAtencionPias? newVal) {
-                                setState(() {
-                                  seleccionarPuesto = newVal!.puntoAtencion!;
-                                  reportePias.puntoAtencion = seleccionarPuesto;
-                                  reportePias.codigoUbigeo =
-                                      newVal.codigoUbigeo!;
-                                });
+                  (widget.unidadTerritorial == '')
+                      ? SizedBox(
+                          width: 200.0,
+                          child: Container(
+                            child: FutureBuilder<List<PuntoAtencionPias>>(
+                              future: ProviderServiciosRest()
+                                  .listarPuntoAtencionPias(
+                                      codCampania.toString(), idtambo, 0),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<PuntoAtencionPias>>
+                                      snapshot) {
+                                if (snapshot.hasData) {
+                                  return Container(
+                                      child: DropdownButton<PuntoAtencionPias>(
+                                    underline: SizedBox(),
+                                    isExpanded: true,
+                                    items: snapshot.data
+                                        ?.map((user) =>
+                                            DropdownMenuItem<PuntoAtencionPias>(
+                                              child: Text(user.puntoAtencion!),
+                                              value: user,
+                                            ))
+                                        .toList(),
+                                    onChanged: (PuntoAtencionPias? newVal) {
+                                      setState(() {
+                                        seleccionarPuntoAte =
+                                            newVal!.puntoAtencion!;
+                                        reportePias.puntoAtencion =
+                                            seleccionarPuntoAte;
+
+                                        reportePias.codigoUbigeo =
+                                            newVal.codigoUbigeo!;
+                                      });
+                                    },
+                                    hint: Text("$seleccionarPuntoAte",
+                                        style: TextStyle(color: Colors.black)),
+                                  ));
+                                }
+                                return SizedBox();
                               },
-                              hint: Text("$seleccionarPuesto", style: TextStyle(color: Colors.black)),
-                            ));
-                          }
-                          return SizedBox();
-                        },
-                      ),
-                    ),
-                  ): SizedBox(
-                    width: 200.0,
-                    child: Container(
-                      ///      child: TextField()
-                      child: FutureBuilder<List<PuntoAtencionPias>>(
-                        future: DatabasePias.db.ListarPuntoAtencionPias(
-                            widget.campaniaCod, widget.idPlataforma),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<PuntoAtencionPias>> snapshot) {
-                          if (snapshot.hasData) {
-                            return Container(
-                                child: DropdownButton<PuntoAtencionPias>(
-                                  underline: SizedBox(),
-                                  isExpanded: true,
-                                  items: snapshot.data
-                                      ?.map((user) =>
-                                      DropdownMenuItem<PuntoAtencionPias>(
-                                        child: Text(user.puntoAtencion!),
-                                        value: user,
-                                      ))
-                                      .toList(),
-                                  onChanged: (PuntoAtencionPias? newVal) {
-                                    setState(() {
-                                      // depatalits = newVal!;
-                                      // seleccionarPuesto = newVal.puntoAtencion!;
-                                      seleccionarPuesto = newVal!.puntoAtencion!;
-                                      reportePias.puntoAtencion = seleccionarPuesto;
-                                      reportePias.codigoUbigeo =
-                                      newVal.codigoUbigeo!;
-                                    });
-                                  },
-                                  hint: Text("  $seleccionarPuesto "),
-                                ));
-                          }
-                          return SizedBox();
-                        },
-                      ),
-                    ),
-                  ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(
+                          width: 200.0,
+                          child: Container(
+                            child: FutureBuilder<List<PuntoAtencionPias>>(
+                              future: DatabasePias.db.ListarPuntoAtencionPias(
+                                  codCampania, idPlataforma),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<PuntoAtencionPias>>
+                                      snapshot) {
+                                if (snapshot.hasData) {
+                                  return Container(
+                                      child: DropdownButton<PuntoAtencionPias>(
+                                    underline: SizedBox(),
+                                    isExpanded: true,
+                                    items: snapshot.data
+                                        ?.map((user) =>
+                                            DropdownMenuItem<PuntoAtencionPias>(
+                                              child: Text(user.puntoAtencion!),
+                                              value: user,
+                                            ))
+                                        .toList(),
+                                    onChanged: (PuntoAtencionPias? newVal) {
+                                      setState(() {
+                                        seleccionarPuntoAte =
+                                            newVal!.puntoAtencion!;
+                                        reportePias.puntoAtencion =
+                                            newVal.puntoAtencion!;
+                                        reportePias.codigoUbigeo =
+                                            newVal.codigoUbigeo!;
+                                      });
+                                    },
+                                    hint: Text("$seleccionarPuntoAte",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15.0)),
+                                  ));
+                                }
+                                return SizedBox();
+                              },
+                            ),
+                          ),
+                        ),
                 ],
               ),
-
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: 10,
+                    width: 20,
                   ),
                   Text("Fecha: "),
                   SizedBox(
+                      width: 200.0, child: Text("${controllerfecha.text}")),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text('Clima'),
+                  SizedBox(
                       width: 200.0,
-                      child: TextField(
-                        controller: controllerfecha,
-                        decoration: InputDecoration(),
-                        onTap: () async {
-                          nowfec = await showDatePicker(
-                              context: context,
-                              initialDate: nowfec!,
-                              firstDate: DateTime(1900),
-                              lastDate: DateTime(2100));
+                      child: Container(
+                        child: FutureBuilder<List<CLima>>(
+                          future: ProviderDataJson().getSaveClima(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<CLima>> snapshot) {
+                            CLima? depatalits;
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            final preguntas = snapshot.data;
 
-                          setState(() {
-                            controllerfecha.text
-                                .replaceAll('', formatter.format(nowfec!));
-                            controllerfecha.text = formatter.format(nowfec!);
-                            reportePias.fechaParteDiario = controllerfecha.text;
-                          });
-                        },
+                            if (preguntas!.length == 0) {
+                              return Center(
+                                child: Text("sin dato"),
+                              );
+                            } else {
+                              return Container(
+                                  child: DropdownButton<CLima>(
+                                underline: SizedBox(),
+                                isExpanded: true,
+                                items: snapshot.data
+                                    ?.map((user) => DropdownMenuItem<CLima>(
+                                          child: Text(user.descripcion),
+                                          value: user,
+                                        ))
+                                    .toList(),
+                                onChanged: (CLima? newVal) {
+                                  setState(() {
+                                    depatalits = newVal!;
+                                    seleccionarClima = newVal.descripcion;
+                                    reportePias.idClima = newVal.cod;
+                                    reportePias.clima = seleccionarClima;
+                                  });
+                                },
+                                value: depatalits,
+                                hint: Text("$seleccionarClima "),
+                              ));
+                            }
+                          },
+                        ),
                       )),
                 ],
               ),
@@ -515,39 +609,13 @@ class _ParteState extends State<Parte> {
                         onChanged: (value) {
                           reportePias.detallePuntoAtencion = value;
                         },
-                        //  onChanged: (value) {
-                        /*     reportePias.detallePuntoAtencion = value;
-                          print(value.length);
-                          setState(() {
-                            contadorTextDetalle = value.length;
-                            if (contadorTextDetalle > 200) {
-                              colorTextDetalle = Colors.red;
-                            } else {
-                              colorTextDetalle = Colors.black;
-                            }
-                          });*/
-                        //  },
                         maxLength: 200,
                         maxLines: 5,
-                        //or null
                         decoration:
                             InputDecoration.collapsed(hintText: "Detalle"),
                       ),
                     )),
               ),
-              /*       Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: Text(
-                      "Carácter maximo ($contadorTextDetalle /200)",
-                      style: TextStyle(color: colorTextDetalle),
-                    ),
-                  ),
-                ],
-              ),*/
-              //  _lineas(),
               Container(
                 margin: EdgeInsets.only(left: 10, right: 10),
                 child: Card(
@@ -615,80 +683,43 @@ class _ParteState extends State<Parte> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                  margin: EdgeInsets.only(left: 16),
-                  child: Row(
-                    children: [
-                      Text('Clima'),
-                    ],
-                  )),
-              Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
-                child: FutureBuilder<List<CLima>>(
-                  future: ProviderDataJson().getSaveClima(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<CLima>> snapshot) {
-                    CLima? depatalits;
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    final preguntas = snapshot.data;
-
-                    if (preguntas!.length == 0) {
-                      return Center(
-                        child: Text("sin dato"),
-                      );
-                    } else {
-                      return Container(
-                          child: DropdownButton<CLima>(
-                        underline: SizedBox(),
-                        isExpanded: true,
-                        items: snapshot.data
-                            ?.map((user) => DropdownMenuItem<CLima>(
-                                  child: Text(user.descripcion),
-                                  value: user,
-                                ))
-                            .toList(),
-                        onChanged: (CLima? newVal) {
-                          setState(() {
-                            depatalits = newVal!;
-                            seleccionarClima = newVal.descripcion;
-                            reportePias.idClima = newVal.cod;
-                            reportePias.clima = seleccionarClima;
-                          });
-                        },
-                        value: depatalits,
-                        hint: Text("  $seleccionarClima "),
-                      ));
-                    }
-                  },
-                ),
-              ),
             ],
-          )
+          ),
+          SizedBox(
+            width: 350,
+            child: TextButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.transparent),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(
+                    Icons.save,
+                    color: Colors.blue[800],
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    'GUARDAR',
+                    style: TextStyle(color: Colors.blue[800]),
+                  ),
+                ],
+              ),
+              onPressed: () async {
+                if (acnuevo == 0) {
+                  await DatabasePias.db.insertReportePias(reportePias);
+                  traerUltimo();
+                  acnuevo = 1;
+                } else {
+                  await DatabasePias.db.updateTask(reportePias);
+                }
+              },
+            ),
+          ),
         ],
       ),
     ));
-  }
-
-  _linea() {
-    return Column(
-      children: [
-        SizedBox(
-          height: 2,
-          child: Container(
-            color: Colors.white,
-          ),
-        ),
-        SizedBox(
-          height: 2,
-          child: Container(
-            color: Colors.grey,
-          ),
-        ),
-      ],
-    );
   }
 }

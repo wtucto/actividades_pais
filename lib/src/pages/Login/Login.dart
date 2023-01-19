@@ -131,8 +131,8 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           _Form(),
-                          SizedBox(height: h / 50),
-                          (contador == 0)
+                          //SizedBox(height: h / 50),
+                       /*   (contador == 0)
                               ? InkWell(
                                   onTap: () {
                                     Navigator.of(context).pushReplacement(
@@ -148,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ),
                                 )
-                              : new Container(),
+                              : new Container(),*/
                           SizedBox(height: h / 35),
                           const Text(
                             'Términos y condiciones de uso',
@@ -264,7 +264,9 @@ class __FormState extends State<_Form> {
             }
           }*/
         } catch (oError) {
-          esperar='Ingresar';
+    setState(() {
+      esperar='Ingresar';
+    });
           mostrarAlerta(context, 'Login incorrecto',
               'Revise sus credenciales nuevamente');
         }

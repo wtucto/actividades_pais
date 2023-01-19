@@ -12,6 +12,7 @@ abstract class DependencyInjection {
     switch (sAmbiente) {
       case "DEV_LOC":
         baseUrl = "http://localhost:8075";
+        baseUrl2 = "https://www.pais.gob.pe";
         break;
       case "DEV":
         baseUrl = "https://backend.pais.gob.pe:8075";

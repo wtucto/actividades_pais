@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
-import 'package:actividades_pais/backend/model/dto/login_dto.dart';
-import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
+import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConfigInicio.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
 import 'package:actividades_pais/src/datamodels/Clases/LoginClass.dart';
@@ -40,35 +39,29 @@ class ProviderLogin {
   }
 
   Login({username, password}) async {
-    MainController mainController = MainController();
-    LoginDto oLogin = LoginDto.empty();
-    oLogin.username = username;
-    oLogin.password = password;
-
     var chekInternet = await _checkInternetConnection();
     if (chekInternet == true) {
       var headers = {'Content-Type': 'application/json'};
-
-      RespTokenDto oToken = await mainController.login(oLogin);
-      /*http.Response response = await http.post(
-          Uri.parse(
-              'https://www.pais.gob.pe/backendsismonitor/public/seguridad/login'),
+      http.Response response = await http.post(
+          Uri.parse(AppConfig.backendsismonitor+
+              '/seguridad/login'),
           headers: headers,
           body: json.encode({
             "username": username,
             "password": password,
-          }));*/
+          }));
 
-      if (oToken != null) {
-        //final parsedJson = jsonDecode(response.body);
-        //final log = new LoginClass.fromJson(parsedJson);
+      if (response.statusCode == 200) {
+        final parsedJson = jsonDecode(response.body);
+        final log = new LoginClass.fromJson(parsedJson);
         var loginClass = LoginClass();
+        _log.i(log.token);
         loginClass.username = username;
         loginClass.password = password;
-        loginClass.name = oToken.name;
-        loginClass.rol = oToken.rol;
-        loginClass.token = oToken.token;
-        loginClass.id = oToken.id;
+        loginClass.name = log.name;
+        loginClass.rol = log.rol;
+        loginClass.token = log.token;
+        loginClass.id = log.id;
         var a = await DatabasePr.db.Login(loginClass);
 
         http.Response responseUsuario = await http.get(
@@ -92,7 +85,18 @@ class ProviderLogin {
             await DatabasePr.db.insertConfigPersonal(r2);
 
             for (var i = 0; i < data.length; i++) {
-              _log.i(data[0]["empleado_nombre"]);
+              print("===================>>>>");
+              print(data[i]["id_puesto"]);
+              print(data[i]["id_plataforma"]);
+              print(data[i]["id_unidad_territorial"]);
+              print(data[i]["plataforma_descripcion"]);
+              print(data[i]["puesto_descripcion"]);
+              print(data[i]["unidad_territorial_descripcion"]);
+              print(data[i]["plataforma_codigo_snip"]??'');
+              print(data[i]["tipoPlataforma"]);
+              print(data[i]["modalidad"].toString() ?? '');
+              print("===================>>>>");
+
               var configIni = ConfigInicio(
                   idLugarPrestacion: 0,
                   idPuesto: data[i]["id_puesto"] ?? 0,
@@ -109,8 +113,8 @@ class ProviderLogin {
                   tipoPlataforma: data[i]["tipoPlataforma"] ?? '',
                   campania: '',
                   codCampania: '',
-                  modalidad: data[i]["modalidad"] ?? '');
-
+                  modalidad: data[i]["modalidad"].toString() ?? '');
+              _log.i(data[0]["id_plataforma"]);
               if (configIni.tipoPlataforma == 'PIAS') {
                 await ProviderServiciosRest().listarPuntoAtencionPias(
                     '0', data[i]["id_plataforma"] ?? 0, 0);
@@ -126,6 +130,37 @@ class ProviderLogin {
           }
         }
         return a;
+      } else {
+        print(response.reasonPhrase);
+
+        if (response.statusCode != 200) {
+          MainController mainController = MainController();
+          UserModel oUser;
+          oUser = await mainController.getUserLogin(username, '');
+          if(oUser.clave == password) {
+
+            var loginClass = LoginClass();
+       
+            loginClass.username = username;
+            loginClass.password = password;
+            loginClass.name = oUser.nombres;
+            loginClass.rol = oUser.rol;
+            loginClass.token = '';
+            loginClass.id = 0;
+            var a = await DatabasePr.db.Login(loginClass);
+
+            var r2 = ConfigPersonal(
+                unidad: 'UPS',
+                nombres: oUser.nombres ?? '',
+                apellidoMaterno: '',
+                apellidoPaterno: '',
+                contrasenia: password ?? '',
+                fechaNacimento: '',
+                numeroDni: int.parse(username ?? 0));
+            await DatabasePr.db.insertConfigPersonal(r2);
+            return a;
+          }
+        }
       }
     } else if (chekInternet == false) {
       var rsp = await DatabasePr.db

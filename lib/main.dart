@@ -20,7 +20,7 @@ import 'package:get/get.dart';
 
 //late ObjectBoxDbPnPais OBoxDbPnPais;
 void main() async {
-  DependencyInjection.initialize("DEV");
+  DependencyInjection.initialize("DEV_LOC");
   //GlobalBindings().dependencies();
 
   WidgetsFlutterBinding.ensureInitialized();

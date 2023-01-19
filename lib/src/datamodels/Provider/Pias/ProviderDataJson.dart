@@ -15,7 +15,7 @@ class ProviderDataJson {
     String jsonString = await servicios.loadCLima();
     final jsonResponse = json.decode(jsonString);
     final listadoDepart = new CLimas.fromJsonList(jsonResponse);
-
+/*
     for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = CLima(
         cod: listadoDepart.items[i].cod,
@@ -23,7 +23,7 @@ class ProviderDataJson {
         id: listadoDepart.items[i].id,
       );
       await DatabasePias.db.insertClima(rspt);
-    }
+    }*/
     return listadoDepart.items;
   }
 

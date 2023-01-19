@@ -5,7 +5,7 @@ class ReportesPias {
   String codigoUbigeo = '';
   String idPlataforma = '';
   String plataforma = '';
-  String idUnidadTerritorial = '';
+  int idUnidadTerritorial = 0;
   String unidadTerritorial = '';
   String clima = '';
   String idClima = '';
@@ -27,7 +27,7 @@ class ReportesPias {
     this.codigoUbigeo = '',
     this.idPlataforma = '',
     this.plataforma = '',
-    this.idUnidadTerritorial = '',
+    this.idUnidadTerritorial = 0,
     this.unidadTerritorial = '',
     this.clima = '',
     this.idClima = '',

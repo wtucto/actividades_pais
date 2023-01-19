@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:actividades_pais/src/datamodels/Clases/NumeroTelefono.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Participantes.dart';
@@ -13,6 +14,7 @@ import 'package:actividades_pais/src/datamodels/Clases/Puesto.dart';
 import 'package:actividades_pais/src/datamodels/Clases/UnidadesOrganicas.dart';
 import 'package:actividades_pais/src/datamodels/Clases/UnidadesTerritoriales.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
+import 'package:flutter/material.dart';
 
 class ProviderServicios {
   Servicios servicios = new Servicios();
@@ -248,4 +250,13 @@ class ProviderServicios {
     final listado = new ListarUnidad.fromJsonList(jsonResponse);
     return listado.items;
   }
+
+  underline(){
+    var underlineCbo = Container(
+      height: 1,
+      color: Color(0xFF1E88E5),
+    );
+    return underlineCbo;
+  }
+
 }

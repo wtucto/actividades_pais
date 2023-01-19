@@ -23,18 +23,19 @@ class ProviderConfiguracion {
     } else if (response.statusCode == 400) {}
     return List.empty();
   }
-  Future<ConfigPersonal> buscarUsuarioApp(codigo) async{
-  print(AppConfig.urlBackndServicioSeguro +
-      '/api-pnpais/app/listarUsuariosApp');
+
+  Future<ConfigPersonal> buscarUsuarioApp(codigo) async {
+    print(AppConfig.urlBackndServicioSeguro +
+        '/api-pnpais/app/listarUsuariosApp');
     http.Response response = await http.get(
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listarUsuariosApp'),
     );
-  print(response.body);
+    print(response.body);
 
     final jsonResponse = json.decode(response.body);
     final listadoUsuario =
-    new ListasUsuarios.fromJsonList(jsonResponse["response"]);
+        new ListasUsuarios.fromJsonList(jsonResponse["response"]);
     for (var i = 0; i < listadoUsuario.items.length; i++) {
       if (listadoUsuario.items[i].codigo == codigo) {
         print(codigo);
@@ -45,10 +46,10 @@ class ProviderConfiguracion {
     return new ConfigPersonal();
   }
 
-  Future<Participantes> buscarUsuarioDni(dni) async{
+  Future<Participantes> buscarUsuarioDni(dni) async {
     http.Response responseReniec = await http.get(
-      Uri.parse(AppConfig.backendsismonitor +
-          '/programaciongit/validar-dni/$dni'),
+      Uri.parse(
+          AppConfig.backendsismonitor + '/programaciongit/validar-dni/$dni'),
     );
     if (responseReniec.statusCode == 200) {
       final jsonResponse = json.decode(responseReniec.body);
