@@ -75,6 +75,14 @@ class ListViewProjet extends StatelessWidget {
     }
   }
 
+  double getAvancefisico(dynamic oProyecto) {
+    try {
+      return double.parse(oProyecto.avanceFisico.toString());
+    } catch (oError) {
+      return 1;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     String experienceLevelColor = '4495FF';
@@ -106,7 +114,7 @@ class ListViewProjet extends StatelessWidget {
                         radius: 30.0,
                         lineWidth: 5.0,
                         percent:
-                            double.parse(oProyecto.avanceFisico.toString()),
+                            getAvancefisico(oProyecto),
                         center: Text(
                           getAvancefisicoText(oProyecto),
                           style: const TextStyle(
