@@ -53,6 +53,28 @@ class ListViewProjet extends StatelessWidget {
     }
   }
 
+  String getAvancefisicoText(dynamic oProyecto) {
+    try {
+      return "${((double.parse(oProyecto.avanceFisico.toString()) * 100).toStringAsFixed(2)).toString()}%";
+    } catch (oError) {
+      return "NAN %";
+    }
+  }
+
+  Color getColorAvancefisico(dynamic oProyecto) {
+    try {
+      return ((double.parse(oProyecto.avanceFisico.toString()) * 100) == 100
+          ? Colors.blue
+          : (double.parse(oProyecto.avanceFisico.toString()) * 100) >= 50
+              ? Colors.green
+              : (double.parse(oProyecto.avanceFisico.toString()) * 100) <= 30
+                  ? Colors.red
+                  : Colors.yellow);
+    } catch (oError) {
+      return Colors.black;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     String experienceLevelColor = '4495FF';
@@ -86,25 +108,13 @@ class ListViewProjet extends StatelessWidget {
                         percent:
                             double.parse(oProyecto.avanceFisico.toString()),
                         center: Text(
-                          "${((double.parse(oProyecto.avanceFisico.toString()) * 100).toStringAsFixed(2)).toString()}%",
+                          getAvancefisicoText(oProyecto),
                           style: const TextStyle(
-                              fontSize: 11, fontWeight: FontWeight.bold),
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        progressColor: ((double.parse(
-                                        oProyecto.avanceFisico.toString()) *
-                                    100) ==
-                                100
-                            ? Colors.blue
-                            : (double.parse(oProyecto.avanceFisico.toString()) *
-                                        100) >=
-                                    50
-                                ? Colors.green
-                                : (double.parse(oProyecto.avanceFisico
-                                                .toString()) *
-                                            100) <=
-                                        30
-                                    ? Colors.red
-                                    : Colors.yellow),
+                        progressColor: getColorAvancefisico(oProyecto),
                       ),
                     ),
                   ),
