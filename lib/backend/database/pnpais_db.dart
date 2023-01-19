@@ -52,6 +52,7 @@ class DatabasePnPais {
     Database db,
     int version,
   ) async {
+
     var constFields = '''
       ${MonitorFields.id} $idType, 
       ${MonitorFields.time} $textType,
@@ -65,7 +66,9 @@ class DatabasePnPais {
       ${UserFields.codigo} $textType $notNull,
       ${UserFields.nombres} $textType $notNull,
       ${UserFields.rol} $textType $notNull,
-      ${UserFields.clave} $textType
+      ${UserFields.clave} $textType,
+      ${UserFields.username} $textType,
+      ${UserFields.password} $textType
       )
     ''');
 
@@ -249,6 +252,11 @@ class DatabasePnPais {
     db.execute("DELETE FROM $tableNameTramaMonitoreos");
   }
 
+  Future deleteAllUsers() async {
+    final db = await instance.database;
+    await db.execute("DELETE FROM $tableNameUsers");
+  }
+
   Future deleteMonitorByEstadoENV() async {
     final db = await instance.database;
     db.execute(
@@ -261,8 +269,10 @@ class DatabasePnPais {
     int newversion,
   ) async {
     if (oldversion < newversion) {
-      print("Version Upgrade");
+      
     }
+
+    print("Version Upgrade: $oldversion -> $newversion");
   }
 
   Future<List<ComboItemModel>> readAllComboItemByType(
@@ -819,7 +829,7 @@ class DatabasePnPais {
     final maps = await db.query(
       tableNameUsers,
       columns: UserFields.values,
-      where: '${UserFields.codigo} = ?',
+      where: '${UserFields.username} = ?',
       whereArgs: [i],
     );
 

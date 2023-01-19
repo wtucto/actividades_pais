@@ -137,7 +137,7 @@ class ProviderLogin {
           MainController mainController = MainController();
           UserModel oUser;
           oUser = await mainController.getUserLogin(username, '');
-          if(oUser.clave == password) {
+          if(oUser.password == password) {
 
             var loginClass = LoginClass();
        
