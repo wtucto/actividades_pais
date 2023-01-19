@@ -12,6 +12,8 @@ class UserFields {
     clave,
     nombres,
     rol,
+    username,
+    password,
   ];
 
   static String id = '_id';
@@ -21,6 +23,8 @@ class UserFields {
   static String clave = 'clave';
   static String nombres = 'nombres';
   static String rol = 'rol';
+  static String username = 'username';
+  static String password = 'password';
 }
 
 class UserModel {
@@ -36,6 +40,8 @@ class UserModel {
   String? clave = "";
   String? nombres = "";
   String? rol = "";
+  String? username = "";
+  String? password = "";
 
   UserModel.empty() {}
 
@@ -47,6 +53,8 @@ class UserModel {
     this.clave,
     this.nombres,
     this.rol,
+    this.username,
+    this.password,
   });
 
   UserModel copy({
@@ -57,6 +65,8 @@ class UserModel {
     String? clave,
     String? nombres,
     String? rol,
+    String? username,
+    String? password,
   }) =>
       UserModel(
         id: id ?? this.id,
@@ -66,6 +76,8 @@ class UserModel {
         clave: clave ?? this.clave,
         nombres: nombres ?? this.nombres,
         rol: rol ?? this.rol,
+        username: username ?? this.username,
+        password: password ?? this.password,
       );
 
   static UserModel fromJson(Map<String, Object?> json) => UserModel(
@@ -82,6 +94,8 @@ class UserModel {
             : json[UserFields.clave] as String,
         nombres: json[UserFields.nombres] as String,
         rol: json[UserFields.rol] as String,
+        username: json[UserFields.username] as String,
+        password: json[UserFields.password] as String,
       );
 
   Map<String, dynamic> toJson() => {
@@ -92,6 +106,8 @@ class UserModel {
         UserFields.clave: clave,
         UserFields.rol: rol,
         UserFields.nombres: nombres,
+        UserFields.username: username,
+        UserFields.password: password,
       };
 
   static Map<String, dynamic> toJsonObject(UserModel o) {
@@ -100,6 +116,8 @@ class UserModel {
       UserFields.clave: o.clave,
       UserFields.rol: o.rol,
       UserFields.nombres: o.nombres,
+      UserFields.username: o.username,
+      UserFields.password: o.password,
     };
   }
 
