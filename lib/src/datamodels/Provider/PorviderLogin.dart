@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProviderLogin {
   final Logger _log = Logger();
@@ -148,6 +149,12 @@ class ProviderLogin {
             loginClass.token = '';
             loginClass.id = 0;
             var a = await DatabasePr.db.Login(loginClass);
+
+            SharedPreferences? _prefs = await SharedPreferences.getInstance();
+            _prefs.setString("nombres", oUser.nombres!);
+            _prefs.setString("codigo", oUser.codigo!);
+            _prefs.setString("rol", oUser.rol!);
+            _prefs.setString("dni", username);
 
             var r2 = ConfigPersonal(
                 unidad: 'UPS',
