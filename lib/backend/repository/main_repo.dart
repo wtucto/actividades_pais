@@ -1,11 +1,14 @@
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
+import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:logger/logger.dart';
 
 class MainRepo {
@@ -197,6 +200,43 @@ class MainRepo {
 
     aResp.forEach((x) => {x.idTypeItem = sType});
 
+    return aResp;
+  }
+
+  Future<List<BuscarTamboDto>> searchTambo(
+    String? palabra,
+  ) async {
+    List<BuscarTamboDto> oUserUp = [];
+    final response = await _pnPaisApi.searchTambo(palabra);
+    if (response.error == null) {
+      oUserUp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return oUserUp;
+  }
+
+  Future<RespBase64FileDto> getBuildBase64PdfFichaTecnica(
+    String idTambo,
+  ) async {
+    RespBase64FileDto aResp = RespBase64FileDto.empty();
+    final response = await _pnPaisApi.getBuildBase64PdfFichaTecnica(idTambo);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<TamboModel> tamboDatoGeneral(String idTambo) async {
+    TamboModel aResp = TamboModel.empty();
+    final response = await _pnPaisApi.tamboDatoGeneral(idTambo);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
     return aResp;
   }
 

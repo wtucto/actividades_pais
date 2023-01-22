@@ -1,5 +1,6 @@
 import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
 import 'package:actividades_pais/backend/model/dto/login_dto.dart';
+import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -8,6 +9,7 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
+import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/repository/main2_repo.dart';
 import 'package:actividades_pais/util/check_connection.dart';
@@ -244,6 +246,23 @@ class MainService {
     ///Obtiene los registros de la DB Local
     List<TramaProyectoModel> aFind =
         await Get.find<MainRepo>().getProyectoByCUI(cui);
+    return aFind;
+  }
+
+  Future<RespBase64FileDto> getBuildBase64PdfFichaTecnica(
+    String idTambo,
+  ) async {
+    ///Obtiene fich tecnica PDF del tambo en formato Base64
+    RespBase64FileDto aFind =
+        await Get.find<MainRepo>().getBuildBase64PdfFichaTecnica(idTambo);
+    return aFind;
+  }
+
+  Future<TamboModel> tamboDatoGeneral(
+    String idTambo,
+  ) async {
+    ///Obtiene fich tecnica PDF del tambo en formato Base64
+    TamboModel aFind = await Get.find<MainRepo>().tamboDatoGeneral(idTambo);
     return aFind;
   }
 
@@ -603,11 +622,11 @@ class MainService {
    Obtiene todas las considencias de Tambos buscados por:
    @String search 
    */
-  Future<List<TamboModel>> searchTambo(
+  Future<List<BuscarTamboDto>> searchTambo(
     String? search,
   ) async {
     ///Obtiene los registros de la DB Local
-    List<TamboModel> aFind = await Get.find<Main2Repo>().searchTambo(search);
+    List<BuscarTamboDto> aFind = await Get.find<MainRepo>().searchTambo(search);
     return aFind;
   }
 

@@ -1,19 +1,36 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
+import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
 import 'package:actividades_pais/src/pages/Tambook/dashboard_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
+import 'package:actividades_pais/util/busy-indicator.dart';
+import 'package:actividades_pais/util/check_connection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class DetalleTambook extends StatefulWidget {
   const DetalleTambook({super.key, this.listTambo});
-  final TamboModel? listTambo;
+  final BuscarTamboDto? listTambo;
 
   @override
   _DetalleTambookState createState() => _DetalleTambookState();
 }
 
-class _DetalleTambookState extends State<DetalleTambook> {
+class _DetalleTambookState extends State<DetalleTambook>
+    with TickerProviderStateMixin<DetalleTambook> {
   ScrollController scrollController = ScrollController();
+  Animation<double>? _animation;
+  AnimationController? _controller;
+  MainController mainCtr = MainController();
+
+  late TamboModel oTambo = TamboModel.empty();
 
   @override
   void dispose() {
@@ -23,9 +40,40 @@ class _DetalleTambookState extends State<DetalleTambook> {
 
   @override
   void initState() {
-    super.initState();
     scrollController = ScrollController();
     scrollController.addListener(() => setState(() {}));
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 260),
+    );
+    final curvedAnimation =
+        CurvedAnimation(curve: Curves.easeInOut, parent: _controller!);
+    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
+
+    super.initState();
+
+    /**
+     * OBTENER DETALLE GENERAL DE TMBO
+     */
+    tamboDatoGeneral();
+  }
+
+  Uint8List convertBase64(String base64String) {
+    return const Base64Decoder().convert(base64String.split(',').last);
+  }
+
+  Future<void> tamboDatoGeneral() async {
+    oTambo = await mainCtr
+        .getTamboDatoGeneral((widget.listTambo!.idTambo).toString());
+
+    setState(() {});
+  }
+
+  Future<Uint8List> downloadPDF() async {
+    RespBase64FileDto oB64 = await mainCtr
+        .getBuildBase64PdfFichaTecnica((widget.listTambo!.idTambo).toString());
+    return convertBase64(oB64.base64 ?? '');
   }
 
   @override
@@ -51,7 +99,7 @@ class _DetalleTambookState extends State<DetalleTambook> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => DashboardTambook(),
+                builder: (BuildContext context) => const DashboardTambook(),
               ));
         },
       ),
@@ -61,7 +109,7 @@ class _DetalleTambookState extends State<DetalleTambook> {
           padding: const EdgeInsets.all(10.0),
           child: Center(
             child: Text(
-              "${widget.listTambo?.tambo} !",
+              "${widget.listTambo?.nombreTambo} !",
               style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16.0,
@@ -72,10 +120,13 @@ class _DetalleTambookState extends State<DetalleTambook> {
       ),
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
-        background: Image.asset(
-          "assets/design_course/fondo2.jpg",
-          fit: BoxFit.fill,
-        ),
+        background: Container(
+              height: 200.0,
+              child: Ink.image(
+                image: NetworkImage(oTambo.tamboPathImage ?? ''),
+                fit: BoxFit.fitHeight,
+              ),
+            ),
       ),
       actions: [
         IconButton(
@@ -171,19 +222,111 @@ class _DetalleTambookState extends State<DetalleTambook> {
                     ),
                   ];
                 },
-                body: const TabBarView(
-                  physics: BouncingScrollPhysics(),
+                body: TabBarView(
+                  physics: const BouncingScrollPhysics(),
                   children: [
-                    TabScreen("GESTOR"),
-                    TabScreen("SERVICIOS INTERNET"),
-                    TabScreen("INTERVENCIONES"),
-                    TabScreen("EQUIPAMIENTO TECNOLÓGICO DEL TAMBO"),
+                    //TabScreen("GESTOR"),
+                    Container(
+                      child: ListView(
+                        children: [
+                          /*
+                            * NUESTRO GESTOR
+                            */
+                          cardNuestroGestor(),
+                          const SizedBox(height: 10),
+
+                          /*
+                            * DATOS GENERALES
+                            */
+                          cardDatosGenerales(),
+                          const SizedBox(height: 10),
+                          /*
+                            * NUESTRO JEFE DE UNIDAD TERRITORIAL
+                            */
+                          cardNuestroJefeUnidad(),
+                          const SizedBox(height: 10),
+
+                          /*
+                            * DATOS DE UBICACIÓN
+                            */
+                          cardDatosUbicacion(),
+                          const SizedBox(height: 10),
+
+                          /*
+                            * DATOS DEMOGRÁFICOS
+                            */
+                          cardDatosDemograficos(),
+                          const SizedBox(height: 10),
+
+                          /*
+                            * DATOS DE LA OBRA
+                            */
+                          cardDatosObra(),
+                          const SizedBox(height: 10),
+
+                          /*
+                            * CENTROS POBLADOS
+                            */
+                          cardDatosCentroPoblado(),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
+                    ),
+
+                    const TabScreen("SERVICIOS INTERNET"),
+                    //TabScreen("INTERVENCIONES"),
+                    Container(
+                      child: ListView(
+                        children: [
+                          Intecard(),
+                          const SizedBox(height: 10),
+                          Intecard1(),
+                        ],
+                      ),
+                    ),
+                    const TabScreen("EQUIPAMIENTO TECNOLÓGICO DEL TAMBO"),
                   ],
                 ),
               ),
             ),
           ],
         ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: ExpandedAnimationFab(
+        items: [
+          FabItem(
+            "Ficha técnica",
+            Icons.picture_as_pdf_sharp,
+            onPress: () async {
+              try {
+                BusyIndicator.show(context);
+                bool isConnec = await CheckConnection.isOnlineWifiMobile();
+                if (isConnec) {
+                  Uint8List dataPdf = await downloadPDF();
+                  BusyIndicator.hide(context);
+                  _controller!.reverse();
+
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => PdfPreviewPage2(dataPdf: dataPdf),
+                    ),
+                  );
+                  return;
+                } else {}
+              } catch (oError) {}
+              BusyIndicator.hide(context);
+            },
+          ),
+        ],
+        animation: _animation!,
+        onPress: () {
+          if (_controller!.isCompleted) {
+            _controller!.reverse();
+          } else {
+            _controller!.forward();
+          }
+        },
       ),
     );
   }
@@ -317,13 +460,13 @@ class _DetalleTambookState extends State<DetalleTambook> {
                                                   Container(
                                                     child: ListView(
                                                       children: [
-                                                        buildCard(),
+                                                        cardNuestroGestor(),
                                                         const SizedBox(
                                                             height: 10),
-                                                        generales(),
+                                                        cardDatosGenerales(),
                                                         const SizedBox(
                                                             height: 10),
-                                                        card3(),
+                                                        cardNuestroJefeUnidad(),
                                                       ],
                                                     ),
                                                   ),
@@ -373,12 +516,10 @@ class _DetalleTambookState extends State<DetalleTambook> {
     );
   }
 
-  Card buildCard() {
+  Card cardNuestroGestor() {
     var heading = 'NUESTRO GESTOR';
-    var subheading = 'JULIO CESAR TAMINCHE LLAMO';
-    var cardImage = const NetworkImage(
-        'https://www.pais.gob.pe/sismonitor/FILES/usuarios/6234/perfil/thumbnail/6234_200x200.jpg');
-
+    var subheading = oTambo.gestorNombre ?? '';
+    var cardImage = NetworkImage(oTambo.gestorPathImage ?? '');
     return Card(
         elevation: 4.0,
         child: Column(
@@ -393,7 +534,7 @@ class _DetalleTambookState extends State<DetalleTambook> {
                 ),
               ),
               subtitle: Text(
-                subheading,
+                subheading!,
                 style: const TextStyle(
                   fontSize: 16,
                   color: Colors.black,
@@ -415,30 +556,30 @@ class _DetalleTambookState extends State<DetalleTambook> {
               child: Card(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     ListTile(
-                      title: Text('CARRERA'),
-                      subtitle: Text('Ingeniería AgroindustrialL'),
+                      title: const Text('CARRERA'),
+                      subtitle: Text(oTambo.gestorProfession ?? ''),
                     ),
                     ListTile(
-                      title: Text('GRADO'),
-                      subtitle: Text('Colegiatura'),
+                      title: const Text('GRADO'),
+                      subtitle: Text(oTambo.gestorGradoAcademico ?? ''),
                     ),
                     ListTile(
-                      title: Text('SEXO'),
-                      subtitle: Text('Masculino'),
+                      title: const Text('SEXO'),
+                      subtitle: Text(oTambo.gestorSexo ?? ''),
                     ),
                     ListTile(
-                      title: Text('ESTADO CIVIL'),
-                      subtitle: Text('Soltero'),
+                      title: const Text('ESTADO CIVIL'),
+                      subtitle: Text(oTambo.gestorEstadoCivil ?? ''),
                     ),
                     ListTile(
-                      title: Text('FECHA DE NACIMIENTO'),
-                      subtitle: Text('11-04-1988'),
+                      title: const Text('FECHA DE NACIMIENTO'),
+                      subtitle: Text(oTambo.gestorFechaNacimiento ?? ''),
                     ),
                     ListTile(
-                      title: Text('EMAIL'),
-                      subtitle: Text('jtaminche@pais.gob.pe'),
+                      title: const Text('EMAIL'),
+                      subtitle: Text(oTambo.gestorCorreo ?? ''),
                     ),
                   ],
                 ),
@@ -448,7 +589,7 @@ class _DetalleTambookState extends State<DetalleTambook> {
         ));
   }
 
-  Card generales() {
+  Card cardDatosGenerales() {
     var heading = 'DATOS GENERALES';
     return Card(
         elevation: 4.0,
@@ -470,18 +611,18 @@ class _DetalleTambookState extends State<DetalleTambook> {
               child: Card(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     ListTile(
-                      title: Text('ATENCIONES'),
-                      subtitle: Text('10.957'),
+                      title: const Text('ATENCIONES'),
+                      subtitle: Text(oTambo.atencion ?? ''),
                     ),
                     ListTile(
-                      title: Text('INTERVENCIONES'),
-                      subtitle: Text('741'),
+                      title: const Text('INTERVENCIONES'),
+                      subtitle: Text(oTambo.intervencion ?? ''),
                     ),
                     ListTile(
-                      title: Text('BENEFICIARIOS'),
-                      subtitle: Text('2,184'),
+                      title: const Text('BENEFICIARIOS'),
+                      subtitle: Text(oTambo.beneficiario ?? ''),
                     ),
                   ],
                 ),
@@ -491,52 +632,236 @@ class _DetalleTambookState extends State<DetalleTambook> {
         ));
   }
 
-  Card card3() {
-    var heading = 'JEFE DE UNIDAD TERRITORIAL';
-    var subheading = "JOSE GREGORIO ARICA NECIOSUP";
+  Card cardDatosUbicacion() {
+    var heading = 'DATOS DE UBICACIÓN';
     return Card(
-        elevation: 4.0,
-        child: Column(
-          children: [
-            ListTile(
-              title: Text(
-                heading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              subtitle: Text(
-                subheading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                ),
+      elevation: 4.0,
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
               ),
             ),
-            const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Card(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    ListTile(
-                      title: Text('TÉLEFONO'),
-                      subtitle: Text('978997614'),
-                    ),
-                    ListTile(
-                      title: Text('EMAIL'),
-                      subtitle: Text('jarica@pais.gob.pe'),
-                    ),
-                  ],
-                ),
+          ),
+          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: const Text('DEPARTAMENTO'),
+                    subtitle: Text(oTambo.nombreDepartamento ?? ''),
+                  ),
+                  ListTile(
+                    title: const Text('PROVINCIA'),
+                    subtitle: Text(oTambo.nombreProvincia ?? ''),
+                  ),
+                  ListTile(
+                    title: const Text('DISTRITO'),
+                    subtitle: Text(oTambo.nombreDistrito ?? ''),
+                  ),
+                  ListTile(
+                    title: const Text('CENTRO POBLADO'),
+                    subtitle: Text(oTambo.nombreCcpp ?? ''),
+                  ),
+                  ListTile(
+                    title: const Text('COORDENADAS'),
+                    subtitle:
+                        Text('${oTambo.xCcpp ?? ''} , ${oTambo.yCcpp ?? ''}'),
+                  ),
+                  ListTile(
+                    title: const Text('ALTITUD'),
+                    subtitle: Text(oTambo.altitudCcpp ?? ''),
+                  ),
+                ],
               ),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
+  }
+
+  Card cardDatosDemograficos() {
+    var heading = 'DATOS DEMOGRÁFICOS';
+    return Card(
+      elevation: 4.0,
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: const Text('N° DE HOGARES'),
+                    subtitle: Text(oTambo.hogaresAnteriores ?? ''),
+                  ),
+                  ListTile(
+                    title: const Text('N° DE VIVIENDAS'),
+                    subtitle: Text(oTambo.viviendasAnterior ?? ''),
+                  ),
+                  ListTile(
+                    title: const Text('POBLACIÓN'),
+                    subtitle: Text(oTambo.poblacionAnterior ?? ''),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Card cardDatosObra() {
+    var heading = 'DATOS DE LA OBRA';
+    return Card(
+      elevation: 4.0,
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: const Text('N° SNIP'),
+                    subtitle: Text(
+                        oTambo.nSnip == null ? '' : oTambo.nSnip.toString()),
+                  ),
+                  ListTile(
+                    title: const Text('MONTO CONTRATADO'),
+                    subtitle: Text(oTambo.montoAdjudicado ?? ''),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Card cardNuestroJefeUnidad() {
+    var heading = 'NUESTRO JEFE DE UNIDAD TERRITORIAL';
+    var subheading =
+        "${oTambo.jefeNombre ?? ''} ${oTambo.jefeApellidoPaterno ?? ''} ${oTambo.jefeApellidoMaterno ?? ''}";
+    return Card(
+      elevation: 4.0,
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            subtitle: Text(
+              subheading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: const Text('TÉLEFONO'),
+                    subtitle: Text(oTambo.jefeTelefono ?? ''),
+                  ),
+                  ListTile(
+                    title: const Text('EMAIL'),
+                    subtitle: Text(oTambo.jefeCorreo ?? ''),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Card cardDatosCentroPoblado() {
+    var heading = 'CENTROS POBLADOS';
+    return Card(
+      elevation: 4.0,
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  ListTile(
+                    title: Text('CC.PP'),
+                    subtitle: Text(''),
+                  ),
+                  ListTile(
+                    title: Text('ALTITUD'),
+                    subtitle: Text(''),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
 // Intervenciones
@@ -568,7 +893,7 @@ class _DetalleTambookState extends State<DetalleTambook> {
           Image.network(
               'https://www.pais.gob.pe/backendsismonitor/public/storage/programaciones-git/temp/TMOgbPC8JekToSulb2QsRUlQNDtYWbnzwCdauuGx.jpg'),
           ElevatedButton(
-            child: Text('Descargar Ficha'),
+            child: const Text('Descargar Ficha'),
             onPressed: () {},
           ),
         ],
@@ -605,7 +930,7 @@ class _DetalleTambookState extends State<DetalleTambook> {
           Image.network(
               'https://www.pais.gob.pe/backendsismonitor/public/storage/programaciones-git/temp/E842oA2wFbzX0wb8ZleAjAJ18z4JQAQ6jDapOsXe.jpg'),
           ElevatedButton(
-            child: Text('Descargar Ficha'),
+            child: const Text('Descargar Ficha'),
             onPressed: () {},
           ),
         ],

@@ -1,6 +1,7 @@
 import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
 import 'package:actividades_pais/backend/model/dto/login_dto.dart';
+import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -9,6 +10,7 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
+import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/util/check_geolocator.dart';
@@ -764,11 +766,12 @@ class MainController extends GetxController {
     return o;
   }
 
-  Future<List<TamboModel>> searchTambo(
+  Future<List<BuscarTamboDto>> searchTambo(
     String? search,
   ) async {
     ///Obtiene los registros de la DB Local
-    List<TamboModel> aFind = await Get.find<MainService>().searchTambo(search);
+    List<BuscarTamboDto> aFind =
+        await Get.find<MainService>().searchTambo(search);
     return aFind;
   }
 
@@ -846,6 +849,17 @@ class MainController extends GetxController {
     await Future.delayed(const Duration(seconds: 1));
     List<AtencionesModel> aFind = await AtencionesModel.categoryList;
     return aFind;
+  }
+
+  Future<RespBase64FileDto> getBuildBase64PdfFichaTecnica(String tambo) async {
+    RespBase64FileDto oResp =
+        await Get.find<MainService>().getBuildBase64PdfFichaTecnica(tambo);
+    return oResp;
+  }
+
+  Future<TamboModel> getTamboDatoGeneral(String tambo) async {
+    TamboModel oResp = await Get.find<MainService>().tamboDatoGeneral(tambo);
+    return oResp;
   }
 
   bool isNumeric(dynamic s) {

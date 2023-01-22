@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
+import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/helpers/http.dart';
 import 'package:actividades_pais/helpers/http_responce.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
@@ -15,6 +18,7 @@ class PnPaisApi {
   final Http _http;
   final String basePathApp = "/api-pnpais/app/";
   final String basePathApp2 = "/api-pnpais/monitoreo/app/";
+  final String basePathApp3 = "/api-pnpais/tambook/app/";
 
   static String username = "username";
   static String password = "password";
@@ -196,5 +200,42 @@ class PnPaisApi {
     }
 
     return mapFormData;
+  }
+
+  Future<HttpResponse<List<BuscarTamboDto>>> searchTambo(
+    String? palabra,
+  ) async {
+    var sFilter = palabra != null ? '/$palabra' : '';
+    return await _http.request<List<BuscarTamboDto>>(
+      '${basePathApp3}buscarTamboOrGestor$sFilter',
+      method: "GET",
+      parser: (data) {
+        return (data as List).map((e) => BuscarTamboDto.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<TamboModel>> tamboDatoGeneral(
+    String? idtambo,
+  ) async {
+    return await _http.request<TamboModel>(
+      '${basePathApp3}tamboDatoGeneral/$idtambo',
+      method: "GET",
+      parser: (data) {
+        return TamboModel.fromJson(data);
+      },
+    );
+  }
+
+  Future<HttpResponse<RespBase64FileDto>> getBuildBase64PdfFichaTecnica(
+    String idTambo,
+  ) async {
+    return await _http.request<RespBase64FileDto>(
+      '${basePathApp3}buildBase64PdfFichaTecnica/$idTambo',
+      method: "GET",
+      parser: (data) {
+        return RespBase64FileDto.fromJson(data);
+      },
+    );
   }
 }

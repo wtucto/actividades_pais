@@ -5,7 +5,7 @@ import 'package:actividades_pais/backend/model/dto/login_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
-import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:logger/logger.dart';
 
 class Main2Repo {
@@ -15,19 +15,6 @@ class Main2Repo {
   final PnPaisApi2 _pnPaisApi;
 
   Main2Repo(this._pnPaisApi, this._dbPnPais);
-
-  Future<List<TamboModel>> searchTambo(
-    String? palabra,
-  ) async {
-    List<TamboModel> oUserUp = [];
-    final response = await _pnPaisApi.searchTambo(palabra);
-    if (response.error == null) {
-      oUserUp = response.data!;
-    } else {
-      _log.e(response.error.message);
-    }
-    return oUserUp;
-  }
 
   Future<RespTokenDto> login(
     LoginDto oBody,

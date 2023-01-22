@@ -6,7 +6,7 @@ import 'package:actividades_pais/backend/model/dto/login_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
-import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/helpers/http.dart';
 import 'package:actividades_pais/helpers/http_responce.dart';
@@ -29,13 +29,13 @@ class PnPaisApi2 {
 
   PnPaisApi2(this._http);
 
-  Future<HttpResponse<List<TamboModel>>> searchTambo(String? palabra) async {
+  Future<HttpResponse<List<BuscarTamboDto>>> searchTambo(String? palabra) async {
     var sFilter = palabra != null ? '?term=$palabra' : '';
-    return await _http.request<List<TamboModel>>(
+    return await _http.request<List<BuscarTamboDto>>(
       '${basePathTambook}buscarportambo$sFilter',
       method: "GET",
       parser: (data) {
-        return (data as List).map((e) => TamboModel.fromJson(e)).toList();
+        return (data as List).map((e) => BuscarTamboDto.fromJson(e)).toList();
       },
     );
   }

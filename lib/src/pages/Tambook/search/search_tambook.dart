@@ -1,14 +1,14 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
-import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/src/pages/Tambook/detalle_tambooK.dart';
 import 'package:flutter/material.dart';
 
 class SearchTambookDelegate extends SearchDelegate<String> {
   SearchTambookDelegate();
   final MainController mainController = MainController();
-  List<TamboModel> listTambo = [];
+  List<BuscarTamboDto> listTambo = [];
 
-  Future<List<TamboModel>> getTambook(String search) async {
+  Future<List<BuscarTamboDto>> getTambook(String search) async {
     try {
       if (search.length > 2) {
         listTambo = await mainController.searchTambo(search);
@@ -94,7 +94,7 @@ class SearchTambookDelegate extends SearchDelegate<String> {
         ),
       );
 
-  Widget buildSuggestionsSuccess(List<TamboModel> dataList) => ListView.builder(
+  Widget buildSuggestionsSuccess(List<BuscarTamboDto> dataList) => ListView.builder(
         itemCount: dataList.length,
         itemBuilder: (context, index) {
           return GestureDetector(
@@ -125,7 +125,7 @@ class SearchTambookDelegate extends SearchDelegate<String> {
                       height: 70,
                       margin: const EdgeInsets.only(right: 15),
                       child: Image.network(
-                        dataList[index].imagen!,
+                        dataList[index].nombreFisicoFoto!,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
@@ -144,7 +144,7 @@ class SearchTambookDelegate extends SearchDelegate<String> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          "Tambo: ${dataList[index].tambo!}",
+                          "Tambo: ${dataList[index].nombreTambo!}",
                           style: const TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.bold,
@@ -162,7 +162,7 @@ class SearchTambookDelegate extends SearchDelegate<String> {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          "Departamento: ${dataList[index].departamento!}",
+                          "Departamento: ${dataList[index].nombreDepartamento!}",
                           style: const TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.bold,
