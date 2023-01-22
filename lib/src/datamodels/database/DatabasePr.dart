@@ -832,9 +832,7 @@ return List.empty();
   }
 
   Future<void> insertConfigInicio(ConfigInicio regitroCalificada) async {
- print("   regitroCalificada.modalidad");
- print(   regitroCalificada.modalidad);
-    print(_db!.insert("DatConfigInicio", regitroCalificada.toMap()));
+     print(_db!.insert("DatConfigInicio", regitroCalificada.toMap()));
   }
 
   Future<void> insertPuesto(Puesto regitroCalificada) async {

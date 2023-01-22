@@ -7,7 +7,7 @@ import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:flutter/material.dart';
 
-import '../../datamodels/Provider/ProviderSeguimientoParqueInformatico.dart';
+import '../../../datamodels/Provider/ProviderSeguimientoParqueInformatico.dart';
 
 class TicketsEquipos extends StatefulWidget {
   // FiltroTicketEquipo filtroTicketEquipo;

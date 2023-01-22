@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           _Form(),
                           //SizedBox(height: h / 50),
-                          /*   (contador == 0)
+                       /*   (contador == 0)
                               ? InkWell(
                                   onTap: () {
                                     Navigator.of(context).pushReplacement(
@@ -187,24 +187,87 @@ class __FormState extends State<_Form> {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     Future LoginUser(usn, psw, rpsw, tipoUser) async {
+      print(tipoUser);
       if (tipoUser == 1) {
-        try {
-          setState(() {
-            esperar = 'Espere un monento...';
-          });
 
-          var resLogin =
-              await ProviderLogin().Login(username: usn, password: psw);
-          esperar = 'Ingresar';
-          if (resLogin >= 1) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => HomePagePais()),
-            );
-          }
+        try {
+         setState(() {
+           esperar='Espere un monento...';
+         });
+
+      var resLogin =    await  ProviderLogin().Login(username: usn,password: psw);
+          esperar='Ingresar';
+      if(resLogin >=1){
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => HomePagePais()),
+        );
+      }
+      /*    var prefixUserDemo = 'D';
+
+          var res = await DatabasePr.db
+              .getLoginUser(dni: int.parse(usn), contrasenia: psw);
+          if (res.isNotEmpty) {
+            ConfigPersonal oUserInfo = res[0];
+            List<String> aUnidad = [];
+            String codigo = '';
+            List<String> aPass = [];
+            for (var u in res) {
+              aUnidad.add(u.unidad);
+              aPass.add(u.contrasenia);
+              if (u.unidad == 'UPS') codigo = u.codigo;
+            }
+
+            if (codigo == '') {
+              if (!aUnidad.contains('UPS')) {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => HomePagePais()),
+                );
+                return;
+              }
+            } else {
+              UserModel oUser;
+              try {
+                oUser = await mainController.getUserLogin(codigo, '');
+
+                if ((oUser.codigo == codigo && (aPass.contains(psw)))) {
+                  check = _prefs!.getBool("check");
+                  if (_prefs != null && check == true) {
+                    _prefs!.setString("clave", oUser.clave!);
+                  } else {
+                    _prefs!.setString("clave", "");
+                  }
+
+                  _prefs!.setString("nombres", oUser.nombres!);
+                  _prefs!.setString("codigo", oUser.codigo!);
+                  _prefs!.setString("rol", oUser.rol!);
+                  _prefs!.setString("dni", oUserInfo.numeroDni.toString());
+
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => HomePagePais(),
+                    ),
+                  );
+                  return;
+                } else {
+                  mostrarAlerta(
+                    context,
+                    'Login incorrecto',
+                    'Revise sus credenciales nuevamente',
+                  );
+                }
+              } catch (oError) {
+                mostrarAlerta(
+                  context,
+                  'Login incorrecto',
+                  oError.toString(),
+                );
+              }
+            }
+          }*/
         } catch (oError) {
-          setState(() {
-            esperar = 'Ingresar';
-          });
+    setState(() {
+      esperar='Ingresar';
+    });
           mostrarAlerta(context, 'Login incorrecto',
               'Revise sus credenciales nuevamente');
         }
@@ -244,6 +307,30 @@ class __FormState extends State<_Form> {
       padding: EdgeInsets.symmetric(horizontal: w / 16),
       child: Column(
         children: <Widget>[
+        /*  DropdownButtonFormField(
+            items: const <DropdownMenuItem<int>>[
+              DropdownMenuItem<int>(
+                value: 1,
+                child: Text("USUARIO"),
+              ),
+              DropdownMenuItem<int>(
+                value: 2,
+                child: Text("JEFE"),
+              ),
+            ],
+            value: tipoUsuario,
+            onChanged: (value) {
+              setState(() {
+                tipoUsuario = value!;
+              });
+            },
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.supervised_user_circle),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),*/
           const SizedBox(height: 10),
           CustomInput(
             icon: Icons.supervised_user_circle,
@@ -286,7 +373,7 @@ class __FormState extends State<_Form> {
                   emailCtrl.text, passCtrl.text, passCtrl.text, tipoUsuario);
             },
           ),
-          /*   CheckboxListTile(
+        /*   CheckboxListTile(
             value: checkGuardarDatos,
             title: const Text('Recordar'),
             onChanged: (value) {

@@ -6,8 +6,12 @@ import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaUbicacion.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderSeguimientoParqueInformatico.dart';
 import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
-import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/DetalleEquipoInformatico.dart';
+import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
+import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/CrudPaqueInformatico/EditarParqueInformatico.dart';
+import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/DetalleEquipo/DetalleEquipoInformatico.dart';
+import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class SeguimientoParqueInformatico extends StatefulWidget {
   const SeguimientoParqueInformatico({Key? key}) : super(key: key);
@@ -25,11 +29,12 @@ class _SeguimientoParqueInformaticoState
   var seleccionarMarca = "Seleccionar Marca";
   var seleccionarModelo = "Seleccionar Modelo";
   var seleccionarUbicacion = "Seleccionar Ubicacion";
-
+  var titulo = "PARQUE INFORMATICO";
   var pageIndex = 1;
 
   final controller = ScrollController();
   bool isLoading = false;
+  ListaEquipoInformatico listaEquipoInformatico = ListaEquipoInformatico();
 
   @override
   void initState() {
@@ -63,137 +68,221 @@ class _SeguimientoParqueInformaticoState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "PARQUE INFORMATICO",
-            style: TextStyle(fontSize: 17),
-          ),
-          actions: [
-            /*    if (isLoading == true) ...[
-              new Center(
-                child: Container(
-                    height: 30,
-                    child: const CircularProgressIndicator(
-                      color: Colors.white,
-                    )),
-              )
-            ],*/
-            const SizedBox(width: 10),
-            InkWell(
-              child: const Icon(Icons.filter_list_rounded),
-              onTap: () {
-                resetlista();
-                _showAddNoteDialog(context);
-              },
-            ),
-            const SizedBox(width: 10),
-            InkWell(
-              child: const Icon(Icons.restart_alt_sharp),
-              onTap: () async {
-                setState(() {
-                  isLoading = true;
-                });
-                await resetlista();
-
-                setState(() {
-                  isLoading = false;
-                });
-              },
-            )
-          ],
+      appBar: AppBar(
+        title: Text(
+          titulo,
+          style: TextStyle(fontSize: 17),
         ),
-        body: FutureBuilder<List<ListaEquipoInformatico>>(
-          future: ProviderSeguimientoParqueInformatico()
-              .listaParqueInformatico(filtroParqueInformatico),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<ListaEquipoInformatico>> snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.hasData == false) {
+        actions: [
+          const SizedBox(width: 10),
+          InkWell(
+            child: const Icon(Icons.filter_list_rounded),
+            onTap: () {
+              resetlista();
+              _showAddNoteDialog(context);
+            },
+          ),
+          const SizedBox(width: 10),
+          InkWell(
+            child: const Icon(Icons.restart_alt_sharp),
+            onTap: () async {
+              setState(() {
+                isLoading = true;
+              });
+              await resetlista();
+
+              setState(() {
+                isLoading = false;
+              });
+            },
+          )
+        ],
+      ),
+      body: FutureBuilder<List<ListaEquipoInformatico>>(
+        future: ProviderSeguimientoParqueInformatico()
+            .listaParqueInformatico(filtroParqueInformatico),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<ListaEquipoInformatico>> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.hasData == false) {
+              return const Center(
+                child: Text("¡No existen registros"),
+              );
+            } else {
+              final listaPersonalAux = snapshot.data;
+              if (listaPersonalAux!.length == 0) {
                 return const Center(
-                  child: Text("¡No existen registros"),
+                  child: Text(
+                    'No hay informacion',
+                    style: TextStyle(fontSize: 19),
+                  ),
                 );
               } else {
-                final listaPersonalAux = snapshot.data;
-                if (listaPersonalAux!.length == 0) {
-                  return const Center(
-                    child: Text(
-                      'No hay informacion',
-                      style: TextStyle(fontSize: 19),
-                    ),
-                  );
-                } else {
-                  return Column(
-                    children: [
-                      Expanded(
-                          child: Container(
-                        child: RefreshIndicator(
-                            onRefresh: resetlista,
-                            child: ListView.builder(
-                              controller: controller,
-                              itemCount: listaPersonalAux.length,
-                              itemBuilder: (context, i) => Dismissible(
-                                  key: UniqueKey(),
-                                  background: buildSwipeActionLeft(),
-                                  secondaryBackground: buildSwipeActionRigth(),
-                                  onDismissed: (direction) async {
-                                    switch (direction) {
-                                      case DismissDirection.endToStart:
-                                        break;
-                                      case DismissDirection.startToEnd:
-                                        break;
-                                      case DismissDirection.vertical:
-                                        // TODO: Handle this case.
-                                        break;
-                                      case DismissDirection.horizontal:
-                                        // TODO: Handle this case.
-                                        break;
-                                      case DismissDirection.up:
-                                        // TODO: Handle this case.
-                                        break;
-                                      case DismissDirection.down:
-                                        // TODO: Handle this case.
-                                        break;
-                                      case DismissDirection.none:
-                                        // TODO: Handle this case.
-                                        break;
-                                    }
-                                  },
-                                  child: listas.cardParqueInformatico(
-                                    listaPersonalAux[i],
-                                    () async {
+                return Column(
+                  children: [
+                    Expanded(
+                        child: Container(
+                      child: RefreshIndicator(
+                          onRefresh: resetlista,
+                          child: ListView.builder(
+                            controller: controller,
+                            itemCount: listaPersonalAux.length,
+                            itemBuilder: (context, i) => Dismissible(
+                                key: UniqueKey(),
+                                background: buildSwipeActionLeft(),
+                                secondaryBackground: buildSwipeActionRigth(),
+                                onDismissed: (direction) async {
+                                  switch (direction) {
+                                    case DismissDirection.endToStart:
+                                      Util().showAlertDialogokno(
+                                          titulo, context, () async {
+                                        await ProviderSeguimientoParqueInformatico()
+                                            .EliminarEquipoInformatico(
+                                                listaPersonalAux[i]);
+                                        Navigator.pop(context);
+                                        resetlista();
+                                      }, () {
+                                        Navigator.pop(context);
+                                        resetlista();
+                                      }, "Estas Seguro de Eliminar este equipo: ${listaPersonalAux[i].descripcionEquipoInformatico}");
+
+                                      break;
+                                    case DismissDirection.startToEnd:
+                                      resetlista();
                                       final respt = await Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                DetalleEquipoInformatico(listaPersonalAux[i]),
+                                                EditarParqueInformatico(
+                                                    listaEquipoInformatico:
+                                                        listaPersonalAux[i],
+                                                    titulo:
+                                                        "EDITAR EQUIPO INFORMATICO",
+                                                    tipo: 0),
                                           ));
-                                      if (respt == 'ok') {
-                                        print("aqioioo");
-                                        // refreshList();
+                                      if (respt == 'OK') {
+                                        resetlista();
                                       }
-                                    },
-                                  )),
-                            )),
-                      )),
-                      if (isLoading == true)
-                        new Center(
-                          child: const CircularProgressIndicator(),
-                        )
-                    ],
-                  );
-                }
+                                      break;
+                                    case DismissDirection.vertical:
+                                      // TODO: Handle this case.
+                                      break;
+                                    case DismissDirection.horizontal:
+                                      // TODO: Handle this case.
+                                      break;
+                                    case DismissDirection.up:
+                                      // TODO: Handle this case.
+                                      break;
+                                    case DismissDirection.down:
+                                      // TODO: Handle this case.
+                                      break;
+                                    case DismissDirection.none:
+                                      // TODO: Handle this case.
+                                      break;
+                                  }
+                                },
+                                child: listas.cardParqueInformatico(
+                                  listaPersonalAux[i],
+                                  () async {
+                                    await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetalleEquipoInformatico(
+                                                  listaPersonalAux[i]),
+                                        ));
+                                  },
+                                )),
+                          )),
+                    )),
+                    if (isLoading == true)
+                      new Center(
+                        child: const CircularProgressIndicator(),
+                      )
+                  ],
+                );
               }
             }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          heroTag: 'ss',
-          onPressed: () {},
-          child: const Icon(Icons.playlist_add_outlined),
-        ));
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
+      floatingActionButton: SpeedDial(
+        //Speed dial menu
+        //marginBottom: 10, //margin bottom
+        icon: Icons.menu,
+        //icon on Floating action button|
+        activeIcon: Icons.close,
+        //icon when menu is expanded on button
+        backgroundColor: Colors.green,
+        //background color of button
+        foregroundColor: Colors.white,
+        //font color, icon color in button
+        activeBackgroundColor: Colors.grey,
+        //background color when menu is expanded
+        activeForegroundColor: Colors.white,
+        buttonSize: const Size(56.0, 56.0),
+        //button size
+        visible: true,
+        closeManually: false,
+        curve: Curves.bounceIn,
+        overlayColor: Colors.black,
+        overlayOpacity: 0.5,
+        onOpen: () => print('OPENING DIAL'),
+        // action when menu opens
+        onClose: () => print('DIAL CLOSED'),
+        //action when menu closes
+
+        elevation: 8.0,
+        //shadow elevation of button
+        shape: CircleBorder(),
+        //shape of button
+
+        children: [
+          SpeedDialChild(
+            child: Icon(Icons.airplay_sharp),
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            label: 'REGISTRAR EQUIPO INFORMATICO',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () async {
+              final respt = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditarParqueInformatico(
+                        listaEquipoInformatico: listaEquipoInformatico,
+                        titulo: "REGISTRAR EQUIPO INFORMATICO",
+                        tipo: 1),
+                  ));
+              if (respt == 'OK') {
+                resetlista();
+              }
+            },
+            onLongPress: () => print('SECOND CHILD LONG PRESS'),
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.pie_chart),
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.orangeAccent,
+            label: 'REPORTE EQUIPO INFROMATICO',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () async {
+              final respt = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReporteEquipoInformatico(),
+                  ));
+              if (respt == 'OK') {
+                resetlista();
+              }
+            },
+            onLongPress: () => print('THIRD CHILD LONG PRESS'),
+          ),
+        ],
+      ),
+    );
   }
 
   _showAddNoteDialog(BuildContext context) => showDialog(
@@ -489,7 +578,7 @@ class _SeguimientoParqueInformaticoState
         ],
       ));
 
-  Future<Null> resetlista() async {
+  Future resetlista() async {
     seleccionarMarca = "Seleccionar Marca";
     seleccionarModelo = "Seleccionar Modelo";
     seleccionarUbicacion = "Seleccionar Ubicacion";

@@ -45,40 +45,42 @@ class ListaEquipoInformatico {
   String? jefe;
   String? totalManto;
   String? total;
+  List? archivos;
 
   ListaEquipoInformatico(
-      {this.idEquipoInformatico='',
-      this.idTipoEquipoInformatico='',
-      this.descripcionEquipoInformatico='',
-      this.codigoPatrimonial='',
-      this.idModelo='',
-      this.color='',
-      this.serie='',
-      this.fecIngreso='',
-      this.idProveedor='',
-      this.fecFinGarantiaProveedor='',
-      this.idArchivo='',
-      this.flgActivo='',
-      this.idUsuarioReg='',
-      this.fechaReg='',
-      this.ipmaqReg='',
-      this.idUsuarioAct='',
-      this.fechaAct='',
-      this.ipmaqAct='',
-      this.idUsuarioDel='',
-      this.fechaDel='',
-      this.ipmaqDel='',
-      this.proveedor='',
-      this.descripcionMarca='',
-      this.descripcionModelo='',
-      this.descripcionTipoEquipoInformatico='',
-      this.empleado='',
-      this.ubicacion='',
-      this.idMarca='',
-      this.estado='',
-      this.jefe='',
-      this.totalManto='',
-      this.total=''});
+      {this.idEquipoInformatico = '',
+      this.idTipoEquipoInformatico = '',
+      this.descripcionEquipoInformatico = '',
+      this.codigoPatrimonial = '',
+      this.idModelo = '',
+      this.color = '',
+      this.serie = '',
+      this.fecIngreso = '',
+      this.idProveedor = '',
+      this.fecFinGarantiaProveedor = '',
+      this.idArchivo = '',
+      this.flgActivo = '',
+      this.idUsuarioReg = '',
+      this.fechaReg = '',
+      this.ipmaqReg = '',
+      this.idUsuarioAct = '',
+      this.fechaAct = '',
+      this.ipmaqAct = '',
+      this.idUsuarioDel = '',
+      this.fechaDel = '',
+      this.ipmaqDel = '',
+      this.proveedor = '',
+      this.descripcionMarca = '',
+      this.descripcionModelo = '',
+      this.descripcionTipoEquipoInformatico = '',
+      this.empleado = '',
+      this.ubicacion = '',
+      this.idMarca = '',
+      this.estado = '',
+      this.jefe = '',
+      this.totalManto = '',
+      this.total = '',
+      this.archivos});
 
   ListaEquipoInformatico.fromJson(Map<String, dynamic> json) {
     idEquipoInformatico = json['id_equipo_informatico'] ?? '';
@@ -151,6 +153,7 @@ class ListaEquipoInformatico {
     data['jefe'] = this.jefe;
     data['totalManto'] = this.totalManto;
     data['total'] = this.total;
+    data['archivos'] = this.archivos;
     return data;
   }
 }

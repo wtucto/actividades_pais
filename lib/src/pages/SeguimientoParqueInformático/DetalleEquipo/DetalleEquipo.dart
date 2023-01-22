@@ -5,8 +5,6 @@ import 'package:actividades_pais/util/app-config.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-//import 'dart:js' as js;
-import 'package:http/http.dart' as http;
 
 class DetalleEquipo extends StatefulWidget {
   ListaEquipoInformatico listaEquipoInformatico;
@@ -37,7 +35,7 @@ class _DetalleEquipoState extends State<DetalleEquipo> {
         .consultaEquipo(widget.listaEquipoInformatico.idEquipoInformatico);
 
     setState(() {});
-   }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +46,6 @@ class _DetalleEquipoState extends State<DetalleEquipo> {
           Expanded(
             child: ListView(
               children: [
-                if (respuetaImgen != '0') ...[
-                  Image.network(
-                      'https://www.pais.gob.pe/backendsismonitor/public/storage/' +
-                          respuetaImgen)
-                ],
                 SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -86,7 +79,7 @@ class _DetalleEquipoState extends State<DetalleEquipo> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     SizedBox(width: 28),
-                    Text("21${widget.listaEquipoInformatico.fecIngreso}")
+                    Text("${widget.listaEquipoInformatico.fecIngreso}")
                   ],
                 ),
                 SizedBox(height: 10),
@@ -169,7 +162,7 @@ class _DetalleEquipoState extends State<DetalleEquipo> {
                       "NRO SERIE :",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(width: 83),
+                    SizedBox(width: 89),
                     Container(
                         width: 170,
                         child: Text(
@@ -178,42 +171,11 @@ class _DetalleEquipoState extends State<DetalleEquipo> {
                   ],
                 ),
                 SizedBox(height: 15),
-              /*  Container(
-                    decoration: Servicios().myBoxDecoration(),
-                    margin: const EdgeInsets.only(right: 10, left: 10),
-                    height: 40.0,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.blue[600],
-                      ),
-                      onPressed: () async {
-                        print(AppConfig.backendsismonitor +
-                            '/seguimientoequipo/exportarExcelFichaTecnica?id_equipo=${widget.listaEquipoInformatico.idEquipoInformatico}');
-                        var response = await dio.download(
-                            AppConfig.backendsismonitor +
-                                '/seguimientoequipo/exportarExcelFichaTecnica?id_equipo=${widget.listaEquipoInformatico.idEquipoInformatico}',
-                            'path-to-save-to');
-
-                        //     http.get(Uri.parse(AppConfig.backendsismonitor+'seguimientoequipo/exportarExcelFichaTecnica?id_equipo=${widget.listaEquipoInformatico.idEquipoInformatico}'));
-                        //.open(AppConfig.backendsismonitor+'seguimientoequipo/exportarExcelFichaTecnica?id_equipo=${widget.listaEquipoInformatico.idEquipoInformatico}', 'PlaceholderName');
-
-                        //                        js.context.callMethod('open', [AppConfig.backendsismonitor+'seguimientoequipo/exportarExcelFichaTecnica?id_equipo=${widget.listaEquipoInformatico.idEquipoInformatico}']);
-
-                        //    html.window.open('https://stackoverflow.com/questions/ask', 'new tab');
-
-                        setState(() {
-                          // isLoading = true;
-                        });
-                        // await traerPaguinado(10, 1);
-                        //   Navigator.of(context).pop();
-
-                        setState(() {
-                          //isLoading = false;
-                        });
-                      },
-                      child: const Text("DESCARGAR FICHA TECNICA"),
-                    ))*/
+                if (respuetaImgen != '0') ...[
+                  Image.network(
+                      AppConfig.backendsismonitor + '/storage/' + respuetaImgen)
+                ],
+                SizedBox(height: 15),
               ],
             ),
           ),

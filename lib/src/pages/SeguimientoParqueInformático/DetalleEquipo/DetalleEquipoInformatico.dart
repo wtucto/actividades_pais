@@ -2,10 +2,10 @@ import 'package:actividades_pais/src/datamodels/Clases/Uti/FiltroTicketEquipo.da
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaEquipoInformatico.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaMarca.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaPersonalSoporte.dart';
-import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/TicketsEquipos.dart';
+import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/DetalleEquipo/TicketsEquipos.dart';
 import 'package:flutter/material.dart';
 
-import '../../datamodels/Provider/ProviderSeguimientoParqueInformatico.dart';
+import '../../../datamodels/Provider/ProviderSeguimientoParqueInformatico.dart';
 import 'DetalleEquipo.dart';
 
 class DetalleEquipoInformatico extends StatefulWidget {

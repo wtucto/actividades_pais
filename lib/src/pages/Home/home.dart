@@ -215,9 +215,9 @@ class _HomePagePais extends State<HomePagePais> {
         aHomeOptions.add(
           HomeOptions(
             code: 'OPT1009',
-            name: 'PAQUE INFORMATICO'.tr,
+            name: 'TileParqueInfomatico'.tr,
             types: const ['Ver'],
-            image: icon4,
+            image: icon5,
             color: lightBlue,
           ),
         );
