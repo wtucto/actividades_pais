@@ -48,6 +48,7 @@ class _HomePagePais extends State<HomePagePais> {
   var _apellidosPersona = '';
   var unidadTerritorial = '';
   var variable = '';
+
   //var snip = 0;
   //List<int> snips = [];
   var idPlataforma = 0;
@@ -61,6 +62,7 @@ class _HomePagePais extends State<HomePagePais> {
   String long = '';
   String lat = '';
   List<String> aUnidad = [];
+
   @override
   void initState() {
     super.initState();
@@ -117,7 +119,7 @@ class _HomePagePais extends State<HomePagePais> {
         if (abc.isNotEmpty) {
           tipoPlataforma = abc[0].tipoPlataforma;
           unidadTerritorial = abc[0].unidTerritoriales;
-
+          variable = abc[0].nombreTambo;
           /*   mostrarNombre();
           cantidadDB = 1;
           changecolor = (Colors.blue[400])!;
@@ -145,12 +147,10 @@ class _HomePagePais extends State<HomePagePais> {
   Future mostrarNombre() async {
     DatabasePr.db.initDB();
     var abc = await DatabasePr.db.getAllConfigPersonal();
-    print("abc[0].nombres");
-    print(abc[0].nombres);
     dniPrueba = abc[0].numeroDni;
     _prefs = await SharedPreferences.getInstance();
     token = _prefs!.getString("token");
-    //&& token == null
+
     if (abc.isNotEmpty) {
       setState(() {
         _nombrePersona = abc[abc.length - 1].nombres.toUpperCase();
@@ -464,7 +464,7 @@ class _HomePagePais extends State<HomePagePais> {
                             ),
                           );
                           break;
-                          case 'OPT1009':
+                        case 'OPT1009':
                           Navigator.push(
                             context,
                             MaterialPageRoute(

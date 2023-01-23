@@ -37,7 +37,7 @@ class CustomInput extends StatelessWidget {
        /* inputFormatters: [
           UpperCaseTextFormatter(),
         ],*/
-        textCapitalization: TextCapitalization.characters,
+        textCapitalization: TextCapitalization.none,
         controller: this.textController,
         autocorrect: false,
         keyboardType: this.keyboardType,

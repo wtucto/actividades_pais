@@ -522,10 +522,12 @@ class Listas {
       child: Column(
         children: <Widget>[
           ListTile(
-            leading: Icon(
-              Icons.text_snippet_sharp,
-              color: Colors.black,
-            ),
+            leading: (band.estado=='INACTIVO')?Icon(
+              Icons.computer,
+              color: Colors.red,
+            ):Icon(
+                Icons.computer,
+                color: Colors.green),
             contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.codigoPatrimonial} \n${band.descripcionEquipoInformatico}',
                 style: TextStyle(fontSize: 13)),

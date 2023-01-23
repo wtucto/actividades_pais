@@ -342,7 +342,7 @@ class __FormState extends State<_Form> {
             icon: Icons.lock_outline,
             placeholder: 'Ingrese su Contraseña',
             textController: passCtrl,
-            isPassword: true,
+            //isPassword: false,
           ),
           // if (bRepeat == true)
           // CustomInput(
