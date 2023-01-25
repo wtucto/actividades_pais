@@ -412,4 +412,32 @@ class ProviderSeguimientoParqueInformatico {
       return "0";
     }
   }
+  ///REPORTE
+
+ Future<int> ReporteEquipos(idTipo)async{
+   var logUser = await DatabasePr.db.loginUser();
+   var headers = {
+     'Authorization': 'Bearer ${logUser[0].token}',
+     'Content-Type': 'application/json'
+   };
+
+   http.Response response = await http.get(
+       Uri.parse(AppConfig.backendsismonitor +
+           '/seguimientoequipo/reportActivoInactivo/$idTipo'),
+       headers: headers);
+   if (response.statusCode == 200) {
+     if (response.body != "") {
+       var jsonResponse;
+       jsonResponse = json.decode(response.body.toString());
+
+       print("jsonResponse: ${jsonResponse[0]["cantidad"]}" );
+       return int.parse(jsonResponse[0]["cantidad"]);
+     } else {
+       return 0;
+     }
+   } else {
+     return 0;
+   }
+
+ }
 }
