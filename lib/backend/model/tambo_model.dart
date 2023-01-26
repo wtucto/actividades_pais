@@ -1,4 +1,5 @@
 import 'package:actividades_pais/backend/model/dto/response_tambo_centro_poblado_dto.dart';
+import 'package:actividades_pais/backend/model/dto/response_tambo_servicio_internet_dto.dart';
 
 class TamboFld {
   static String idTambo = 'idTambo';
@@ -50,6 +51,7 @@ class TamboFld {
   static String jefeCorreo = 'jefeCorreo';
   static String jefeTelefono = 'jefeTelefono';
   static String aCentroPoblado = 'acentroPoblado';
+  static String oServicioInternet = 'oservicioInternet';
 }
 
 class TamboModel {
@@ -134,6 +136,7 @@ class TamboModel {
   */
 
   List<TamboCentroPobladoDto>? aCentroPoblado = [];
+  TamboServicioInternetDto? oServicioInternet = null;
 
   TamboModel.empty() {}
 
@@ -187,64 +190,68 @@ class TamboModel {
     this.aCentroPoblado,
     this.tamboPathImage,
     this.gestorPathImage,
+    this.oServicioInternet,
   });
 
   factory TamboModel.fromJson(Map<String, dynamic> json) {
     return TamboModel(
-      idTambo: json[TamboFld.idTambo],
-      nombreFisicoFoto: json[TamboFld.nombreFisicoFoto],
-      extensionFoto: json[TamboFld.extensionFoto],
-      folder: json[TamboFld.folder],
-      fechaCreacionImagen: json[TamboFld.fechaCreacionImagen],
-      atencion: json[TamboFld.atencion],
-      intervencion: json[TamboFld.intervencion],
-      beneficiario: json[TamboFld.beneficiario],
-      nombreDepartamento: json[TamboFld.nombreDepartamento],
-      nombreProvincia: json[TamboFld.nombreProvincia],
-      nombreDistrito: json[TamboFld.nombreDistrito],
-      nombreCcpp: json[TamboFld.nombreCcpp],
-      xCcpp: json[TamboFld.xCcpp],
-      yCcpp: json[TamboFld.yCcpp],
-      altitudCcpp: json[TamboFld.altitudCcpp],
-      hogaresAnteriores: json[TamboFld.hogaresAnteriores],
-      viviendasAnterior: json[TamboFld.viviendasAnterior],
-      poblacionAnterior: json[TamboFld.poblacionAnterior],
-      nSnip: json[TamboFld.nSnip],
-      montoAdjudicado: json[TamboFld.montoAdjudicado],
-      fechaInicioServicio: json[TamboFld.fechaInicioServicio],
-      gestorId: json[TamboFld.gestorId],
-      gestorNombre: json[TamboFld.gestorNombre],
-      gestorApellidos: json[TamboFld.gestorApellidos],
-      gestorCorreo: json[TamboFld.gestorCorreo],
-      gestorDocumento: json[TamboFld.gestorDocumento],
-      gestorFechaNacimiento: json[TamboFld.gestorFechaNacimiento],
-      gestorSexo: json[TamboFld.gestorSexo],
-      gestorCargoLaboral: json[TamboFld.gestorCargoLaboral],
-      gestorDomicilioCcpp: json[TamboFld.gestorDomicilioCcpp],
-      gestorDomicilioDireccion: json[TamboFld.gestorDomicilioDireccion],
-      gestorDomicilioReferencia: json[TamboFld.gestorDomicilioReferencia],
-      gestorRuc: json[TamboFld.gestorRuc],
-      gestorBrevete: json[TamboFld.gestorBrevete],
-      gestorEstadoCivil: json[TamboFld.gestorEstadoCivil],
-      gestorProfession: json[TamboFld.gestorProfession],
-      gestorGradoAcademico: json[TamboFld.gestorGradoAcademico],
-      gestorNombreFisicoFoto: json[TamboFld.gestorNombreFisicoFoto],
-      gestorFotoExtencion: json[TamboFld.gestorFotoExtencion],
-      gestorTelefono: json[TamboFld.gestorTelefono],
-      jefeNombre: json[TamboFld.jefeNombre],
-      jefeDocumento: json[TamboFld.jefeDocumento],
-      jefeApellidoPaterno: json[TamboFld.jefeApellidoPaterno],
-      jefeApellidoMaterno: json[TamboFld.jefeApellidoMaterno],
-      jefeCorreo: json[TamboFld.jefeCorreo],
-      jefeTelefono: json[TamboFld.jefeTelefono],
-      tamboPathImage: json[TamboFld.tamboPathImage],
-      gestorPathImage: json[TamboFld.gestorPathImage],
-      aCentroPoblado: json[TamboFld.aCentroPoblado] != null
-          ? (json[TamboFld.aCentroPoblado] as List)
-              .map((e) => TamboCentroPobladoDto.fromJson(e))
-              .toList()
-          : [],
-    );
+        idTambo: json[TamboFld.idTambo],
+        nombreFisicoFoto: json[TamboFld.nombreFisicoFoto],
+        extensionFoto: json[TamboFld.extensionFoto],
+        folder: json[TamboFld.folder],
+        fechaCreacionImagen: json[TamboFld.fechaCreacionImagen],
+        atencion: json[TamboFld.atencion],
+        intervencion: json[TamboFld.intervencion],
+        beneficiario: json[TamboFld.beneficiario],
+        nombreDepartamento: json[TamboFld.nombreDepartamento],
+        nombreProvincia: json[TamboFld.nombreProvincia],
+        nombreDistrito: json[TamboFld.nombreDistrito],
+        nombreCcpp: json[TamboFld.nombreCcpp],
+        xCcpp: json[TamboFld.xCcpp],
+        yCcpp: json[TamboFld.yCcpp],
+        altitudCcpp: json[TamboFld.altitudCcpp],
+        hogaresAnteriores: json[TamboFld.hogaresAnteriores],
+        viviendasAnterior: json[TamboFld.viviendasAnterior],
+        poblacionAnterior: json[TamboFld.poblacionAnterior],
+        nSnip: json[TamboFld.nSnip],
+        montoAdjudicado: json[TamboFld.montoAdjudicado],
+        fechaInicioServicio: json[TamboFld.fechaInicioServicio],
+        gestorId: json[TamboFld.gestorId],
+        gestorNombre: json[TamboFld.gestorNombre],
+        gestorApellidos: json[TamboFld.gestorApellidos],
+        gestorCorreo: json[TamboFld.gestorCorreo],
+        gestorDocumento: json[TamboFld.gestorDocumento],
+        gestorFechaNacimiento: json[TamboFld.gestorFechaNacimiento],
+        gestorSexo: json[TamboFld.gestorSexo],
+        gestorCargoLaboral: json[TamboFld.gestorCargoLaboral],
+        gestorDomicilioCcpp: json[TamboFld.gestorDomicilioCcpp],
+        gestorDomicilioDireccion: json[TamboFld.gestorDomicilioDireccion],
+        gestorDomicilioReferencia: json[TamboFld.gestorDomicilioReferencia],
+        gestorRuc: json[TamboFld.gestorRuc],
+        gestorBrevete: json[TamboFld.gestorBrevete],
+        gestorEstadoCivil: json[TamboFld.gestorEstadoCivil],
+        gestorProfession: json[TamboFld.gestorProfession],
+        gestorGradoAcademico: json[TamboFld.gestorGradoAcademico],
+        gestorNombreFisicoFoto: json[TamboFld.gestorNombreFisicoFoto],
+        gestorFotoExtencion: json[TamboFld.gestorFotoExtencion],
+        gestorTelefono: json[TamboFld.gestorTelefono],
+        jefeNombre: json[TamboFld.jefeNombre],
+        jefeDocumento: json[TamboFld.jefeDocumento],
+        jefeApellidoPaterno: json[TamboFld.jefeApellidoPaterno],
+        jefeApellidoMaterno: json[TamboFld.jefeApellidoMaterno],
+        jefeCorreo: json[TamboFld.jefeCorreo],
+        jefeTelefono: json[TamboFld.jefeTelefono],
+        tamboPathImage: json[TamboFld.tamboPathImage],
+        gestorPathImage: json[TamboFld.gestorPathImage],
+        aCentroPoblado: json[TamboFld.aCentroPoblado] != null
+            ? (json[TamboFld.aCentroPoblado] as List)
+                .map((e) => TamboCentroPobladoDto.fromJson(e))
+                .toList()
+            : [],
+        oServicioInternet: json[TamboFld.oServicioInternet] != null
+            ? TamboServicioInternetDto.fromJson(
+                json[TamboFld.oServicioInternet])
+            : null);
   }
 
   static List<TamboCentroPobladoDto> parseList(List<dynamic> a) {

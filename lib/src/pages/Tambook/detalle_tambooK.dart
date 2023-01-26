@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/dto/response_tambo_centro_poblado_dto.dart';
+import 'package:actividades_pais/backend/model/dto/response_tambo_servicio_internet_dto.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
@@ -25,7 +27,8 @@ class DetalleTambook extends StatefulWidget {
 
 class _DetalleTambookState extends State<DetalleTambook>
     with TickerProviderStateMixin<DetalleTambook> {
-  ScrollController scrollController = ScrollController();
+  ScrollController scrollCtr = ScrollController();
+  ScrollController scrollCtr2 = ScrollController();
   Animation<double>? _animation;
   AnimationController? _controller;
   MainController mainCtr = MainController();
@@ -34,14 +37,16 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   @override
   void dispose() {
-    scrollController.dispose();
+    scrollCtr.dispose();
+    scrollCtr2.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
-    scrollController = ScrollController();
-    scrollController.addListener(() => setState(() {}));
+    scrollCtr = ScrollController();
+    scrollCtr.addListener(() => setState(() {}));
+    scrollCtr2.addListener(() => setState(() {}));
 
     _controller = AnimationController(
       vsync: this,
@@ -111,9 +116,10 @@ class _DetalleTambookState extends State<DetalleTambook>
             child: Text(
               "${widget.listTambo?.nombreTambo} !",
               style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w700),
+                color: Colors.white,
+                fontSize: 16.0,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ),
@@ -121,12 +127,12 @@ class _DetalleTambookState extends State<DetalleTambook>
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         background: Container(
-              height: 200.0,
-              child: Ink.image(
-                image: NetworkImage(oTambo.tamboPathImage ?? ''),
-                fit: BoxFit.fitHeight,
-              ),
-            ),
+          height: 200.0,
+          child: Ink.image(
+            image: NetworkImage(oTambo.tamboPathImage ?? ''),
+            fit: BoxFit.fitHeight,
+          ),
+        ),
       ),
       actions: [
         IconButton(
@@ -147,7 +153,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             DefaultTabController(
               length: 4,
               child: NestedScrollView(
-                controller: scrollController,
+                controller: scrollCtr,
                 headerSliverBuilder:
                     (BuildContext context, bool innerBoxIsScrolled) {
                   return [
@@ -273,7 +279,16 @@ class _DetalleTambookState extends State<DetalleTambook>
                       ),
                     ),
 
-                    const TabScreen("SERVICIOS INTERNET"),
+                    //const TabScreen("SERVICIOS INTERNET"),
+                    Container(
+                      child: ListView(
+                        children: [
+                          cardDatosSrvInternet(),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
+                    ),
+
                     //TabScreen("INTERVENCIONES"),
                     Container(
                       child: ListView(
@@ -327,191 +342,6 @@ class _DetalleTambookState extends State<DetalleTambook>
             _controller!.forward();
           }
         },
-      ),
-    );
-  }
-
-  Container newMethod() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-      width: double.maxFinite,
-      child: Column(
-        children: [
-          Expanded(
-            child: Container(
-              alignment: Alignment.topCenter,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: 1,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            AspectRatio(
-                              aspectRatio: 1.2,
-                              child: Image.asset(
-                                'assets/design_course/fondo2.jpg',
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            //DETALLE
-                            Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFFFFF),
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(1.0),
-                                    topRight: Radius.circular(1.0)),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: const Color(0xFF3A5160)
-                                          .withOpacity(0.2),
-                                      offset: const Offset(1.1, 1.1),
-                                      blurRadius: 10.0),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Container(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(height: 15),
-                                      Container(
-                                        padding: const EdgeInsets.all(5),
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(16.0),
-                                          ),
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            "¡BIENVENIDO A SOLEDAD!",
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 18,
-                                              letterSpacing: 0.0,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(16.0),
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.green
-                                                    .withOpacity(0.5),
-                                                offset: const Offset(1.1, 1.1),
-                                                blurRadius: 10.0),
-                                          ],
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            'OPERATIVO',
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 18,
-                                              letterSpacing: 0.0,
-                                              color: Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DefaultTabController(
-                                        length: 3, // length of tabs
-                                        initialIndex: 0,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          children: [
-                                            Container(
-                                              child: const TabBar(
-                                                labelColor: Colors.blue,
-                                                isScrollable: true,
-                                                unselectedLabelColor:
-                                                    Colors.black,
-                                                tabs: [
-                                                  Tab(text: 'GESTOR'),
-                                                  Tab(text: 'INTERVENCIONES'),
-                                                  Tab(text: 'UBICACIÓN'),
-                                                ],
-                                              ),
-                                            ),
-                                            Container(
-                                              height:
-                                                  400, //height of TabBarView
-                                              decoration: const BoxDecoration(
-                                                  border: Border(
-                                                      top: BorderSide(
-                                                          color: Colors.grey,
-                                                          width: 0.5))),
-                                              child: TabBarView(
-                                                children: [
-                                                  Container(
-                                                    child: ListView(
-                                                      children: [
-                                                        cardNuestroGestor(),
-                                                        const SizedBox(
-                                                            height: 10),
-                                                        cardDatosGenerales(),
-                                                        const SizedBox(
-                                                            height: 10),
-                                                        cardNuestroJefeUnidad(),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    child: ListView(
-                                                      children: [
-                                                        Intecard(),
-                                                        const SizedBox(
-                                                            height: 10),
-                                                        Intecard1(),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    child: ListView(
-                                                      children: [
-                                                        Image.asset(
-                                                          'assets/Tambook/mapa_tambo.jpg',
-                                                          height: 400,
-                                                          width: 400,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -832,6 +662,49 @@ class _DetalleTambookState extends State<DetalleTambook>
         children: [
           ListTile(
             title: Text(
+              '$heading ( ${oTambo.aCentroPoblado!.length} )',
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (var oCentro in oTambo.aCentroPoblado!)
+                    ListTile(
+                      title: Text(
+                        '- ${oCentro.nombreCcpp} ( ALTITUD: ${oCentro.altitudCcpp} - REGION: ${oCentro.regionCatural} )',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                      ),
+                    )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Card cardDatosSrvInternet() {
+    var heading = 'SERVICIOS INTERNET';
+    TamboServicioInternetDto oSrvInter = oTambo.oServicioInternet!;
+    return Card(
+      elevation: 4.0,
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
               heading,
               style: const TextStyle(
                 fontSize: 16,
@@ -846,14 +719,30 @@ class _DetalleTambookState extends State<DetalleTambook>
             child: Card(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
+                  /*ListTile(
+                    title: const Text('CENTRO POBLADO'),
+                    subtitle: Text(oSrvInter.nombreCcpp!),
+                  ),*/
                   ListTile(
-                    title: Text('CC.PP'),
-                    subtitle: Text(''),
+                    title: const Text('INTERNET'),
+                    subtitle: Text(oSrvInter.internet!),
                   ),
                   ListTile(
-                    title: Text('ALTITUD'),
-                    subtitle: Text(''),
+                    title: const Text('FECHA INSTALACIÓN'),
+                    subtitle: Text(oSrvInter.fecInstalacion!),
+                  ),
+                  ListTile(
+                    title: const Text('ESTADO INTERNET'),
+                    subtitle: Text(oSrvInter.estadoInternet!),
+                  ),
+                  ListTile(
+                    title: const Text('VELOCIDAD BAJADA'),
+                    subtitle: Text(oSrvInter.veloBaja!),
+                  ),
+                  ListTile(
+                    title: const Text('VELOCIDAD SUBIDA'),
+                    subtitle: Text(oSrvInter.veloSube!),
                   ),
                 ],
               ),
