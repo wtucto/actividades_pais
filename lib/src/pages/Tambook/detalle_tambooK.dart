@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
-import 'package:actividades_pais/backend/model/dto/response_tambo_centro_poblado_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_tambo_servicio_internet_dto.dart';
+import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
@@ -34,6 +34,13 @@ class _DetalleTambookState extends State<DetalleTambook>
   MainController mainCtr = MainController();
 
   late TamboModel oTambo = TamboModel.empty();
+  late List<TamboActividadModel> aActividad = [];
+
+  late List<TamboActividadModel> aInterAmbDir = [];
+  late List<TamboActividadModel> aInterSopEnt = [];
+  late List<TamboActividadModel> aCoordinacio = [];
+
+  int statusLoadActividad = 0;
 
   @override
   void dispose() {
@@ -62,6 +69,7 @@ class _DetalleTambookState extends State<DetalleTambook>
      * OBTENER DETALLE GENERAL DE TMBO
      */
     tamboDatoGeneral();
+    TamboIntervencionAtencionIncidencia();
   }
 
   Uint8List convertBase64(String base64String) {
@@ -73,6 +81,50 @@ class _DetalleTambookState extends State<DetalleTambook>
         .getTamboDatoGeneral((widget.listTambo!.idTambo).toString());
 
     setState(() {});
+  }
+
+  Future<void> TamboIntervencionAtencionIncidencia() async {
+    /*
+   * statusLoadActividad:
+   * 0: ESPERANDO
+   * 1: FINALIZO
+   * 2: ERROR
+   * */
+
+    statusLoadActividad = 0;
+    try {
+      aActividad = await mainCtr.getTamboIntervencionAtencionIncidencia(
+        widget.listTambo!.idTambo,
+        0,
+        0,
+        0,
+      );
+
+      /*
+        TIPO:
+        1 - INTERVENCIÓN DE ÁMBITO DIRECTO
+        2 - INTERVENCIÓN DE SOPORTE A ENTIDADES
+        4 - COORDINACIONES
+        */
+      int maxData = 50;
+      for (var oAct in aActividad) {
+        if (oAct.tipo == 1) {
+          if (aInterAmbDir.length < maxData) aInterAmbDir.add(oAct);
+        }
+        if (oAct.tipo == 2) {
+          if (aInterSopEnt.length < maxData) aInterSopEnt.add(oAct);
+        }
+        if (oAct.tipo == 4) {
+          if (aCoordinacio.length < maxData) aCoordinacio.add(oAct);
+        }
+      }
+
+      statusLoadActividad = 1;
+
+      setState(() {});
+    } catch (oError) {
+      statusLoadActividad = 2;
+    }
   }
 
   Future<Uint8List> downloadPDF() async {
@@ -293,9 +345,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                     Container(
                       child: ListView(
                         children: [
-                          Intecard(),
+                          cardDatosIntervencion(),
                           const SizedBox(height: 10),
-                          Intecard1(),
+                          //Intecard1(),
                         ],
                       ),
                     ),
@@ -698,7 +750,8 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   Card cardDatosSrvInternet() {
     var heading = 'SERVICIOS INTERNET';
-    TamboServicioInternetDto oSrvInter = oTambo.oServicioInternet!;
+    TamboServicioInternetDto oSrvInter =
+        oTambo.oServicioInternet ?? TamboServicioInternetDto.empty();
     return Card(
       elevation: 4.0,
       child: Column(
@@ -753,75 +806,93 @@ class _DetalleTambookState extends State<DetalleTambook>
     );
   }
 
-// Intervenciones
-  Card Intecard() {
+  Card cardDatosIntervencion() {
+    var heading = 'INTERVENCIONES';
+    TamboServicioInternetDto oSrvInter =
+        oTambo.oServicioInternet ?? TamboServicioInternetDto.empty();
     return Card(
-      margin: const EdgeInsets.all(5),
-      elevation: 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
-      ),
-      clipBehavior: Clip.antiAlias,
+      elevation: 4.0,
       child: Column(
         children: [
-          ListTile(
-            leading: const Icon(Icons.arrow_drop_down_circle),
-            title: const Text('QALIWARMA'),
-            subtitle: Text(
-              '10/11/2022',
-              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+          if (aInterAmbDir.isEmpty && statusLoadActividad == 0)
+            ListTile(
+              leading: const Icon(Icons.arrow_drop_down_circle),
+              title: Text("CARGANDO..."),
+              subtitle: Text(
+                "Esperando los registros. Esto puede tomar tiempo",
+                style: TextStyle(
+                    color: Color.fromARGB(255, 53, 8, 200).withOpacity(0.6)),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Text(
-              'TALLER DE CAPACITACION, CONFORMACION DEL CAE Y ENTREGA DE ALIMENTOS, CON LA FINALIDAD DE DOTAR DE PRODUCTOS RICOS EN PROTEINAS, MINERALES Y VITAMINAS LA CUAL PERMITE COMBATIR LA ANEMIA Y LA DCI, REALIZADO POR EL MONITOR DE GESTION LOCAL DEL PN QALIWARMA',
-              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+          if (aInterAmbDir.isEmpty && statusLoadActividad == 1)
+            ListTile(
+              leading: const Icon(Icons.arrow_drop_down_circle),
+              title: Text("SIN DATOS"),
+              subtitle: Text(
+                "No se encontraron registros para mostrar.",
+                style: TextStyle(
+                    color: Color.fromARGB(255, 53, 8, 200).withOpacity(0.6)),
+              ),
             ),
-          ),
-          Image.network(
-              'https://www.pais.gob.pe/backendsismonitor/public/storage/programaciones-git/temp/TMOgbPC8JekToSulb2QsRUlQNDtYWbnzwCdauuGx.jpg'),
-          ElevatedButton(
-            child: const Text('Descargar Ficha'),
-            onPressed: () {},
-          ),
-        ],
-      ),
-    );
-  }
+          if (aInterAmbDir.isEmpty && statusLoadActividad == 2)
+            ListTile(
+              leading: const Icon(Icons.arrow_drop_down_circle),
+              title: Text("¡Ups! Algo salió mal"),
+              subtitle: Text(
+                "No se pudo recuperar los registros para mostrar.",
+                style: TextStyle(
+                    color: Color.fromARGB(255, 211, 13, 13).withOpacity(0.6)),
+              ),
+            ),
+          for (var oActividad in aInterAmbDir)
+            Card(
+              margin: const EdgeInsets.all(5),
+              elevation: 1,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.arrow_drop_down_circle),
+                    title: Text(oActividad.programa!),
+                    subtitle: Text(
+                      oActividad.fecha!,
+                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(
+                      oActividad.descripcion!,
+                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                    ),
+                  ),
+                  if (oActividad.actividadPathImage != null &&
+                      oActividad.actividadPathImage != '')
+                    Image.network(
+                      oActividad.actividadPathImage!,
+                      height: 100.0,
+                      width: 100.0,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          alignment: Alignment.center,
+                          height: 100.0,
+                          width: 100.0,
+                          child: Image.asset('assets/Monitor/logo.png'),
+                        );
+                      },
+                    ),
 
-  Card Intecard1() {
-    return Card(
-      margin: const EdgeInsets.all(5),
-      elevation: 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        children: [
-          ListTile(
-            leading: const Icon(Icons.arrow_drop_down_circle),
-            title: const Text(
-                'SERVICIO NACIONAL DE AREAS NATURALES PROTEGIDAS (SERNANP)'),
-            subtitle: Text(
-              '08/11/2022',
-              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                  /*ElevatedButton(
+                    child: const Text('Descargar Ficha'),
+                    onPressed: () {},
+                  ),*/
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Text(
-              'TALLER DE CAPACITACION: EVALUACION DE PECES, ESTANDARIZACION DE ALIMENTOS,COSECHA, COMERCIALIZACION Y ACUERDOS DE COMPROMISO PARA LA CONTINUIDAD DE ACTIVIDADES PARA EL AÑO 2023, EN EL MARCO DE LA EJECUCION DEL PROYECTO “PRODUCCION DE ALEVINOS DE ESPECIES AMAZONICAS',
-              style: TextStyle(color: Colors.black.withOpacity(0.6)),
-            ),
-          ),
-          Image.network(
-              'https://www.pais.gob.pe/backendsismonitor/public/storage/programaciones-git/temp/E842oA2wFbzX0wb8ZleAjAJ18z4JQAQ6jDapOsXe.jpg'),
-          ElevatedButton(
-            child: const Text('Descargar Ficha'),
-            onPressed: () {},
-          ),
         ],
       ),
     );

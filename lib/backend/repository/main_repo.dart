@@ -8,6 +8,7 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:logger/logger.dart';
 
@@ -232,6 +233,27 @@ class MainRepo {
   Future<TamboModel> tamboDatoGeneral(String idTambo) async {
     TamboModel aResp = TamboModel.empty();
     final response = await _pnPaisApi.tamboDatoGeneral(idTambo);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<TamboActividadModel>> tamboIntervencionAtencionIncidencia(
+    String? idTambo,
+    String? idTipo,
+    String? anio,
+    String? numMaxRegistro,
+  ) async {
+    List<TamboActividadModel> aResp = [];
+    final response = await _pnPaisApi.tamboIntervencionAtencionIncidencia(
+      idTambo,
+      idTipo,
+      anio,
+      numMaxRegistro,
+    );
     if (response.error == null) {
       aResp = response.data!;
     } else {

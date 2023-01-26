@@ -11,6 +11,7 @@ import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart'
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/util/check_geolocator.dart';
@@ -401,6 +402,20 @@ class MainController extends GetxController {
       idProgramacionIntervenciones,
       limit,
       offset,
+    );
+  }
+
+  Future<List<TamboActividadModel>> getTamboIntervencionAtencionIncidencia(
+    int? idTambo,
+    int? idTipo,
+    int? anio,
+    int? numMaxRegistro,
+  ) async {
+    return await Get.find<MainService>().tamboIntervencionAtencionIncidencia(
+      idTambo.toString(),
+      idTipo.toString(),
+      anio.toString(),
+      numMaxRegistro.toString(),
     );
   }
 

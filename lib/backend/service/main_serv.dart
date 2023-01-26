@@ -10,6 +10,7 @@ import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart'
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/repository/main2_repo.dart';
 import 'package:actividades_pais/util/check_connection.dart';
@@ -528,6 +529,23 @@ class MainService {
     ///Obtiene los registros de la DB Local
     List<ProgramacionActividadModel> aFind =
         await Get.find<MainRepo>().getProgramaIntervencionDb(id, limit, offset);
+
+    return aFind;
+  }
+
+  Future<List<TamboActividadModel>> tamboIntervencionAtencionIncidencia(
+    String? idTambo,
+    String? idTipo,
+    String? anio,
+    String? numMaxRegistro,
+  ) async {
+    List<TamboActividadModel> aFind =
+        await Get.find<MainRepo>().tamboIntervencionAtencionIncidencia(
+      idTambo,
+      idTipo,
+      anio,
+      numMaxRegistro,
+    );
 
     return aFind;
   }

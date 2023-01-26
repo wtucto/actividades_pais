@@ -9,6 +9,7 @@ import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/helpers/http.dart';
 import 'package:actividades_pais/helpers/http_responce.dart';
@@ -211,6 +212,24 @@ class PnPaisApi {
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => BuscarTamboDto.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<TamboActividadModel>>>
+      tamboIntervencionAtencionIncidencia(
+    String? idTambo,
+    String? idTipo,
+    String? anio,
+    String? numMaxRegistro,
+  ) async {
+    return await _http.request<List<TamboActividadModel>>(
+      '${basePathApp3}tamboIntervencionAtencionIncidencia/$idTambo/$idTipo/$anio/$numMaxRegistro',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => TamboActividadModel.fromJson(e))
+            .toList();
       },
     );
   }
