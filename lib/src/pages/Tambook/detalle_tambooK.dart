@@ -52,8 +52,12 @@ class _DetalleTambookState extends State<DetalleTambook>
   @override
   void initState() {
     scrollCtr = ScrollController();
-    scrollCtr.addListener(() => setState(() {}));
-    scrollCtr2.addListener(() => setState(() {}));
+    scrollCtr.addListener(
+      () => setState(() {}),
+    );
+    scrollCtr2.addListener(
+      () => setState(() {}),
+    );
 
     _controller = AnimationController(
       vsync: this,
@@ -77,8 +81,9 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Future<void> tamboDatoGeneral() async {
-    oTambo = await mainCtr
-        .getTamboDatoGeneral((widget.listTambo!.idTambo).toString());
+    oTambo = await mainCtr.getTamboDatoGeneral(
+      (widget.listTambo!.idTambo).toString(),
+    );
 
     setState(() {});
   }
@@ -128,8 +133,9 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Future<Uint8List> downloadPDF() async {
-    RespBase64FileDto oB64 = await mainCtr
-        .getBuildBase64PdfFichaTecnica((widget.listTambo!.idTambo).toString());
+    RespBase64FileDto oB64 = await mainCtr.getBuildBase64PdfFichaTecnica(
+      (widget.listTambo!.idTambo).toString(),
+    );
     return convertBase64(oB64.base64 ?? '');
   }
 
@@ -154,10 +160,11 @@ class _DetalleTambookState extends State<DetalleTambook>
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
           Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const DashboardTambook(),
-              ));
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => const DashboardTambook(),
+            ),
+          );
         },
       ),
       bottom: PreferredSize(
@@ -403,115 +410,117 @@ class _DetalleTambookState extends State<DetalleTambook>
     var subheading = oTambo.gestorNombre ?? '';
     var cardImage = NetworkImage(oTambo.gestorPathImage ?? '');
     return Card(
-        elevation: 4.0,
-        child: Column(
-          children: [
-            ListTile(
-              title: Text(
-                heading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              subtitle: Text(
-                subheading!,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                ),
+      elevation: 4.0,
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
               ),
             ),
-            const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-            Container(
-              height: 200.0,
-              child: Ink.image(
-                image: cardImage,
-                fit: BoxFit.fitHeight,
+            subtitle: Text(
+              subheading!,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w400,
               ),
             ),
-            Container(
-              // padding: EdgeInsets.all(5.0),
-              alignment: Alignment.centerLeft,
-              child: Card(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListTile(
-                      title: const Text('CARRERA'),
-                      subtitle: Text(oTambo.gestorProfession ?? ''),
-                    ),
-                    ListTile(
-                      title: const Text('GRADO'),
-                      subtitle: Text(oTambo.gestorGradoAcademico ?? ''),
-                    ),
-                    ListTile(
-                      title: const Text('SEXO'),
-                      subtitle: Text(oTambo.gestorSexo ?? ''),
-                    ),
-                    ListTile(
-                      title: const Text('ESTADO CIVIL'),
-                      subtitle: Text(oTambo.gestorEstadoCivil ?? ''),
-                    ),
-                    ListTile(
-                      title: const Text('FECHA DE NACIMIENTO'),
-                      subtitle: Text(oTambo.gestorFechaNacimiento ?? ''),
-                    ),
-                    ListTile(
-                      title: const Text('EMAIL'),
-                      subtitle: Text(oTambo.gestorCorreo ?? ''),
-                    ),
-                  ],
-                ),
+          ),
+          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+          Container(
+            height: 200.0,
+            child: Ink.image(
+              image: cardImage,
+              fit: BoxFit.fitHeight,
+            ),
+          ),
+          Container(
+            // padding: EdgeInsets.all(5.0),
+            alignment: Alignment.centerLeft,
+            child: Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: const Text('CARRERA'),
+                    subtitle: Text(oTambo.gestorProfession ?? ''),
+                  ),
+                  ListTile(
+                    title: const Text('GRADO'),
+                    subtitle: Text(oTambo.gestorGradoAcademico ?? ''),
+                  ),
+                  ListTile(
+                    title: const Text('SEXO'),
+                    subtitle: Text(oTambo.gestorSexo ?? ''),
+                  ),
+                  ListTile(
+                    title: const Text('ESTADO CIVIL'),
+                    subtitle: Text(oTambo.gestorEstadoCivil ?? ''),
+                  ),
+                  ListTile(
+                    title: const Text('FECHA DE NACIMIENTO'),
+                    subtitle: Text(oTambo.gestorFechaNacimiento ?? ''),
+                  ),
+                  ListTile(
+                    title: const Text('EMAIL'),
+                    subtitle: Text(oTambo.gestorCorreo ?? ''),
+                  ),
+                ],
               ),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 
   Card cardDatosGenerales() {
     var heading = 'DATOS GENERALES';
     return Card(
-        elevation: 4.0,
-        child: Column(
-          children: [
-            ListTile(
-              title: Text(
-                heading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                ),
+      elevation: 4.0,
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
               ),
             ),
-            const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Card(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListTile(
-                      title: const Text('ATENCIONES'),
-                      subtitle: Text(oTambo.atencion ?? ''),
-                    ),
-                    ListTile(
-                      title: const Text('INTERVENCIONES'),
-                      subtitle: Text(oTambo.intervencion ?? ''),
-                    ),
-                    ListTile(
-                      title: const Text('BENEFICIARIOS'),
-                      subtitle: Text(oTambo.beneficiario ?? ''),
-                    ),
-                  ],
-                ),
+          ),
+          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: const Text('ATENCIONES'),
+                    subtitle: Text(oTambo.atencion ?? ''),
+                  ),
+                  ListTile(
+                    title: const Text('INTERVENCIONES'),
+                    subtitle: Text(oTambo.intervencion ?? ''),
+                  ),
+                  ListTile(
+                    title: const Text('BENEFICIARIOS'),
+                    subtitle: Text(oTambo.beneficiario ?? ''),
+                  ),
+                ],
               ),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 
   Card cardDatosUbicacion() {
@@ -979,7 +988,9 @@ class SliverFabState extends State<SliverContainer> {
   void initState() {
     super.initState();
     scrollController = ScrollController();
-    scrollController.addListener(() => setState(() {}));
+    scrollController.addListener(
+      () => setState(() {}),
+    );
   }
 
   @override
