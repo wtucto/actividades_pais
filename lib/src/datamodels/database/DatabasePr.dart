@@ -10,6 +10,7 @@ import 'package:actividades_pais/src/datamodels/Clases/CierreUsuario.dart';
 
 import 'package:actividades_pais/src/datamodels/Clases/ConfigInicio.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
+import 'package:actividades_pais/src/datamodels/Clases/Distritos.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Funcionarios.dart';
 import 'package:actividades_pais/src/datamodels/Clases/IncidentesNovedadesPias.dart';
 import 'package:actividades_pais/src/datamodels/Clases/InfoTelefono.dart';
@@ -39,6 +40,8 @@ import 'package:actividades_pais/src/pages/Pias/Incidentes_Actividades/incidente
 import 'package:logger/logger.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../Clases/CentroPoblado.dart';
+
 class DatabasePr {
   final Logger _log = Logger();
   Database? _db;
@@ -61,11 +64,14 @@ class DatabasePr {
       'databaseConfig.db',
       version: 1,
       onCreate: (Database db, int version) async {
-        db.execute(
+
+       /* db.execute(
             "CREATE TABLE DatUnidadesOrganicas (id INTEGER PRIMARY KEY, UNIDAD_ORGANICA TEXT, IDUO INTEGER)");
-        db.execute(
+       */
+       /* db.execute(
             "CREATE TABLE DatUnidadTerritorial (id INTEGER PRIMARY KEY, unidadTerritorial TEXT, id_UnidadesTerritoriales INTEGER)");
-        db.execute(
+       */
+        /*db.execute(
             'CREATE TABLE DatUnidadesTablaPlataforma (id INTEGER PRIMARY KEY, ID_UNIDAD_TERRITORIAL  INTEGER,'
             'SNIP  INTEGER,'
             'UBIGEO_CCPP  TEXT,'
@@ -78,13 +84,14 @@ class DatabasePr {
             'LONGITUD,'
             'LATITUD,'
             'ALTITUD'
-            ')');
+            ')');*/
 
-        db.execute(
+       /* db.execute(
             "CREATE TABLE DatLugarPrestacion (id INTEGER PRIMARY KEY, idLugarPrestacion INTEGER, nombreLugarPrestacion TEXT)");
-
-        db.execute(
+*/
+      /*  db.execute(
             "CREATE TABLE DatPuesto (id INTEGER PRIMARY KEY, idPuesto INTEGER, nombrePuesto TEXT)");
+       */
         db.execute(
             "CREATE TABLE asistenciaClass (id INTEGER PRIMARY KEY,  numeroDni,	nombres, snip,	nombreTambo, modalidadTrabajo,	idModalidadTrabajo,	cargo, date,dateSalida, unidadorg, tipoasistencia, idTipoasistencia)");
         db.execute(
@@ -149,6 +156,12 @@ class DatabasePr {
 
         db.execute(
             "CREATE TABLE login (id, name,username,password, token, rol)");
+
+        db.execute(
+            "CREATE TABLE distritos (distrito_descripcion, distrito_ubigeo)");
+
+        db.execute(
+            "CREATE TABLE centros_poblados (centro_poblado_ubigeo, centro_poblado_descripcion)");
       },
     );
   }
@@ -163,6 +176,16 @@ class DatabasePr {
     await _db!.execute(
       "DELETE FROM DatConfigInicio",
     );
+    await _db!.execute(
+      "DELETE FROM centros_poblados",
+    );
+    await _db!.execute(
+      "DELETE FROM distritos",
+    );
+    await _db!.execute(
+      "DELETE FROM provincias",
+    );
+
 
     var a = await _db!.insert("login", loginClass.toMap());
     return a;
@@ -219,8 +242,8 @@ class DatabasePr {
     print(_db!.execute(sql + "ConfigPersonal"));
     print(_db!.execute(sql + "DatPuesto"));
     print(_db!.execute(sql + "DatConfigInicio"));
-    print(_db!.execute("DELETE FROM DatUnidadesOrganicas"));
-    print(_db!.execute("DELETE FROM DatUnidadTerritorial"));
+   // print(_db!.execute("DELETE FROM DatUnidadesOrganicas"));
+   // print(_db!.execute("DELETE FROM DatUnidadTerritorial"));
     print(_db!.execute("DELETE FROM DatUnidadesTablaPlataforma"));
     print(_db!.execute("DELETE FROM DatLugarPrestacion"));
     print(_db!.execute("DELETE FROM numeroTelefono"));
@@ -238,8 +261,6 @@ class DatabasePr {
   Future<List<ConfigPersonal>> getLoginUser(
       { dni, contrasenia}) async {
     initDB();
-    _log.i(dni);
-    _log.i(contrasenia);
     final res = await _db!.rawQuery(
         "select * from ConfigPersonal where numeroDni=$dni and contrasenia = '$contrasenia'");
     List<ConfigPersonal> list = res.isNotEmpty
@@ -273,6 +294,13 @@ class DatabasePr {
   }
 
 //////////////////////
+  //Distritos
+
+  Future<void> insertarDistritos(
+      Distrito distrito) async {
+    await DatabasePr.db.initDB();
+    print(_db!.insert("distritos", distrito.toMap()));
+  }
   Future<void> insertParticipanteEjecucion(
       ParticipanteEjecucion participanteEjecucion) async {
     await DatabasePr.db.initDB();
@@ -319,6 +347,11 @@ class DatabasePr {
     await DatabasePr.db.initDB();
     final res = await _db?.rawQuery("DELETE FROM listarCcpp");
     return res;
+  }
+
+  Future<void> insertCcpp(CentroPoblado listarCcpp) async {
+    await DatabasePr.db.initDB();
+    print(_db!.insert("centros_poblados", listarCcpp.toMap()));
   }
 
   Future<void> insertlistarCcpp(ListarCcpp listarCcpp) async {
@@ -847,11 +880,11 @@ return List.empty();
     print(_db!.insert("provincias", regitroCalificada.toMap()));
   }
 
-  Future<void> insertUnidadesTerritoriales(
+/*  Future<void> insertUnidadesTerritoriales(
       UnidadesTerritoriales regitroCalificada) async {
     print(_db!.insert("DatUnidadTerritorial", regitroCalificada.toMap()));
   }
-
+*/
   Future<void> insertLugarPrestacion(LugarPrestacion regitroCalificada) async {
     print(_db!.insert("DatLugarPrestacion", regitroCalificada.toMap()));
   }
@@ -865,6 +898,35 @@ return List.empty();
   }
 
 //ConfigPersonal
+
+  Future<List<Provincia>> getProvincias() async {
+    List<Map<String, dynamic>> result = await _db!.query("provincias");
+    //  print(result[0].toString());
+    return result.map((map) => Provincia.fromMap(map)).toList();
+  }
+
+  Future<List<Distrito>> getDistrito(ubigeo) async {
+    initDB();
+    final res = await _db!.rawQuery(
+        "SELECT * FROM distritos  where SUBSTR(distrito_ubigeo, 1, 4) ='$ubigeo'");
+    List<Distrito> list = res.isNotEmpty
+        ? res.map((e) => Distrito.fromJson(e)).toList()
+        : [];
+    return list;
+  }
+
+  Future<List<CentroPoblado>> getCentroPoblado(ubigeo) async {
+    initDB();
+    print( "SELECT * FROM centros_poblados  where SUBSTR(centro_poblado_ubigeo, 1, 6) ='$ubigeo'");
+    final res = await _db!.rawQuery(
+        "SELECT * FROM centros_poblados  where SUBSTR(centro_poblado_ubigeo, 1, 6) ='$ubigeo'");
+    List<CentroPoblado> list = res.isNotEmpty
+        ? res.map((e) => CentroPoblado.fromJson(e)).toList()
+        : [];
+    return list;
+  }
+
+
   Future<List<ConfigPersonal>> getAllConfigPersonal() async {
     List<Map<String, dynamic>> result = await _db!.query("ConfigPersonal");
     //  print(result[0].toString());
@@ -895,7 +957,7 @@ return List.empty();
         await _db!.query("DatUnidadTerritorial");
     return result.map((map) => UnidadesTerritoriales.fromMap(map)).toList();
   }
-
+/*
   Future updateTask(UnidadesTerritoriales task) async {
     _db!.update("DatUnidadTerritorial", task.toMap(),
         where: "id = ?", whereArgs: [task.id_UnidadesTerritoriales]);
@@ -911,7 +973,7 @@ return List.empty();
     _db!.update("DatUnidadTerritorial", task.toMap(),
         where: "id = ?", whereArgs: [task.id_UnidadesTerritoriales]);
   }
-
+*/
 //traertodos
   Future<List<NumerosTelef>> getAllNumerosTelf() async {
     initDB();
@@ -1011,26 +1073,26 @@ return List.empty();
     return list;
   }
 
-  Future<void> insertUnidadesOrganicas(
+/*  Future<void> insertUnidadesOrganicas(
       UnidadesOrganicas regitroCalificada) async {
     //print("hola");
     initDB();
     print(_db!.insert("DatUnidadesOrganicas", regitroCalificada.toMap()));
   }
-
-  Future<List<UnidadesOrganicas>> getAllTasksUnidadesOrganicas() async {
+*/
+  /*Future<List<UnidadesOrganicas>> getAllTasksUnidadesOrganicas() async {
     List<Map<String, dynamic>> result =
         await _db!.query("DatUnidadesOrganicas");
     //  print(result[0].toString());
     return result.map((map) => UnidadesOrganicas.fromMap(map)).toList();
-  }
+  }*/
 
-  Future updateTaskUnidadesOrganicas(UnidadesOrganicas task) async {
+/*  Future updateTaskUnidadesOrganicas(UnidadesOrganicas task) async {
     _db!.update("DatUnidadesOrganicas", task.toMap(),
         where: "id = ?", whereArgs: [task.IDUO]);
-  }
+  }*/
 
-  Future<List<UnidadesOrganicas>> getTodosUnidadesOrganicas() async {
+/*  Future<List<UnidadesOrganicas>> getTodosUnidadesOrganicas() async {
     initDB();
 
     final res = await _db!.query('DatUnidadesOrganicas');
@@ -1039,8 +1101,8 @@ return List.empty();
         : [];
     return list;
   }
-
-  Future<List<UnidadesTerritoriales>> getTodosUnidadesTeritoriales() async {
+*/
+/*  Future<List<UnidadesTerritoriales>> getTodosUnidadesTeritoriales() async {
     initDB();
 
     final res = await _db!.query('DatUnidadTerritorial');
@@ -1051,5 +1113,5 @@ return List.empty();
         : [];
     print(list[0].toString());
     return list;
-  }
+  }*/
 }

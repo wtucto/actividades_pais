@@ -7,6 +7,7 @@ import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/configuracion/ResetContrasenia.dart';
+import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -187,9 +188,8 @@ class __FormState extends State<_Form> {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     Future LoginUser(usn, psw, rpsw, tipoUser) async {
-      print(tipoUser);
-      if (tipoUser == 1) {
-
+       if (tipoUser == 1) {
+        BusyIndicator.show(context);
         try {
          setState(() {
            esperar='Espere un monento...';
@@ -198,9 +198,10 @@ class __FormState extends State<_Form> {
       var resLogin =    await  ProviderLogin().Login(username: usn,password: psw);
           esperar='Ingresar';
       if(resLogin >=1){
-        Navigator.of(context).pushReplacement(
+       await Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => HomePagePais()),
         );
+
       }
       /*    var prefixUserDemo = 'D';
 
@@ -334,7 +335,7 @@ class __FormState extends State<_Form> {
           const SizedBox(height: 10),
           CustomInput(
             icon: Icons.supervised_user_circle,
-            placeholder: 'Ingrerse su DNI',
+            placeholder: 'Ingrese su DNI',
             keyboardType: TextInputType.text,
             textController: emailCtrl,
           ),

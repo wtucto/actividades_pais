@@ -49,7 +49,7 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
   File? _imageby;
   String image64 = '';
   Util util = Util();
-  var _image, _image2, _image3;
+  File? _image, _image2, _image3;
   ArchivoTramaIntervencion archivoTramaIntervencion =
       ArchivoTramaIntervencion();
   String fotonomm = 'assets/imagenatencion.png';
@@ -508,7 +508,7 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
     var gallery = await ImagePicker()
         .pickImage(source: ImageSource.gallery, maxWidth: 700);
     setState(() {
-      _image = gallery;
+      _image = File(gallery!.path);
     });
     List<int> bytes = await new File(gallery!.path).readAsBytesSync();
 
@@ -543,15 +543,15 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
 
     await DatabasePr.db
         .insertArchivoTramaIntervencion(archivoTramaIntervencion);
-    print(image64);
   }
 
   Future getImageLibrary2() async {
     var gallery = await ImagePicker()
         .pickImage(source: ImageSource.gallery, maxWidth: 700);
     setState(() {
-      // _imageby = File(gallery.path);
-      _image2 = gallery;
+      _image2 = File(gallery!.path);
+     // _image2 = gallery;
+      //_image2 = gallery;
     });
     List<int> bytes = await new File(gallery!.path).readAsBytesSync();
     await DatabasePr.db.deleteArchivoIntervenciones(
@@ -594,7 +594,8 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
     var gallery = await ImagePicker()
         .pickImage(source: ImageSource.gallery, maxWidth: 700);
     setState(() {
-      _image3 = gallery;
+   //   _image3 = gallery;
+      _image3 = File(gallery!.path);
     });
     List<int> bytes = await new File(gallery!.path).readAsBytesSync();
     archivoTramaIntervencion.codigoIntervencion =

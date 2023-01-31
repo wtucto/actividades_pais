@@ -239,15 +239,15 @@ class ProviderDatos {
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listarTramaIntervencion/$snip'),
     );
-    print(  Uri.parse(AppConfig.urlBackndServicioSeguro +
+    print(Uri.parse(AppConfig.urlBackndServicioSeguro +
         '/api-pnpais/app/listarTramaIntervencion/$snip'));
     if (response.statusCode == 200) {
       await getlistarCcpp(snip);
 
       final jsonResponse = json.decode(response.body);
-      if(jsonResponse["response"] != null){
+      if (jsonResponse["response"] != null) {
         final listadostraba =
-        new TramaIntervenciones.fromJsonList(jsonResponse["response"]);
+            new TramaIntervenciones.fromJsonList(jsonResponse["response"]);
         for (var i = 0; i < listadostraba.items.length; i++) {
           final rspt = TramaIntervencion(
             atencion: listadostraba.items[i].atencion,
@@ -265,7 +265,7 @@ class ProviderDatos {
             horaInicio: listadostraba.items[i].horaInicio,
             idDepartamento: listadostraba.items[i].idDepartamento,
             identificacionIntervencion:
-            listadostraba.items[i].identificacionIntervencion,
+                listadostraba.items[i].identificacionIntervencion,
             lugarIntervencion: listadostraba.items[i].lugarIntervencion,
             poblacion: listadostraba.items[i].poblacion,
             programa: listadostraba.items[i].programa,
@@ -357,7 +357,7 @@ class ProviderDatos {
       var resdb =
           //  await DatabaseParticipantes.db.getUsuarioParticipanteDniSQLites(dni);
           await ProviderServicios().getBuscarParticipante(dni);
-       print(resdb.dni);
+      print(resdb.dni);
       if (resdb.dni!.isNotEmpty) {
         print("3....");
 
@@ -441,9 +441,9 @@ class ProviderDatos {
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      if(jsonResponse["total"]>0){
+      if (jsonResponse["total"] > 0) {
         final listadostraba =
-        new ListarCcppes.fromJsonList(jsonResponse["response"]);
+            new ListarCcppes.fromJsonList(jsonResponse["response"]);
         print(listadostraba.items.length);
         for (var i = 0; i < listadostraba.items.length; i++) {
           final rspt = ListarCcpp(
@@ -456,16 +456,20 @@ class ProviderDatos {
 
         return listadostraba.items;
       }
-
     } else if (response.statusCode == 400) {}
     return List.empty();
   }
 
   Future<List<Provincia>> getProvincias(snip) async {
+    var abc = await DatabasePr.db.getAllTasksConfigInicio();
+
     http.Response response = await http.get(
       Uri.parse(AppConfig.urlBackndServicioSeguro +
-          '/api-pnpais/app/listaProvinciaporSnp/$snip'),
+          '/api-pnpais/app/listaProvinciaporSnp/${abc[0].snip}'),
     );
+    print(Uri.parse(AppConfig.urlBackndServicioSeguro +
+        '/api-pnpais/app/listaProvinciaporSnp/${abc[0].snip}'));
+    print(response.body);
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listadostraba =
@@ -513,7 +517,7 @@ class ProviderDatos {
   // ignore: non_constant_identifier_names
   Future<List<ListarEntidadFuncionario>> listarEntidadFuncionario(
       idProgramacion) async {
-    await DatabasePr.db.eliminarTodoEntidadFuncionario();
+    //await DatabasePr.db.eliminarTodoEntidadFuncionario();
 
     http.Response response = await http.get(
       Uri.parse(AppConfig.urlBackndServicioSeguro +
@@ -577,13 +581,39 @@ class ProviderDatos {
 
   bool fileExists = false;
 
-  void createFile(
-      Map<String, dynamic> content, Directory dir, String fileName) {
+  Future createFile(
+      Map<String, dynamic> content, Directory dir, String fileName) async {
     print("Creating file!");
     File file = new File(dir.path + "/" + fileName);
     file.createSync();
     fileExists = true;
     file.writeAsStringSync(json.encode(content));
+
+    print(file.path);
+    print("creado");
+  }
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    print('path ${path}');
+    return File('$path/myJSONFile.json');
+  }
+
+  Future<int> deleteFile() async {
+    try {
+      final file = await _localFile;
+
+      await file.delete();
+    } catch (e) {
+      return 0;
+    }
+    return 0;
   }
 
   Future<List<ParticipantesIntervenciones>>
@@ -592,61 +622,33 @@ class ProviderDatos {
     late Directory dir;
     String fileName = "myJSONFile.json";
     bool fileExists = false;
-    late Map<String, String> fileContent;
+    // late Map<String, String> fileContent;
     getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
       fileExists = jsonFile.existsSync();
     });
 
-    print("dsadsad");
-    await DatabaseParticipantes.db.DeleteAllParticitantesInterv();
+    ///print("dsadsad");
+    ///await DatabaseParticipantes.db.DeleteAllParticitantesInterv();
     http.Response response = await http.get(
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listarParticipantesIntervencionesMovil/$UNIDAD_TERRITORIAL'),
     );
 
-    print(AppConfig.urlBackndServicioSeguro +
-        '/api-pnpais/app/listarParticipantesIntervencionesMovil/$UNIDAD_TERRITORIAL');
     if (fileExists) {
       print("File exists");
-
-      /*  Map<String, String> jsonFileContent = json.decode(response.body);
-      jsonFile.writeAsStringSync(json.encode(jsonFileContent));*/
+      await deleteFile();
+      print("existe");
+      await Future.delayed(Duration(seconds: 10));
+      await createFile(json.decode(response.body), dir, fileName);
+      //  Map<String, String> jsonFileContent = json.decode(response.body);
+      // jsonFile.writeAsStringSync(json.encode(jsonFileContent));
     } else {
       print("File does not exist!");
-      createFile(json.decode(response.body), dir, fileName);
+      await createFile(json.decode(response.body), dir, fileName);
     }
 
-    if (response.statusCode == 200) {
-      //final store = await openStore();
-      //final box = store.box<ParticipantesIntervenciones>();
-
-      //  var person = ParticipantesIntervenciones(firstName: 'Joe', lastName: 'Green');
-
-      final jsonResponse = json.decode(response.body);
-
-      final listadostraba = new ListarParticipantesIntervenciones.fromJsonList(
-          jsonResponse["response"]);
-      /*  for (var i = 0; i < listadostraba.items.length; i++) {
-        final rspt = ParticipantesIntervenciones(
-          aPELLIDOMATERNO: listadostraba.items[i].aPELLIDOMATERNO,
-          aPELLIDOPATERNO: listadostraba.items[i].aPELLIDOPATERNO,
-          dNI: listadostraba.items[i].dNI,
-          fECHANACIMIENTO: listadostraba.items[i].fECHANACIMIENTO,
-          idParticipante: listadostraba.items[i].idParticipante,
-          pRIMERNOMBRE: listadostraba.items[i].pRIMERNOMBRE,
-          sEGUNDONOMBRE: listadostraba.items[i].sEGUNDONOMBRE,
-          sEXO: listadostraba.items[i].sEXO,
-          uNIDADTERRITORIAL: listadostraba.items[i].uNIDADTERRITORIAL,
-        );
-     //   final id = box.put(rspt);  // Create
-       await DatabaseParticipantes.db
-            .insertParticipantesIntervencionesMovil(rspt);
-      }*/
-
-      return listadostraba.items;
-    } else if (response.statusCode == 400) {}
     return List.empty();
   }
 
@@ -879,5 +881,124 @@ class ProviderDatos {
       });
     } else {}
     return respuesta;
+  }
+
+  //
+  /* Future<List<Provincia>> guardarJsProvincia(snip) async {
+    late File jsonFile;
+    late Directory dir;
+    String fileName = "provinciaJson.json";
+    bool fileExists = false;
+    late Map<String, String> fileContent;
+    getApplicationDocumentsDirectory().then((Directory directory) {
+      dir = directory;
+      jsonFile = new File(dir.path + "/" + fileName);
+      fileExists = jsonFile.existsSync();
+    });
+    http.Response response = await http.get(
+      Uri.parse(AppConfig.urlBackndServicioSeguro +
+          '/api-pnpais/app/listaProvinciaporSnp/${snip}'),
+    );
+    if (fileExists) {
+      print("File exists");
+      // Map<String, String> jsonFileContent = json.decode(response.body);
+      // jsonFile.writeAsStringSync(json.encode(jsonFileContent));
+    } else {
+      print("File  provinciaJson does not exist!");
+      createFile(json.decode(response.body), dir, fileName);
+    }
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      final listadostraba =
+          new Provincias.fromJsonList(jsonResponse["response"]);
+
+      for (var i = 0; i < listadostraba.items.length; i++) {
+        await guardarJsDistrito(listadostraba.items[i].provinciaUbigeo!);
+      }
+
+      return listadostraba.items;
+    } else if (response.statusCode == 400) {}
+    return List.empty();
+  }
+*/
+  guardarProvincia(snip) async {
+    http.Response response = await http.get(
+      Uri.parse(AppConfig.urlBackndServicioSeguro +
+          '/api-pnpais/app/listaProvinciaporSnp/${snip}'),
+    );
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      final listadostraba =
+          new Provincias.fromJsonList(jsonResponse["response"]);
+      for (var i = 0; i < listadostraba.items.length; i++) {
+        var resp = Provincia(
+            provinciaUbigeo: listadostraba.items[i].provinciaUbigeo,
+            provinciaDescripcion: listadostraba.items[i].provinciaDescripcion);
+        await DatabasePr.db.insertProvincia(resp);
+        await guardarJsDistrito(listadostraba.items[i].provinciaUbigeo!);
+        await guardarCentroPoblado(listadostraba.items[i].provinciaUbigeo);
+      }
+    } else if (response.statusCode == 400) {}
+    return List.empty();
+  }
+
+  //provincia
+  guardarJsDistrito(ubigeo) async {
+    http.Response response = await http.get(
+      Uri.parse(AppConfig.urlBackndServicioSeguro +
+          '/api-pnpais/app/listarDistritosporUbigeo/$ubigeo'),
+    );
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      final listadostraba =
+          new Distritos.fromJsonList(jsonResponse["response"]);
+      for (var i = 0; i < listadostraba.items.length; i++) {
+        var resp = Distrito(
+            distritoDescripcion: listadostraba.items[i].distritoDescripcion,
+            distritoUbigeo: listadostraba.items[i].distritoUbigeo);
+        await DatabasePr.db.insertarDistritos(resp);
+      }
+    } else if (response.statusCode == 400) {}
+    return List.empty();
+  }
+
+  guardarCentroPoblado(ubigeo) async {
+    http.Response response = await http.get(
+      Uri.parse(AppConfig.urlBackndServicioSeguro +
+          '/api-pnpais/app/listarCentroPobladoporUbigeoProvincia/$ubigeo'),
+    );
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      final listadostraba =
+          new CentroPobladoes.fromJsonList(jsonResponse["response"]);
+      List<CentroPoblado> resultado = [];
+
+      for (var i = 0; i < listadostraba.items.length; i++) {
+        /*      var resp = CentroPoblado(
+            centroPobladoDescripcion:
+            listadostraba.items[i].centroPobladoDescripcion,
+            centroPobladoUbigeo: listadostraba.items[i].centroPobladoUbigeo);
+        resultado.add(resp);*/
+        var resp = CentroPoblado(
+            centroPobladoDescripcion:
+                listadostraba.items[i].centroPobladoDescripcion,
+            centroPobladoUbigeo: listadostraba.items[i].centroPobladoUbigeo);
+        await DatabasePr.db.insertCcpp(resp);
+
+/*        print(" ${resultado.length}");
+        print(" ${resultado[i].centroPobladoDescripcion}");
+        print(" ${resultado[i].centroPobladoUbigeo}");
+
+        if(resultado.length==listadostraba.items.length){
+          print("si dale ${resultado.length}");
+
+        }*/
+      }
+      //   print("letbjj ${resultado.length}");
+      return listadostraba;
+    } else if (response.statusCode == 400) {}
+
+    return List.empty();
   }
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:actividades_pais/src/datamodels/Provider/ProviderServicios.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Ccpp.dart';
 import 'package:actividades_pais/src/datamodels/Clases/CentroPoblado.dart';
@@ -178,6 +179,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 SizedBox(
                   width: 350,
                   child: TextField(
+                    maxLength: 8,
                     keyboardType: TextInputType.number,
                     controller: controllerNumeroDoc,
                     decoration: InputDecoration(
@@ -361,8 +363,8 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 validarcontroles
                     ? SizedBox(
                   width: 350,
-                  child: new FutureBuilder<List<Sexo>>(
-                    future: DatabasePr.db.listarSexo(),
+                  child: FutureBuilder<List<Sexo>>(
+                    future:ProviderServicios().getSexo(),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<Sexo>> snapshot) {
                       if (snapshot.hasData) {
@@ -494,7 +496,8 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                     ? Container(
                   width: 350,
                   child: FutureBuilder<List<Provincia>>(
-                    future: provider.getProvincias(widget.snip),
+                    // provider.getProvincias(widget.snip)
+                    future:DatabasePr.db.getProvincias(),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<Provincia>> snapshot) {
                       Provincia depatalits;
@@ -541,7 +544,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                     ? Container(
                   width: 350,
                   child: FutureBuilder<List<Distrito>>(
-                    future: provider.getDistritos(ubigeoProvincia),
+                    future:DatabasePr.db.getDistrito(ubigeoProvincia),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<Distrito>> snapshot) {
                       Distrito depatalits;
@@ -591,7 +594,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                     ? Container(
                   width: 350,
                   child: FutureBuilder<List<CentroPoblado>>(
-                    future: provider.getCentroPoblado(ubigeoDistrito),
+                    future: DatabasePr.db.getCentroPoblado(ubigeoDistrito),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<CentroPoblado>> snapshot) {
                       CentroPoblado depatalits;

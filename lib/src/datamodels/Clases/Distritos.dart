@@ -26,4 +26,12 @@ class Distrito {
     data['distrito_ubigeo'] = this.distritoUbigeo;
     return data;
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "distrito_descripcion": distritoDescripcion,
+      "distrito_ubigeo": distritoUbigeo,
+
+    };
+  }
 }

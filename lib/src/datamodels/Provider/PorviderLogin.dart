@@ -86,19 +86,10 @@ class ProviderLogin {
             await DatabasePr.db.insertConfigPersonal(r2);
 
             for (var i = 0; i < data.length; i++) {
-              print("===================>>>>");
-              print(data[i]["id_puesto"]);
-              print(data[i]["id_plataforma"]);
-              print(data[i]["id_unidad_territorial"]);
-              print(data[i]["plataforma_descripcion"]);
-              print(data[i]["puesto_descripcion"]);
-              print(data[i]["unidad_territorial_descripcion"]);
-              print(data[i]["plataforma_codigo_snip"]??'');
-              print(data[i]["tipoPlataforma"]);
-              print(data[i]["modalidad"].toString() ?? '');
-              print("===================>>>>");
 
-              var configIni = ConfigInicio(
+             _log.i("numero1");
+
+             var configIni = ConfigInicio(
                   idLugarPrestacion: 0,
                   idPuesto: data[i]["id_puesto"] ?? 0,
                   idTambo: data[i]["id_plataforma"] ?? 0,
@@ -115,8 +106,7 @@ class ProviderLogin {
                   campania: '',
                   codCampania: '',
                   modalidad: data[i]["modalidad"].toString() ?? '');
-              _log.i(data[0]["id_plataforma"]);
-              if (configIni.tipoPlataforma == 'PIAS') {
+               if (configIni.tipoPlataforma == 'PIAS') {
                 await ProviderServiciosRest().listarPuntoAtencionPias(
                     '0', data[i]["id_plataforma"] ?? 0, 0);
               }
@@ -125,12 +115,22 @@ class ProviderLogin {
             }
 
             if (data[0]["unidad_territorial_descripcion"] != null) {
+              _log.i("numero2");
+
               await ProviderDatos().getInsertParticipantesIntervencionesMovil(
                   data[0]["unidad_territorial_descripcion"]);
+               _log.i("numero3");
+              await ProviderDatos().guardarProvincia(
+                  data[0]["plataforma_codigo_snip"]);
+
+              _log.i("numero3");
+              await Future.delayed(Duration(seconds: 10));
+
+              return a;
             }
           }
         }
-        return a;
+
       } else {
         print(response.reasonPhrase);
 

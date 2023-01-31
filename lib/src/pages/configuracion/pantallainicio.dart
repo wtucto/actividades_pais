@@ -39,8 +39,8 @@ class _PantallaInicioState extends State<PantallaInicio> {
   } */
 
   mostrarInicio() {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => ConfiguracionInicial()));
+ /*   Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => ConfiguracionInicial()));*/
   }
 
   Future<int> getToken() async {

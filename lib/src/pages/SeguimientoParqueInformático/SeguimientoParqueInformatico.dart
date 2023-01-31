@@ -68,10 +68,10 @@ class _SeguimientoParqueInformaticoState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(centerTitle: true,
         title: Text(
           titulo,
-          style: TextStyle(fontSize: 17),
+          style: const TextStyle(fontSize: 17),
         ),
         actions: [
           const SizedBox(width: 10),
@@ -266,7 +266,7 @@ class _SeguimientoParqueInformaticoState
             child: Icon(Icons.pie_chart),
             foregroundColor: Colors.white,
             backgroundColor: Colors.orangeAccent,
-            label: 'REPORTE EQUIPO INFROMATICO',
+            label: 'REPORTE EQUIPO INFORMATICO',
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () async {
               final respt = await Navigator.push(
@@ -465,38 +465,36 @@ class _SeguimientoParqueInformaticoState
                               children: [
                                 const Icon(Icons.place,
                                     size: 15, color: Colors.grey),
-                                SizedBox(width: 13),
-                                Expanded(child: Container(
-                                  child: StatefulBuilder(builder:
-                                      (BuildContext context,
-                                          StateSetter dropDownState) {
-                                    return DropdownButtonFormField<Ubicacion>(
-                                      isExpanded: true,
-                                      items: snapshot.data?.map((user) {
-                                        return new DropdownMenuItem<Ubicacion>(
-                                          value: user,
-                                          child: new Text(
-                                            user.ubicacion!,
-                                            style:
-                                                const TextStyle(fontSize: 10),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (Ubicacion? value) {
-                                        dropDownState(() {
-                                          seleccionarUbicacion =
-                                              value!.ubicacion!;
-                                          filtroParqueInformatico.idUbicacion =
-                                              value.idUbicacion.toString();
-                                        });
-                                      },
-                                      hint: Text(
-                                        seleccionarUbicacion,
-                                        style: const TextStyle(fontSize: 10),
-                                      ),
-                                    );
-                                  }),
-                                ))
+                                const SizedBox(width: 13),
+                                Expanded(child: StatefulBuilder(builder:
+                                    (BuildContext context,
+                                        StateSetter dropDownState) {
+                                  return DropdownButtonFormField<Ubicacion>(
+                                    isExpanded: true,
+                                    items: preguntas.map((user) {
+                                      return DropdownMenuItem<Ubicacion>(
+                                        value: user,
+                                        child:  Text(
+                                          user.ubicacion!,
+                                          style:
+                                              const TextStyle(fontSize: 10),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (Ubicacion? value) {
+                                      dropDownState(() {
+                                        seleccionarUbicacion =
+                                            value!.ubicacion!;
+                                        filtroParqueInformatico.idUbicacion =
+                                            value.idUbicacion.toString();
+                                      });
+                                    },
+                                    hint: Text(
+                                      seleccionarUbicacion,
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
+                                  );
+                                }))
                               ],
                             );
                           }

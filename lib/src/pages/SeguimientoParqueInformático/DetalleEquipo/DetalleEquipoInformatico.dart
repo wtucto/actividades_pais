@@ -44,7 +44,7 @@ class _DetalleEquipoInformaticoState extends State<DetalleEquipoInformatico> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Detalle Equipo Informatico")),
+        appBar: AppBar(title: Text("DETALLE EQUIPO INFORMATICO"),centerTitle: true),
         body: DefaultTabController(
           initialIndex: 0,
           length: 2,

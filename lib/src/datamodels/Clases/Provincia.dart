@@ -20,6 +20,11 @@ class Provincia {
     provinciaUbigeo = json['provincia_ubigeo'];
   }
 
+  Provincia.fromMap(Map<String, dynamic> map) {
+
+    provinciaDescripcion = map['provincia_descripcion'];
+    provinciaUbigeo = map['provincia_ubigeo'];
+  }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['provincia_descripcion'] = this.provinciaDescripcion;

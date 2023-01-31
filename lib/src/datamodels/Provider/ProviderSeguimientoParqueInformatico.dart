@@ -201,6 +201,7 @@ class ProviderSeguimientoParqueInformatico {
       'Authorization': 'Bearer ${logUser[0].token}',
       'Content-Type': 'application/json'
     };
+    print(json.encode(filtroTicketEquipo));
     http.Response response = await http.post(
         Uri.parse(AppConfig.backendsismonitor +
             '/seguimientoequipo/listaEquiposInformaticosTicket'),
@@ -289,7 +290,9 @@ class ProviderSeguimientoParqueInformatico {
     } else {
       return EstadoGuardar();
     }
-  }  Future<EstadoGuardar> guardarEquipoInformatico(
+  }
+
+  Future<EstadoGuardar> guardarEquipoInformatico(
       ListaEquipoInformatico listaEquipoInformatico) async {
     var logUser = await DatabasePr.db.loginUser();
 
@@ -412,32 +415,76 @@ class ProviderSeguimientoParqueInformatico {
       return "0";
     }
   }
+
   ///REPORTE
 
- Future<int> ReporteEquipos(idTipo)async{
-   var logUser = await DatabasePr.db.loginUser();
-   var headers = {
-     'Authorization': 'Bearer ${logUser[0].token}',
-     'Content-Type': 'application/json'
-   };
+  Future<int> ReporteEquipos(idTipo) async {
+    var logUser = await DatabasePr.db.loginUser();
+    var headers = {
+      'Authorization': 'Bearer ${logUser[0].token}',
+      'Content-Type': 'application/json'
+    };
 
-   http.Response response = await http.get(
-       Uri.parse(AppConfig.backendsismonitor +
-           '/seguimientoequipo/reportActivoInactivo/$idTipo'),
-       headers: headers);
-   if (response.statusCode == 200) {
-     if (response.body != "") {
-       var jsonResponse;
-       jsonResponse = json.decode(response.body.toString());
+    http.Response response = await http.get(
+        Uri.parse(AppConfig.backendsismonitor +
+            '/seguimientoequipo/reportActivoInactivo/$idTipo'),
+        headers: headers);
+    if (response.statusCode == 200) {
+      if (response.body != "") {
+        var jsonResponse;
+        jsonResponse = json.decode(response.body.toString());
+        return int.parse(jsonResponse[0]["cantidad"]);
+      } else {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
+  }
 
-       print("jsonResponse: ${jsonResponse[0]["cantidad"]}" );
-       return int.parse(jsonResponse[0]["cantidad"]);
-     } else {
-       return 0;
-     }
-   } else {
-     return 0;
-   }
+  Future<int> estadosTickePie(tipo) async {
+    var logUser = await DatabasePr.db.loginUser();
+    var headers = {
+      'Authorization': 'Bearer ${logUser[0].token}',
+      'Content-Type': 'application/json'
+    };
 
- }
+    http.Response response = await http.get(
+        Uri.parse(AppConfig.backendsismonitor +
+            '/seguimientoequipo/listaTickect/$tipo'),
+        headers: headers);
+
+    if (response.statusCode == 200) {
+      var jsonResponse;
+      jsonResponse = json.decode(response.body.toString());
+
+      return jsonResponse["contar"];
+    } else {
+      return 0;
+    }
+  }
+
+  Future<List<ListaEquiposInformaticosTicket>> ListaEstadosTickeDatos(
+      {required FiltroTicketEquipo filtroTicketEquipo}) async {
+    var logUser = await DatabasePr.db.loginUser();
+    var headers = {
+      'Authorization': 'Bearer ${logUser[0].token}',
+      'Content-Type': 'application/json'
+    };
+
+    http.Response response = await http.get(
+        Uri.parse(AppConfig.backendsismonitor +
+            '/seguimientoequipo/listaTickect/${filtroTicketEquipo.estado}'),
+        headers: headers);
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      final listadoEquiposInformaticosTickets =
+          new ListaEquiposInformaticosTickets.fromJsonList(
+              jsonResponse["data"]);
+
+      return listadoEquiposInformaticosTickets.items;
+    } else {
+      return List.empty();
+    }
+  }
 }

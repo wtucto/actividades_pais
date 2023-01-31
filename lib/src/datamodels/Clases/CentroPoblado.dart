@@ -28,4 +28,11 @@ class CentroPoblado {
     data['centro_poblado_descripcion'] = this.centroPobladoDescripcion;
     return data;
   }
+  Map<String, dynamic> toMap() {
+    return {
+      "centro_poblado_ubigeo": centroPobladoUbigeo,
+      "centro_poblado_descripcion": centroPobladoDescripcion,
+
+    };
+  }
 }

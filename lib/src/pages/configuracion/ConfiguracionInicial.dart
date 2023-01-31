@@ -1,4 +1,4 @@
-import 'package:actividades_pais/main.dart';
+/*import 'package:actividades_pais/main.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConsultarTambosPiasxUnidadTerritorial.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Pias/Campania.dart';
@@ -286,7 +286,7 @@ class _ConfiguracionInicial extends State<ConfiguracionInicial> {
                               ),
                             ),
                             SizedBox(height: 10),
-                            SizedBox(
+                           SizedBox(
                               height: tamanio,
                               child: Container(
                                 margin: EdgeInsets.only(),
@@ -1137,3 +1137,4 @@ class _ConfiguracionInicial extends State<ConfiguracionInicial> {
         ));
   }
 }
+*/

@@ -562,7 +562,7 @@ class Listas {
       ),
     );
   }
-
+//dynamic
   Card cardParqueInformaticoTicket(ListaEquiposInformaticosTicket band, callback) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

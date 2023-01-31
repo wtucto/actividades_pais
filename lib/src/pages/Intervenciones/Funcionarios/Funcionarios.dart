@@ -50,6 +50,8 @@ class _FuncionariosPageState extends State<FuncionariosPage>
   int idPais = 0;
   var entidad = "Entidad";
   var id_entidad = 0;
+  bool closeTraerDni = false;
+
   @override
   void initState() {
     super.initState();
@@ -181,6 +183,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                       : new Container(),
                   !_value
                       ? TextField(
+                    maxLength: 8,
                           controller: controllerNumeroDoc,
                           decoration: InputDecoration(
                             labelText: 'Numero Documento',
@@ -198,21 +201,65 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                         backgroundColor:
                             MaterialStateProperty.all(Colors.blue[600]),
                       ),
-                      child: Text(
+                      /*  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        closeTraerDni
+                            ? Image.asset(
+                          "assets/loaderios.gif",
+                          height: 40.0,
+                          width: 50.0,
+                          //color: Colors.transparent,
+                        )
+                            : new Container(),
+                        Text(
+                          nombreBoton,
+                          style: TextStyle(
+                            color: Colors
+                                .white, // this is for your text colour
+                          ),
+                        ),
+                      ],*/
+                      child:Row(mainAxisAlignment: MainAxisAlignment.center,children: [
+                        closeTraerDni
+                            ? Image.asset(
+                          "assets/loaderios.gif",
+                          height: 40.0,
+                          width: 50.0,
+                          //color: Colors.transparent,
+                        )
+                            : new Container(),
+                        Text(
+                            'Validar ' + nombreBoton,
+                          style: TextStyle(
+                            color: Colors
+                                .white, // this is for your text colour
+                          ),
+                        ),
+                        /* Text(
                         'Validar ' + nombreBoton,
                         style: TextStyle(color: Colors.white),
-                      ),
+                      )*/
+                      ],),
                       onPressed: () async {
+                        closeTraerDni = true;
                         setborrar();
+                        setState(() {
+                        });
                         if (_isOnline == true) {
                           await DatabasePr.db.listarTipoDocumento();
                           if (nombreBoton == 'Extrangero') {
                             var usuarioex = await provider.pintarExtranjerosBD(
                                 controllerNumeroDocExtr.text);
+                            print("::: ${usuarioex}");
+
                             if (usuarioex == null) {
                               enableController = true;
                               showAlertDialog(context);
+                              closeTraerDni = false;
+
                             } else {
+                            //  showAlertDialog(context);
                               visibilitytipotex = true;
                               visibilityTag = false;
                               controllerNombre.text = usuarioex.nombre;
@@ -225,15 +272,19 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                               controllerPais.text = usuarioex.pais;
                               idPais = usuarioex.idPais;
                               enableController = true;
+                              closeTraerDni = true;
                               setState(() {});
                             }
                           } else {
                             var usuario = await provider
                                 .getUsuarioDni(controllerNumeroDoc.text);
+                            print("::: ${usuario}");
+
                             // ignore: unnecessary_null_comparison
                             if (usuario == null) {
+
                               enableController = true;
-                              showAlertDialog(context);
+
                             } else {
                               controllerNombre.text = usuario.nombres;
                               controllerApellidoPaterno.text =
@@ -242,10 +293,13 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                                   usuario.apellidoMaterno;
                               controllerCelular.text = usuario.telefono;
                               controllerCargo.text = usuario.cargo;
+                              closeTraerDni = false;
                               setState(() {});
                             }
                           }
                         } else {
+                          showAlertDialog(context);
+                          closeTraerDni = false;
                           setState(() {
                             enableController = true;
                           });

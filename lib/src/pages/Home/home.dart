@@ -9,6 +9,7 @@ import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Seg
 import 'package:actividades_pais/src/pages/Tambook/dashboard_tambook.dart';
 import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/responsive.dart';
 import 'package:flutter/cupertino.dart';
@@ -63,9 +64,14 @@ class _HomePagePais extends State<HomePagePais> {
   String lat = '';
   List<String> aUnidad = [];
 
+  bool cargo = false;
+
   @override
   void initState() {
     super.initState();
+    if (_nombrePersona != '') {
+      _nombrePersona = "Un momento por favor";
+    }
 
     ///ProviderDatos().   verificacionpesmiso();
     mostrarTmbo();
@@ -152,6 +158,7 @@ class _HomePagePais extends State<HomePagePais> {
     token = _prefs!.getString("token");
 
     if (abc.isNotEmpty) {
+      cargo = true;
       setState(() {
         _nombrePersona = abc[abc.length - 1].nombres.toUpperCase();
         _apellidosPersona =
@@ -166,6 +173,24 @@ class _HomePagePais extends State<HomePagePais> {
 
   @override
   Widget build(BuildContext context) {
+    if (cargo == false) {
+      return Scaffold(
+          body: Container(
+        color: Colors.transparent,
+        child: Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            CircularProgressIndicator(),
+            SizedBox(height: 10),
+            Text("Cargando informacion, un momento por favor.",
+                style: TextStyle(color: Colors.black))
+          ],
+        )),
+      ));
+    }
+
     final Responsive responsive = Responsive.of(context);
     double wp = responsive.wp(14);
     double hp65 = responsive.hp(35);

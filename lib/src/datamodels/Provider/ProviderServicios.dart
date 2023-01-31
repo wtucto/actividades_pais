@@ -31,7 +31,7 @@ class ProviderServicios {
     // await getUnidadesTablaPlataforma();
     await getLugarPrestacion();
     await getPuesto();
-    await getUnidadesOrg();
+    //await getUnidadesOrg();
     await getNumeroTelefono();
     await getProvincias();
     await getTipoDocumento();
@@ -44,7 +44,7 @@ class ProviderServicios {
     };
   }
 
-  Future<List<UnidadesOrganicas>> getUnidadesOrg() async {
+/*  Future<List<UnidadesOrganicas>> getUnidadesOrg() async {
     String jsonString = await servicios.loadunidadesOrganicas();
     final jsonResponse = json.decode(jsonString);
 
@@ -58,7 +58,7 @@ class ProviderServicios {
       DatabasePr.db.insertUnidadesOrganicas(rspt);
     }
     return listadoDepart.items;
-  }
+  }*/
 
   Future<List<UnidadesTerritoriales>> getUnidadesTerr() async {
     String jsonString = await servicios.loadunidadesTerritoriales();
@@ -182,15 +182,14 @@ class ProviderServicios {
     final jsonResponse = json.decode(jsonString);
     final listadoDepart = new ListarSexo.fromJsonList(jsonResponse);
 
-    for (var i = 0; i < listadoDepart.items.length; i++) {
+    /*for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = Sexo(
         id: listadoDepart.items[i].id,
         cod: listadoDepart.items[i].cod,
         descripcion: listadoDepart.items[i].descripcion,
       );
       await DatabasePr.db.insertSexo(rspt);
-    }
-
+    }*/
     return listadoDepart.items;
   }
 
