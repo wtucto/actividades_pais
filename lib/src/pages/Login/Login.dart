@@ -2,9 +2,6 @@
 
 import 'dart:async';
 
-import 'package:actividades_pais/backend/model/dto/login_dto.dart';
-import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
-import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/configuracion/ResetContrasenia.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
@@ -19,11 +16,9 @@ import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
-import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 
 import '../../datamodels/Provider/PorviderLogin.dart';
-import '../configuracion/pantallainicio.dart';
 
 SharedPreferences? _prefs;
 bool? checkGuardarDatos = false;
@@ -125,31 +120,16 @@ class _LoginPageState extends State<LoginPage> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     margin: EdgeInsets.only(
-                        left: w / 15, right: w / 15, top: h / 4),
+                      left: w / 15,
+                      right: w / 15,
+                      top: h / 4,
+                    ),
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: h / 20),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           _Form(),
-                          //SizedBox(height: h / 50),
-                       /*   (contador == 0)
-                              ? InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (_) => PantallaInicio()),
-                                    );
-                                  },
-                                  child: Text(
-                                    'Registrarse en el app',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                )
-                              : new Container(),*/
                           SizedBox(height: h / 35),
                           const Text(
                             'Términos y condiciones de uso',
@@ -187,118 +167,33 @@ class __FormState extends State<_Form> {
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+
     Future LoginUser(usn, psw, rpsw, tipoUser) async {
-       if (tipoUser == 1) {
+      if (tipoUser == 1) {
         BusyIndicator.show(context);
         try {
-         setState(() {
-           esperar='Espere un monento...';
-         });
+          setState(() {
+            esperar = 'Espere un monento...';
+          });
 
-      var resLogin =    await  ProviderLogin().Login(username: usn,password: psw);
-          esperar='Ingresar';
-      if(resLogin >=1){
-        BusyIndicator.hide(context);
+          var resLogin = await ProviderLogin().Login(
+            username: usn,
+            password: psw,
+          );
+          esperar = 'Ingresar';
+          if (resLogin >= 1) {
+            BusyIndicator.hide(context);
 
-        await Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => HomePagePais()),
-        );
-
-      }
-      /*    var prefixUserDemo = 'D';
-
-          var res = await DatabasePr.db
-              .getLoginUser(dni: int.parse(usn), contrasenia: psw);
-          if (res.isNotEmpty) {
-            ConfigPersonal oUserInfo = res[0];
-            List<String> aUnidad = [];
-            String codigo = '';
-            List<String> aPass = [];
-            for (var u in res) {
-              aUnidad.add(u.unidad);
-              aPass.add(u.contrasenia);
-              if (u.unidad == 'UPS') codigo = u.codigo;
-            }
-
-            if (codigo == '') {
-              if (!aUnidad.contains('UPS')) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => HomePagePais()),
-                );
-                return;
-              }
-            } else {
-              UserModel oUser;
-              try {
-                oUser = await mainController.getUserLogin(codigo, '');
-
-                if ((oUser.codigo == codigo && (aPass.contains(psw)))) {
-                  check = _prefs!.getBool("check");
-                  if (_prefs != null && check == true) {
-                    _prefs!.setString("clave", oUser.clave!);
-                  } else {
-                    _prefs!.setString("clave", "");
-                  }
-
-                  _prefs!.setString("nombres", oUser.nombres!);
-                  _prefs!.setString("codigo", oUser.codigo!);
-                  _prefs!.setString("rol", oUser.rol!);
-                  _prefs!.setString("dni", oUserInfo.numeroDni.toString());
-
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (_) => HomePagePais(),
-                    ),
-                  );
-                  return;
-                } else {
-                  mostrarAlerta(
-                    context,
-                    'Login incorrecto',
-                    'Revise sus credenciales nuevamente',
-                  );
-                }
-              } catch (oError) {
-                mostrarAlerta(
-                  context,
-                  'Login incorrecto',
-                  oError.toString(),
-                );
-              }
-            }
-          }*/
+            await Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => HomePagePais()),
+            );
+          }
         } catch (oError) {
           BusyIndicator.hide(context);
 
           setState(() {
-      esperar='Ingresar';
-    });
-          mostrarAlerta(context, 'Login incorrecto',
-              'Revise sus credenciales nuevamente');
-        }
-        //usuario Jefe
-      } else {
-        try {
-          LoginDto paramUser = LoginDto(
-              username: usn, password: psw, codigo: tipoUser.toString());
-          RespTokenDto resp = await mainController.login(paramUser);
-          if (resp.token!.isNotEmpty) {
-            _prefs!.setString("nombres", resp.name!);
-            _prefs!.setString("codigo", resp.id.toString());
-            _prefs!.setString("rol", resp.rol!);
-            _prefs!.setString("dni", usn);
-            _prefs!.setString("token", resp.token!);
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (_) => HomePagePais(),
-              ),
-            );
-            return;
-          } else {
-            mostrarAlerta(context, 'Login incorrecto',
-                'Revise sus credenciales nuevamente');
-          }
-        } catch (oError) {
+            esperar = 'Ingresar';
+          });
           mostrarAlerta(context, 'Login incorrecto',
               'Revise sus credenciales nuevamente');
         }
@@ -312,30 +207,6 @@ class __FormState extends State<_Form> {
       padding: EdgeInsets.symmetric(horizontal: w / 16),
       child: Column(
         children: <Widget>[
-        /*  DropdownButtonFormField(
-            items: const <DropdownMenuItem<int>>[
-              DropdownMenuItem<int>(
-                value: 1,
-                child: Text("USUARIO"),
-              ),
-              DropdownMenuItem<int>(
-                value: 2,
-                child: Text("JEFE"),
-              ),
-            ],
-            value: tipoUsuario,
-            onChanged: (value) {
-              setState(() {
-                tipoUsuario = value!;
-              });
-            },
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.supervised_user_circle),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),*/
           const SizedBox(height: 10),
           CustomInput(
             icon: Icons.supervised_user_circle,
@@ -349,13 +220,6 @@ class __FormState extends State<_Form> {
             textController: passCtrl,
             //isPassword: false,
           ),
-          // if (bRepeat == true)
-          // CustomInput(
-          //   icon: Icons.lock_outline,
-          //   placeholder: 'Repetir Contraseña',
-          //   textController: passCtrl2,
-          //   isPassword: true,
-          // ),
           InkWell(
             onTap: () {
               Navigator.of(context).pushReplacement(
@@ -375,42 +239,15 @@ class __FormState extends State<_Form> {
             text: esperar,
             onPressed: () async {
               await LoginUser(
-                  emailCtrl.text, passCtrl.text, passCtrl.text, tipoUsuario);
+                emailCtrl.text,
+                passCtrl.text,
+                passCtrl.text,
+                tipoUsuario,
+              );
             },
           ),
-        /*   CheckboxListTile(
-            value: checkGuardarDatos,
-            title: const Text('Recordar'),
-            onChanged: (value) {
-              setState(() {
-                checkGuardarDatos = value!;
-                _prefs!.setBool("check", value);
-              });
-            },
-            secondary: const Icon(Icons.safety_check),
-          ),*/
         ],
       ),
     );
   }
 }
-
-// body: SafeArea(
-//   child: SingleChildScrollView(
-//     physics: BouncingScrollPhysics(),
-//     child: Container(
-//       height: MediaQuery.of(context).size.height * 0.9,
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: <Widget>[
-//           Logo(titulo: ''),
-//           _Form(),
-//           Text(
-//             'Términos y condiciones de uso',
-//             style: TextStyle(fontWeight: FontWeight.w200),
-//           )
-//         ],
-//       ),
-//     ),
-//   ),
-// ),
