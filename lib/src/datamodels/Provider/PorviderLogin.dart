@@ -109,28 +109,35 @@ class ProviderLogin {
                if (configIni.tipoPlataforma == 'PIAS') {
                 await ProviderServiciosRest().listarPuntoAtencionPias(
                     '0', data[i]["id_plataforma"] ?? 0, 0);
+                await DatabasePr.db.insertConfigInicio(configIni);
+                return a;
               }
 
-              await DatabasePr.db.insertConfigInicio(configIni);
+             if (configIni.tipoPlataforma == 'TAMBO') {
+               if (data[0]["unidad_territorial_descripcion"] != null) {
+                 _log.i("numero2");
+
+                 await ProviderDatos().getInsertParticipantesIntervencionesMovil(
+                     data[0]["unidad_territorial_descripcion"]);
+                 _log.i("numero3");
+                 await ProviderDatos().guardarProvincia(
+                     data[0]["plataforma_codigo_snip"]);
+
+                 _log.i("numero3");
+                 await Future.delayed(Duration(seconds: 10));
+
+               }
+               await DatabasePr.db.insertConfigInicio(configIni);
+               return a;
+             }
+
+
             }
+           // return a;
 
-            if (data[0]["unidad_territorial_descripcion"] != null) {
-              _log.i("numero2");
-
-              await ProviderDatos().getInsertParticipantesIntervencionesMovil(
-                  data[0]["unidad_territorial_descripcion"]);
-               _log.i("numero3");
-              await ProviderDatos().guardarProvincia(
-                  data[0]["plataforma_codigo_snip"]);
-
-              _log.i("numero3");
-              await Future.delayed(Duration(seconds: 10));
-
-              return a;
-            }
           }
         }
-
+        return a;
       } else {
         print(response.reasonPhrase);
 

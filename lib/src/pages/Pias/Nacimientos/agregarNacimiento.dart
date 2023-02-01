@@ -21,7 +21,7 @@ class AgregarNacimiento extends StatefulWidget {
 class _AgregarNacimientoState extends State<AgregarNacimiento> {
   Nacimiento nacimiento = Nacimiento();
 
-  var _image, _image2;
+  File? _image, _image2;
   String fotonomm1 = 'assets/imgBb1.png';
   String fotonomm2 = 'assets/imgbb2.jpg';
   String lastSelectedValue = "", nombre_2 = "", iamgen_file = "";
@@ -276,8 +276,9 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
         .pickImage(source: ImageSource.camera, maxWidth: 700);
     setState(() {
       _image = File(image!.path);
-      listArchivo.add(image.path);
+
     });
+    listArchivo.add(_image!.path);
     // List<int> bytes = File(image.path).readAsBytesSync();
   }
 
@@ -285,10 +286,10 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
     var gallery = await ImagePicker()
         .pickImage(source: ImageSource.gallery, maxWidth: 700);
     setState(() {
-      _image = gallery!.path;
+      _image = File(gallery!.path);
       // nacimiento.imagen1 = _image;
     });
     List<int> bytes = await new File(gallery!.path).readAsBytesSync();
-    listArchivo.add(_image);
+    listArchivo.add(_image!.path.toString());
   }
 }
