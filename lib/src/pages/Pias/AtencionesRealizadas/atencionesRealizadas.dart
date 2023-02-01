@@ -8,13 +8,16 @@ import 'package:intl/intl.dart';
 
 class AtencionesRealizadas extends StatefulWidget {
   String idUnicoReporte = '';
+
   AtencionesRealizadas(this.idUnicoReporte);
+
   @override
   State<AtencionesRealizadas> createState() => _AtencionesRealizadasState();
 }
 
 class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
   String seleccionarClima = '';
+
 /*  DateTime? nowfec = new DateTime.now();
   var formatter = new DateFormat('yyyy-MM-dd');*/
   TextEditingController controllerAtendidos = TextEditingController();
@@ -25,9 +28,8 @@ class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
   Future<Null> refresh() async {
     await Future.delayed(Duration(seconds: 0));
     var ar = await DatabasePias.db.sumaAtenAtenc(widget.idUnicoReporte);
-    sumaAtendidos = ar[0]["sumaAtendidos"];
-    sumAtenciones = ar[0]["sumAtenciones"];
-    print(ar[0]["sumAtenciones"]);
+    sumaAtendidos = ar[0]["sumaAtendidos"] ?? 0;
+    sumAtenciones = ar[0]["sumAtenciones"] ?? 0;
     await DatabasePias.db.listarAtencion(widget.idUnicoReporte);
     setState(() {});
   }
@@ -45,7 +47,7 @@ class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Center(
+        title: const Center(
           child: Text(
             "Atenciones Realizadas",
             style: TextStyle(
@@ -121,11 +123,9 @@ class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
             MaterialPageRoute(
                 builder: (context) => CrearAtenciones(widget.idUnicoReporte)),
           );
-          print(respuesta);
-          if (respuesta == "atencion") {
+           if (respuesta == "atencion") {
             refresh();
           }
-          ;
         },
         child: Icon(
           Icons.add,
@@ -186,6 +186,7 @@ class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
       ),
     );
   }
+
   /* Widget _bandTile(Atencion band) {
     return
   }*/

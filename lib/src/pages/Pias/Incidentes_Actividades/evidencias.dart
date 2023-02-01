@@ -22,8 +22,8 @@ class Evidencias extends StatefulWidget {
 class _EvidenciasState extends State<Evidencias> {
   Nacimiento nacimiento = Nacimiento();
   List<ArchivosEvidencia> listArc = [];
-  var _image;
-  String lastSelectedValue = "", nombre_2 = "", iamgen_file = "";
+  File? _image;
+  String lastSelectedValue = "";
   Archivos ar = new Archivos();
   List<ArchivosEvidencia> listArchivo = [];
 
@@ -117,23 +117,21 @@ class _EvidenciasState extends State<Evidencias> {
                 // ignore: unnecessary_new
                 child: new ClipRRect(
                     //  borderRadius: new BorderRadius.circular(100.0),
-                    child: new GestureDetector(
+                    child: GestureDetector(
                         onTap: () {
-                          print("hola");
-                          Navigator.push(
+                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ImagenMostar(
                                         imagen: i2,
                                       )));
                         },
-                        child: new Container(
-                            child: PhotoView(
+                        child: PhotoView(
                           imageProvider: FileImage(File(i2!)),
-                        )))),
+                        ))),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
           ],
@@ -189,31 +187,32 @@ class _EvidenciasState extends State<Evidencias> {
   Future cameraImage() async {
     final image =
         await ImagePicker().pickImage(source: ImageSource.camera, maxWidth: 700);
-    setState(() {
-      _image = File(image!.path);
-    });
+   // _image = File(image!.path);
+
+
     ArchivosEvidencia ar = ArchivosEvidencia();
     ar.file = image!.path;
     ar.idUnicoReporte = widget.idUnicoReporte;
     await DatabasePias.db.insertArchivosEv(ar);
     await taerArchivos();
+    setState(() {
+    });
   }
 
   Future getImageLibrary() async {
     var gallery =
         await ImagePicker().pickImage(source: ImageSource.gallery, maxWidth: 700);
-    setState(() {
-      _image = gallery!.path;
-     // _image = File(gallery.path);
-    });
+  //  _image =  File(gallery!.path);
+
+/*    setState(() {
+     });*/
     ArchivosEvidencia ar2 = ArchivosEvidencia();
-    ar2.file = _image.toString();
+    ar2.file = gallery!.path.toString();
     ar2.idUnicoReporte = widget.idUnicoReporte;
     await DatabasePias.db.insertArchivosEv(ar2);
 
-    setState(() {
-
-    });
     await taerArchivos();
+    setState(() {
+    });
   }
 }

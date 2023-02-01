@@ -241,7 +241,7 @@ class DatabasePias {
     await DatabasePias.db.initDB();
     final res = await _db?.rawQuery(
         "SELECT sum(atendidos) as sumaAtendidos, sum(atenciones) as sumAtenciones from atencion where idUnicoReporte = '$idUnicoReporte'");
-    return res;
+     return res;
   }
 
   Future eliminarAtencionid(i) async {
@@ -353,8 +353,7 @@ class DatabasePias {
   }
 
   Future eliminarReportePorIdru(idUnicoReporte) async {
-    print("aqqaqaqayiuiuiu $idUnicoReporte");
-    await DatabasePias.db.initDB();
+     await DatabasePias.db.initDB();
     final res = await _db?.rawQuery(
         "DELETE from reportesPias where idUnicoReporte = '$idUnicoReporte'");
     await _db?.rawQuery(
@@ -371,21 +370,7 @@ class DatabasePias {
   }
 
   Future updateTask(ReportesPias task) async {
-    print(task.idUnidadTerritorial);
-    print(task.unidadTerritorial);
-    print(task.plataforma);
-    print(task.idPlataforma);
-    print(task.campania);
-    print(task.puntoAtencion);
-    print(task.fechaParteDiario);
-    print(task.detallePuntoAtencion);
-    print(task.personal);
-    print(task.estadoEquipos);
-    print(task.sismonitor);
-    print(task.clima);
-    print(task.idUnicoReporte);
-    print(task.idClima);
-    print(task.toMap());
+
     print(_db!.update("reportesPias", task.toMap(),
         where: "idUnicoReporte = ?", whereArgs: [task.idUnicoReporte]));
 
@@ -487,7 +472,7 @@ class DatabasePias {
 
   Future<List<ArchivosEvidencia>> listarArchivosUnico(idUnicoReporte) async {
     final res = await _db?.rawQuery(
-        "SELECT * from archivosEvidencia a where idUnicoReporte = '$idUnicoReporte'");
+        "SELECT * from archivosEvidencia a where idUnicoReporte = '$idUnicoReporte' ORDER BY id DESC ");
     List<ArchivosEvidencia> list = res!.isNotEmpty
         ? res.map((e) => ArchivosEvidencia.fromMap(e)).toList()
         : [];
