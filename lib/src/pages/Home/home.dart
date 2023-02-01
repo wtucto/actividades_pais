@@ -126,6 +126,7 @@ class _HomePagePais extends State<HomePagePais> {
           tipoPlataforma = abc[0].tipoPlataforma;
           unidadTerritorial = abc[0].unidTerritoriales;
           variable = abc[0].nombreTambo;
+          modalidad = abc[0].modalidad;
           /*   mostrarNombre();
           cantidadDB = 1;
           changecolor = (Colors.blue[400])!;
@@ -272,6 +273,8 @@ class _HomePagePais extends State<HomePagePais> {
           ),
         );
       } else {
+        _log.i(tipoPlataforma);
+        _log.i(modalidad);
         if (tipoPlataforma == 'PIAS' &&
             (modalidad == '1' || modalidad == '2' || modalidad == '3')) {
           String sImagePias = modalidad == '1'

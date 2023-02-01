@@ -198,7 +198,9 @@ class __FormState extends State<_Form> {
       var resLogin =    await  ProviderLogin().Login(username: usn,password: psw);
           esperar='Ingresar';
       if(resLogin >=1){
-       await Navigator.of(context).pushReplacement(
+        BusyIndicator.hide(context);
+
+        await Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => HomePagePais()),
         );
 
@@ -266,7 +268,9 @@ class __FormState extends State<_Form> {
             }
           }*/
         } catch (oError) {
-    setState(() {
+          BusyIndicator.hide(context);
+
+          setState(() {
       esperar='Ingresar';
     });
           mostrarAlerta(context, 'Login incorrecto',
