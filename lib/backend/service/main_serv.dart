@@ -441,6 +441,25 @@ class MainService {
           await Get.find<MainRepo>().getAllMonitoreoApi();
 
       for (TramaMonitoreoModel oApi in aApi) {
+        /**
+         * TEMP: Limpiar data base64 temporal,
+         * buscar alternativa para almacenamiento de imagenes en json
+         */
+        oApi.imgActividad1 = '';
+        oApi.imgActividad2 = '';
+        oApi.imgActividad3 = '';
+        oApi.imgActividad4 = '';
+
+        oApi.imgProblema1 = '';
+        oApi.imgProblema2 = '';
+        oApi.imgProblema3 = '';
+        oApi.imgProblema4 = '';
+
+        oApi.imgRiesgo1 = '';
+        oApi.imgRiesgo2 = '';
+        oApi.imgRiesgo3 = '';
+        oApi.imgRiesgo4 = '';
+
         if (aDb.isNotEmpty) {
           TramaMonitoreoModel? oDataFind;
           try {

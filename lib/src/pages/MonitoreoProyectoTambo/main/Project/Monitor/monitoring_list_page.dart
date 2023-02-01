@@ -150,7 +150,7 @@ class _MonitorListState extends State<MonitorList> {
     }
     if (mounted) {
       setState(() {
-        loadData(context);
+        //loadData(context);
         loading = false;
       });
     }
@@ -160,7 +160,7 @@ class _MonitorListState extends State<MonitorList> {
     scrollController.addListener(() async {
       if (scrollController.position.maxScrollExtent ==
           scrollController.position.pixels) {
-        loadData(context);
+        //loadData(context);
       }
     });
   }

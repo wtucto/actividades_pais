@@ -18,6 +18,7 @@ class DatabasePnPais {
   final textType = 'TEXT';
   final boolType = 'BOOLEAN';
   final integerType = 'INTEGER';
+  final blobType = 'BLOB';
   final notNull = 'NOT NULL';
   final sLimit = "LIMIT [limit]";
   final sOffset = "OFFSET [offset]";
@@ -52,7 +53,6 @@ class DatabasePnPais {
     Database db,
     int version,
   ) async {
-
     var constFields = '''
       ${MonitorFields.id} $idType, 
       ${MonitorFields.time} $textType,
@@ -96,26 +96,26 @@ class DatabasePnPais {
       ${MonitorFields.avanceFisicoPartida} $textType,
       ${MonitorFields.observaciones} $textType,
       ${MonitorFields.imgActividad} $textType,
-      ${MonitorFields.imgActividad1} $textType,
-      ${MonitorFields.imgActividad2} $textType,
-      ${MonitorFields.imgActividad3} $textType,
-      ${MonitorFields.imgActividad4} $textType,
+      ${MonitorFields.imgActividad1} $blobType,
+      ${MonitorFields.imgActividad2} $blobType,
+      ${MonitorFields.imgActividad3} $blobType,
+      ${MonitorFields.imgActividad4} $blobType,
       ${MonitorFields.problemaIdentificado} $textType,
       ${MonitorFields.idProblemaIdentificado} $textType,
       ${MonitorFields.imgProblema} $textType,
-      ${MonitorFields.imgProblema1} $textType,
-      ${MonitorFields.imgProblema2} $textType,
-      ${MonitorFields.imgProblema3} $textType,
-      ${MonitorFields.imgProblema4} $textType,
+      ${MonitorFields.imgProblema1} $blobType,
+      ${MonitorFields.imgProblema2} $blobType,
+      ${MonitorFields.imgProblema3} $blobType,
+      ${MonitorFields.imgProblema4} $blobType,
       ${MonitorFields.alternativaSolucion} $textType,
       ${MonitorFields.idAlternativaSolucion} $textType,
       ${MonitorFields.riesgoIdentificado} $textType,
       ${MonitorFields.idRiesgoIdentificado} $textType,
       ${MonitorFields.imgRiesgo} $textType,
-      ${MonitorFields.imgRiesgo1} $textType,
-      ${MonitorFields.imgRiesgo2} $textType,
-      ${MonitorFields.imgRiesgo3} $textType,
-      ${MonitorFields.imgRiesgo4} $textType,
+      ${MonitorFields.imgRiesgo1} $blobType,
+      ${MonitorFields.imgRiesgo2} $blobType,
+      ${MonitorFields.imgRiesgo3} $blobType,
+      ${MonitorFields.imgRiesgo4} $blobType,
       ${MonitorFields.fechaTerminoEstimado} $textType,
       ${MonitorFields.latitud} $textType,
       ${MonitorFields.longitud} $textType,
@@ -268,9 +268,7 @@ class DatabasePnPais {
     int oldversion,
     int newversion,
   ) async {
-    if (oldversion < newversion) {
-      
-    }
+    if (oldversion < newversion) {}
 
     print("Version Upgrade: $oldversion -> $newversion");
   }
@@ -654,8 +652,7 @@ class DatabasePnPais {
       sWhere = TramaProyectoFields.codCrp;
     }
 
-    String sQuery = '''
-    
+    String sQuery = '''  
     SELECT 
       a.*,
       b.${TramaProyectoFields.codResidente},
@@ -664,16 +661,16 @@ class DatabasePnPais {
     FROM $tableNameTramaMonitoreos AS a  
     LEFT JOIN $tableNameTramaProyectos AS b 
            ON b.${TramaProyectoFields.cui} = a.${MonitorFields.cui}
-    WHERE b.$sWhere != ?
+    WHERE  ( a.${MonitorFields.cui} IS NOT NULL AND a.${MonitorFields.cui} != '' ) AND b.$sWhere != '${o.codigo}'
     ORDER BY a.$orderBy
-
+    ;
     ''';
 
     dynamic result;
     if (limit! > 0) {
-      result = await db.rawQuery(sQuery, [o.codigo]);
+      result = await db.rawQuery(sQuery);
     } else {
-      result = await db.rawQuery(sQuery, [o.codigo]);
+      result = await db.rawQuery(sQuery);
     }
 
     if (result.length == 0) return [];
