@@ -22,8 +22,8 @@ const LinearGradient mainButton4 = LinearGradient(
 );
 
 const LinearGradient mainButton5 = LinearGradient(colors: [
-  Color.fromARGB(255, 14, 161, 232),
-  Color.fromARGB(255, 14, 161, 232),
+  Color(0xFFa0d9f5),
+  Color(0xFFa0d9f5),
 ]);
 
 const List<BoxShadow> shadow = [

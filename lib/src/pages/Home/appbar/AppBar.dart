@@ -7,87 +7,88 @@ class AppBarPais extends StatefulWidget {
   int snip;
   AppBarPais(
       {this.datoUt = "",
-        this.nombre = "",
-        this.snip = 0,
-        this.plataforma = ''});
+      this.nombre = "",
+      this.snip = 0,
+      this.plataforma = ''});
   @override
   _AppBarPaisState createState() => _AppBarPaisState();
 }
 
 class _AppBarPaisState extends State<AppBarPais> {
   Widget text() {
-    return Container(
-      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
         Padding(
-          padding: EdgeInsets.only(
-            top: 30,
-          ),
+          padding: const EdgeInsets.only(top: 30),
           child: Column(
-            //   crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  SizedBox(
-                      width: 180.0,
-                      height: 120.0,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.asset(
-                            'assets/paislogo.png',
-                            width: 100.0,
-                            height: 90.0,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      )),
-                ],
-              ),
-              SizedBox(
-                height: 5.0,
-                width: 14,
-              ),
+              const SizedBox(height: 15.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  if (widget.datoUt != "") ...[
-                    SizedBox(
-                      height: 40.0,
-                      width: 170,
-                      child: Text(
-                        "UT : ${widget.datoUt} - PLATAFORMA: ${widget.plataforma}",
-                        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 11),
+                  SizedBox(
+                    width: 70.0,
+                    height: 70.0,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white.withOpacity(0.1),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.asset(
+                          'assets/icons/icons8-male-user-100.png',
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
-                  ],
-                  if (widget.datoUt != "") ...[
-                    SizedBox(
-                      //  height: 15.0,
-                      width: 30,
-                    ),
-                  ],
-
-                  if (widget.nombre != "") ...[
-                    SizedBox(
-                      height: 40.0,
-                      width: 150,
-                      child: Text(
-                        "USUARIO : " + widget.nombre,
-                        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 11, ),
-                      ),
-                    ),
-
-                  ]
+                  ),
+                  Column(
+                    children: [
+                      if (widget.datoUt != "") ...[
+                        SizedBox(
+                          height: 15.0,
+                          child: Text(
+                            "UT : ${widget.datoUt}",
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15.0,
+                          child: Text(
+                            "PLATAFORMA : ${widget.plataforma}",
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ),
+                      ],
+                      if (widget.nombre != "") ...[
+                        SizedBox(
+                          height: 15.0,
+                          child: Text(
+                            "USUARIO : ${widget.nombre}",
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ),
+                      ]
+                    ],
+                  ),
                 ],
               )
             ],
           ),
         ),
-      ]),
+      ],
     );
   }
 
@@ -95,7 +96,7 @@ class _AppBarPaisState extends State<AppBarPais> {
   Widget build(BuildContext context) {
     double dRadiusTop = 0; //50;
     double dHeight = 300;
-    double dTop = 200;
+    double dTop = 150;
 
     Color bgColor = Colors.white;
 
@@ -118,13 +119,14 @@ class _AppBarPaisState extends State<AppBarPais> {
                   decoration: BoxDecoration(
                     color: bgColor,
                     borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(dRadiusTop)),
+                        BorderRadius.vertical(top: Radius.circular(dRadiusTop)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.2),
                         blurRadius: 5,
                         spreadRadius: 0.2,
-                        offset: Offset(0.5, -8), // changes position of shadow
+                        offset:
+                            const Offset(0.5, -8), // changes position of shadow
                       ),
                     ],
                   ),

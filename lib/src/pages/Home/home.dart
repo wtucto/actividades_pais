@@ -1,15 +1,12 @@
 import 'dart:async';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/card.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/main_footer_all_option.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/actividadesPnpais.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/cordinacion_articulacion.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_suspervicion.dart';
-import 'package:actividades_pais/src/pages/ProgramacionActividades/programacion_list_page.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/SeguimientoParqueInformatico.dart';
 import 'package:actividades_pais/src/pages/Tambook/dashboard_tambook.dart';
 import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/util/Constants.dart';
-import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/responsive.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,14 +41,11 @@ class _HomePagePais extends State<HomePagePais> {
   int currenIndex = 0;
   var cantidadDB = 0;
   Color changecolor = Colors.grey;
-  bool _isVisible = true;
   var _nombrePersona = '';
   var _apellidosPersona = '';
   var unidadTerritorial = '';
   var variable = '';
 
-  //var snip = 0;
-  //List<int> snips = [];
   var idPlataforma = 0;
   var tipoPlataforma = '';
   var campaniaCod = '';
@@ -73,7 +67,6 @@ class _HomePagePais extends State<HomePagePais> {
       _nombrePersona = "Un momento por favor";
     }
 
-    ///ProviderDatos().   verificacionpesmiso();
     mostrarTmbo();
     traerdato();
     verificargps();
@@ -94,15 +87,11 @@ class _HomePagePais extends State<HomePagePais> {
   datosParaPerfil() async {
     cantidadDB = 1;
     var res = await DatabasePr.db.getAllConfigPersonal();
-    if (res.length > 0) {
+    if (res.isNotEmpty) {
       List<String> aUnidadTemp = [];
-      String codigo = '';
-      List<String> aPass = [];
       for (var u in res) {
         aUnidadTemp.add(u.unidad);
-        if (u.unidad == 'UPS') codigo = u.codigo;
       }
-
       setState(() {
         aUnidad = aUnidadTemp;
       });
@@ -113,13 +102,7 @@ class _HomePagePais extends State<HomePagePais> {
   mostrarTmbo() async {
     DatabasePr.db.initDB();
     var abc = await DatabasePr.db.getAllTasksConfigInicio();
-    var user = await DatabasePr.db.getLoginUser();
-    //_log.i(abc[0].nombreTambo);
-    // print(object)
     if (abc.isNotEmpty) {
-      var idlp = abc[abc.length - 1].idLugarPrestacion;
-      var iduo = abc[abc.length - 1].idUnidadesOrganicas;
-
       setState(() {
         mostrarNombre();
         if (abc.isNotEmpty) {
@@ -127,25 +110,6 @@ class _HomePagePais extends State<HomePagePais> {
           unidadTerritorial = abc[0].unidTerritoriales;
           variable = abc[0].nombreTambo;
           modalidad = abc[0].modalidad;
-          /*   mostrarNombre();
-          cantidadDB = 1;
-          changecolor = (Colors.blue[400])!;
-          _isVisible = false;
-          if (idlp == 1) {
-            variable = abc[abc.length - 1].lugarPrestacion;
-            unidadTerritorial = abc[abc.length - 1].unidTerritoriales;
-            snip = abc[abc.length - 1].snip;
-          } else if (idlp == 2) {
-            variable = abc[abc.length - 1].nombreTambo;
-            unidadTerritorial = abc[abc.length - 1].unidTerritoriales;
-            snip = abc[abc.length - 1].snip;
-            tipoPlataforma = abc[abc.length - 1].tipoPlataforma;
-            idPlataforma = abc[abc.length - 1].idTambo;
-            campaniaCod = abc[abc.length - 1].codCampania;
-            modalidad = abc[abc.length - 1].modalidad;
-
-            //print('campaniaCod $campaniaCod');
-          }*/
         }
       });
     }
@@ -176,25 +140,31 @@ class _HomePagePais extends State<HomePagePais> {
   Widget build(BuildContext context) {
     if (cargo == false) {
       return Scaffold(
-          body: Container(
-        color: Colors.transparent,
-        child: Center(
+        body: Container(
+          color: Colors.transparent,
+          child: Center(
             child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            CircularProgressIndicator(),
-            SizedBox(height: 10),
-            Text("Cargando informacion, un momento por favor.",
-                style: TextStyle(color: Colors.black))
-          ],
-        )),
-      ));
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                CircularProgressIndicator(),
+                SizedBox(height: 10),
+                Text(
+                  "Cargando informacion, un momento por favor.",
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
     }
 
     final Responsive responsive = Responsive.of(context);
     double wp = responsive.wp(14);
-    double hp65 = responsive.hp(35);
+    double hp65 = responsive.hp(27);
 
     var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     if (!isPortrait) {
@@ -207,8 +177,7 @@ class _HomePagePais extends State<HomePagePais> {
     String icon2 = 'assets/icons/icon_boat.png';
     String icon3 = 'assets/icons/icon_fligth.png';
     String icon4 = 'assets/icons/icon_intervencion.png';
-    String icon5 = 'assets/icons/icon_monitoring.png';
-    String icon6 = 'assets/icons/icon_registration.png';
+    String icon5 = 'assets/icons/monitoreo.png';
     String icon7 = 'assets/icons/icon_activity.png';
     String icon8 = 'assets/Tambook/libro-abierto.png';
 
@@ -225,9 +194,6 @@ class _HomePagePais extends State<HomePagePais> {
         ),
       );
     } else {
-      print("tipoPlataforma");
-      print(tipoPlataforma);
-
       if (tipoPlataforma == 'JF') {
         aHomeOptions.add(
           HomeOptions(
@@ -235,7 +201,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: 'TileIntervencion'.tr,
             types: const ['Ver'],
             image: icon4,
-            color: lightBlue,
+            color: const Color(0xFF78b8cd),
           ),
         );
         aHomeOptions.add(
@@ -244,7 +210,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: 'TileParqueInfomatico'.tr,
             types: const ['Ver'],
             image: icon5,
-            color: lightBlue,
+            color: const Color(0xFF78b8cd),
           ),
         );
         String sImagePias = modalidad == '1'
@@ -258,7 +224,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: 'TilePias'.tr,
             types: const ['Ver'],
             image: sImagePias,
-            color: lightBlue,
+            color: const Color(0xFF78b8cd),
           ),
         );
       }
@@ -269,7 +235,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: 'TileIntervencion'.tr,
             types: const ['Ver'],
             image: icon4,
-            color: lightBlue,
+            color: const Color(0xFF78b8cd),
           ),
         );
       } else {
@@ -288,7 +254,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TilePias'.tr,
               types: const ['Ver'],
               image: sImagePias,
-              color: lightBlue,
+              color: const Color(0xFF78b8cd),
             ),
           );
         }
@@ -300,7 +266,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: 'TileProgramacionActividad'.tr,
             types: const ['Ver'],
             image: icon7,
-            color: lightBlue,
+            color: const Color(0xFF78b8cd),
           ),
         );
         aHomeOptions.add(
@@ -309,7 +275,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: 'TAMBOOK',
             types: const ['Ver'],
             image: icon8,
-            color: lightBlue,
+            color: const Color(0xFF78b8cd),
           ),
         );
         aHomeOptions.add(
@@ -318,7 +284,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: 'SEGUIMINETO Y MONITOREO',
             types: const ['Ver'],
             image: icon1,
-            color: lightBlue,
+            color: const Color(0xFF78b8cd),
           ),
         );
       }
@@ -332,7 +298,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: 'SEGUIMINETO Y MONITOREO',
             types: const ['Ver'],
             image: icon1,
-            color: lightBlue,
+            color: const Color(0xFF78b8cd),
           ),
         );
         aHomeOptions.add(
@@ -341,7 +307,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: 'TAMBOOK',
             types: const ['Ver'],
             image: icon8,
-            color: lightBlue,
+            color: const Color(0xFF78b8cd),
           ),
         );
       } else {
@@ -351,7 +317,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: 'TileProyectTambo'.tr,
             types: const ['Ver'],
             image: icon5,
-            color: lightBlue,
+            color: const Color(0xFF78b8cd),
           ),
         );
       }
@@ -365,7 +331,6 @@ class _HomePagePais extends State<HomePagePais> {
           message: Text('SelectOption'.tr),
           actions: <CupertinoActionSheetAction>[
             CupertinoActionSheetAction(
-              //isDefaultAction: true,
               onPressed: () async {
                 /*
                  COORDINACIÓN Y ARTICULACIÓN
@@ -373,7 +338,7 @@ class _HomePagePais extends State<HomePagePais> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CordinacionArticulacion(),
+                    builder: (context) => const CordinacionArticulacion(),
                   ),
                 );
               },
@@ -387,7 +352,7 @@ class _HomePagePais extends State<HomePagePais> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MonitoreoSupervicion(),
+                    builder: (context) => const MonitoreoSupervicion(),
                   ),
                 );
               },
@@ -401,26 +366,12 @@ class _HomePagePais extends State<HomePagePais> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ActividadesPnpais(),
+                    builder: (context) => const ActividadesPnpais(),
                   ),
                 );
               },
               child: Text('TileActividadPnpais'.tr),
             ),
-            // CupertinoActionSheetAction(
-            //   onPressed: () async {
-            //     /*
-            //      ACTIVIDADES PNPAIS
-            //     */
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => ProgramacionListPage(),
-            //       ),
-            //     );
-            //   },
-            //   child: Text('TileProgramaciones'.tr),
-            // ),
           ],
           cancelButton: CupertinoActionSheetAction(
             isDestructiveAction: true,
@@ -434,29 +385,84 @@ class _HomePagePais extends State<HomePagePais> {
     }
 
     List listPages = [
-      Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: hp65,
-            ),
-            Expanded(
-              child: GridView.builder(
-                physics: const BouncingScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1.4,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                padding: const EdgeInsets.only(left: 28, right: 28, bottom: 58),
-                itemCount: aHomeOptions.length,
-                itemBuilder: (context, index) => TiteCard(
-                  aHomeOptions[index],
-                  index: index,
-                  onPress: () async {
+      Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            height: hp65,
+          ),
+          Expanded(
+            child: GridView.builder(
+              physics: const BouncingScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1.1,
+                crossAxisSpacing: 30,
+                mainAxisSpacing: 30,
+              ),
+              padding: const EdgeInsets.only(
+                left: 28,
+                right: 28,
+                bottom: 58,
+              ),
+              itemCount: aHomeOptions.length,
+              itemBuilder: (context, index) {
+                HomeOptions homeOption = aHomeOptions[index];
+                return InkWell(
+                  splashColor: Colors.white10,
+                  highlightColor: Colors.white10,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      image: const DecorationImage(
+                        image: AssetImage("assets/icons/botones 1-01.png"),
+                        fit: BoxFit.cover,
+                      ),
+                      color: homeOption.color,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 15),
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            child: Hero(
+                              tag: homeOption.image,
+                              child: Image.asset(
+                                homeOption.image,
+                                fit: BoxFit.contain,
+                                width: 60,
+                                height: 60,
+                                alignment: Alignment.center,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            child: Text(
+                              homeOption.name,
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontWeight: FontWeight.w700,
+                                fontStyle: FontStyle.normal,
+                                fontSize: 12.0,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  onTap: () async {
                     var oHomeOptionSelect = aHomeOptions[index];
 
                     if (cantidadDB < 1) {
@@ -497,7 +503,7 @@ class _HomePagePais extends State<HomePagePais> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  SeguimientoParqueInformatico(),
+                                  const SeguimientoParqueInformatico(),
                             ),
                           );
                           break;
@@ -531,15 +537,14 @@ class _HomePagePais extends State<HomePagePais> {
                       case 'OPT1007':
                         var rspt = await Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => Dashboard(),
+                            builder: (_) => const Dashboard(),
                           ),
                         );
                         break;
                       case 'OPT1008':
                         var rspt = await Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => DashboardTambook(),
-                            // builder: (_) => HomeTambook(),
+                            builder: (_) => const DashboardTambook(),
                           ),
                         );
                         break;
@@ -549,11 +554,11 @@ class _HomePagePais extends State<HomePagePais> {
                       default:
                     }
                   },
-                ),
-              ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     ];
 
@@ -564,7 +569,6 @@ class _HomePagePais extends State<HomePagePais> {
             datoUt: token == null ? unidadTerritorial : '',
             plataforma: variable,
             nombre: '$_nombrePersona $_apellidosPersona',
-            // snip: snip,
           ),
           listPages[currenIndex]
         ],

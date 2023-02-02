@@ -88,7 +88,7 @@ class MyTraslation extends Translations {
           "ProgramacionListTitle": "LISTA PROGRAMACIONES",
           "TilePias": "PIAS",
           "TileParqueInfomatico": "PAQUE INFORMATICO",
-          "TileProyectTambo": "MONITOR PROY. TAMBO",
+          "TileProyectTambo": "MONITOREO",
           "ToChoose": "Elegir",
           "ToSend": "Por Envia",
           "User": "Usuario",

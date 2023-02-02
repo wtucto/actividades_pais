@@ -89,9 +89,9 @@ class TiteCard extends StatelessWidget {
           child: Image.asset(
             homeOption.image,
             fit: BoxFit.contain,
-            width: itemHeight * 0.6,
-            height: itemHeight * 0.6,
-            alignment: Alignment.bottomRight,
+            width: itemHeight * 0.5,
+            height: itemHeight * 0.5,
+            alignment: Alignment.center,
           ),
         ),
       ),
@@ -99,11 +99,11 @@ class TiteCard extends StatelessWidget {
         top: 10,
         right: 14,
         child: Text(
-          _formattedPokeIndex(this.index),
+          "x",
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
-            color: Colors.black.withOpacity(0.12),
+            color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.12),
           ),
         ),
       ),

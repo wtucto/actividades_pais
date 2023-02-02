@@ -236,3 +236,24 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 ```
+
+
+
+
+# COLORES LOGO PAIS
+```sh
+#FBFBFB BACKGROUND
+#BC0514 P
+#8F9D9F A
+#7987CC I
+#65A33E S
+```
+
+# USUARIO DEMO
+
+UPS
+42315615
+CIP_119811
+
+47532262
+47532262
