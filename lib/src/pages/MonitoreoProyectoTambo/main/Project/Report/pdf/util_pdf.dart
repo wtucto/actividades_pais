@@ -12,29 +12,10 @@ Future<Uint8List> generatePdf(final PdfPageFormat format) async {
   final pdf = pw.Document(
     title: 'TEST PDF',
   );
-  /*final logoImage = pw.MemoryImage(
-    (await rootBundle.load('assets/paislogo.png')).buffer.asUint8List(),
-  );
-  final footerImage = pw.MemoryImage(
-    (await rootBundle.load('assets/paislogo.png')).buffer.asUint8List(),
-  );*/
-
-  //final font = await rootBundle.load('assets/OpenSansRegular.ttf');
-  //final ttf = pw.Font.ttf(font);
   final pageTheme = await _myPageTheme(format);
   pdf.addPage(
     pw.MultiPage(
       pageTheme: pageTheme,
-      /*header: (final context) => pw.Image(
-        alignment: pw.Alignment.topLeft,
-        logoImage,
-        fit: pw.BoxFit.contain,
-        width: 180,
-      ),
-      footer: (final context) => pw.Image(
-        footerImage,
-        fit: pw.BoxFit.scaleDown,
-      ), */
       build: (final context) => [
         pw.Container(
           padding: const pw.EdgeInsets.only(
@@ -73,9 +54,6 @@ Future<Uint8List> generatePdf(final PdfPageFormat format) async {
 }
 
 Future<pw.PageTheme> _myPageTheme(PdfPageFormat format) async {
-  /*final logoImage = pw.MemoryImage(
-    (await rootBundle.load('assets/paislogo.png')).buffer.asUint8List(),
-  );*/
   return pw.PageTheme(
     margin: const pw.EdgeInsets.symmetric(
       horizontal: 1 * PdfPageFormat.cm,
@@ -89,11 +67,6 @@ Future<pw.PageTheme> _myPageTheme(PdfPageFormat format) async {
         angle: 20,
         child: pw.Opacity(
           opacity: 0.5,
-          /*child: pw.Image(
-            alignment: pw.Alignment.center,
-            logoImage,
-            fit: pw.BoxFit.cover,
-          ),*/
         ),
       ),
     ),
@@ -106,9 +79,6 @@ Future<void> saveAsFile(
   final PdfPageFormat pageFormat,
 ) async {
   final bytes = await build(pageFormat);
-
-  //getTempDirectory()
-  //getApplicationDocumentsDirectory()
 
   final appDocDir = await getApplicationDocumentsDirectory();
   final appDocPath = appDocDir.path;

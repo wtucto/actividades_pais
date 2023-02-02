@@ -36,7 +36,6 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
   void initState() {
     super.initState();
     getMaestra();
-    setState(() {});
   }
 
   Color getColorByStatus(int idEstadoMonitoreo) {
@@ -65,10 +64,11 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
       cbPEJEC = await mainController.getListComboItemByType(
           ComboItemModel.cbPEJEC, 0, 0);
     } catch (oErro) {}
+    setState(() {});
   }
 
   String getDescripcionCombo(String tipo, int id) {
-    String respuesta = "";
+    String respuesta = "NAN";
     if (tipo == "EM") {
       for (var item in cbEMONI) {
         if (int.parse(item.codigo1!) == id) {
@@ -134,7 +134,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
     try {
       List<TramaMonitoreoModel> aResp = await mainController.sendMonitoreo(a);
 
-      if (aResp.length > 0) {
+      if (aResp.isNotEmpty) {
         sMsg =
             'Error al enviar el Monitoreo, verifica que los datos sean correctos y vuelve a intentarlo más tarde, código de Monitoreo: ${aResp[0].idMonitoreo}';
       }
@@ -142,7 +142,6 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
       sMsg =
           '¡Ups! Algo salió mal, verifica tu conexión a internet y vuelve a intentarlo más tarde.';
     }
-    //throw Exception('¡Ups! Algo salió mal, vuelve a intentarlo mas tarde.');
     return sMsg;
   }
 
@@ -183,23 +182,21 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
           ),
           child: Column(
             children: [
-              Container(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Center(
-                        child: Text(
-                          widget.oMonitoreo[index].tambo!,
-                          style: const TextStyle(
-                            color: Color.fromARGB(255, 37, 71, 194),
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                          ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        widget.oMonitoreo[index].tambo!,
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 37, 71, 194),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               Row(
                 children: [
@@ -365,7 +362,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                           ),
                           borderRadius: BorderRadius.circular(12),
                           color: Color(
-                            int.parse("0xff${experienceLevelColor}"),
+                            int.parse("0xff$experienceLevelColor"),
                           ).withAlpha(20),
                         ),
                         child: const Center(
@@ -379,53 +376,19 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                 ],
               ),
               const SizedBox(height: 20),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        if (isEditDelete(
-                            widget.oMonitoreo[index].idEstadoMonitoreo!))
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    MonitoringDetailNewEditPage(
-                                        datoMonitor: widget.oMonitoreo[index],
-                                        statusM: 'UPDATE'),
-                              ));
-                            },
-                            child: AnimatedContainer(
-                              height: 35,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 3, horizontal: 15),
-                              duration: const Duration(milliseconds: 300),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: const Color.fromARGB(
-                                          255, 179, 177, 177),
-                                      width: 1.0,
-                                      style: BorderStyle.solid),
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Color(int.parse(
-                                          "0xff${experienceLevelColor}"))
-                                      .withAlpha(20)),
-                              child: const Center(
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Color.fromARGB(255, 56, 54, 54),
-                                ),
-                              ),
-                            ),
-                          ),
-                        const SizedBox(width: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      if (isEditDelete(
+                          widget.oMonitoreo[index].idEstadoMonitoreo!))
                         GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => MonitoringDetailNewEditPage(
                                   datoMonitor: widget.oMonitoreo[index],
-                                  statusM: 'LECTURA'),
+                                  statusM: 'UPDATE'),
                             ));
                           },
                           child: AnimatedContainer(
@@ -440,103 +403,131 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                                     width: 1.0,
                                     style: BorderStyle.solid),
                                 borderRadius: BorderRadius.circular(12),
-                                color: Color(int.parse(
-                                        "0xff${experienceLevelColor}"))
+                                color: Color(
+                                        int.parse("0xff$experienceLevelColor"))
                                     .withAlpha(20)),
                             child: const Center(
                               child: Icon(
-                                Icons.visibility,
+                                Icons.edit,
                                 color: Color.fromARGB(255, 56, 54, 54),
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        if (isEditDelete(
-                            widget.oMonitoreo[index].idEstadoMonitoreo!))
-                          GestureDetector(
-                            onTap: () async {
-                              final alert = AlertQuestion(
-                                  title: "Información",
-                                  message:
-                                      "¿Está Seguro de Eliminar Monitoreo?",
-                                  onNegativePressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  onPostivePressed: () async {
-                                    Navigator.of(context).pop();
-                                    BusyIndicator.show(context);
-                                    bool res =
-                                        await mainController.deleteMonitor(
-                                            widget.oMonitoreo[index]);
-                                    BusyIndicator.hide(context);
-                                    if (res) {
-                                      showSnackbar(
-                                        success: true,
-                                        text: 'Monitor Eliminado Correctamente',
-                                      );
-                                      widget.oMonitoreo.removeAt(index);
-                                      setState(() {});
-                                    } else {
-                                      // ignore: use_build_context_synchronously
-                                      AnimatedSnackBar.rectangle(
-                                        'Error',
-                                        'No se pudo Enviar Monitore',
-                                        type: AnimatedSnackBarType.error,
-                                        brightness: Brightness.light,
-                                        mobileSnackBarPosition:
-                                            MobileSnackBarPosition.top,
-                                      ).show(context);
-                                    }
-                                  });
-
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return alert;
+                      const SizedBox(width: 10),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => MonitoringDetailNewEditPage(
+                                datoMonitor: widget.oMonitoreo[index],
+                                statusM: 'LECTURA'),
+                          ));
+                        },
+                        child: AnimatedContainer(
+                          height: 35,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 3, horizontal: 15),
+                          duration: const Duration(milliseconds: 300),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color:
+                                      const Color.fromARGB(255, 179, 177, 177),
+                                  width: 1.0,
+                                  style: BorderStyle.solid),
+                              borderRadius: BorderRadius.circular(12),
+                              color:
+                                  Color(int.parse("0xff$experienceLevelColor"))
+                                      .withAlpha(20)),
+                          child: const Center(
+                            child: Icon(
+                              Icons.visibility,
+                              color: Color.fromARGB(255, 56, 54, 54),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      if (isEditDelete(
+                          widget.oMonitoreo[index].idEstadoMonitoreo!))
+                        GestureDetector(
+                          onTap: () async {
+                            final alert = AlertQuestion(
+                                title: "Información",
+                                message: "¿Está Seguro de Eliminar Monitoreo?",
+                                onNegativePressed: () {
+                                  Navigator.of(context).pop();
                                 },
-                              );
-                            },
-                            child: AnimatedContainer(
-                              height: 35,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 3, horizontal: 15),
-                              duration: const Duration(milliseconds: 300),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: const Color.fromARGB(
-                                        255, 179, 177, 177),
-                                    width: 1.0,
-                                    style: BorderStyle.solid),
-                                borderRadius: BorderRadius.circular(12),
-                                color: Color(
-                                  int.parse("0xff${experienceLevelColor}"),
-                                ).withAlpha(20),
+                                onPostivePressed: () async {
+                                  Navigator.of(context).pop();
+                                  BusyIndicator.show(context);
+                                  bool res = await mainController
+                                      .deleteMonitor(widget.oMonitoreo[index]);
+                                  BusyIndicator.hide(context);
+                                  if (res) {
+                                    showSnackbar(
+                                      success: true,
+                                      text: 'Monitor Eliminado Correctamente',
+                                    );
+                                    widget.oMonitoreo.removeAt(index);
+                                    setState(() {});
+                                  } else {
+                                    AnimatedSnackBar.rectangle(
+                                      'Error',
+                                      'No se pudo Enviar Monitore',
+                                      type: AnimatedSnackBarType.error,
+                                      brightness: Brightness.light,
+                                      mobileSnackBarPosition:
+                                          MobileSnackBarPosition.top,
+                                    ).show(context);
+                                  }
+                                });
+
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return alert;
+                              },
+                            );
+                          },
+                          child: AnimatedContainer(
+                            height: 35,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 3, horizontal: 15),
+                            duration: const Duration(milliseconds: 300),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: const Color.fromARGB(255, 179, 177, 177),
+                                width: 1.0,
+                                style: BorderStyle.solid,
                               ),
-                              child: const Center(
-                                child: Icon(
-                                  Icons.delete,
-                                  color: Color.fromARGB(255, 241, 85, 64),
-                                ),
+                              borderRadius: BorderRadius.circular(12),
+                              color: Color(
+                                int.parse("0xff$experienceLevelColor"),
+                              ).withAlpha(20),
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.delete,
+                                color: Color.fromARGB(255, 241, 85, 64),
                               ),
                             ),
                           ),
-                        const SizedBox(width: 10),
-                      ],
-                    ),
-                    Expanded(
-                      child: Text(
-                        textAlign: TextAlign.right,
-                        widget.oMonitoreo[index].idMonitoreo!,
-                        style: const TextStyle(
-                          color: Color.fromARGB(255, 13, 0, 255),
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
                         ),
+                      const SizedBox(width: 10),
+                    ],
+                  ),
+                  Expanded(
+                    child: Text(
+                      textAlign: TextAlign.right,
+                      widget.oMonitoreo[index].idMonitoreo!,
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 13, 0, 255),
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               )
             ],
           ),

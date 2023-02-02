@@ -126,39 +126,9 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
                   onTap: () => Navigator.of(context)
                       .push(MaterialPageRoute(builder: (_) => SettingsPage())),
                 ),
-                /*const Divider(),
-                ListTile(
-                  title: Text('PrivacyPolicy'.tr),
-                  subtitle: Text('Legal'.tr),
-                  leading: Image.asset('assets/icons/support.png'),
-                  trailing: const Icon(
-                    Icons.chevron_right,
-                    color: blue,
-                  ),
-                  onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => LegalAboutPage())),
-                ),*/
-                /*const Divider(),
-                ListTile(
-                  title: Text('FrequentlyAskedQuestions'.tr),
-                  subtitle: Text('FrequentlyAskedQuestionsResp'.tr),
-                  leading: Image.asset(
-                    'assets/icons/settings_icon.png',
-                    fit: BoxFit.scaleDown,
-                    width: 30,
-                    height: 30,
-                  ),
-                  trailing: const Icon(
-                    Icons.chevron_right,
-                    color: blue,
-                  ),
-                  onTap: () => Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => FaqPage())),
-                ),*/
                 const Divider(),
                 ListTile(
                   title: const Text('Manual de Usuario'),
-                  // subtitle: Text('UserConfig'.tr),
                   leading: const Icon(
                     Icons.picture_as_pdf_outlined,
                     color: Color.fromARGB(221, 104, 101, 101),
@@ -170,7 +140,6 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
                   onTap: () async {
                     isConnec = await CheckConnection.isOnlineWifiMobile();
                     if (isConnec) {
-                      // ignore: use_build_context_synchronously
                       Navigator.push(
                         context,
                         MaterialPageRoute<dynamic>(
@@ -180,7 +149,6 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
                         ),
                       );
                     } else {
-                      // ignore: use_build_context_synchronously
                       Navigator.push(
                         context,
                         MaterialPageRoute<dynamic>(

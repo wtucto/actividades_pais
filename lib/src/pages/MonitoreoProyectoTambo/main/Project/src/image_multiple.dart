@@ -40,8 +40,6 @@ class _MyImageMultipleState extends State<MyImageMultiple> {
           return GridView.count(
             shrinkWrap: true,
             crossAxisCount: 3,
-            // mainAxisSpacing: 2.0,
-            // crossAxisSpacing: 2.0,
             children: List.generate(
               selectedItemCount.value,
               (index) {
@@ -49,16 +47,6 @@ class _MyImageMultipleState extends State<MyImageMultiple> {
                   clipBehavior: Clip.antiAlias,
                   child: Stack(
                     children: [
-                      // FadeInImage(
-                      //   placeholder:
-                      //       const AssetImage('assets/loading_icon.gif'),
-                      //   fit: BoxFit.cover,
-                      //   width: double.infinity,
-                      //   height: double.infinity,
-                      //   image: FileImage(
-                      //     File(itemsImagePath[index]),
-                      //   ),
-                      // ),
                       Image.file(
                         File(itemsImagePath[index]),
                         width: double.infinity,

@@ -25,7 +25,6 @@ class PdfPreviewPage2 extends StatelessWidget {
       ),
       body: PdfPreview(
         maxPageWidth: 708,
-        //actions: actions,
         onPrinted: showPrintedToast,
         onShared: showSharedToast,
         build: (context) => (dataPdf),

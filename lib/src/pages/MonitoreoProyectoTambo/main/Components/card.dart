@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 String _formattedPokeIndex(int index) {
   return "";
-  //"#${((index + 1) / 100).toStringAsFixed(2).replaceAll(".", "")}";
 }
 
 String capitalizeFirstChar(String text) {

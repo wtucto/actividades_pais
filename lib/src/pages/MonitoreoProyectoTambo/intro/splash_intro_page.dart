@@ -60,7 +60,6 @@ class _SplashPageState extends State<SplashPage>
     cantidad = abc.length;
 
     if (cantidad == 0) {
-      // providerServicios.requestSqlData();
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) => LoginPage(),
@@ -68,9 +67,6 @@ class _SplashPageState extends State<SplashPage>
       );
       //PantallaInicio
     } else {
-      /*  Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) => Home_Asis()));*/
-
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

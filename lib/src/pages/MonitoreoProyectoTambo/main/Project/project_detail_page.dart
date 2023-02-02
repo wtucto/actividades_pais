@@ -78,8 +78,6 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
     _codSupervisor = TextEditingController(text: _oProject.codSupervisor);
     _codCrp = TextEditingController(text: _oProject.codCrp);
 
-    //_POBLADO = TextEditingController(text: _oProject.numSnip);
-
     super.initState();
   }
 

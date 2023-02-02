@@ -79,7 +79,7 @@ class _MonitorListState extends State<MonitorList> {
     try {
       List<TramaMonitoreoModel> aResp = await mainController.sendMonitoreo(a);
 
-      if (aResp.length > 0) {
+      if (aResp.isNotEmpty) {
         sMsg =
             'Error al enviar el Monitoreo, verifica que los datos sean correctos y vuelve a intentarlo más tarde, código de Monitoreo: ${aResp[0].idMonitoreo}';
       }
@@ -87,7 +87,6 @@ class _MonitorListState extends State<MonitorList> {
       sMsg =
           '¡Ups! Algo salió mal, verifica tu conexión a internet y vuelve a intentarlo más tarde.';
     }
-    //throw Exception('¡Ups! Algo salió mal, vuelve a intentarlo mas tarde.');
     return sMsg;
   }
 
@@ -137,16 +136,10 @@ class _MonitorListState extends State<MonitorList> {
           );
         }
       }
-
-      // Incrementar
-      // if (response.length != 0) {
-      //   aMonResp = aMonResp + response;
-      //   offset = offset + limit;
-      // }
       aMonResp = response;
     } catch (oError) {
       mostrarAlerta(
-          context!, "Warning!", "No se encontraron registros para mostrar.");
+          context, "Warning!", "No se encontraron registros para mostrar.");
     }
     if (mounted) {
       setState(() {
@@ -159,9 +152,7 @@ class _MonitorListState extends State<MonitorList> {
   void handleNext() {
     scrollController.addListener(() async {
       if (scrollController.position.maxScrollExtent ==
-          scrollController.position.pixels) {
-        //loadData(context);
-      }
+          scrollController.position.pixels) {}
     });
   }
 
@@ -215,45 +206,48 @@ class _MonitorListState extends State<MonitorList> {
                 showSearch(
                   context: context,
                   delegate: MonitorSearchDelegate(
-                      searchMonitor: aMonResp, statusM: widget.estadoM),
+                    searchMonitor: aMonResp,
+                    statusM: widget.estadoM,
+                  ),
                 );
               },
             ),
           ],
         ),
-        body: Container(
-          child: RefreshIndicator(
-            onRefresh: () async {
-              await Future.delayed(Duration(seconds: 2));
-              setState(() {
-                aMonResp = [];
-                offset = 0;
-                loadData(context);
-              });
-            },
-            child: Container(
-              child: aMonResp.isNotEmpty
-                  ? ListViewMonitores(
-                      context: context,
-                      oMonitoreo: aMonResp,
-                      scrollController: scrollController)
-                  : Container(
-                      padding: const EdgeInsets.all(20),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 245, 246, 248)),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
-                            "No existe Monitores",
-                            style: TextStyle(color: Colors.black, fontSize: 16),
-                            textAlign: TextAlign.center,
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await Future.delayed(const Duration(seconds: 2));
+            setState(() {
+              aMonResp = [];
+              offset = 0;
+              loadData(context);
+            });
+          },
+          child: Container(
+            child: aMonResp.isNotEmpty
+                ? ListViewMonitores(
+                    context: context,
+                    oMonitoreo: aMonResp,
+                    scrollController: scrollController)
+                : Container(
+                    padding: const EdgeInsets.all(20),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 245, 246, 248)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text(
+                          "No existe Monitores",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
                           ),
-                        ],
-                      ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-            ),
+                  ),
           ),
         ),
         floatingActionButton: _getFAB(),

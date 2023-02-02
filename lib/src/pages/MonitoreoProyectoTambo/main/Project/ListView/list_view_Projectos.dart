@@ -107,23 +107,20 @@ class ListViewProjet extends StatelessWidget {
             children: [
               Expanded(
                 child: Row(children: [
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: CircularPercentIndicator(
-                        radius: 30.0,
-                        lineWidth: 5.0,
-                        percent:
-                            getAvancefisico(oProyecto),
-                        center: Text(
-                          getAvancefisicoText(oProyecto),
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: CircularPercentIndicator(
+                      radius: 30.0,
+                      lineWidth: 5.0,
+                      percent: getAvancefisico(oProyecto),
+                      center: Text(
+                        getAvancefisicoText(oProyecto),
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
                         ),
-                        progressColor: getColorAvancefisico(oProyecto),
                       ),
+                      progressColor: getColorAvancefisico(oProyecto),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -177,117 +174,113 @@ class ListViewProjet extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return MonitoringDetailNewEditPage(
-                                  datoProyecto: oProyecto, statusM: "CREATE");
-                            },
-                          ),
-                        );
-                      },
-                      child: AnimatedContainer(
-                        height: 35,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 3, horizontal: 15),
-                        duration: const Duration(milliseconds: 300),
-                        decoration: BoxDecoration(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return MonitoringDetailNewEditPage(
+                                datoProyecto: oProyecto, statusM: "CREATE");
+                          },
+                        ),
+                      );
+                    },
+                    child: AnimatedContainer(
+                      height: 35,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 3, horizontal: 15),
+                      duration: const Duration(milliseconds: 300),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 179, 177, 177),
+                            width: 1.0,
+                            style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(12),
+                        color: Color(int.parse('0xff${experienceLevelColor}'))
+                            .withAlpha(20),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.add_to_queue,
+                          color: Color.fromARGB(255, 56, 54, 54),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            ProjectDetailPage(datoProyecto: oProyecto),
+                      ));
+                    },
+                    child: AnimatedContainer(
+                      height: 35,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 3, horizontal: 15),
+                      duration: const Duration(milliseconds: 300),
+                      decoration: BoxDecoration(
                           border: Border.all(
                               color: const Color.fromARGB(255, 179, 177, 177),
                               width: 1.0,
                               style: BorderStyle.solid),
                           borderRadius: BorderRadius.circular(12),
                           color: Color(int.parse('0xff${experienceLevelColor}'))
-                              .withAlpha(20),
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.add_to_queue,
-                            color: Color.fromARGB(255, 56, 54, 54),
-                          ),
+                              .withAlpha(20)),
+                      child: const Center(
+                        child: Icon(
+                          Icons.visibility,
+                          color: Color.fromARGB(255, 56, 54, 54),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              ProjectDetailPage(datoProyecto: oProyecto),
-                        ));
-                      },
-                      child: AnimatedContainer(
-                        height: 35,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 3, horizontal: 15),
-                        duration: const Duration(milliseconds: 300),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: const Color.fromARGB(255, 179, 177, 177),
-                                width: 1.0,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(12),
-                            color:
-                                Color(int.parse('0xff${experienceLevelColor}'))
-                                    .withAlpha(20)),
-                        child: const Center(
-                          child: Icon(
-                            Icons.visibility,
-                            color: Color.fromARGB(255, 56, 54, 54),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () async {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MonitorList(
-                              datoProyecto: oProyecto, estadoM: 'PE'),
-                        ));
-                      },
-                      child: AnimatedContainer(
-                        height: 35,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 3, horizontal: 15),
-                        duration: const Duration(milliseconds: 300),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: const Color.fromARGB(255, 179, 177, 177),
-                                width: 1.0,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(12),
-                            color:
-                                Color(int.parse('0xff${experienceLevelColor}'))
-                                    .withAlpha(20)),
-                        child: const Center(
-                          child: Icon(
-                            Icons.cloud_upload_rounded,
-                            color: Color.fromARGB(255, 38, 173, 108),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Text(
-                  oProyecto.cui!,
-                  style: const TextStyle(
-                    color: Color.fromARGB(255, 13, 0, 255),
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
                   ),
-                )
-              ],
-            ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            MonitorList(datoProyecto: oProyecto, estadoM: 'PE'),
+                      ));
+                    },
+                    child: AnimatedContainer(
+                      height: 35,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 3, horizontal: 15),
+                      duration: const Duration(milliseconds: 300),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: const Color.fromARGB(255, 179, 177, 177),
+                              width: 1.0,
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(12),
+                          color: Color(int.parse('0xff${experienceLevelColor}'))
+                              .withAlpha(20)),
+                      child: const Center(
+                        child: Icon(
+                          Icons.cloud_upload_rounded,
+                          color: Color.fromARGB(255, 38, 173, 108),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                oProyecto.cui!,
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 13, 0, 255),
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
           )
         ],
       ),

@@ -446,7 +446,6 @@ class _MonitoringDetailNewEditPageState
        */
       body: Form(
         key: _formKey,
-        // autovalidateMode: AutovalidateMode.onUserInteraction,
         child: ListView(
           padding: const EdgeInsets.all(32.0),
           children: [
@@ -511,23 +510,25 @@ class _MonitoringDetailNewEditPageState
                           child: Row(
                             children: [
                               Expanded(
-                                  child: map.descripcion
-                                          .toString()
-                                          .toUpperCase()
-                                          .contains("SELECCIONE UNA OPCIÓN")
-                                      ? Text(
-                                          map.descripcion.toString(),
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color:
-                                                  Theme.of(context).hintColor),
-                                        )
-                                      : Text(
-                                          map.descripcion.toString(),
-                                          style: const TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w400),
-                                        )),
+                                child: map.descripcion
+                                        .toString()
+                                        .toUpperCase()
+                                        .contains("SELECCIONE UNA OPCIÓN")
+                                    ? Text(
+                                        map.descripcion.toString(),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Theme.of(context).hintColor,
+                                        ),
+                                      )
+                                    : Text(
+                                        map.descripcion.toString(),
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                              ),
                             ],
                           ),
                         );
@@ -554,10 +555,11 @@ class _MonitoringDetailNewEditPageState
               readOnly: true,
               onTap: () async {
                 DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2101));
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2101),
+                );
 
                 if (pickedDate != null) {
                   setState(() {
@@ -628,22 +630,25 @@ class _MonitoringDetailNewEditPageState
                         child: Row(
                           children: [
                             Expanded(
-                                child: map.descripcion
-                                        .toString()
-                                        .toUpperCase()
-                                        .contains("SELECCIONE UNA OPCIÓN")
-                                    ? Text(
-                                        map.descripcion.toString(),
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Theme.of(context).hintColor),
-                                      )
-                                    : Text(
-                                        map.descripcion.toString(),
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400),
-                                      )),
+                              child: map.descripcion
+                                      .toString()
+                                      .toUpperCase()
+                                      .contains("SELECCIONE UNA OPCIÓN")
+                                  ? Text(
+                                      map.descripcion.toString(),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Theme.of(context).hintColor,
+                                      ),
+                                    )
+                                  : Text(
+                                      map.descripcion.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                            ),
                           ],
                         ),
                       );
@@ -699,14 +704,16 @@ class _MonitoringDetailNewEditPageState
                                     ? Text(
                                         map.descripcion.toString(),
                                         style: TextStyle(
-                                            fontSize: 14,
-                                            color: Theme.of(context).hintColor),
+                                          fontSize: 14,
+                                          color: Theme.of(context).hintColor,
+                                        ),
                                       )
                                     : Text(
                                         map.descripcion.toString(),
                                         style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400),
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
                               ),
                             ],
@@ -810,7 +817,6 @@ class _MonitoringDetailNewEditPageState
               textInputAction: TextInputAction.newline,
               controller: _obsMonitor,
               enabled: _enabledF,
-              // validator: (v) => v!.isEmpty ? 'Required'.tr : null,
             ),
             /**
            * PROBLEMA IDENTIFICADO EN LA OBRA (Obligatorio)
@@ -847,22 +853,25 @@ class _MonitoringDetailNewEditPageState
                         child: Row(
                           children: [
                             Expanded(
-                                child: map.descripcion
-                                        .toString()
-                                        .toUpperCase()
-                                        .contains("SELECCIONE UNA OPCIÓN")
-                                    ? Text(
-                                        map.descripcion.toString(),
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Theme.of(context).hintColor),
-                                      )
-                                    : Text(
-                                        map.descripcion.toString(),
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400),
-                                      )),
+                              child: map.descripcion
+                                      .toString()
+                                      .toUpperCase()
+                                      .contains("SELECCIONE UNA OPCIÓN")
+                                  ? Text(
+                                      map.descripcion.toString(),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Theme.of(context).hintColor,
+                                      ),
+                                    )
+                                  : Text(
+                                      map.descripcion.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                            ),
                           ],
                         ),
                       );
@@ -950,14 +959,16 @@ class _MonitoringDetailNewEditPageState
                                     ? Text(
                                         map.descripcion.toString(),
                                         style: TextStyle(
-                                            fontSize: 14,
-                                            color: Theme.of(context).hintColor),
+                                          fontSize: 14,
+                                          color: Theme.of(context).hintColor,
+                                        ),
                                       )
                                     : Text(
                                         map.descripcion.toString(),
                                         style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400),
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       )),
                           ],
                         ),
@@ -998,22 +1009,25 @@ class _MonitoringDetailNewEditPageState
                         child: Row(
                           children: [
                             Expanded(
-                                child: map.descripcion
-                                        .toString()
-                                        .toUpperCase()
-                                        .contains("SELECCIONE UNA OPCIÓN")
-                                    ? Text(
-                                        map.descripcion.toString(),
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Theme.of(context).hintColor),
-                                      )
-                                    : Text(
-                                        map.descripcion.toString(),
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400),
-                                      )),
+                              child: map.descripcion
+                                      .toString()
+                                      .toUpperCase()
+                                      .contains("SELECCIONE UNA OPCIÓN")
+                                  ? Text(
+                                      map.descripcion.toString(),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Theme.of(context).hintColor,
+                                      ),
+                                    )
+                                  : Text(
+                                      map.descripcion.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                            ),
                           ],
                         ),
                       );
@@ -1086,22 +1100,25 @@ class _MonitoringDetailNewEditPageState
                         child: Row(
                           children: [
                             Expanded(
-                                child: map.descripcion
-                                        .toString()
-                                        .toUpperCase()
-                                        .contains("SELECCIONE UNA OPCIÓN")
-                                    ? Text(
-                                        map.descripcion.toString(),
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Theme.of(context).hintColor),
-                                      )
-                                    : Text(
-                                        map.descripcion.toString(),
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400),
-                                      )),
+                              child: map.descripcion
+                                      .toString()
+                                      .toUpperCase()
+                                      .contains("SELECCIONE UNA OPCIÓN")
+                                  ? Text(
+                                      map.descripcion.toString(),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Theme.of(context).hintColor,
+                                      ),
+                                    )
+                                  : Text(
+                                      map.descripcion.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                            ),
                           ],
                         ),
                       );
@@ -1260,7 +1277,6 @@ class _MonitoringDetailNewEditPageState
                                           100),
                                       fechaMonitoreo: _dateMonitor.text,
                                       idMonitoreo: _idMonitor.text,
-                                      //idUsuario: oUser.codigo,
                                       imgActividad: imgPE,
                                       imgProblema: imgPI,
                                       imgRiesgo: imgRI,
@@ -1269,27 +1285,19 @@ class _MonitoringDetailNewEditPageState
                                           int.parse(_statusAdvance!)),
                                       idEstadoMonitoreo: getValueSelected(
                                           int.parse(_statusMonitor!)),
-
                                       idAvanceFisicoPartida: getValueSelected(
                                           int.parse(_valuePartidaEje!)),
-
                                       idAlternativaSolucion: getValueSelected(
                                           int.parse(_valueAlternSolucion!)),
-
                                       idProblemaIdentificado: getValueSelected(
                                           int.parse(_valueProblemaIO!)),
                                       idRiesgoIdentificado: getValueSelected(
                                           int.parse(_valueRiesgo!)),
-
                                       nivelRiesgo: _valueNivelRiesgo!
                                               .toUpperCase()
                                               .contains("SELECCIONE UNA OPCIÓN")
                                           ? ""
                                           : _valueNivelRiesgo!,
-                                      // nivelRiesgo: getValueSelected(
-                                      //         int.parse(_valueNivelRiesgo!))
-                                      //     .toString(), //xx
-
                                       rol: oUser.rol,
                                       usuario: oUser.codigo,
                                     ));
@@ -1446,7 +1454,6 @@ class _MonitoringDetailNewEditPageState
                                                 100),
                                             fechaMonitoreo: _dateMonitor.text,
                                             idMonitoreo: _idMonitor.text,
-                                            //idUsuario: oUser.codigo,
                                             imgActividad: imgPE,
                                             imgProblema: imgPI,
                                             imgRiesgo: imgRI,
@@ -1455,26 +1462,18 @@ class _MonitoringDetailNewEditPageState
                                                 int.parse(_statusAdvance!)),
                                             idEstadoMonitoreo: getValueSelected(
                                                 int.parse(_statusMonitor!)),
-
                                             idAvanceFisicoPartida:
                                                 getValueSelected(int.parse(
                                                     _valuePartidaEje!)),
-
                                             idAlternativaSolucion:
                                                 getValueSelected(int.parse(
                                                     _valueAlternSolucion!)),
-
                                             idProblemaIdentificado:
                                                 getValueSelected(int.parse(
                                                     _valueProblemaIO!)),
                                             idRiesgoIdentificado:
                                                 getValueSelected(
                                                     int.parse(_valueRiesgo!)),
-
-                                            // nivelRiesgo: getValueSelected(
-                                            //         int.parse(
-                                            //             _valueNivelRiesgo!))
-                                            //     .toString(),
                                             nivelRiesgo: _valueNivelRiesgo!
                                                     .toUpperCase()
                                                     .contains(
@@ -1593,9 +1592,10 @@ class _MonitoringDetailNewEditPageState
                   shrinkWrap: true,
                   children: [
                     MyImageMultiple(
-                        controller: controller,
-                        nameField: fieldNameImage,
-                        enabled: _enabledF),
+                      controller: controller,
+                      nameField: fieldNameImage,
+                      enabled: _enabledF,
+                    ),
                   ],
                 ),
               ),
@@ -1624,8 +1624,6 @@ class _MonitoringDetailNewEditPageState
               child: Text('Yes'.tr),
               onPressed: () {
                 if (sAction == 'SAVE') {}
-                /*Navigator.popUntil(
-                    context, ModalRoute.withName(Navigator.defaultRouteName));*/
               },
             ),
             TextButton(

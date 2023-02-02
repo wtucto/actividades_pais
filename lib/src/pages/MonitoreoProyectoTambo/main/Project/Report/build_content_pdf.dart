@@ -12,35 +12,6 @@ Future<Uint8List> makePdf(ReportDto oDataPdf) async {
   final imageLogo = MemoryImage(
     (await rootBundle.load('assets/paislogo.png')).buffer.asUint8List(),
   );
-
-  /*pdf.addPage(
-    Page(
-      pageFormat: PdfPageFormat.a4,
-      build: (context) {
-        return Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    Text("Reporte"),
-                    Text("PAIS"),
-                  ],
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                ),
-                SizedBox(
-                  height: 150,
-                  width: 150,
-                  child: Image(imageLogo),
-                )
-              ],
-            )
-          ],
-        );
-      },
-    ),
-  ); */
   List<Widget> widgets = [];
 
   final font = await PdfGoogleFonts.cairoRegular();
@@ -101,7 +72,6 @@ Future<Uint8List> makePdf(ReportDto oDataPdf) async {
             padding: const EdgeInsets.all(0.5),
             child: Text(
               "${index + 1}",
-              // textDirection: TextDirection.rtl,
               style: TextStyle(font: font, fontSize: 7.5),
               textAlign: TextAlign.center,
             ),
@@ -174,7 +144,6 @@ Future<Uint8List> makePdf(ReportDto oDataPdf) async {
           border: TableBorder.all(color: PdfColor.fromHex("#000000")),
           children: rows[index]!,
         ),
-        // Container(height: 50),
       ],
     );
   }));
