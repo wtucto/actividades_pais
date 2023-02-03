@@ -176,6 +176,13 @@ class DatabasePr {
     await _db!.execute(
       "DELETE FROM DatConfigInicio",
     );
+    await eliminarProvincias();
+    var a = await _db!.insert("login", loginClass.toMap());
+    return a;
+  }
+
+  Future eliminarProvincias()async{
+
     await _db!.execute(
       "DELETE FROM centros_poblados",
     );
@@ -186,11 +193,7 @@ class DatabasePr {
       "DELETE FROM provincias",
     );
 
-
-    var a = await _db!.insert("login", loginClass.toMap());
-    return a;
   }
-
   Future<List<LoginClass>> loginUser() async {
     initDB();
     final res = await _db!.rawQuery(

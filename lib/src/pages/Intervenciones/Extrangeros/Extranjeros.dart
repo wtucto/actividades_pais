@@ -95,7 +95,7 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.blue[600],
-        title: Text("Extranjeros"),
+        title: Text("AGREGAR EXTRANGEROS - ${widget.idProgramacion}",style: TextStyle(fontSize: 15),),
         leading: Util().iconbuton(() => Navigator.of(context).pop()),
         actions: [],
       ),

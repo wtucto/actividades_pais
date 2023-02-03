@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'dart:isolate';
 
 import 'package:actividades_pais/src/datamodels/Provider/ProviderServicios.dart';
+import 'package:actividades_pais/src/datamodels/database/DatabaseProvincia.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ActividadesTambo.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ArchivoTramaIntervencion.dart';
@@ -239,6 +240,7 @@ class ProviderDatos {
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listarTramaIntervencion/$snip'),
     );
+
     print(Uri.parse(AppConfig.urlBackndServicioSeguro +
         '/api-pnpais/app/listarTramaIntervencion/$snip'));
     if (response.statusCode == 200) {
@@ -314,39 +316,62 @@ class ProviderDatos {
   }
 
   Future<Funcionarios?> getUsuarioDni(dni) async {
+
     // await TraerToken().mostrarDatos();
     var cnt = await _checkInternetConnection();
+    print(cnt);
     if (cnt == false) {
-      return null;
-    }
+       var buscarFuncionarios =  await ProviderServicios().getBuscarFuncionarios(dni);
 
-    http.Response responseReniec = await http.get(
-      Uri.parse(
-          AppConfig.backendsismonitor + '/programaciongit/validar-dni/$dni'),
-    );
-    if (responseReniec.statusCode == 200) {
-      final jsonResponse = json.decode(responseReniec.body);
-      final listadostraba = new Funcionarios.fromJsonReniec(jsonResponse);
-      return listadostraba;
-    } else {
-      http.Response response = await http.get(
-        Uri.parse(AppConfig.urlBackndServicioSeguro +
-            '/api-pnpais/app/validarfuncionario/$dni'),
-      );
-      if (response.statusCode == 200) {
+      if(buscarFuncionarios!=null){
+        return buscarFuncionarios;
+       } else {
+        return null;
+
+      }
+/*      if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
 
         if (jsonResponse["total"] == 0) {
           return null;
         } else {
           final listadostraba =
-              new Funcionarios.fromJson(jsonResponse["response"][0]);
+          new Funcionarios.fromJson(jsonResponse["response"][0]);
           return listadostraba;
         }
       } else if (response.statusCode == 400) {
-        return null;
+      }*/
+    } else {
+      http.Response responseReniec = await http.get(
+        Uri.parse(
+            AppConfig.backendsismonitor + '/programaciongit/validar-dni/$dni'),
+      );
+      if (responseReniec.statusCode == 200) {
+        final jsonResponse = json.decode(responseReniec.body);
+        final listadostraba = new Funcionarios.fromJsonReniec(jsonResponse);
+        return listadostraba;
+      } else {
+        http.Response response = await http.get(
+          Uri.parse(AppConfig.urlBackndServicioSeguro +
+              '/api-pnpais/app/validarfuncionario/$dni'),
+        );
+        if (response.statusCode == 200) {
+          final jsonResponse = json.decode(response.body);
+
+          if (jsonResponse["total"] == 0) {
+            return null;
+          } else {
+            final listadostraba =
+            new Funcionarios.fromJson(jsonResponse["response"][0]);
+            return listadostraba;
+          }
+        } else if (response.statusCode == 400) {
+          return null;
+        }
       }
     }
+
+
     return null;
   }
 
@@ -592,22 +617,31 @@ class ProviderDatos {
     print(file.path);
     print("creado");
   }
-
+/*
   Future<String> get _localPath async {
+
+
+    return ;
+  }
+*/
+/*  Future<File> get _localFile async {
     final directory = await getApplicationDocumentsDirectory();
 
-    return directory.path;
-  }
-
-  Future<File> get _localFile async {
-    final path = await _localPath;
+    final path = await directory.path;
     print('path ${path}');
     return File('$path/myJSONFile.json');
-  }
+  }*/
 
-  Future<int> deleteFile() async {
+  Future<int> deleteFile(nane) async {
+
+    final directory = await getApplicationDocumentsDirectory();
+
+    final path = await directory.path;
+    print('path ${path}');
+//    return File('$path/myJSONFile.json');
+
     try {
-      final file = await _localFile;
+      final file = await File('$path/$nane');
 
       await file.delete();
     } catch (e) {
@@ -638,7 +672,7 @@ class ProviderDatos {
 
     if (fileExists) {
       print("File exists");
-      await deleteFile();
+      await deleteFile(fileName);
       print("existe");
       await Future.delayed(Duration(seconds: 10));
       await createFile(json.decode(response.body), dir, fileName);
@@ -927,6 +961,8 @@ class ProviderDatos {
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listaProvinciaporSnp/${snip}'),
     );
+    await DatabaseProvincia.db.initDB();
+    await DatabaseProvincia.db.eliminarProvincias();
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listadostraba =
@@ -935,7 +971,7 @@ class ProviderDatos {
         var resp = Provincia(
             provinciaUbigeo: listadostraba.items[i].provinciaUbigeo,
             provinciaDescripcion: listadostraba.items[i].provinciaDescripcion);
-        await DatabasePr.db.insertProvincia(resp);
+        await DatabaseProvincia.db.insertProvincia(resp);
         await guardarJsDistrito(listadostraba.items[i].provinciaUbigeo!);
         await guardarCentroPoblado(listadostraba.items[i].provinciaUbigeo);
       }
@@ -957,7 +993,7 @@ class ProviderDatos {
         var resp = Distrito(
             distritoDescripcion: listadostraba.items[i].distritoDescripcion,
             distritoUbigeo: listadostraba.items[i].distritoUbigeo);
-        await DatabasePr.db.insertarDistritos(resp);
+        await DatabaseProvincia.db.insertarDistritos(resp);
       }
     } else if (response.statusCode == 400) {}
     return List.empty();
@@ -984,7 +1020,7 @@ class ProviderDatos {
             centroPobladoDescripcion:
                 listadostraba.items[i].centroPobladoDescripcion,
             centroPobladoUbigeo: listadostraba.items[i].centroPobladoUbigeo);
-        await DatabasePr.db.insertCcpp(resp);
+        await DatabaseProvincia.db.insertCcpp(resp);
 
 /*        print(" ${resultado.length}");
         print(" ${resultado[i].centroPobladoDescripcion}");
@@ -1001,4 +1037,36 @@ class ProviderDatos {
 
     return List.empty();
   }
+
+
+  Future
+  getInsertFuncionariosIntervencionesMovil() async {
+    late File jsonFile;
+    late Directory dir;
+    String fileName = "jsonFuncionarios.json";
+    bool fileExists = false;
+     getApplicationDocumentsDirectory().then((Directory directory) {
+      dir = directory;
+      jsonFile = new File(dir.path + "/" + fileName);
+      fileExists = jsonFile.existsSync();
+    });
+
+    http.Response response = await http.get(
+      Uri.parse(AppConfig.urlBackndServicioSeguro +
+          '/api-pnpais/app/ListaFuncionariosIntervenciones'),
+    );
+
+    if (fileExists) {
+      print("File exists");
+      await deleteFile(fileName);
+      print("existe");
+      await Future.delayed(Duration(seconds: 10));
+      await createFile(json.decode(response.body), dir, fileName);
+    } else {
+      print("File does not exist!");
+      await createFile(json.decode(response.body), dir, fileName);
+    }
+    return List.empty();
+  }
+
 }

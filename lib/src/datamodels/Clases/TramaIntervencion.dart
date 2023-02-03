@@ -74,7 +74,7 @@ class TramaIntervencion {
       });
 
   TramaIntervencion.fromJson(Map<String, dynamic> json) {
-    codigoIntervencion = json['codigoIntervencion'];
+    codigoIntervencion = json['codigoIntervencion'] ;
     codigoInterno = json['codigoInterno'];
     snip = json['snip'];
     idDepartamento = json['id_departamento'];

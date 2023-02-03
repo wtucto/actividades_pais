@@ -20,6 +20,25 @@ class ProviderLogin {
 
   bool _isOnline = false;
 
+  Future checkInternetConnection() async {
+    try {
+      await Future.delayed(Duration(seconds: 1));
+
+      final result = await InternetAddress.lookup('www.google.com');
+
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        _isOnline = true;
+        return _isOnline;
+      } else {
+        _isOnline = false;
+        return _isOnline;
+      }
+    } on SocketException catch (_) {
+      _isOnline = false;
+    }
+    return _isOnline;
+  }
+
   Future<bool> _checkInternetConnection() async {
     try {
       await Future.delayed(Duration(seconds: 1));
@@ -44,8 +63,7 @@ class ProviderLogin {
     if (chekInternet == true) {
       var headers = {'Content-Type': 'application/json'};
       http.Response response = await http.post(
-          Uri.parse(AppConfig.backendsismonitor+
-              '/seguridad/login'),
+          Uri.parse(AppConfig.backendsismonitor + '/seguridad/login'),
           headers: headers,
           body: json.encode({
             "username": username,
@@ -86,10 +104,9 @@ class ProviderLogin {
             await DatabasePr.db.insertConfigPersonal(r2);
 
             for (var i = 0; i < data.length; i++) {
+              _log.i("numero1");
 
-             _log.i("numero1");
-
-             var configIni = ConfigInicio(
+              var configIni = ConfigInicio(
                   idLugarPrestacion: 0,
                   idPuesto: data[i]["id_puesto"] ?? 0,
                   idTambo: data[i]["id_plataforma"] ?? 0,
@@ -106,34 +123,15 @@ class ProviderLogin {
                   campania: '',
                   codCampania: '',
                   modalidad: data[i]["modalidad"].toString() ?? '');
-               if (configIni.tipoPlataforma == 'PIAS') {
+
+              if (configIni.tipoPlataforma == 'PIAS') {
                 await ProviderServiciosRest().listarPuntoAtencionPias(
                     '0', data[i]["id_plataforma"] ?? 0, 0);
-                await DatabasePr.db.insertConfigInicio(configIni);
-                return a;
               }
-
-             if (configIni.tipoPlataforma == 'TAMBO') {
-               if (data[0]["unidad_territorial_descripcion"] != null) {
-                 _log.i("numero2");
-
-                 await ProviderDatos().getInsertParticipantesIntervencionesMovil(
-                     data[0]["unidad_territorial_descripcion"]);
-                 _log.i("numero3");
-                 await ProviderDatos().guardarProvincia(
-                     data[0]["plataforma_codigo_snip"]);
-
-                 _log.i("numero3");
-                 await Future.delayed(Duration(seconds: 10));
-
-               }
-               await DatabasePr.db.insertConfigInicio(configIni);
-               return a;
-             }
-
+              await DatabasePr.db.insertConfigInicio(configIni);
 
             }
-           // return a;
+            // return a;
 
           }
         }
@@ -145,10 +143,9 @@ class ProviderLogin {
           MainController mainController = MainController();
           UserModel oUser;
           oUser = await mainController.getUserLogin(username, '');
-          if(oUser.password == password) {
-
+          if (oUser.password == password) {
             var loginClass = LoginClass();
-       
+
             loginClass.username = username;
             loginClass.password = password;
             loginClass.name = oUser.nombres;

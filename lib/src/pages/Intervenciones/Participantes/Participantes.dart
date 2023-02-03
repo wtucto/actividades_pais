@@ -19,6 +19,8 @@ import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:intl/intl.dart';
 
+import '../../../datamodels/database/DatabaseProvincia.dart';
+
 enum BestTutorSite { javatpoint, w3schools, tutorialandexample }
 
 class Animal {
@@ -112,7 +114,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
       appBar: AppBar(
         backgroundColor: Colors.blue[600],
         leading: Util().iconbuton(() => Navigator.of(context).pop()),
-        title: Text("Agregar Participantes"),
+        title: Text("AGREGAR PARTICIPANTES  - ${widget.idProgramacion}", style: TextStyle(fontSize: 15),),
       ),
       body: Container(
         child: ListView(
@@ -496,12 +498,9 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                     ? Container(
                   width: 350,
                   child: FutureBuilder<List<Provincia>>(
-                    // provider.getProvincias(widget.snip)
-                    future:DatabasePr.db.getProvincias(),
+                    future:DatabaseProvincia.db.getProvincias(),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<Provincia>> snapshot) {
-                      Provincia depatalits;
-
                       if (!snapshot.hasData) {
                         return Center(
                           child: CircularProgressIndicator(),
@@ -532,7 +531,6 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                                 ubigeoProvincia = newVal.provinciaUbigeo!;
                                 setState(() {});
                               },
-                              //value: depatalits.,
                               hint: Text("$provinciaDescripcion"),
                             ));
                       }
@@ -544,7 +542,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                     ? Container(
                   width: 350,
                   child: FutureBuilder<List<Distrito>>(
-                    future:DatabasePr.db.getDistrito(ubigeoProvincia),
+                    future:DatabaseProvincia.db.getDistrito(ubigeoProvincia),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<Distrito>> snapshot) {
                       Distrito depatalits;
@@ -594,7 +592,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                     ? Container(
                   width: 350,
                   child: FutureBuilder<List<CentroPoblado>>(
-                    future: DatabasePr.db.getCentroPoblado(ubigeoDistrito),
+                    future: DatabaseProvincia.db.getCentroPoblado(ubigeoDistrito),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<CentroPoblado>> snapshot) {
                       CentroPoblado depatalits;

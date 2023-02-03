@@ -46,7 +46,7 @@ class _EvidenciasState extends State<Evidencias> {
           onPressed: () {
             selectCamera();
           },
-          backgroundColor: Colors.indigo,
+          backgroundColor: Colors.blue[600],
           child: Icon(Icons.camera_enhance_rounded)),
       body: Container(
       //  color: Colors.black,

@@ -69,7 +69,7 @@ class _ListaReportesState extends State<ListaReportesPias> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.blue[600],
         onPressed: () async {
           final DateTime? picked = await showDatePicker(
             context: context,
@@ -104,7 +104,7 @@ class _ListaReportesState extends State<ListaReportesPias> {
       ),
       appBar: AppBar(
         title: Text("Reportes Pias"),
-        backgroundColor: Colors.indigo,
+        backgroundColor:Colors.blue[600],
         actions: [
           InkWell(
             child: Icon(Icons.cloud_upload),

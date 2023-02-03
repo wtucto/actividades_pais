@@ -19,7 +19,7 @@ class Funcionarios {
   String nombres;
   String apellidoPaterno;
   String apellidoMaterno;
-  String dni;
+  String  dni;
   String ubigeoCcpp;
   int idActividad;
   int idEntidad;
@@ -75,30 +75,30 @@ class Funcionarios {
 
   factory Funcionarios.fromJson(Map<String, dynamic> json) {
     return Funcionarios(
-        estado: json['estado'],
-        id: json['id'],
-        flgReniec: json['flgReniec'],
-        tipo: json['tipo'],
-        dni: json['dni'],
-        pais: json['pais'],
-        datos: json['datos'],
-        entidad: json['entidad'],
-        nombreCargo: json['nombreCargo'],
-        telefono: json['telefono'],
-        apellidoPaterno: json['apellidoPaterno'],
-        nombres: json['nombres'],
-        apellidoMaterno: json['apellidoMaterno'],
-        idProgramacion: json['idProgramacion'],
-        cargo: json['cargo'],
-        idActividad: json['idActividad'],
-        idEntidad: json['idEntidad'],
-        idPais: json['idPais'],
-        idTipoDocumento: json['idTipoDocumento'],
-        tipoDocumento: json['tipoDocumento'],
-        idUsuario: json['idUsuario'],
-        numDocExtranjero: json['numDocExtranjero'],
-        txtIpmaq: json['txtIpmaq'],
-        ubigeoCcpp: json['ubigeoCcpp']);
+        estado: json['estado']??0,
+        id: json['id']??0,
+        flgReniec: json['flgReniec']??'',
+        tipo: json['tipo']??'',
+        dni: json['dni']??'',
+        pais: json['pais']??'',
+        datos: json['datos']??'',
+        entidad: json['entidad']??'',
+        nombreCargo: json['nombreCargo']??'',
+        telefono: json['telefono']??'',
+        apellidoPaterno: json['apellidoPaterno']??'',
+        nombres: json['nombres']??'',
+        apellidoMaterno: json['apellidoMaterno']??'',
+        idProgramacion: json['idProgramacion']??0,
+        cargo: json['cargo']??'',
+        idActividad: json['idActividad']??0,
+        idEntidad: json['idEntidad']??0,
+        idPais: json['idPais']??0,
+        idTipoDocumento: json['idTipoDocumento']??0,
+        tipoDocumento: json['tipoDocumento']??'',
+        idUsuario: json['idUsuario']??0,
+        numDocExtranjero: json['numDocExtranjero']??'',
+        txtIpmaq: json['txtIpmaq']??'',
+        ubigeoCcpp: json['ubigeoCcpp']??'');
   }
 
   factory Funcionarios.fromJsonReniec(Map<String, dynamic> json) {

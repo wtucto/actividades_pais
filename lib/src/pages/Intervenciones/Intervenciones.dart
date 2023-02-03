@@ -1,3 +1,4 @@
+import 'package:actividades_pais/src/datamodels/Provider/PorviderLogin.dart';
 import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/Clases/TramaIntervencion.dart';
@@ -38,19 +39,12 @@ class _IntervencionesState extends State<Intervenciones> {
 
   @override
   void initState() {
+    cargarDatosIntervenciones();
     super.initState();
     refreshList();
     CalcularParticipantes();
   }
 
-  CalcularParticipantes() async {
-    //var todoPartici = await DatabaseParticipantes.db.listarTodoParicipantes();
-    var todoPartici = await Servicios().loadParticipantes();
-    // servicios.loadParticipantes();
-    todoParticiw = todoPartici.length;
-    print("aqqqui" + todoPartici.length.toString());
-    setState(() {});
-  }
 
   Future<Null> refreshList() async {
     await Future.delayed(Duration(seconds: 0));
@@ -62,6 +56,42 @@ class _IntervencionesState extends State<Intervenciones> {
 
   @override
   Widget build(BuildContext context) {
+    if (todoParticiw == 0) {
+      setState(() {
+        _isloading = true;
+      });
+      return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.blue[600],
+            leading:
+                Util().iconbuton(() => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => HomePagePais()),
+                    )),
+            title: Text("Intervenciones"),
+          ),
+          body: esperadecara("Cargando informacion de usuarios de la region, un momento por favor.")
+          /*   Center(//    return esperadecara("Cargando informacion de usuarios de la region, un momento por favor.");
+            child: Container(
+              margin: EdgeInsets.all(20),
+              width: 500,
+              color: Colors.transparent,
+              child: Center(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children:   [
+
+                  CircularProgressIndicator(),
+                  SizedBox(height: 10),
+                  Text(
+                      "Cargando informacion de usuarios de la region, un momento por favor.",
+                      style: TextStyle(color: Colors.black))
+                ],
+              )),
+            ),
+          )*/
+       );
+    }
     return WillPopScope(
       onWillPop: systemBackButtonPressed,
       child: Scaffold(
@@ -72,152 +102,7 @@ class _IntervencionesState extends State<Intervenciones> {
                 MaterialPageRoute(builder: (context) => HomePagePais()),
               )),
           title: Text("Intervenciones"),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                loadPart
-                    ? Image.asset(
-                        "assets/loaderios.gif",
-                        height: 40.0,
-                        width: 50.0,
-                        //color: Colors.transparent,
-                      )
-                    : new Container(),
-                if (todoParticiw <= 0) ...[
-                  InkWell(
-                    child: Icon(
-                      Icons.vpn_lock,
-                      color: Colors.red,
-                    ),
-                    onTap: () async {
-                      //   CalcularParticipantes();
-
-                      var ar = [];
-                      showAlertDialogBarra(context, titulo: 'Participantes',
-                          presse: () async {
-                        loadPart = true;
-                        Navigator.pop(context);
-                        setState(() {
-                          cargardialog = true;
-                        });
-
-                        ar = await ProviderDatos()
-                            .getInsertParticipantesIntervencionesMovil(
-                                widget.unidadTerritorial);
-                        Navigator.pop(context);
-                        loadPart = false;
-                      }, pressno: () {
-                        Navigator.pop(context);
-                      },
-                          texto:
-                              '¿Estas seguro de eliminar los datos existentes para sincronizar nuevos participantes',
-                          a: cargardialog);
-                      setState(() {});
-                      if (ar.length > 1) {
-                        loadPart = false;
-                      }
-                    },
-                  )
-                ] else ...[
-                  InkWell(
-                    child: Icon(
-                      Icons.vpn_lock,
-                      color: Colors.green,
-                    ),
-                    onTap: () async {
-                      var ar = [];
-                      showAlertDialogBarra(context, titulo: 'Participantes',
-                          presse: () async {
-                        loadPart = true;
-                        Navigator.pop(context);
-                        setState(() {});
-                        // Navigator.pop(context);
-                        ar = await ProviderDatos()
-                            .getInsertParticipantesIntervencionesMovil(
-                                widget.unidadTerritorial);
-                        setState(() {
-                          cargardialog = false;
-                        });
-                        loadPart = false;
-                      }, pressno: () {
-                        Navigator.pop(context);
-                      },
-                          texto:
-                              '¿Estas seguro de eliminar los datos existentes para sincronizar nuevos participantes',
-                          a: cargardialog);
-                      setState(() {});
-                      if (ar.length > 1) {
-                        loadPart = false;
-                      }
-                      //setState(() {});
-                    },
-                  ),
-                ],
-                SizedBox(
-                  width: 4,
-                ),
-                InkWell(
-                  child: Icon(Icons.delete),
-                  onTap: () async {
-                    await DatabasePr.db.deleteIntervenciones();
-                    await DatabasePr.db.eliminarTodoEntidadFuncionario();
-                    await DatabasePr.db.eliminarTodoParticipanteEjecucion();
-
-                    refreshList();
-                  },
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                  child: Icon(Icons.cloud_download_sharp),
-                  onTap: () async {
-                    //    await DatabaseParticipantes.db.DeleteAllParticitantesInterv();
-                    setState(() {
-                      _isloading = true;
-                    });
-                    await DatabasePr.db.deleteIntervenciones();
-                    await DatabasePr.db.eliminarTodoEntidadFuncionario();
-                    await DatabasePr.db.eliminarTodoParticipanteEjecucion();
-                    var abc = await DatabasePr.db.getAllTasksConfigInicio();
-                    for (var i = 0; i < abc.length; i++) {
-                      var a =
-                          await provider.getListaTramaIntervencion(abc[i].snip);
-                      if (a.length == 0) {
-                        _isloading = false;
-                        setState(() {});
-                      }
-                      if (a.length > 0) {
-                        var r2 = await DatabasePr.db.listarInterciones();
-
-                        setState(() {});
-                        _isloading = false;
-                      }
-                    }
-
-                    // refreshList();
-                  },
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                InkWell(
-                  child: Icon(Icons.cloud_upload),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PendienteSincronizar()),
-                    );
-                  },
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-              ],
-            )
-          ],
+          actions: [accionesBotones()],
         ),
         body: FutureBuilder<List<TramaIntervencion>>(
           future: DatabasePr.db.listarInterciones(),
@@ -232,112 +117,10 @@ class _IntervencionesState extends State<Intervenciones> {
                 final listaPersonalAux = snapshot.data;
 
                 if (listaPersonalAux!.length == 0) {
-                  return Center(
-                    child: _isloading
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                "assets/loading_icon.gif",
-                                height: 125.0,
-                                width: 200.0,
-                                //color: Colors.transparent,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const SizedBox(
-                                    width: 24,
-                                  ),
-                                  Container(
-                                    margin:
-                                        EdgeInsets.only(right: 10, left: 10),
-                                    height: 100,
-                                    width: 250,
-                                    child: Text(
-                                      'Espere un momento... \nEl aplicativo esta recuperando las '
-                                      'intervenciones de su tambo...',
-                                      style: TextStyle(fontSize: 17),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          )
-                        : Text(
-                            'No hay informacion',
-                            style: TextStyle(fontSize: 19),
-                          ),
-                    //Text("No hay informacion"),
-                  );
-                  /* _isloading
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                            const SizedBox(
-                              width: 24,
-                            ),
-                            Text(
-                              'Espere...',
-                              style: TextStyle(fontSize: 17),
-                            )
-                          ],
-                        )
-                      : Text(
-                          'Guardar',
-                          style: TextStyle(fontSize: 19),
-                        ),*/
+                return esperadecara( 'Espere un momento... \nEl aplicativo esta recuperando las '
+                    'intervenciones de su tambo...');
                 } else {
-                  return Container(
-                    child: RefreshIndicator(
-                        child: ListView.builder(
-                          itemCount: listaPersonalAux.length,
-                          itemBuilder: (context, i) => Dismissible(
-                              key: UniqueKey(),
-                              child: listas.cardIntervenciones(
-                                listaPersonalAux[i],
-                                () async {
-                                  final respt = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            EjecucionProgramacionPage(
-                                                idProgramacion: int.parse(
-                                                    listaPersonalAux[i]
-                                                        .codigoIntervencion!),
-                                                descripcionEvento:
-                                                    listaPersonalAux[i]
-                                                        .descripcionEvento!,
-                                                //   snip: widget.snip,
-                                                programa: listaPersonalAux[i]
-                                                    .programa!,
-                                                tramaIntervencion:
-                                                    listaPersonalAux[i])),
-                                  );
-                                  if (respt == 'ok') {
-                                    print("aqioioo");
-                                    refreshList();
-                                  }
-                                },
-                              ),
-                              background: buildSwipeActionLeft(),
-                              secondaryBackground: buildSwipeActionRigth(),
-                              onDismissed: (direction) async {
-                                switch (direction) {
-                                  case DismissDirection.endToStart:
-                                    break;
-                                  case DismissDirection.startToEnd:
-                                    break;
-                                }
-                              }),
-                          /*   itemBuilder: (context, i) =>
-                              _banTitle(listaPersonalAux[i]), */
-                        ),
-                        onRefresh: refreshList),
-                  );
+                 return lista(listaPersonalAux);
                 }
               }
             }
@@ -350,6 +133,277 @@ class _IntervencionesState extends State<Intervenciones> {
     );
   }
 
+ Widget esperadecara(texto){
+    return Center(
+      child: _isloading
+          ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            "assets/loading_icon.gif",
+            height: 125.0,
+            width: 200.0,
+            //color: Colors.transparent,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                width: 24,
+              ),
+              Container(
+                margin:
+                EdgeInsets.only(right: 10, left: 10),
+                height: 100,
+                width: 250,
+                child: Text(
+                  texto,
+                  style: TextStyle(fontSize: 17),
+                ),
+              )
+            ],
+          ),
+        ],
+      )
+          : Text(
+        'No hay intervenciones',
+        style: TextStyle(fontSize: 19),
+      ),
+      //Text("No hay informacion"),
+    );
+
+  }
+  eliminarArchivoParticipantes() async {
+    var ar = [];
+    showAlertDialogBarra(context, titulo: 'Participantes', presse: () async {
+      loadPart = true;
+      Navigator.pop(context);
+      setState(() {});
+      // Navigator.pop(context);
+      ar = await ProviderDatos()
+          .getInsertParticipantesIntervencionesMovil(widget.unidadTerritorial);
+      setState(() {
+        cargardialog = false;
+      });
+      loadPart = false;
+    }, pressno: () {
+      Navigator.pop(context);
+    },
+        texto:
+        '¿Estas seguro de eliminar los datos existentes para sincronizar nuevos participantes',
+        a: cargardialog);
+    setState(() {});
+    if (ar.length > 1) {
+      loadPart = false;
+    }
+  }
+
+  cargarDatosIntervenciones() async {
+    var chc = await ProviderLogin().checkInternetConnection();
+    if (chc == true) {
+      print(chc);
+      await DatabasePr.db.eliminarProvincias();
+      var data = await DatabasePr.db.getAllTasksConfigInicio();
+      print(data[0].unidTerritoriales);
+
+      if (data[0].unidTerritoriales != null) {
+        await ProviderDatos().getInsertParticipantesIntervencionesMovil(
+            data[0].unidTerritoriales);
+        await ProviderDatos().getInsertFuncionariosIntervencionesMovil();
+        CalcularParticipantes();
+        cargarIntervenciones();
+        await ProviderDatos().guardarProvincia(data[0].snip);
+
+        print("numero3");
+        setState(() {});
+      }
+    }
+  }
+
+  cargarIntervenciones() async {
+    setState(() {
+      _isloading = true;
+    });
+    await eliminarintervenciones();
+    var data = await DatabasePr.db.getAllTasksConfigInicio();
+
+    for (var i = 0; i < data.length; i++) {
+      var a = await provider.getListaTramaIntervencion(data[i].snip);
+      if (a.length == 0) {
+        _isloading = false;
+        setState(() {});
+      }
+      if (a.length > 0) {
+        await DatabasePr.db.listarInterciones();
+
+        setState(() {});
+        _isloading = false;
+      }
+    }
+  }
+
+  eliminarintervenciones() async {
+    await DatabasePr.db.deleteIntervenciones();
+    await DatabasePr.db.eliminarTodoEntidadFuncionario();
+    await DatabasePr.db.eliminarTodoParticipanteEjecucion();
+    setState(() {});
+  }
+
+  CalcularParticipantes() async {
+    var todoPartici = await Servicios().loadParticipantes();
+    if (todoPartici != null) {
+      todoParticiw = todoPartici.length;
+      setState(() {});
+    }
+  }
+
+  accionesBotones() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        loadPart
+            ? Image.asset(
+          "assets/loaderios.gif",
+          height: 40.0,
+          width: 50.0,
+          //color: Colors.transparent,
+        )
+            : new Container(),
+        if (todoParticiw <= 0) ...[
+          InkWell(
+            child: Icon(
+              Icons.vpn_lock,
+              color: Colors.red,
+            ),
+            onTap: () async {
+              //   CalcularParticipantes();
+
+              var ar = [];
+              showAlertDialogBarra(context, titulo: 'Participantes',
+                  presse: () async {
+                    loadPart = true;
+                    Navigator.pop(context);
+                    setState(() {
+                      cargardialog = true;
+                    });
+
+                    ar = await ProviderDatos()
+                        .getInsertParticipantesIntervencionesMovil(
+                        widget.unidadTerritorial);
+                    Navigator.pop(context);
+                    loadPart = false;
+                  }, pressno: () {
+                    Navigator.pop(context);
+                  },
+                  texto:
+                  '¿Estas seguro de eliminar los datos existentes para sincronizar nuevos participantes',
+                  a: cargardialog);
+              setState(() {});
+              if (ar.length > 1) {
+                loadPart = false;
+              }
+            },
+          )
+        ] else ...[
+          InkWell(
+            child: Icon(
+              Icons.vpn_lock,
+              color: Colors.green,
+            ),
+            onTap: () async {
+              await eliminarArchivoParticipantes();
+              //setState(() {});
+            },
+          ),
+        ],
+        SizedBox(
+          width: 4,
+        ),
+        InkWell(
+          child: Icon(Icons.delete),
+          onTap: () async {
+            await eliminarintervenciones();
+
+            ///refreshList();
+          },
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        InkWell(
+          child: Icon(Icons.cloud_download_sharp),
+          onTap: () async {
+            await cargarIntervenciones();
+          },
+        ),
+        SizedBox(
+          width: 20,
+        ),
+        InkWell(
+          child: Icon(Icons.cloud_upload),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PendienteSincronizar()),
+            );
+          },
+        ),
+        SizedBox(
+          width: 10,
+        ),
+      ],
+    );
+  }
+
+  lista(listaPersonalAux){
+    return Container(
+      child: RefreshIndicator(
+          child: ListView.builder(
+            itemCount: listaPersonalAux.length,
+            itemBuilder: (context, i) => Dismissible(
+                key: UniqueKey(),
+                child: listas.cardIntervenciones(
+                  listaPersonalAux[i],
+                      () async {
+                    final respt = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              EjecucionProgramacionPage(
+                                  idProgramacion: int.parse(
+                                      listaPersonalAux[i]
+                                          .codigoIntervencion!),
+                                  descripcionEvento:
+                                  listaPersonalAux[i]
+                                      .descripcionEvento!,
+                                  //   snip: widget.snip,
+                                  programa: listaPersonalAux[i]
+                                      .programa!,
+                                  tramaIntervencion:
+                                  listaPersonalAux[i])),
+                    );
+                    if (respt == 'ok') {
+                      print("aqioioo");
+                      refreshList();
+                    }
+                  },
+                ),
+                background: buildSwipeActionLeft(),
+                secondaryBackground: buildSwipeActionRigth(),
+                onDismissed: (direction) async {
+                  switch (direction) {
+                    case DismissDirection.endToStart:
+                      break;
+                    case DismissDirection.startToEnd:
+                      break;
+                  }
+                }),
+            /*   itemBuilder: (context, i) =>
+                              _banTitle(listaPersonalAux[i]), */
+          ),
+          onRefresh: refreshList),
+    );
+  }
   showAlertDialogBarra(BuildContext context,
       {titulo, presse, pressno, texto, bool a = false}) {
     Widget okButton = TextButton(child: Text("SI"), onPressed: presse);

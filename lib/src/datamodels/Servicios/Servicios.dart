@@ -92,7 +92,31 @@ class Servicios {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
       fileExists = jsonFile.existsSync();
-      fileEncode = jsonFile.readAsStringSync();
+      if (fileExists){
+        fileEncode = jsonFile.readAsStringSync();
+        return fileEncode;
+      }
+
+    });
+    if (fileExists){
+      return fileEncode;
+    }
+  }
+  Future loadFuncionarios() async {
+    late File jsonFile;
+    late Directory dir;
+    String fileName = "jsonFuncionarios.json";
+    bool fileExists = false;
+    var fileEncode;
+    await getApplicationDocumentsDirectory().then((Directory directory) {
+      dir = directory;
+      jsonFile = new File(dir.path + "/" + fileName);
+      fileExists = jsonFile.existsSync();
+      if (fileExists){
+        fileEncode = jsonFile.readAsStringSync();
+        return fileEncode;
+      }
+
     });
     if (fileExists){
       return fileEncode;

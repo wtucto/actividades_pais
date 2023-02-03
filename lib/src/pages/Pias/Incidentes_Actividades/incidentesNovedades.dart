@@ -15,7 +15,7 @@ class IncidentesNovedades extends StatelessWidget {
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(50.0),
             child: AppBar(
-              backgroundColor: Colors.indigo,
+              backgroundColor: Colors.blue[600],
               automaticallyImplyLeading: false,
               bottom: TabBar(
                 tabs: [

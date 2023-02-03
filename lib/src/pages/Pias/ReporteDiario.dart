@@ -71,7 +71,7 @@ class _ReporteDiarioState extends State<ReporteDiario> {
           preferredSize: Size.fromHeight(67.0),
           child: AppBar(
             leading: Util().iconbuton(() => Navigator.of(context).pop()),
-            backgroundColor: Colors.indigo,
+            backgroundColor:Colors.blue[600],
             title: Container(
               child: Text("Reporte diario equipo de \ncampaña"),
             ),

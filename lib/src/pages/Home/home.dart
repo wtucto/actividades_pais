@@ -138,30 +138,6 @@ class _HomePagePais extends State<HomePagePais> {
 
   @override
   Widget build(BuildContext context) {
-    if (cargo == false) {
-      return Scaffold(
-        body: Container(
-          color: Colors.transparent,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                CircularProgressIndicator(),
-                SizedBox(height: 10),
-                Text(
-                  "Cargando informacion, un momento por favor.",
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
     final Responsive responsive = Responsive.of(context);
     double wp = responsive.wp(14);
     double hp65 = responsive.hp(27);

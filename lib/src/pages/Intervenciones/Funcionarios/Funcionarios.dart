@@ -94,7 +94,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[600],
-        title: Text("Agregar Funcionarios"),
+        title: Text("AGREGAR FUNCIONARIOS - ${widget.idProgramacion}", style: TextStyle(fontSize: 15),),
         leading: Util().iconbuton(() => Navigator.of(context).pop()),
       ),
       body: Container(
@@ -246,7 +246,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                         setborrar();
                         setState(() {
                         });
-                        if (_isOnline == true) {
+                       // if (_isOnline == true) {
                           await DatabasePr.db.listarTipoDocumento();
                           if (nombreBoton == 'Extrangero') {
                             var usuarioex = await provider.pintarExtranjerosBD(
@@ -276,6 +276,8 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                               setState(() {});
                             }
                           } else {
+                            print("::: ${controllerNumeroDoc.text}");
+
                             var usuario = await provider
                                 .getUsuarioDni(controllerNumeroDoc.text);
                             print("::: ${usuario}");
@@ -297,15 +299,15 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                               setState(() {});
                             }
                           }
-                        } else {
-                          showAlertDialog(context);
+                      ///  } else {
+                        /*  showAlertDialog(context);
                           closeTraerDni = false;
                           setState(() {
                             enableController = true;
                           });
                           enableController = true;
-                          flgReniec = 'SR';
-                        }
+                          flgReniec = 'SR';*/
+                       // }
                       },
                     ),
                   ),

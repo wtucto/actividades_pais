@@ -164,7 +164,7 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
       appBar: AppBar(
         backgroundColor: Colors.blue[600],
         title: Text(
-          "Ejecucion Programacion \n${widget.idProgramacion}",
+          "EJECUCION INTERVENCION \n${widget.idProgramacion}",
           style: TextStyle(fontSize: 17),
         ),
         leading: IconButton(

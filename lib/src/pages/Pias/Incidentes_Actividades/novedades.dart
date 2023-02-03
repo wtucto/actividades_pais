@@ -22,7 +22,7 @@ class _NovedadesState extends State<Novedades> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.blue[600],
         onPressed: () async {
           var a = await DatabasePias.db;
           showAlertDialogAgregar(context, titulo: 'Agregar Novedades',
