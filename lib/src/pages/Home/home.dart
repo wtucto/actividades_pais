@@ -416,14 +416,14 @@ class _HomePagePais extends State<HomePagePais> {
                               child: Image.asset(
                                 homeOption.image,
                                 fit: BoxFit.contain,
-                                width: 60,
-                                height: 60,
+                                width: 50,
+                                height: 50,
                                 alignment: Alignment.center,
                               ),
                             ),
                           ),
                           Container(
-                            padding: const EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(1),
                             child: Center(
                               child: Text(
                                 homeOption.name,

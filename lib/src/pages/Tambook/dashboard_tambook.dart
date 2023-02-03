@@ -1,5 +1,6 @@
 import 'package:actividades_pais/src/pages/Tambook/atenciones_list_view.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
 
 class DashboardTambook extends StatefulWidget {
@@ -19,12 +20,15 @@ class _DashboardTambookState extends State<DashboardTambook> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFa0d9f5),
       appBar: AppBar(
+        backgroundColor: const Color(0xFFa0d9f5),
+        shadowColor: const Color(0xFFa0d9f5),
         title: const Center(
           child: Text(
             'TAMBOOK',
             style: TextStyle(
-              color: Color(0xfffefefe),
+              color: Color.fromARGB(255, 0, 0, 0),
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               fontSize: 18.0,
@@ -58,33 +62,25 @@ class _DashboardTambookState extends State<DashboardTambook> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: AtencionesListView(),
-              ),
-            ],
-          ),
-
-          getPopularCourseUI(),
-          // Intervenciones
+          const SizedBox(height: 20),
+          cardHeader(),
+          const SizedBox(height: 20),
+          cardTambos(),
+          cardPersonal(),
+          cardEquipamiento(),
         ],
       ),
     );
   }
 
-  Widget getPopularCourseUI() {
+  Widget cardHeader() {
     return Padding(
       padding: const EdgeInsets.only(left: 18, right: 16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Últimas Intervenciones',
+            'PLATAFORMAS FIJAS Y MOVIL',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.w600,
@@ -94,39 +90,159 @@ class _DashboardTambookState extends State<DashboardTambook> {
             ),
           ),
           const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-          Card(
-            margin: const EdgeInsets.all(5),
-            elevation: 1,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                const ListTile(
-                  title: Text(
-                    'SUB PREFECTURA',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      letterSpacing: 0.27,
-                      color: Colors.black,
-                    ),
-                  ),
+          Column(
+            children: const [
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                child: Text(
+                  'NUESTRAS PLATAFORMAS CUENTAN CON PERSONAL CAPACITADO Y EQUIPAMIENTO MODERNO, QUE BRINDAN SERVICIOS EN MÁS DE 14 400 CENTROS POBLADOS, EN 22 REGIONES, BENEFICIANDO A MÁS DE 1 MILLÓN DE HABITANTES.',
+                  textAlign: TextAlign.justify,
                 ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                  child: Text(
-                    'VI Feria Agromercado 2022, con la finalidad de comercializar los productos agropecuarios y derivados propios de la zona a precios razonables y cumpliendo los protocolos de bioseguridad directamente a los consumidores finales, evento realizado por la Agencia Agraria Melgar, dirigido a las asociaciones de productores y población del distrito de Ayaviri.',
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-                Image.asset('assets/design_course/tercero.jpeg'),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
+      ),
+    );
+  }
+
+/*
+ * -----------------------------------------------
+ *            TAMBOS
+ * -----------------------------------------------
+ */
+  Padding cardTambos() {
+    var heading = '486 TAMBOS';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+              width: 2, color: const Color.fromARGB(255, 255, 255, 255)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: Color.fromARGB(255, 255, 255, 255)),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  ListTile(
+                    title: Text(''),
+                    subtitle: Text(""),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /*
+  * -----------------------------------------------
+  *            PERSONAL
+  * -----------------------------------------------
+  */
+  Padding cardPersonal() {
+    var heading = 'PERSONAL';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+              width: 2, color: const Color.fromARGB(255, 255, 255, 255)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: Color.fromARGB(255, 255, 255, 255)),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  ListTile(
+                    title: Text(''),
+                    subtitle: Text(""),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /*
+  * -----------------------------------------------
+  *            PERSONAL
+  * -----------------------------------------------
+  */
+  Padding cardEquipamiento() {
+    var heading = 'EQUIPAMIENTO';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+              width: 2, color: const Color.fromARGB(255, 255, 255, 255)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: Color.fromARGB(255, 255, 255, 255)),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  ListTile(
+                    title: Text(''),
+                    subtitle: Text(""),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
