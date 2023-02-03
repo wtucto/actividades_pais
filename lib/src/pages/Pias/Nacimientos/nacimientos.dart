@@ -8,6 +8,8 @@ import 'package:actividades_pais/src/pages/Pias/Nacimientos/agregarNacimiento.da
 import 'package:intl/intl.dart';
 import 'package:actividades_pais/src/pages/Pias/Nacimientos/editarNacimiento.dart';
 
+import '../../../../util/app-config.dart';
+
 class Nacimientos extends StatefulWidget {
   String idUnicoReporte = '';
 
@@ -43,7 +45,7 @@ class _NacimientosState extends State<Nacimientos> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         elevation: 0,
-        backgroundColor: Colors.cyan,
+        backgroundColor: AppConfig.primaryColor,
         onPressed: () async {
           final respuesta = await Navigator.push(
             context,

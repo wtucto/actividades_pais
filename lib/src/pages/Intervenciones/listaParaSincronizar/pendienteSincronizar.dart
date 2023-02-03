@@ -13,6 +13,8 @@ import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/listaParaSincronizar/listasParaEnvio.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 
+import '../../../../util/app-config.dart';
+
 class PendienteSincronizar extends StatefulWidget {
  // int snip;
  // PendienteSincronizar(this.snip);
@@ -72,7 +74,7 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
       onWillPop: systemBackButtonPressed,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blue[600],
+          backgroundColor: AppConfig.primaryColor,
           title: Text("Pendientes Envio"),
           leading: Util().iconbuton(() => Navigator.of(context).pushReplacement(
                 MaterialPageRoute(

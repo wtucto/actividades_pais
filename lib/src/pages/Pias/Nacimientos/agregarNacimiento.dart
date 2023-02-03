@@ -9,6 +9,8 @@ import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../util/app-config.dart';
+
 class AgregarNacimiento extends StatefulWidget {
   String idUnicoReporte = '';
 
@@ -40,7 +42,7 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
     return Scaffold(
       appBar: AppBar(
         leading: Util().iconbuton(() => Navigator.of(context).pop()),
-        backgroundColor: Colors.indigo,
+        backgroundColor:AppConfig.primaryColor,
         title: Text("Agregar Detalle Nacimiento"),
       ),
       body: ListView(
@@ -58,7 +60,7 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
                   width: 350,
                   child: TextButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.indigo),
+                      backgroundColor: MaterialStateProperty.all(AppConfig.primaryColor),
                     ),
                     child: Text(
                       'Guardar',
@@ -116,7 +118,7 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
                     child: TextButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.indigo),
+                            MaterialStateProperty.all(AppConfig.primaryColor),
                       ),
                       onPressed: () {
                         selectCamera();
@@ -132,12 +134,9 @@ class _AgregarNacimientoState extends State<AgregarNacimiento> {
                 for (var i in listArchivo) _tomarImagen(i),
 
                 SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
-                // _tomarImagen2(),
-                SizedBox(
-                  height: 10,
-                ),
+
               ],
             ),
           ),

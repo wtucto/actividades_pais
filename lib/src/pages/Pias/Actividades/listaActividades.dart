@@ -7,6 +7,8 @@ import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../util/app-config.dart';
+
 class ListaActividades extends StatefulWidget {
   String idUnicoReporte = '';
   ListaActividades(this.idUnicoReporte);
@@ -29,7 +31,7 @@ class _ListaActividadesState extends State<ListaActividades> {
     return Container(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.green[600],
+          backgroundColor: AppConfig.primaryColor,
           onPressed: () async {
             Util().showAlertDialogAgregar('Agregar Actividad', context,
                 () async {
@@ -57,13 +59,12 @@ class _ListaActividadesState extends State<ListaActividades> {
         ),
         appBar: AppBar(
           elevation: 0,
-          leading: Util().iconbuton(() => Navigator.of(context).pop()),
-          backgroundColor: Colors.transparent,
+           backgroundColor: Colors.transparent,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Actividades",
+                "ACTIVIDADES",
                 style: TextStyle(
                   color: Colors.black, // 2
                 ),

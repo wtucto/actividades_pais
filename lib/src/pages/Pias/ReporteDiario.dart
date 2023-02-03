@@ -11,6 +11,8 @@ import 'package:actividades_pais/src/pages/Pias/Incidentes_Actividades/incidente
 import 'package:actividades_pais/src/pages/Pias/Nacimientos/nacimientos.dart';
 import 'package:actividades_pais/src/pages/Pias/Parte/parte.dart';
 
+import '../../../util/app-config.dart';
+
 class ReporteDiario extends StatefulWidget {
   String plataforma = "", unidadTeritorial = "", idUnicoReporte = '';
   int idPlataforma = 0;
@@ -68,12 +70,12 @@ class _ReporteDiarioState extends State<ReporteDiario> {
     ];
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(67.0),
+          preferredSize: Size.fromHeight(55.0),
           child: AppBar(
             leading: Util().iconbuton(() => Navigator.of(context).pop()),
-            backgroundColor:Colors.blue[600],
+            backgroundColor:AppConfig.primaryColor,
             title: Container(
-              child: Text("Reporte diario equipo de \ncampaña"),
+              child: Text("REPORTE DIARIO EQUIPO DE\nCAMPAÑA", style: TextStyle(fontSize: 16,color: AppConfig.letrasColor),),
             ),
             actions: [
               InkWell(
@@ -98,28 +100,28 @@ class _ReporteDiarioState extends State<ReporteDiario> {
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
               icon: Icon(Icons.pending_actions_rounded),
-              title: Text("Parte"),
-              activeColor: (Colors.blue[800])!,
+              title: Text("PARTE",  style: TextStyle(color:AppConfig.letrasColor),),
+              activeColor: AppConfig.primaryColor,
               inactiveColor: Colors.black),
           BottomNavyBarItem(
               icon: Icon(Icons.home_rounded),
               title: Text("Actividades"),
-              activeColor: (Colors.blue[800])!,
+              activeColor: AppConfig.primaryColor,
               inactiveColor: Colors.black),
           BottomNavyBarItem(
               icon: Icon(Add_home.hand_holding_medical),
               title: Text("Atenciones Realizadas"),
-              activeColor: (Colors.blue[800])!,
+              activeColor: AppConfig.primaryColor,
               inactiveColor: Colors.black),
           BottomNavyBarItem(
               icon: Icon(Icons.handyman),
               title: Text("Incidentes"),
-              activeColor: (Colors.blue[800])!,
+              activeColor: AppConfig.primaryColor,
               inactiveColor: Colors.black),
           BottomNavyBarItem(
               icon: Icon(Icons.child_friendly),
               title: Text("Nacimientos"),
-              activeColor: (Colors.blue[800])!,
+              activeColor: AppConfig.primaryColor,
               inactiveColor: Colors.black),
         ],
       ),

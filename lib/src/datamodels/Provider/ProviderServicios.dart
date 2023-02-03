@@ -236,6 +236,8 @@ class ProviderServicios {
     for (var i = 0; i < listadoDepart.items.length; i++) {
       if (listadoDepart.items[i].dni == dni) {
         return listadoDepart.items[i];
+      } else {
+        return new Participantes();
       }
     }
 
@@ -246,17 +248,13 @@ class ProviderServicios {
     String jsonString = await servicios.loadFuncionarios();
     final jsonResponse = json.decode(jsonString);
     final listadoDepart =
-    new ListaFuncionarios.fromJsonList(jsonResponse["response"]);
-    print("============");
-    print(listadoDepart);
-    print("============");
+        new ListaFuncionarios.fromJsonList(jsonResponse["response"]);
+
     for (var i = 0; i < listadoDepart.items.length; i++) {
       if (listadoDepart.items[i].dni == dni) {
-        print("============");
-        print(dni);
-        print(listadoDepart.items[i].dni);
-        print("=========");
         return listadoDepart.items[i];
+      } else {
+        return new Funcionarios();
       }
     }
 
@@ -272,12 +270,11 @@ class ProviderServicios {
     return listado.items;
   }
 
-  underline(){
+  underline() {
     var underlineCbo = Container(
       height: 1,
       color: Colors.grey,
     );
     return underlineCbo;
   }
-
 }

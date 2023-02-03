@@ -6,6 +6,8 @@ import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
 import 'package:actividades_pais/src/pages/Pias/AtencionesRealizadas/CrearAtenciones.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../util/app-config.dart';
+
 class AtencionesRealizadas extends StatefulWidget {
   String idUnicoReporte = '';
 
@@ -49,7 +51,7 @@ class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
         backgroundColor: Colors.transparent,
         title: const Center(
           child: Text(
-            "Atenciones Realizadas",
+            "ATENCIONES REALIZADAS",
             style: TextStyle(
               color: Colors.black, // 2
             ),
@@ -116,7 +118,7 @@ class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
           )),
       floatingActionButton: FloatingActionButton(
         elevation: 1,
-        backgroundColor: Colors.green[600],
+        backgroundColor: AppConfig.primaryColor,
         onPressed: () async {
           final respuesta = await Navigator.push(
             context,

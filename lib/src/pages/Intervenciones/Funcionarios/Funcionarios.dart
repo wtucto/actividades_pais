@@ -9,6 +9,8 @@ import 'package:actividades_pais/src/datamodels/Provider/Provider.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 
+import '../../../../util/app-config.dart';
+
 class FuncionariosPage extends StatefulWidget {
   int idProgramacion;
   String programa;
@@ -93,7 +95,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[600],
+        backgroundColor: const Color(0xFF78b8cd),
         title: Text("AGREGAR FUNCIONARIOS - ${widget.idProgramacion}", style: TextStyle(fontSize: 15),),
         leading: Util().iconbuton(() => Navigator.of(context).pop()),
       ),
@@ -109,8 +111,8 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Checkbox(
-                        activeColor: Colors.blue[600],
-                        focusColor: Colors.blue[600],
+                        activeColor:const Color(0xFF78b8cd),
+                        focusColor:const Color(0xFF78b8cd),
                         onChanged: (value) {
                           setState(() {
                             _value = value!;
@@ -199,7 +201,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                     child: TextButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.blue[600]),
+                            MaterialStateProperty.all(const Color(0xFF78b8cd)),
                       ),
                       /*  child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -453,7 +455,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                     child: TextButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.blue[600]),
+                            MaterialStateProperty.all(AppConfig.primaryColor),
                       ),
                       child: Text(
                         "Agregar " + nombreBoton,

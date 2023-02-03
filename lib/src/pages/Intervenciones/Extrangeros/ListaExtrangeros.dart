@@ -6,6 +6,8 @@ import 'package:actividades_pais/src/pages/Intervenciones/Extrangeros/Extranjero
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 
+import '../../../../util/app-config.dart';
+
 class ListaExtrangeros extends StatefulWidget {
   int idProgramacion;
   ListaExtrangeros(this.idProgramacion);
@@ -25,7 +27,7 @@ class _ListaExtrangerosState extends State<ListaExtrangeros> {
     return Container(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.green[600],
+          backgroundColor: AppConfig.primaryColor,
           onPressed: () async {
             final respuesta = await Navigator.push(
               context,

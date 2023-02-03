@@ -669,6 +669,7 @@ return List.empty();
 
   Future<int> insertParticipantes(Participantes participantes) async {
     await DatabasePr.db.initDB();
+    print( participantes.toMap());
     var a = await _db!.insert("participantes", participantes.toMap());
     await DatabaseParticipantes.db.initDB();
     var ar = await DatabaseParticipantes.db

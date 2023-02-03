@@ -10,6 +10,8 @@ import 'package:actividades_pais/src/datamodels/Clases/Pias/Nacimiento.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
 import 'package:actividades_pais/src/pages/Pias/Incidentes_Actividades/mostarFoto.dart';
 
+import '../../../../util/app-config.dart';
+
 class Evidencias extends StatefulWidget {
   String idUnicoReporte = '';
 
@@ -46,7 +48,7 @@ class _EvidenciasState extends State<Evidencias> {
           onPressed: () {
             selectCamera();
           },
-          backgroundColor: Colors.blue[600],
+          backgroundColor: AppConfig.primaryColor,
           child: Icon(Icons.camera_enhance_rounded)),
       body: Container(
       //  color: Colors.black,

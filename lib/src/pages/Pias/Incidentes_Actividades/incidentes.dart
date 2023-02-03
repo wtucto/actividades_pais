@@ -6,6 +6,8 @@ import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 
+import '../../../../util/app-config.dart';
+
 class Incidentes extends StatefulWidget {
   String  idUnicoReporte='';
   Incidentes(this.idUnicoReporte);
@@ -23,7 +25,7 @@ class _IncidentesState extends State<Incidentes> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.blue[600],
+          backgroundColor: AppConfig.primaryColor,
           onPressed: () async {
             var a = await DatabasePias.db;
             showAlertDialogAgregar(context, titulo: 'Agregar Incidente',

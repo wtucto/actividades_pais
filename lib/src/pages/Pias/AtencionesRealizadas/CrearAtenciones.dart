@@ -7,6 +7,8 @@ import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../util/app-config.dart';
+
 class CrearAtenciones extends StatefulWidget {
   String idUnicoReporte = '';
 
@@ -32,7 +34,7 @@ class _CrearAtencionesState extends State<CrearAtenciones> {
           "Agregar Atencion",
         ),
         leading: Util().iconbuton(() => Navigator.of(context).pop()),
-        backgroundColor: Colors.indigo,
+        backgroundColor: AppConfig.primaryColor,
       ),
       body: Container(
         margin: EdgeInsets.all(20),
@@ -113,7 +115,7 @@ class _CrearAtencionesState extends State<CrearAtenciones> {
             SizedBox(
               child: TextButton(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blue[800]),
+                  backgroundColor: MaterialStateProperty.all(AppConfig.primaryColor),
                 ),
                 child: Text(
                   'Guardar',

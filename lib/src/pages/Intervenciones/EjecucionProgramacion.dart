@@ -22,6 +22,8 @@ import 'package:actividades_pais/src/pages/Intervenciones/Participantes/Particip
 import 'package:actividades_pais/src/pages/Intervenciones/Participantes/ListaParticipantes.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 
+import '../../../util/app-config.dart';
+
 // ignore: must_be_immutable
 class EjecucionProgramacionPage extends StatefulWidget {
   int idProgramacion;
@@ -162,15 +164,14 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[600],
+        backgroundColor: AppConfig.primaryColor,
         title: Text(
           "EJECUCION INTERVENCION \n${widget.idProgramacion}",
-          style: TextStyle(fontSize: 17),
+          style: TextStyle(fontSize: 17, color: AppConfig.letrasColor),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        leading:
+        Util().iconbuton(() => Navigator.of(context).pop()),
+
         actions: [
           InkWell(
             child: Icon(Icons.save),
@@ -215,22 +216,22 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
           BottomNavyBarItem(
               icon: Icon(Icons.home),
               title: Text("Inicio"),
-              activeColor: (Colors.blue[800])!,
+              activeColor:const Color(0xFF78b8cd),
               inactiveColor: Colors.black),
           BottomNavyBarItem(
               icon: Icon(Icons.engineering),
               title: Text("Funcionarios"),
-              activeColor: (Colors.blue[800])!,
+              activeColor: const Color(0xFF78b8cd),
               inactiveColor: Colors.black),
           BottomNavyBarItem(
               icon: Icon(Icons.people_alt),
               title: Text("Participantes"),
-              activeColor: (Colors.blue[800])!,
+              activeColor: const Color(0xFF78b8cd),
               inactiveColor: Colors.black),
           BottomNavyBarItem(
               icon: Icon(Icons.person_sharp),
               title: Text("Extranjeros"),
-              activeColor: (Colors.blue[800])!,
+              activeColor: const Color(0xFF78b8cd),
               inactiveColor: Colors.black),
         ],
       ),

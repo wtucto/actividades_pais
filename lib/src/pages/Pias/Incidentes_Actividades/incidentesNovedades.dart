@@ -3,6 +3,8 @@ import 'package:actividades_pais/src/pages/Pias/Incidentes_Actividades/evidencia
 import 'package:actividades_pais/src/pages/Pias/Incidentes_Actividades/incidentes.dart';
 import 'package:actividades_pais/src/pages/Pias/Incidentes_Actividades/novedades.dart';
 
+import '../../../../util/app-config.dart';
+
 class IncidentesNovedades extends StatelessWidget {
   String idUnicoReporte ='';
   IncidentesNovedades(this.idUnicoReporte);
@@ -15,7 +17,7 @@ class IncidentesNovedades extends StatelessWidget {
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(50.0),
             child: AppBar(
-              backgroundColor: Colors.blue[600],
+              backgroundColor:AppConfig.primaryColor,
               automaticallyImplyLeading: false,
               bottom: TabBar(
                 tabs: [

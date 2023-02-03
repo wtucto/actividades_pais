@@ -19,6 +19,7 @@ import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../util/app-config.dart';
 import '../../../datamodels/database/DatabaseProvincia.dart';
 
 enum BestTutorSite { javatpoint, w3schools, tutorialandexample }
@@ -112,7 +113,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[600],
+        backgroundColor: AppConfig.primaryColor,
         leading: Util().iconbuton(() => Navigator.of(context).pop()),
         title: Text("AGREGAR PARTICIPANTES  - ${widget.idProgramacion}", style: TextStyle(fontSize: 15),),
       ),
@@ -124,8 +125,8 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 ListTile(
                   title: const Text('Tiene DNI'),
                   leading: Radio(
-                    activeColor: Colors.blue[600],
-                    focusColor: Colors.blue[600],
+                    activeColor: AppConfig.primaryColor,
+                    focusColor: AppConfig.primaryColor,
                     value: BestTutorSite.javatpoint,
                     groupValue: _site,
                     onChanged: (BestTutorSite? value) {
@@ -143,8 +144,8 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 ListTile(
                   title: const Text('Menor de Edad Datos no encontrados'),
                   leading: Radio(
-                    activeColor: Colors.blue[600],
-                    focusColor: Colors.blue[600],
+                    activeColor: AppConfig.primaryColor,
+                    focusColor: AppConfig.primaryColor,
                     value: BestTutorSite.w3schools,
                     groupValue: _site,
                     onChanged: (BestTutorSite? value) {
@@ -162,8 +163,8 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 ListTile(
                   title: const Text('No tiene DNI'),
                   leading: Radio(
-                    activeColor: Colors.blue[600],
-                    focusColor: Colors.blue[600],
+                    activeColor: AppConfig.primaryColor,
+                    focusColor: AppConfig.primaryColor,
                     value: BestTutorSite.tutorialandexample,
                     groupValue: _site,
                     onChanged: (BestTutorSite? value) {
@@ -199,7 +200,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                   child: TextButton(
                     style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all(Colors.blue[600]),
+                      MaterialStateProperty.all(AppConfig.primaryColor),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -641,8 +642,8 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 Row(
                   children: [
                     Checkbox(
-                      activeColor: Colors.blue[600],
-                      focusColor: Colors.blue[600],
+                      activeColor: AppConfig.primaryColor,
+                      focusColor: AppConfig.primaryColor,
                       onChanged: (value) {
                         setState(() {
                           _value = value!;
@@ -750,7 +751,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                    child: TextButton(
                     style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all(Colors.blue[600]),
+                      MaterialStateProperty.all(AppConfig.primaryColor),
                     ),
                     child:const Text(
                       "Agregar ",
@@ -766,10 +767,10 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                         showAlertDialog(context, "Usuario ya registrado");
                       } else {
                         participantes.ubigeoCcpp = ubigeoCpp;
-                        participantes.nombreResidencia = nombreResidencia;
+                        //participantes.nombreResidencia = nombreResidencia;
                         participantes.flatResidencia = fueraAmbito.toString();
-                        participantes.distrito = ubigeoDistrito;
-                        participantes.provincia = ubigeoProvincia;
+                      //  participantes.distrito = ubigeoDistrito;
+                        //participantes.provincia = ubigeoProvincia;
                         participantes.idCentroPoblado =
                             int.parse(ubigeoCentroPoblado);
                         participantes.primerNombre =
@@ -790,7 +791,23 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                         participantes.edad = int.parse(controllerEdad.text);
                         participantes.tipo = 'participantes';
                         participantes.idEntidad = id_entidad;
+
+
                         participantes.nombreCcpp = cppText;
+
+                        if(provinciaDescripcion!= "Provincia"){
+                          participantes.provincia = provinciaDescripcion;
+                          participantes.distrito = distritoDescripcion;
+                        }
+
+                        if(centroPblado== "Centro Poblado"){
+                          participantes.nombreResidencia = cppText;
+                          participantes.centroPoblado = "";
+                        }else{
+                          participantes.nombreResidencia = centroPblado;
+                          participantes.centroPoblado = centroPblado;
+                        }
+                      ///participantes.nombreResidencia = nombreResidencia;
                         var a = await DatabasePr.db
                             .insertParticipantes(participantes);
                         print("luistasss ${listas.length}");

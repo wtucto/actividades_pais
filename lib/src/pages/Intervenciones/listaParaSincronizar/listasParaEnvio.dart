@@ -11,6 +11,8 @@ import 'package:actividades_pais/src/pages/Intervenciones/listaParaSincronizar/p
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
+import '../../../../util/app-config.dart';
+
 class ListasParaEnvio extends StatefulWidget {
   String codigoIntervencion;
   String tambo;
@@ -302,7 +304,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
             widget.tambo + '\n' + widget.codigoIntervencion,
             style: TextStyle(fontSize: 15),
           ),
-          backgroundColor: Colors.blue[600],
+          backgroundColor: Color(0xFF78b8cd),
         ),
       ),
       body: Center(
@@ -331,7 +333,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                       InkWell(
                         child: Icon(
                           Icons.send,
-                          color: Colors.blue[900],
+                          color: const Color(0xFF78b8cd),
                         ),
                         onTap: () {
                          /* cargarListas();
@@ -382,7 +384,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                         InkWell(
                           child: Icon(
                             Icons.send,
-                            color: Colors.blue[900],
+                            color: AppConfig.primaryColor,
                           ),
                           onTap: () {
                           cargarListas();
@@ -432,7 +434,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                       InkWell(
                         child: Icon(
                           Icons.send,
-                          color: Colors.blue[900],
+                          color: const Color(0xFF78b8cd),
                         ),
                         onTap: () async {
                           cargarListas();
@@ -482,7 +484,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                         InkWell(
                           child: Icon(
                             Icons.send,
-                            color: Colors.blue[900],
+                            color: const Color(0xFF78b8cd),
                           ),
                           onTap: () {
                              cargarListas();
@@ -525,7 +527,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                 //left: 10, right: 10, top: 10
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.blue[800],
+                      primary: AppConfig.primaryColor,
                       //   shadowColor:
                       textStyle: TextStyle(fontSize: 24),
                       minimumSize: Size.fromHeight(72),

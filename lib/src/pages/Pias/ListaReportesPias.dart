@@ -11,6 +11,8 @@ import 'package:actividades_pais/src/pages/Pias/ReporteDiario.dart';
 import 'package:intl/intl.dart';
 import 'package:actividades_pais/src/pages/Pias/Sincronizar/Sincronizar.dart';
 
+import '../../../util/app-config.dart';
+
 class ListaReportesPias extends StatefulWidget {
   String plataforma = "", unidadTeritorial = "";
   int idPlataforma = 0;
@@ -69,7 +71,7 @@ class _ListaReportesState extends State<ListaReportesPias> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue[600],
+        backgroundColor: AppConfig.primaryColor,
         onPressed: () async {
           final DateTime? picked = await showDatePicker(
             context: context,
@@ -103,8 +105,9 @@ class _ListaReportesState extends State<ListaReportesPias> {
         ),
       ),
       appBar: AppBar(
-        title: Text("Reportes Pias"),
-        backgroundColor:Colors.blue[600],
+        leading: Util().iconbuton(()=> Navigator.of(context).pop()),
+        title: Text("REPORTES PIAS", style: TextStyle(color: AppConfig.letrasColor),),
+        backgroundColor:AppConfig.primaryColor,
         actions: [
           InkWell(
             child: Icon(Icons.cloud_upload),

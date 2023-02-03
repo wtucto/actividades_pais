@@ -13,6 +13,8 @@ import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/listaParaSincronizar/pendienteSincronizar.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 
+import '../../../util/app-config.dart';
+
 // ignore: must_be_immutable
 class Intervenciones extends StatefulWidget {
 //  int snip;
@@ -48,10 +50,14 @@ class _IntervencionesState extends State<Intervenciones> {
 
   Future<Null> refreshList() async {
     await Future.delayed(Duration(seconds: 0));
-    var abc = await DatabasePr.db.getAllTasksConfigInicio();
+    cargarIntervenciones();
+    setState(() {
+
+    });
+   /* var abc = await DatabasePr.db.getAllTasksConfigInicio();
     if (abc.isNotEmpty) {
       await DatabasePr.db.listarInterciones();
-    }
+    }*/
   }
 
   @override
@@ -61,8 +67,9 @@ class _IntervencionesState extends State<Intervenciones> {
         _isloading = true;
       });
       return Scaffold(
+          backgroundColor: Colors.white,
           appBar: AppBar(
-            backgroundColor: Colors.blue[600],
+            backgroundColor: AppConfig.primaryColor,
             leading:
                 Util().iconbuton(() => Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) => HomePagePais()),
@@ -97,11 +104,11 @@ class _IntervencionesState extends State<Intervenciones> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.blue[600],
+          backgroundColor:AppConfig.primaryColor,
           leading: Util().iconbuton(() => Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => HomePagePais()),
               )),
-          title: Text("Intervenciones"),
+          title: Text("Intervenciones", style: TextStyle(color: AppConfig.letrasColor),),
           actions: [accionesBotones()],
         ),
         body: FutureBuilder<List<TramaIntervencion>>(

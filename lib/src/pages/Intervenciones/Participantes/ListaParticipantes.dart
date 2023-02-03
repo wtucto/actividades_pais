@@ -7,6 +7,8 @@ import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Participantes/Participantes.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 
+import '../../../../util/app-config.dart';
+
 class ListaParticipantesVw extends StatefulWidget {
   int idProgramacion;
   int snip;
@@ -30,7 +32,7 @@ class _ListaParticipantesVwState extends State<ListaParticipantesVw> {
     return Container(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.green[600],
+          backgroundColor:AppConfig.primaryColor,
           onPressed: () async {
             final respuesta = await Navigator.push(
               context,
@@ -66,7 +68,7 @@ class _ListaParticipantesVwState extends State<ListaParticipantesVw> {
             InkWell(
               child: Icon(
                 Icons.person_add,
-                color: Colors.green[600],
+                color: const Color(0xFF78b8cd),
               ),
               onTap: () async {},
             ),

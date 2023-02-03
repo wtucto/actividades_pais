@@ -6,6 +6,8 @@ import 'package:actividades_pais/src/pages/Intervenciones/Funcionarios/Funcionar
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 
+import '../../../../util/app-config.dart';
+
 class ListaFuncionariosVw extends StatefulWidget {
   TramaIntervencion tramaIntervencion;
 
@@ -37,7 +39,7 @@ class _ListaFuncionariosVwState extends State<ListaFuncionariosVw> {
     return Container(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.green[600],
+          backgroundColor:   AppConfig.primaryColor,
           onPressed: () async {
             final respuesta = await Navigator.push(
               context,

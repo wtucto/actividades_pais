@@ -798,7 +798,7 @@ class ProviderDatos {
     print(
       jsonEncode(participantes),
     );
-    print("prticipantes");
+    print("participantes::: ${jsonEncode(participantes)}");
 
     http.Response response = await http.post(
         Uri.parse(AppConfig.urlBackndServicioSeguro +
