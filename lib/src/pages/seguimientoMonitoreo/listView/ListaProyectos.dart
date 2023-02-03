@@ -1,4 +1,5 @@
 import 'package:actividades_pais/src/pages/seguimientoMonitoreo/detalleProyecto.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
@@ -26,7 +27,7 @@ class ListaProyectos extends StatelessWidget {
                   ? Colors.red
                   : Colors.yellow);
     } catch (oError) {
-      return Colors.black;
+      return color_01;
     }
   }
 
@@ -48,7 +49,6 @@ class ListaProyectos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // String experienceLevelColor = '4495FF';
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
@@ -62,14 +62,14 @@ class ListaProyectos extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
+          color: colorGB,
           border: Border.all(
             width: 1,
             color: getColorAvancefisico(oProyecto),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.9),
+              color: color_04.withOpacity(0.9),
               spreadRadius: 0,
               blurRadius: 2,
               offset: const Offset(0, 1),
@@ -88,12 +88,14 @@ class ListaProyectos extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 20),
                         child: CircularPercentIndicator(
                           radius: 30.0,
-                          lineWidth: 5.0,
+                          lineWidth: 8.0,
                           percent: getAvancefisico(oProyecto),
                           center: Text(
                             getAvancefisicoText(oProyecto),
                             style: const TextStyle(
-                                fontSize: 11, fontWeight: FontWeight.bold),
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           progressColor: getColorAvancefisico(oProyecto),
                         ),
@@ -101,36 +103,30 @@ class ListaProyectos extends StatelessWidget {
                       const SizedBox(width: 10),
                       Flexible(
                         child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 10),
-                              Text(
-                                oProyecto.tambo!,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'TAMBO ${oProyecto.tambo!}',
+                              style: const TextStyle(
+                                color: color_01,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
                               ),
-                              const SizedBox(height: 5),
-                              Text(
-                                oProyecto.estado!,
-                                style: const TextStyle(
-                                  color: Color.fromARGB(255, 73, 72, 72),
-                                ),
+                            ),
+                            Text(
+                              "${oProyecto.departamento!} / ${oProyecto.provincia!} / ${oProyecto.distrito!}",
+                              style: const TextStyle(
+                                color: color_04,
                               ),
-                              Text(
-                                "${oProyecto.departamento!} / ${oProyecto.provincia!} / ${oProyecto.distrito!}",
-                                style: const TextStyle(
-                                  color: Color.fromARGB(255, 73, 72, 72),
-                                ),
+                            ),
+                            Text(
+                              oProyecto.fechaTerminoEstimado!,
+                              style: const TextStyle(
+                                color: color_01,
                               ),
-                              Text(
-                                oProyecto.fechaTerminoEstimado!,
-                                style: const TextStyle(
-                                    color: Color.fromARGB(255, 37, 36, 36)),
-                              ),
-                            ]),
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -139,15 +135,18 @@ class ListaProyectos extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Row(
-                  children: [],
+                  children: [
+                    Text(oProyecto.estado!),
+                  ],
                 ),
+                const SizedBox(width: 20),
                 Text(
                   oProyecto.cui!,
                   style: const TextStyle(
-                    color: Color.fromARGB(255, 13, 0, 255),
+                    color: color_01,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),

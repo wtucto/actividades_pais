@@ -154,7 +154,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         backgroundColor: Colors.transparent,
         title: Text(
           'Credential'.tr,
-          style: const TextStyle(color: darkGrey),
+          style: const TextStyle(color: color_01),
         ),
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,

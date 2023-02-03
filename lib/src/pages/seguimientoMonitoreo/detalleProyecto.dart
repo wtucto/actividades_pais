@@ -5,6 +5,7 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/gallery/image_view.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
@@ -65,9 +66,12 @@ class _DetalleProyectoState extends State<DetalleProyecto>
     super.initState();
     animationController = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
-    animation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+    animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
         parent: animationController!,
-        curve: const Interval(0, 1.0, curve: Curves.fastOutSlowIn)));
+        curve: const Interval(0, 1.0, curve: Curves.fastOutSlowIn),
+      ),
+    );
     setData();
 
     _oProject = widget.datoProyecto;
@@ -124,49 +128,76 @@ class _DetalleProyectoState extends State<DetalleProyecto>
       List<ImagenesCourrusel> _lisImg = [
         if (item.imgActividad1!.length > 10)
           ImagenesCourrusel(
-              num: count,
-              descripcion: item.problemaIdentificado,
-              imagen: Image.memory(base64Decode(item.imgActividad1!))),
+            num: count,
+            descripcion: item.problemaIdentificado,
+            imagen: Image.memory(
+              base64Decode(item.imgActividad1!),
+            ),
+          ),
         if (item.imgActividad2!.length > 10)
           ImagenesCourrusel(
-              num: count,
-              descripcion: item.problemaIdentificado,
-              imagen: Image.memory(base64Decode(item.imgActividad2!))),
+            num: count,
+            descripcion: item.problemaIdentificado,
+            imagen: Image.memory(
+              base64Decode(item.imgActividad2!),
+            ),
+          ),
         if (item.imgActividad3!.length > 10)
           ImagenesCourrusel(
-              num: count,
-              descripcion: item.problemaIdentificado,
-              imagen: Image.memory(base64Decode(item.imgActividad3!))),
+            num: count,
+            descripcion: item.problemaIdentificado,
+            imagen: Image.memory(
+              base64Decode(item.imgActividad3!),
+            ),
+          ),
         if (item.imgProblema1!.length > 10)
           ImagenesCourrusel(
-              num: count,
-              descripcion: item.problemaIdentificado,
-              imagen: Image.memory(base64Decode(item.imgProblema1!))),
+            num: count,
+            descripcion: item.problemaIdentificado,
+            imagen: Image.memory(
+              base64Decode(item.imgProblema1!),
+            ),
+          ),
         if (item.imgProblema2!.length > 10)
           ImagenesCourrusel(
-              num: count,
-              descripcion: item.problemaIdentificado,
-              imagen: Image.memory(base64Decode(item.imgProblema2!))),
+            num: count,
+            descripcion: item.problemaIdentificado,
+            imagen: Image.memory(
+              base64Decode(item.imgProblema2!),
+            ),
+          ),
         if (item.imgProblema3!.length > 10)
           ImagenesCourrusel(
-              num: count,
-              descripcion: item.problemaIdentificado,
-              imagen: Image.memory(base64Decode(item.imgProblema3!))),
+            num: count,
+            descripcion: item.problemaIdentificado,
+            imagen: Image.memory(
+              base64Decode(item.imgProblema3!),
+            ),
+          ),
         if (item.imgRiesgo1!.length > 10)
           ImagenesCourrusel(
-              descripcion: item.problemaIdentificado,
-              num: count,
-              imagen: Image.memory(base64Decode(item.imgRiesgo1!))),
+            descripcion: item.problemaIdentificado,
+            num: count,
+            imagen: Image.memory(
+              base64Decode(item.imgRiesgo1!),
+            ),
+          ),
         if (item.imgRiesgo2!.length > 10)
           ImagenesCourrusel(
-              descripcion: item.problemaIdentificado,
-              num: count,
-              imagen: Image.memory(base64Decode(item.imgRiesgo2!))),
+            descripcion: item.problemaIdentificado,
+            num: count,
+            imagen: Image.memory(
+              base64Decode(item.imgRiesgo2!),
+            ),
+          ),
         if (item.imgRiesgo3!.length > 10)
           ImagenesCourrusel(
-              descripcion: item.problemaIdentificado,
-              num: count,
-              imagen: Image.memory(base64Decode(item.imgRiesgo3!)))
+            descripcion: item.problemaIdentificado,
+            num: count,
+            imagen: Image.memory(
+              base64Decode(item.imgRiesgo3!),
+            ),
+          )
       ];
       listImges.addAll(_lisImg);
       count++;
@@ -226,16 +257,29 @@ class _DetalleProyectoState extends State<DetalleProyecto>
         24.0;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: color_10o15,
+        shadowColor: color_10o15,
         title: Center(
-          child: Text(widget.datoProyecto.tambo!),
+          child: Text(
+            widget.datoProyecto.tambo!,
+            style: const TextStyle(
+              color: color_01,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+              fontSize: 18.0,
+            ),
+          ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(
+            color: color_01,
+            Icons.arrow_back,
+          ),
           onPressed: () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => Dashboard(),
+                builder: (BuildContext context) => const Dashboard(),
               ),
             );
           },
@@ -248,7 +292,7 @@ class _DetalleProyectoState extends State<DetalleProyecto>
               onPressed: () {},
               icon: const Icon(
                 Icons.format_align_left,
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: color_01,
               ),
             ),
           )
@@ -270,123 +314,24 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                           itemCount: 1,
                           itemBuilder: (BuildContext context, int index) {
                             return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                CarouselSlider(
-                                  options: CarouselOptions(
-                                    // height: 380.0,
-                                    enlargeCenterPage: true,
-                                    autoPlay: true,
-                                    aspectRatio: 16 / 9,
-                                    autoPlayCurve: Curves.fastOutSlowIn,
-                                    enableInfiniteScroll: true,
-                                    autoPlayAnimationDuration:
-                                        const Duration(milliseconds: 1000),
-                                    viewportFraction: 0.8,
-                                  ),
-                                  items: listImges.isNotEmpty
-                                      ? listImges.map((ImagenesCourrusel map) {
-                                          return Builder(
-                                            builder: (BuildContext context) {
-                                              return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(10.0),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.pushReplacement(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (BuildContext
-                                                                context) =>
-                                                            ImageView(
-                                                                datoProyecto: widget
-                                                                    .datoProyecto,
-                                                                galleria: map
-                                                                    .imagen!),
-                                                      ),
-                                                    );
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      color: Colors.white,
-                                                      boxShadow: const [
-                                                        BoxShadow(
-                                                            color:
-                                                                Colors.black54,
-                                                            blurRadius: 15.0,
-                                                            offset: Offset(
-                                                                0.0, 0.75))
-                                                      ],
-                                                    ),
-                                                    child: Image(
-                                                      image:
-                                                          (map.imagen)!.image,
-                                                      errorBuilder: (context,
-                                                              url, error) =>
-                                                          const Icon(
-                                                              Icons.image),
-                                                      fit: BoxFit.fill,
-                                                      width: double.infinity,
-                                                      height: double.infinity,
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        }).toList()
-                                      : [
-                                          Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Colors.white,
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                      color: Colors.black54,
-                                                      blurRadius: 15.0,
-                                                      offset: Offset(0.0, 0.75))
-                                                ],
-                                              ),
-                                              child: isOKImage
-                                                  ? const Center(
-                                                      child: Icon(
-                                                        Icons.image,
-                                                        size: 50,
-                                                      ),
-                                                    )
-                                                  : Center(
-                                                      child: Image.asset(
-                                                          'assets/loading_icon.gif'),
-                                                    ),
-                                            ),
-                                          ),
-                                        ],
-                                ),
-
+                                const SizedBox(height: 10),
                                 /**
                                  * HEADER
                                  */
-                                const Divider(),
                                 Container(
+                                  width: MediaQuery.of(context).size.width - 20,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white,
+                                    color: colorGB,
                                     border: Border.all(
                                       width: 1,
-                                      color: const Color.fromARGB(
-                                          255, 212, 207, 207),
+                                      color: colorGB_01o27,
                                     ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: const Color.fromARGB(
-                                                255, 218, 211, 211)
-                                            .withOpacity(0.9),
+                                        color: color_04.withOpacity(0.9),
                                         spreadRadius: 0,
                                         blurRadius: 2,
                                         offset: const Offset(0, 1),
@@ -394,12 +339,128 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                     ],
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(8),
+                                    padding: const EdgeInsets.all(0),
                                     child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.center,
                                       children: [
-                                        const SizedBox(height: 15),
+                                        CarouselSlider(
+                                          options: CarouselOptions(
+                                            enlargeCenterPage: true,
+                                            autoPlay: true,
+                                            aspectRatio: 16 / 9,
+                                            autoPlayCurve: Curves.fastOutSlowIn,
+                                            enableInfiniteScroll: true,
+                                            autoPlayAnimationDuration:
+                                                const Duration(
+                                                    milliseconds: 1000),
+                                            viewportFraction: 0.8,
+                                          ),
+                                          items: listImges.isNotEmpty
+                                              ? listImges
+                                                  .map((ImagenesCourrusel map) {
+                                                  return Builder(
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(10.0),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            Navigator
+                                                                .pushReplacement(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (BuildContext
+                                                                        context) =>
+                                                                    ImageView(
+                                                                        datoProyecto:
+                                                                            widget
+                                                                                .datoProyecto,
+                                                                        galleria:
+                                                                            map.imagen!),
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              color: colorGB,
+                                                              boxShadow: const [
+                                                                BoxShadow(
+                                                                    color: Colors
+                                                                        .black54,
+                                                                    blurRadius:
+                                                                        15.0,
+                                                                    offset:
+                                                                        Offset(
+                                                                            0.0,
+                                                                            0.75))
+                                                              ],
+                                                            ),
+                                                            child: Image(
+                                                              image:
+                                                                  (map.imagen)!
+                                                                      .image,
+                                                              errorBuilder: (context,
+                                                                      url,
+                                                                      error) =>
+                                                                  const Icon(Icons
+                                                                      .image),
+                                                              fit: BoxFit.fill,
+                                                              width: double
+                                                                  .infinity,
+                                                              height: double
+                                                                  .infinity,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                }).toList()
+                                              : [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10.0),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        color: colorGB,
+                                                        boxShadow: const [
+                                                          BoxShadow(
+                                                              color: Colors
+                                                                  .black54,
+                                                              blurRadius: 15.0,
+                                                              offset: Offset(
+                                                                  0.0, 0.75))
+                                                        ],
+                                                      ),
+                                                      child: isOKImage
+                                                          ? const Center(
+                                                              child: Icon(
+                                                                Icons.image,
+                                                                size: 50,
+                                                              ),
+                                                            )
+                                                          : Center(
+                                                              child: Image.asset(
+                                                                  'assets/loading_icon.gif'),
+                                                            ),
+                                                    ),
+                                                  ),
+                                                ],
+                                        ),
+
+                                        /*const SizedBox(height: 15),
                                         Container(
                                           padding: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
@@ -427,17 +488,17 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        const SizedBox(height: 15),
+                                        ),*/
+                                        const SizedBox(height: 25),
 
                                         Text(
-                                          widget.datoProyecto.tambo!,
+                                          'TAMBO ${widget.datoProyecto.tambo!}',
                                           textAlign: TextAlign.left,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 22,
                                             letterSpacing: 0.27,
-                                            color: Color(0xFF17262A),
+                                            color: color_01,
                                           ),
                                         ),
                                         const SizedBox(height: 15),
@@ -448,42 +509,41 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13,
                                             letterSpacing: 0.27,
-                                            color:
-                                                Color.fromARGB(255, 13, 0, 255),
+                                            color: color_01,
                                           ),
                                         ),
                                         const SizedBox(height: 15),
                                         Text(
-                                          widget.datoProyecto.cui!,
+                                          'SNIP ${widget.datoProyecto.numSnip!}',
                                           textAlign: TextAlign.left,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16,
                                             letterSpacing: 0.27,
-                                            color:
-                                                Color.fromARGB(255, 13, 0, 255),
+                                            color: color_01,
                                           ),
                                         ),
                                         ScaleTransition(
                                           alignment: Alignment.center,
                                           scale: CurvedAnimation(
-                                              parent: animationController!,
-                                              curve: Curves.fastOutSlowIn),
+                                            parent: animationController!,
+                                            curve: Curves.fastOutSlowIn,
+                                          ),
                                           child: Padding(
                                             padding:
-                                                const EdgeInsets.only(top: 20),
+                                                const EdgeInsets.only(top: 15),
                                             child: CircularPercentIndicator(
-                                              radius: 30.0,
-                                              lineWidth: 5.0,
+                                              radius: 50.0,
+                                              lineWidth: 20.0,
                                               percent: getAvancefisico(
                                                   widget.datoProyecto),
                                               center: Text(
                                                 getAvancefisicoText(
                                                     widget.datoProyecto),
                                                 style: const TextStyle(
-                                                    fontSize: 11,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
                                               ),
                                               progressColor:
                                                   getColorAvancefisico(
@@ -503,304 +563,9 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                  */
 
                                 const Divider(),
-                                Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect002'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _numSnip,
-
-                                        ///CÓDIGO DE SNIP
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect011'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _subEstado,
-
-                                        ///SUB ESTADO DEL PROYECTO
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect012'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _estadoSaneamiento,
-
-                                        ///ESTADO DE SANEAMIENTO DEL PROYECTO
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect013'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _modalidad,
-
-                                        ///MODALIDAD DE CONTRATACIÓN DEL PROYECTO
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect014'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _fechaInicio,
-
-                                        ///FECHA DE INICIO DEL PROYECTO
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect015'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _fechaTerminoEstimado,
-
-                                        ///FECHA DE TÉRMINO ESTIMADO DEL PROYECTO
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect016'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _inversion,
-
-                                        ///MONTO DE INVERSIÓN DEL PROYECTO
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect017'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _costoEjecutado,
-
-                                        ///COSTO EJECUTADO ACUMULADO DEL PROYECTO
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect018'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _costoEstimadoFinal,
-
-                                        ///COSTO ESTIMADO FINAL DEL PROYECTO
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect020'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _residente,
-
-                                        ///NOMBRE DEL RESIDENTE
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect021'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _supervisor,
-
-                                        ///NOMBRE DEL SUPERVISOR
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect022'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _crp,
-
-                                        ///NOMBRE DEL COORDINADOR REGIONAL DEL PROYECTO
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect023'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _codResidente,
-
-                                        ///CÓDIGO DEL RESIDENTE
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect024'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _codSupervisor,
-
-                                        ///CÓDIGO DEL SUPERVISOR
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect025'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _codCrp,
-
-                                        ///CÓDIGO DEL COORDINADOR REGIONAL DEL PROYECTO
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect003'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _latitud,
-
-                                        ///LATITUD DE LA UBICACIÓN DEL PROYECTO
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'FldProyect004'.tr,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextFormField(
-                                        controller: _longitud,
-
-                                        ///LONGITUD DE LA UBICACIÓN DEL PROYECTO
-                                        validator: (v) =>
-                                            v!.isEmpty ? 'Required'.tr : null,
-                                        enabled: false,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                cardEstadoProyecto(),
+                                cardSubEstadoProyecto(),
+                                cardSaneamientoProyecto(),
                               ],
                             );
                           }),
@@ -811,6 +576,393 @@ class _DetalleProyectoState extends State<DetalleProyecto>
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  /*
+  * -----------------------------------------------
+  *            ESTADO DEL PROVECTO
+  * -----------------------------------------------
+  */
+
+  Padding cardEstadoProyecto() {
+    var heading = 'ESTADO DEL PROVECTO';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'FldProyect002'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _numSnip,
+
+                    ///CÓDIGO DE SNIP
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect011'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _subEstado,
+
+                    ///SUB ESTADO DEL PROYECTO
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect012'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _estadoSaneamiento,
+
+                    ///ESTADO DE SANEAMIENTO DEL PROYECTO
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect013'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _modalidad,
+
+                    ///MODALIDAD DE CONTRATACIÓN DEL PROYECTO
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect014'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _fechaInicio,
+
+                    ///FECHA DE INICIO DEL PROYECTO
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect015'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _fechaTerminoEstimado,
+
+                    ///FECHA DE TÉRMINO ESTIMADO DEL PROYECTO
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect016'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _inversion,
+
+                    ///MONTO DE INVERSIÓN DEL PROYECTO
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect017'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _costoEjecutado,
+
+                    ///COSTO EJECUTADO ACUMULADO DEL PROYECTO
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect018'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _costoEstimadoFinal,
+
+                    ///COSTO ESTIMADO FINAL DEL PROYECTO
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect020'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _residente,
+
+                    ///NOMBRE DEL RESIDENTE
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect021'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _supervisor,
+
+                    ///NOMBRE DEL SUPERVISOR
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect022'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _crp,
+
+                    ///NOMBRE DEL COORDINADOR REGIONAL DEL PROYECTO
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect023'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _codResidente,
+
+                    ///CÓDIGO DEL RESIDENTE
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect024'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _codSupervisor,
+
+                    ///CÓDIGO DEL SUPERVISOR
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect025'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _codCrp,
+
+                    ///CÓDIGO DEL COORDINADOR REGIONAL DEL PROYECTO
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect003'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _latitud,
+
+                    ///LATITUD DE LA UBICACIÓN DEL PROYECTO
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'FldProyect004'.tr,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: _longitud,
+
+                    ///LONGITUD DE LA UBICACIÓN DEL PROYECTO
+                    validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                    enabled: false,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /*
+  * -----------------------------------------------
+  *            SUB ESTADO DEL PROYEVTO
+  * -----------------------------------------------
+  */
+
+  Padding cardSubEstadoProyecto() {
+    var heading = 'ESTADO DEL PROVECTO';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: false,
+          title: ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[],
+        ),
+      ),
+    );
+  }
+
+  /*
+  * -----------------------------------------------
+  *            SANEAMENTO DEL PROYECTO
+  * -----------------------------------------------
+  */
+  Padding cardSaneamientoProyecto() {
+    var heading = 'ESTADO DEL PROVECTO';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: false,
+          title: ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[],
         ),
       ),
     );

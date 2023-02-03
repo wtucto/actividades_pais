@@ -121,7 +121,7 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
                   ),
                   trailing: const Icon(
                     Icons.chevron_right,
-                    color: blue,
+                    color: colorI,
                   ),
                   onTap: () => Navigator.of(context)
                       .push(MaterialPageRoute(builder: (_) => SettingsPage())),
@@ -135,7 +135,7 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
                   ),
                   trailing: const Icon(
                     Icons.chevron_right,
-                    color: blue,
+                    color: colorI,
                   ),
                   onTap: () async {
                     isConnec = await CheckConnection.isOnlineWifiMobile();

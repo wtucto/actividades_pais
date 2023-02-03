@@ -31,7 +31,7 @@ class FabMenuItem extends StatelessWidget {
         children: <Widget>[
           Text(item.title),
           SizedBox(width: 8),
-          Icon(item.icon, color: lightBlue),
+          Icon(item.icon, color: color_08o80),
         ],
       ),
     );
@@ -90,7 +90,7 @@ class ExpandedAnimationFab extends AnimatedWidget {
           ),
         ),
         FloatingActionButton(
-          backgroundColor: lightBlue,
+          backgroundColor: color_08o80,
           child: AnimatedIcon(
             icon: AnimatedIcons.menu_close,
             progress: _animation,

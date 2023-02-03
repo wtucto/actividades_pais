@@ -28,7 +28,7 @@ class SettingsPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           title: Text(
             'Settings'.tr,
-            style: TextStyle(color: darkGrey),
+            style: TextStyle(color: color_01),
           ),
           elevation: 0,
         ),

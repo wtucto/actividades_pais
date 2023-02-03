@@ -1,31 +1,67 @@
 import 'package:flutter/material.dart';
 
-const Color lightBlue = Color(0xFF58ABF6);
-const Color lightTeal = Color(0xFF2CDAB1);
+/*
+ * PALETA DE COLORES SEGUN LOGO PAIS
+ * 
+ * #FBFBFB BACKGROUND
+ * #BC0514 P
+ * #8F9D9F A
+ * #7987CC I
+ * #65A33E S
+ * 
+ */
 
-const Color blue = Color.fromARGB(255, 0, 76, 255);
-const Color yellow = Color(0xffFDC054);
-const Color transparentYellow = Color.fromARGB(172, 110, 175, 187);
-const Color transparentWite = Color.fromARGB(175, 255, 255, 255);
-const Color darkGrey = Color(0xff202020);
+const Color colorGB = Color(0xFFFBFBFB);
+const Color colorP = Color(0xFFBC0514);
+const Color colorA = Color(0xFF8F9D9F);
+const Color colorI = Color(0xFF79B7CC);
+const Color colorS = Color(0xFF65A33E);
+
+/*
+ * VARIANTES PALETA COLORES
+ */
+const Color colorGB_01o27 = Color(0xC5FBFBFB); //27% Opacidad
+const Color color_01 = Color(0XFF000000);
+const Color color_02o27 = Color(0xB7333333); //27% Opacidad
+const Color color_03 = Color(0XFF008980);
+const Color color_04 = Color(0XFF666666);
+const Color color_05 = Color(0XFF008D3D);
+const Color color_06 = Color(0XFF00C1DB);
+const Color color_07 = Color(0XFF22C1E4);
+const Color color_08o80 = Color(0x5228AEC0); //80% Opacidad
+const Color color_09 = Color(0XFF89BFD2);
+const Color color_10o15 = Color(0xDCA0D9F6); //15% Opacidad
+const Color color_11 = Color(0XFFC12C37);
+const Color color_12 = Color(0XFFE06DBF);
+const Color color_13 = Color(0XFFFF8E00);
+
+/*
+ * OTROS COLORES
+ */
 
 const LinearGradient mainButton4 = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,
   colors: [
-    Color(0xFF398AE5),
-    Color(0xFF398AE5),
-    Color(0xFF398AE5),
-    Color(0xFF398AE5),
+    colorI,
+    colorI,
+    colorI,
+    colorI,
   ],
   stops: [0.1, 0.4, 0.7, 0.9],
 );
 
-const LinearGradient mainButton5 = LinearGradient(colors: [
-  Color(0xFFa0d9f5),
-  Color(0xFFa0d9f5),
-]);
+const LinearGradient mainButton5 = LinearGradient(
+  colors: [
+    color_10o15,
+    color_10o15,
+  ],
+);
 
 const List<BoxShadow> shadow = [
-  BoxShadow(color: Colors.black12, offset: Offset(0, 3), blurRadius: 6)
+  BoxShadow(
+    color: color_01,
+    offset: Offset(0, 3),
+    blurRadius: 6,
+  )
 ];

@@ -1,3 +1,4 @@
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
 
 class BotonLog extends StatelessWidget {
@@ -11,21 +12,26 @@ class BotonLog extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
+        backgroundColor: const MaterialStatePropertyAll<Color>(colorI),
         elevation: MaterialStateProperty.all(2),
         shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
       ),
-      // elevation: 2,
-      // highlightElevation: 5,
-      // color: Colors.blue,
-      // shape: StadiumBorder(),
-      onPressed: () => this.onPressed(),
-      child: Container(
+      onPressed: () => onPressed(),
+      child: SizedBox(
         width: double.infinity,
         height: 55,
         child: Center(
-          child: Text(this.text,
-              style: TextStyle(color: Colors.white, fontSize: 17)),
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 17,
+            ),
+          ),
         ),
       ),
     );

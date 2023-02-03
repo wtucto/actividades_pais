@@ -25,7 +25,7 @@ class _ChangeCountryPageState extends State<ChangeLanguagePage> {
         backgroundColor: Colors.transparent,
         title: Text(
           'Settings'.tr,
-          style: TextStyle(color: darkGrey),
+          style: TextStyle(color: color_01),
         ),
         elevation: 0,
       ),
@@ -64,7 +64,7 @@ class _ChangeCountryPageState extends State<ChangeLanguagePage> {
                             trailing: l == currentLanguage
                                 ? Icon(
                                     Icons.check_circle,
-                                    color: yellow,
+                                    color: color_13,
                                     size: 16,
                                   )
                                 : SizedBox(),

@@ -3,6 +3,7 @@ import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart'
 import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/listView/ListaProyectos.dart';
 import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/search/project_search.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -134,8 +135,18 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: color_10o15,
+        shadowColor: color_10o15,
         title: const Center(
-          child: Text("Dashboard Proyectos"),
+          child: Text(
+            "DASHBOARD PROYECTOS",
+            style: TextStyle(
+              color: color_01,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+              fontSize: 18.0,
+            ),
+          ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -147,7 +158,6 @@ class _DashboardState extends State<Dashboard> {
                 ));
           },
         ),
-        //shape: const CustomAppBarShape(multi: 0.05),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -160,20 +170,12 @@ class _DashboardState extends State<Dashboard> {
               },
               icon: const Icon(
                 Icons.restart_alt_outlined,
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: color_01,
               ),
             ),
           ),
-          // IconButton(
-          //   icon: const Icon(Icons.search),
-          //   onPressed: () {
-          //     showSearch(
-          //       context: context,
-          //       delegate: ProjectSMSearchDelegate(aProyecto: aProyectoAll),
-          //     );
-          //   },
-          // ),
         ],
+        /*
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: Container(
@@ -181,7 +183,7 @@ class _DashboardState extends State<Dashboard> {
             margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: Colors.white,
+              color: colorGB,
               border: Border.all(color: Colors.blue),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -206,6 +208,7 @@ class _DashboardState extends State<Dashboard> {
             ),
           ),
         ),
+        */
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -213,153 +216,139 @@ class _DashboardState extends State<Dashboard> {
         child: Column(
           children: [
             Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: const Color.fromRGBO(0, 0, 0, 0.12),
-                    width: 1.1,
-                  ),
-                  //borderRadius: const BorderRadius.all(Radius.circular(12)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: 1,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              /**
-                               * PIE CHART
-                               */
-                              Card(
-                                color: const Color(0xFFF5F5F5),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                elevation: 3,
-                                child: SfCircularChart(
-                                  title: ChartTitle(
-                                    text: 'ESTADOS DE TAMBOS',
-                                    textStyle: const TextStyle(
-                                      color: Color.fromRGBO(0, 116, 227, 1),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                    alignment: ChartAlignment.center,
-                                  ),
-                                  legend: Legend(
-                                    isVisible: true,
-                                    position: LegendPosition.right,
-                                    orientation: LegendItemOrientation.vertical,
-                                    overflowMode: LegendItemOverflowMode.wrap,
-                                    textStyle: const TextStyle(
-                                      color: Color.fromRGBO(0, 116, 227, 1),
-                                    ),
-                                  ),
-                                  onLegendTapped: (LegendTapArgs args) {
-                                    //print(args.pointIndex);
-                                  },
-                                  series: [
-                                    PieSeries<ChartData, String>(
-                                      dataSource: chartData,
-                                      pointColorMapper: (ChartData data, _) =>
-                                          data.color,
-                                      xValueMapper: (ChartData data, _) =>
-                                          data.x,
-                                      yValueMapper: (ChartData data, _) =>
-                                          data.y,
-                                      dataLabelSettings:
-                                          const DataLabelSettings(
-                                        isVisible: true,
-                                        labelAlignment:
-                                            ChartDataLabelAlignment.top,
-                                        margin: EdgeInsets.all(1),
-                                      ),
-                                      name: 'Data',
-                                      //explode: true,
-                                      //explodeIndex: 1,
-                                      radius: '80%',
-                                      onPointTap:
-                                          (ChartPointDetails details) async {
-                                        BusyIndicator.show(context);
-                                        await Future<dynamic>.delayed(
-                                            const Duration(milliseconds: 1000));
-                                        int iIndex = details.pointIndex! + 1;
-                                        switch (iIndex) {
-                                          case 1: /* MUL ALTO*/
-                                            aProyecto = aProyecto1;
-                                            break;
-                                          case 2: /* ALTO*/
-                                            aProyecto = aProyecto2;
-                                            break;
-                                          case 3: /* BAJO*/
-                                            aProyecto = aProyecto3;
-                                            break;
-                                          case 4: /* MEDIO */
-                                            aProyecto = aProyecto4;
-                                            break;
-                                          default:
-                                        }
-                                        setState(() {});
-                                        BusyIndicator.hide(context);
-                                      },
-                                    ),
-                                  ],
-                                ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: 1,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            /**
+                             * PIE CHART
+                             */
+                            Card(
+                              color: colorGB,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
+                              elevation: 3,
+                              child: SfCircularChart(
+                                title: ChartTitle(
+                                  text: 'ESTADOS DE TAMBOS',
+                                  textStyle: const TextStyle(
+                                    color: color_07,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                  alignment: ChartAlignment.center,
+                                ),
+                                legend: Legend(
+                                  isVisible: true,
+                                  position: LegendPosition.right,
+                                  orientation: LegendItemOrientation.vertical,
+                                  overflowMode: LegendItemOverflowMode.wrap,
+                                  textStyle: const TextStyle(
+                                    color: color_07,
+                                  ),
+                                ),
+                                onLegendTapped: (LegendTapArgs args) {
+                                  //print(args.pointIndex);
+                                },
+                                series: [
+                                  PieSeries<ChartData, String>(
+                                    dataSource: chartData,
+                                    pointColorMapper: (ChartData data, _) =>
+                                        data.color,
+                                    xValueMapper: (ChartData data, _) => data.x,
+                                    yValueMapper: (ChartData data, _) => data.y,
+                                    dataLabelSettings: const DataLabelSettings(
+                                      isVisible: true,
+                                      labelAlignment:
+                                          ChartDataLabelAlignment.top,
+                                      margin: EdgeInsets.all(1),
+                                    ),
+                                    name: 'Data',
+                                    //explode: true,
+                                    //explodeIndex: 1,
+                                    radius: '80%',
+                                    onPointTap:
+                                        (ChartPointDetails details) async {
+                                      BusyIndicator.show(context);
+                                      await Future<dynamic>.delayed(
+                                          const Duration(milliseconds: 1000));
+                                      int iIndex = details.pointIndex! + 1;
+                                      switch (iIndex) {
+                                        case 1: /* MUL ALTO*/
+                                          aProyecto = aProyecto1;
+                                          break;
+                                        case 2: /* ALTO*/
+                                          aProyecto = aProyecto2;
+                                          break;
+                                        case 3: /* BAJO*/
+                                          aProyecto = aProyecto3;
+                                          break;
+                                        case 4: /* MEDIO */
+                                          aProyecto = aProyecto4;
+                                          break;
+                                        default:
+                                      }
+                                      setState(() {});
+                                      BusyIndicator.hide(context);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
 
-                              /**
-                               * DATA
-                               */
-                              const SizedBox(height: 15),
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                child: const Center(
-                                  child: Text(
-                                    "PROYECTOS TAMBOS",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(0, 116, 227, 1),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w800,
-                                      fontFamily: 'Roboto-Bold',
-                                    ),
+                            /**
+                             * DATA
+                             */
+                            const SizedBox(height: 15),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              child: const Center(
+                                child: Text(
+                                  "PROYECTOS TAMBOS",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: color_07,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w800,
+                                    fontFamily: 'Roboto-Bold',
                                   ),
                                 ),
                               ),
-                              aProyecto.isNotEmpty
-                                  ? ListView.builder(
-                                      itemCount: aProyecto.length,
-                                      physics: const ClampingScrollPhysics(),
-                                      shrinkWrap: true,
-                                      padding: const EdgeInsets.all(10),
-                                      itemBuilder: (context, index) {
-                                        return ListaProyectos(
-                                          context: context,
-                                          oProyecto: aProyecto[index],
-                                        );
-                                      },
-                                    )
-                                  : Container(
-                                      padding: const EdgeInsets.only(top: 40),
-                                      child: const Center(
-                                        child: CircularProgressIndicator(
-                                          color:
-                                              Color.fromARGB(255, 0, 102, 255),
-                                        ),
+                            ),
+                            aProyecto.isNotEmpty
+                                ? ListView.builder(
+                                    itemCount: aProyecto.length,
+                                    physics: const ClampingScrollPhysics(),
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.all(10),
+                                    itemBuilder: (context, index) {
+                                      return ListaProyectos(
+                                        context: context,
+                                        oProyecto: aProyecto[index],
+                                      );
+                                    },
+                                  )
+                                : Container(
+                                    padding: const EdgeInsets.only(top: 40),
+                                    child: const Center(
+                                      child: CircularProgressIndicator(
+                                        color: color_07,
                                       ),
                                     ),
-                            ],
-                          );
-                        },
-                      ),
+                                  ),
+                          ],
+                        );
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

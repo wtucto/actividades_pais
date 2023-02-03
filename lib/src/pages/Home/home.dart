@@ -154,8 +154,9 @@ class _HomePagePais extends State<HomePagePais> {
     String icon3 = 'assets/icons/icon_fligth.png';
     String icon4 = 'assets/icons/icon_intervencion.png';
     String icon5 = 'assets/icons/monitoreo.png';
-    String icon7 = 'assets/icons/icon_activity.png';
-    String icon8 = 'assets/Tambook/libro-abierto.png';
+    String icon6 = 'assets/icons/parque informático.png';
+    String icon7 = 'assets/icons/actividades.png';
+    String icon8 = 'assets/icons/libro-abierto.png';
 
     List<HomeOptions> aHomeOptions = [];
 
@@ -166,7 +167,7 @@ class _HomePagePais extends State<HomePagePais> {
           name: 'TileAppRegister'.tr,
           types: const ['Usuario'],
           image: icon0,
-          color: lightTeal,
+          color: color_07,
         ),
       );
     } else {
@@ -185,7 +186,7 @@ class _HomePagePais extends State<HomePagePais> {
             code: 'OPT1009',
             name: 'TileParqueInfomatico'.tr,
             types: const ['Ver'],
-            image: icon5,
+            image: icon6,
             color: const Color(0xFF78b8cd),
           ),
         );
@@ -259,7 +260,7 @@ class _HomePagePais extends State<HomePagePais> {
             code: 'OPT1007',
             name: 'SEGUIMINETO Y MONITOREO',
             types: const ['Ver'],
-            image: icon1,
+            image: icon5,
             color: const Color(0xFF78b8cd),
           ),
         );

@@ -85,7 +85,7 @@ class _SplashPageState extends State<SplashPage>
         ),
       ),
       child: Container(
-        decoration: const BoxDecoration(color: transparentWite),
+        decoration: const BoxDecoration(color: colorGB_01o27),
         child: SafeArea(
           child: Scaffold(
             body: Column(
