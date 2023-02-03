@@ -14,6 +14,7 @@ import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/repository/main2_repo.dart';
 import 'package:actividades_pais/util/check_connection.dart';
+import 'package:actividades_pais/util/file_util.dart';
 import 'package:get/get.dart';
 import 'package:actividades_pais/backend/repository/main_repo.dart';
 import 'package:logger/logger.dart';
@@ -439,6 +440,20 @@ class MainService {
           await Get.find<MainRepo>().getAllMonitoreoDb(limit, offset);
       List<TramaMonitoreoModel> aApi =
           await Get.find<MainRepo>().getAllMonitoreoApi();
+
+      try {
+        bool isOk = await FileUtil().writeToAllDataFile("MonitoreoApi", aApi);
+        /*
+        List<TramaMonitoreoModel>? aApi2 =
+            await FileUtil().readDataFile("MonitoreoApi", (data) {
+          return (data as List)
+              .map((e) => TramaMonitoreoModel.fromJson(e))
+              .toList();
+        });
+        */
+      } catch (oError) {
+        print(oError);
+      }
 
       for (TramaMonitoreoModel oApi in aApi) {
         /**

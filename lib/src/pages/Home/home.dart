@@ -448,13 +448,16 @@ class _HomePagePais extends State<HomePagePais> {
                           ),
                           Container(
                             padding: const EdgeInsets.all(12),
-                            child: Text(
-                              homeOption.name,
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 0, 0, 0),
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.normal,
-                                fontSize: 12.0,
+                            child: Center(
+                              child: Text(
+                                homeOption.name,
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  fontWeight: FontWeight.w700,
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 12.0,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           )

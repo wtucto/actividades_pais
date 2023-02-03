@@ -27,12 +27,12 @@ class AtencionesModel {
 
   static List<AtencionesModel> categoryList = <AtencionesModel>[
     AtencionesModel(
-      imagePath: 'assets/design_course/user-gobierno_central.png',
+      imagePath: '',
       title: 'Atenciones a nivel nacional',
       total: 17393388,
     ),
     AtencionesModel(
-      imagePath: 'assets/design_course/user-gobierno_central.png',
+      imagePath: '',
       title: 'Atenciones 2022',
       total: 2577847,
     ),

@@ -7,7 +7,6 @@ import 'package:actividades_pais/src/pages/configuracion/ResetContrasenia.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/Login/widgets/botonLog.dart';
@@ -20,7 +19,6 @@ import 'package:actividades_pais/backend/api/pnpais_api.dart';
 
 import '../../datamodels/Provider/PorviderLogin.dart';
 
-SharedPreferences? _prefs;
 bool? checkGuardarDatos = false;
 bool? check = false;
 bool? bRepeat = false;
@@ -37,22 +35,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    loadPreferences();
     vaidarexUsuario();
-
     super.initState();
-  }
-
-  loadPreferences() async {
-    _prefs = await SharedPreferences.getInstance();
-    check = _prefs!.getBool("check");
-    if (_prefs != null && check == true) {
-      if (_prefs!.getString("clave") != "") {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => HomePagePais()),
-        );
-      }
-    }
   }
 
   vaidarexUsuario() async {

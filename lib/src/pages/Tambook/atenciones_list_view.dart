@@ -46,19 +46,30 @@ class _AtencionesListViewState extends State<AtencionesListView>
             } else {
               return ListView.builder(
                 padding: const EdgeInsets.only(
-                    top: 0, bottom: 0, right: 16, left: 16),
+                  top: 0,
+                  bottom: 0,
+                  right: 16,
+                  left: 16,
+                ),
                 itemCount: AtencionesModel.categoryList.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   final int count = AtencionesModel.categoryList.length > 10
                       ? 10
                       : AtencionesModel.categoryList.length;
-                  final Animation<double> animation =
-                      Tween<double>(begin: 0.0, end: 1.0).animate(
-                          CurvedAnimation(
-                              parent: animationController!,
-                              curve: Interval((1 / count) * index, 1.0,
-                                  curve: Curves.fastOutSlowIn)));
+                  final Animation<double> animation = Tween<double>(
+                    begin: 0.0,
+                    end: 1.0,
+                  ).animate(
+                    CurvedAnimation(
+                      parent: animationController!,
+                      curve: Interval(
+                        (1 / count) * index,
+                        1.0,
+                        curve: Curves.fastOutSlowIn,
+                      ),
+                    ),
+                  );
                   animationController?.forward();
 
                   return AtencionesView(
@@ -100,7 +111,10 @@ class AtencionesView extends StatelessWidget {
           opacity: animation!,
           child: Transform(
             transform: Matrix4.translationValues(
-                100 * (1.0 - animation!.value), 0.0, 0.0),
+              100 * (1.0 - animation!.value),
+              0.0,
+              0.0,
+            ),
             child: InkWell(
               splashColor: Colors.black,
               onTap: callback,
@@ -108,79 +122,80 @@ class AtencionesView extends StatelessWidget {
                 width: 280,
                 child: Stack(
                   children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 48,
-                          ),
-                          Expanded(
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                color: Color.fromARGB(255, 233, 234, 240),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(16.0)),
-                              ),
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 70,
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      child: Column(
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10, bottom: 16, right: 16),
-                                            child: Text(
-                                              category!.title!,
+                    Row(
+                      children: [
+                        const SizedBox(
+                          width: 48,
+                        ),
+                        Expanded(
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: Color.fromARGB(255, 237, 237, 241),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16.0)),
+                            ),
+                            child: Row(
+                              children: [
+                                const SizedBox(
+                                  width: 70,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 10,
+                                          bottom: 16,
+                                          right: 16,
+                                        ),
+                                        child: Text(
+                                          category!.title!,
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                            letterSpacing: 0.27,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, bottom: 16, right: 16),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '${category!.total}',
                                               textAlign: TextAlign.left,
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.w600,
-                                                fontSize: 16,
+                                                fontSize: 20,
                                                 letterSpacing: 0.27,
                                                 color: Colors.black,
                                               ),
                                             ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10, bottom: 16, right: 16),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  '${category!.total}',
-                                                  textAlign: TextAlign.left,
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 20,
-                                                    letterSpacing: 0.27,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        )
+                      ],
                     ),
                     Padding(
-                      padding:
-                          const EdgeInsets.only(top: 24, bottom: 24, left: 16),
+                      padding: const EdgeInsets.only(
+                        top: 24,
+                        bottom: 24,
+                        left: 16,
+                      ),
                       child: Row(
                         children: [
                           ClipRRect(
@@ -189,8 +204,9 @@ class AtencionesView extends StatelessWidget {
                             child: AspectRatio(
                               aspectRatio: 1.0,
                               child: Image.asset(
-                                  'assets/design_course/user-gobierno_central.png',
-                                  fit: BoxFit.fill),
+                                'assets/design_course/user-gobierno_central.png',
+                                fit: BoxFit.fill,
+                              ),
                             ),
                           )
                         ],

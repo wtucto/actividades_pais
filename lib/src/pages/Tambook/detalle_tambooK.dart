@@ -185,7 +185,7 @@ class _DetalleTambookState extends State<DetalleTambook>
       ),
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
-        background: Container(
+        background: SizedBox(
           height: 200.0,
           child: Ink.image(
             image: NetworkImage(oTambo.tamboPathImage ?? ''),
@@ -333,30 +333,26 @@ class _DetalleTambookState extends State<DetalleTambook>
                             * CENTROS POBLADOS
                             */
                           cardDatosCentroPoblado(),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 50),
                         ],
                       ),
                     ),
 
                     //const TabScreen("SERVICIOS INTERNET"),
-                    Container(
-                      child: ListView(
-                        children: [
-                          cardDatosSrvInternet(),
-                          const SizedBox(height: 10),
-                        ],
-                      ),
+                    ListView(
+                      children: [
+                        cardDatosSrvInternet(),
+                        const SizedBox(height: 10),
+                      ],
                     ),
 
                     //TabScreen("INTERVENCIONES"),
-                    Container(
-                      child: ListView(
-                        children: [
-                          cardDatosIntervencion(),
-                          const SizedBox(height: 10),
-                          //Intecard1(),
-                        ],
-                      ),
+                    ListView(
+                      children: [
+                        cardDatosIntervencion(),
+                        const SizedBox(height: 10),
+                        //Intecard1(),
+                      ],
                     ),
                     const TabScreen("EQUIPAMIENTO TECNOLÓGICO DEL TAMBO"),
                   ],
@@ -405,6 +401,11 @@ class _DetalleTambookState extends State<DetalleTambook>
     );
   }
 
+/*
+ * -----------------------------------------------
+ *            GESTOR
+ * -----------------------------------------------
+ */
   Card cardNuestroGestor() {
     var heading = 'NUESTRO GESTOR';
     var subheading = oTambo.gestorNombre ?? '';
@@ -413,66 +414,70 @@ class _DetalleTambookState extends State<DetalleTambook>
       elevation: 4.0,
       child: Column(
         children: [
-          ListTile(
-            title: Text(
-              heading,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
+          ExpansionTile(
+            initiallyExpanded: true,
+            title: ListTile(
+              title: Text(
+                heading,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              subtitle: Text(
+                subheading,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
-            subtitle: Text(
-              subheading!,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w400,
+            children: <Widget>[
+              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+              SizedBox(
+                height: 200.0,
+                child: Ink.image(
+                  image: cardImage,
+                  fit: BoxFit.fitHeight,
+                ),
               ),
-            ),
-          ),
-          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-          Container(
-            height: 200.0,
-            child: Ink.image(
-              image: cardImage,
-              fit: BoxFit.fitHeight,
-            ),
-          ),
-          Container(
-            // padding: EdgeInsets.all(5.0),
-            alignment: Alignment.centerLeft,
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    title: const Text('CARRERA'),
-                    subtitle: Text(oTambo.gestorProfession ?? ''),
+              Container(
+                // padding: EdgeInsets.all(5.0),
+                alignment: Alignment.centerLeft,
+                child: Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        title: const Text('CARRERA'),
+                        subtitle: Text(oTambo.gestorProfession ?? ''),
+                      ),
+                      ListTile(
+                        title: const Text('GRADO'),
+                        subtitle: Text(oTambo.gestorGradoAcademico ?? ''),
+                      ),
+                      ListTile(
+                        title: const Text('SEXO'),
+                        subtitle: Text(oTambo.gestorSexo ?? ''),
+                      ),
+                      ListTile(
+                        title: const Text('ESTADO CIVIL'),
+                        subtitle: Text(oTambo.gestorEstadoCivil ?? ''),
+                      ),
+                      ListTile(
+                        title: const Text('FECHA DE NACIMIENTO'),
+                        subtitle: Text(oTambo.gestorFechaNacimiento ?? ''),
+                      ),
+                      ListTile(
+                        title: const Text('EMAIL'),
+                        subtitle: Text(oTambo.gestorCorreo ?? ''),
+                      ),
+                    ],
                   ),
-                  ListTile(
-                    title: const Text('GRADO'),
-                    subtitle: Text(oTambo.gestorGradoAcademico ?? ''),
-                  ),
-                  ListTile(
-                    title: const Text('SEXO'),
-                    subtitle: Text(oTambo.gestorSexo ?? ''),
-                  ),
-                  ListTile(
-                    title: const Text('ESTADO CIVIL'),
-                    subtitle: Text(oTambo.gestorEstadoCivil ?? ''),
-                  ),
-                  ListTile(
-                    title: const Text('FECHA DE NACIMIENTO'),
-                    subtitle: Text(oTambo.gestorFechaNacimiento ?? ''),
-                  ),
-                  ListTile(
-                    title: const Text('EMAIL'),
-                    subtitle: Text(oTambo.gestorCorreo ?? ''),
-                  ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ],
       ),
@@ -485,180 +490,41 @@ class _DetalleTambookState extends State<DetalleTambook>
       elevation: 4.0,
       child: Column(
         children: [
-          ListTile(
-            title: Text(
-              heading,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
+          ExpansionTile(
+            title: ListTile(
+              title: Text(
+                heading,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
-          ),
-          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-          Container(
-            alignment: Alignment.centerLeft,
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    title: const Text('ATENCIONES'),
-                    subtitle: Text(oTambo.atencion ?? ''),
+            children: <Widget>[
+              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        title: const Text('ATENCIONES'),
+                        subtitle: Text(oTambo.atencion ?? ''),
+                      ),
+                      ListTile(
+                        title: const Text('INTERVENCIONES'),
+                        subtitle: Text(oTambo.intervencion ?? ''),
+                      ),
+                      ListTile(
+                        title: const Text('BENEFICIARIOS'),
+                        subtitle: Text(oTambo.beneficiario ?? ''),
+                      ),
+                    ],
                   ),
-                  ListTile(
-                    title: const Text('INTERVENCIONES'),
-                    subtitle: Text(oTambo.intervencion ?? ''),
-                  ),
-                  ListTile(
-                    title: const Text('BENEFICIARIOS'),
-                    subtitle: Text(oTambo.beneficiario ?? ''),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Card cardDatosUbicacion() {
-    var heading = 'DATOS DE UBICACIÓN';
-    return Card(
-      elevation: 4.0,
-      child: Column(
-        children: [
-          ListTile(
-            title: Text(
-              heading,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-          Container(
-            alignment: Alignment.centerLeft,
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    title: const Text('DEPARTAMENTO'),
-                    subtitle: Text(oTambo.nombreDepartamento ?? ''),
-                  ),
-                  ListTile(
-                    title: const Text('PROVINCIA'),
-                    subtitle: Text(oTambo.nombreProvincia ?? ''),
-                  ),
-                  ListTile(
-                    title: const Text('DISTRITO'),
-                    subtitle: Text(oTambo.nombreDistrito ?? ''),
-                  ),
-                  ListTile(
-                    title: const Text('CENTRO POBLADO'),
-                    subtitle: Text(oTambo.nombreCcpp ?? ''),
-                  ),
-                  ListTile(
-                    title: const Text('COORDENADAS'),
-                    subtitle:
-                        Text('${oTambo.xCcpp ?? ''} , ${oTambo.yCcpp ?? ''}'),
-                  ),
-                  ListTile(
-                    title: const Text('ALTITUD'),
-                    subtitle: Text(oTambo.altitudCcpp ?? ''),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Card cardDatosDemograficos() {
-    var heading = 'DATOS DEMOGRÁFICOS';
-    return Card(
-      elevation: 4.0,
-      child: Column(
-        children: [
-          ListTile(
-            title: Text(
-              heading,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-          Container(
-            alignment: Alignment.centerLeft,
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    title: const Text('N° DE HOGARES'),
-                    subtitle: Text(oTambo.hogaresAnteriores ?? ''),
-                  ),
-                  ListTile(
-                    title: const Text('N° DE VIVIENDAS'),
-                    subtitle: Text(oTambo.viviendasAnterior ?? ''),
-                  ),
-                  ListTile(
-                    title: const Text('POBLACIÓN'),
-                    subtitle: Text(oTambo.poblacionAnterior ?? ''),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Card cardDatosObra() {
-    var heading = 'DATOS DE LA OBRA';
-    return Card(
-      elevation: 4.0,
-      child: Column(
-        children: [
-          ListTile(
-            title: Text(
-              heading,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-          Container(
-            alignment: Alignment.centerLeft,
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    title: const Text('N° SNIP'),
-                    subtitle: Text(
-                        oTambo.nSnip == null ? '' : oTambo.nSnip.toString()),
-                  ),
-                  ListTile(
-                    title: const Text('MONTO CONTRATADO'),
-                    subtitle: Text(oTambo.montoAdjudicado ?? ''),
-                  ),
-                ],
-              ),
-            ),
+            ],
           ),
         ],
       ),
@@ -673,42 +539,197 @@ class _DetalleTambookState extends State<DetalleTambook>
       elevation: 4.0,
       child: Column(
         children: [
-          ListTile(
-            title: Text(
-              heading,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
+          ExpansionTile(
+            title: ListTile(
+              title: Text(
+                heading,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              subtitle: Text(
+                subheading,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
-            subtitle: Text(
-              subheading,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w400,
+            children: <Widget>[
+              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        title: const Text('TÉLEFONO'),
+                        subtitle: Text(oTambo.jefeTelefono ?? ''),
+                      ),
+                      ListTile(
+                        title: const Text('EMAIL'),
+                        subtitle: Text(oTambo.jefeCorreo ?? ''),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-          Container(
-            alignment: Alignment.centerLeft,
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    title: const Text('TÉLEFONO'),
-                    subtitle: Text(oTambo.jefeTelefono ?? ''),
-                  ),
-                  ListTile(
-                    title: const Text('EMAIL'),
-                    subtitle: Text(oTambo.jefeCorreo ?? ''),
-                  ),
-                ],
+        ],
+      ),
+    );
+  }
+
+  Card cardDatosUbicacion() {
+    var heading = 'DATOS DE UBICACIÓN';
+    return Card(
+      elevation: 4.0,
+      child: Column(
+        children: [
+          ExpansionTile(
+            title: ListTile(
+              title: Text(
+                heading,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
+            children: <Widget>[
+              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        title: const Text('DEPARTAMENTO'),
+                        subtitle: Text(oTambo.nombreDepartamento ?? ''),
+                      ),
+                      ListTile(
+                        title: const Text('PROVINCIA'),
+                        subtitle: Text(oTambo.nombreProvincia ?? ''),
+                      ),
+                      ListTile(
+                        title: const Text('DISTRITO'),
+                        subtitle: Text(oTambo.nombreDistrito ?? ''),
+                      ),
+                      ListTile(
+                        title: const Text('CENTRO POBLADO'),
+                        subtitle: Text(oTambo.nombreCcpp ?? ''),
+                      ),
+                      ListTile(
+                        title: const Text('COORDENADAS'),
+                        subtitle: Text(
+                            '${oTambo.xCcpp ?? ''} , ${oTambo.yCcpp ?? ''}'),
+                      ),
+                      ListTile(
+                        title: const Text('ALTITUD'),
+                        subtitle: Text(oTambo.altitudCcpp ?? ''),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Card cardDatosDemograficos() {
+    var heading = 'DATOS DEMOGRÁFICOS';
+    return Card(
+      elevation: 4.0,
+      child: Column(
+        children: [
+          ExpansionTile(
+            title: ListTile(
+              title: Text(
+                heading,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            children: <Widget>[
+              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        title: const Text('N° DE HOGARES'),
+                        subtitle: Text(oTambo.hogaresAnteriores ?? ''),
+                      ),
+                      ListTile(
+                        title: const Text('N° DE VIVIENDAS'),
+                        subtitle: Text(oTambo.viviendasAnterior ?? ''),
+                      ),
+                      ListTile(
+                        title: const Text('POBLACIÓN'),
+                        subtitle: Text(oTambo.poblacionAnterior ?? ''),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Card cardDatosObra() {
+    var heading = 'DATOS DE LA OBRA';
+    return Card(
+      elevation: 4.0,
+      child: Column(
+        children: [
+          ExpansionTile(
+            title: ListTile(
+              title: Text(
+                heading,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            children: <Widget>[
+              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        title: const Text('N° SNIP'),
+                        subtitle: Text(oTambo.nSnip == null
+                            ? ''
+                            : oTambo.nSnip.toString()),
+                      ),
+                      ListTile(
+                        title: const Text('MONTO CONTRATADO'),
+                        subtitle: Text(oTambo.montoAdjudicado ?? ''),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -721,42 +742,47 @@ class _DetalleTambookState extends State<DetalleTambook>
       elevation: 4.0,
       child: Column(
         children: [
-          ListTile(
-            title: Text(
-              '$heading ( ${oTambo.aCentroPoblado!.length} )',
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
+          ExpansionTile(
+            title: ListTile(
+              title: Text(
+                '$heading ( ${oTambo.aCentroPoblado!.length} )',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
-          ),
-          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-          Container(
-            alignment: Alignment.centerLeft,
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  for (var oCentro in oTambo.aCentroPoblado!)
-                    ListTile(
-                      title: Text(
-                        '- ${oCentro.nombreCcpp} ( ALTITUD: ${oCentro.altitudCcpp} - REGION: ${oCentro.regionCatural} )',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
+            children: <Widget>[
+              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (var oCentro in oTambo.aCentroPoblado!)
+                        ListTile(
+                          iconColor: const Color.fromARGB(255, 0, 0, 0),
+                          title: Text(oCentro.nombreCcpp!),
+                          subtitle: Text(
+                              '( ALTITUD: ${oCentro.altitudCcpp} - REGION: ${oCentro.regionCatural} )'),
                         ),
-                      ),
-                    )
-                ],
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ],
       ),
     );
   }
 
+/*
+ * -----------------------------------------------
+ *            SERVICIOS INTERNET
+ * -----------------------------------------------
+ */
   Card cardDatosSrvInternet() {
     var heading = 'SERVICIOS INTERNET';
     TamboServicioInternetDto oSrvInter =
@@ -765,56 +791,65 @@ class _DetalleTambookState extends State<DetalleTambook>
       elevation: 4.0,
       child: Column(
         children: [
-          ListTile(
-            title: Text(
-              heading,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
+          ExpansionTile(
+            initiallyExpanded: true,
+            title: ListTile(
+              title: Text(
+                heading,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
-          ),
-          const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-          Container(
-            alignment: Alignment.centerLeft,
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  /*ListTile(
+            children: <Widget>[
+              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      /*ListTile(
                     title: const Text('CENTRO POBLADO'),
                     subtitle: Text(oSrvInter.nombreCcpp!),
                   ),*/
-                  ListTile(
-                    title: const Text('INTERNET'),
-                    subtitle: Text(oSrvInter.internet!),
+                      ListTile(
+                        title: const Text('INTERNET'),
+                        subtitle: Text(oSrvInter.internet!),
+                      ),
+                      ListTile(
+                        title: const Text('FECHA INSTALACIÓN'),
+                        subtitle: Text(oSrvInter.fecInstalacion!),
+                      ),
+                      ListTile(
+                        title: const Text('ESTADO INTERNET'),
+                        subtitle: Text(oSrvInter.estadoInternet!),
+                      ),
+                      ListTile(
+                        title: const Text('VELOCIDAD BAJADA'),
+                        subtitle: Text(oSrvInter.veloBaja!),
+                      ),
+                      ListTile(
+                        title: const Text('VELOCIDAD SUBIDA'),
+                        subtitle: Text(oSrvInter.veloSube!),
+                      ),
+                    ],
                   ),
-                  ListTile(
-                    title: const Text('FECHA INSTALACIÓN'),
-                    subtitle: Text(oSrvInter.fecInstalacion!),
-                  ),
-                  ListTile(
-                    title: const Text('ESTADO INTERNET'),
-                    subtitle: Text(oSrvInter.estadoInternet!),
-                  ),
-                  ListTile(
-                    title: const Text('VELOCIDAD BAJADA'),
-                    subtitle: Text(oSrvInter.veloBaja!),
-                  ),
-                  ListTile(
-                    title: const Text('VELOCIDAD SUBIDA'),
-                    subtitle: Text(oSrvInter.veloSube!),
-                  ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ],
       ),
     );
   }
 
+/*
+ * -----------------------------------------------
+ *            INTERVENCIONES
+ * -----------------------------------------------
+ */
   Card cardDatosIntervencion() {
     var heading = 'INTERVENCIONES';
     TamboServicioInternetDto oSrvInter =
@@ -826,31 +861,34 @@ class _DetalleTambookState extends State<DetalleTambook>
           if (aInterAmbDir.isEmpty && statusLoadActividad == 0)
             ListTile(
               leading: const Icon(Icons.arrow_drop_down_circle),
-              title: Text("CARGANDO..."),
+              title: const Text("CARGANDO..."),
               subtitle: Text(
                 "Esperando los registros. Esto puede tomar tiempo",
                 style: TextStyle(
-                    color: Color.fromARGB(255, 53, 8, 200).withOpacity(0.6)),
+                    color:
+                        const Color.fromARGB(255, 53, 8, 200).withOpacity(0.6)),
               ),
             ),
           if (aInterAmbDir.isEmpty && statusLoadActividad == 1)
             ListTile(
               leading: const Icon(Icons.arrow_drop_down_circle),
-              title: Text("SIN DATOS"),
+              title: const Text("SIN DATOS"),
               subtitle: Text(
                 "No se encontraron registros para mostrar.",
                 style: TextStyle(
-                    color: Color.fromARGB(255, 53, 8, 200).withOpacity(0.6)),
+                    color:
+                        const Color.fromARGB(255, 53, 8, 200).withOpacity(0.6)),
               ),
             ),
           if (aInterAmbDir.isEmpty && statusLoadActividad == 2)
             ListTile(
               leading: const Icon(Icons.arrow_drop_down_circle),
-              title: Text("¡Ups! Algo salió mal"),
+              title: const Text("¡Ups! Algo salió mal"),
               subtitle: Text(
                 "No se pudo recuperar los registros para mostrar.",
                 style: TextStyle(
-                    color: Color.fromARGB(255, 211, 13, 13).withOpacity(0.6)),
+                    color: const Color.fromARGB(255, 211, 13, 13)
+                        .withOpacity(0.6)),
               ),
             ),
           for (var oActividad in aInterAmbDir)
@@ -906,6 +944,13 @@ class _DetalleTambookState extends State<DetalleTambook>
       ),
     );
   }
+
+/*
+ * -----------------------------------------------
+ *            EQUIPAMIENTO TECNOLÓGICO
+ * -----------------------------------------------
+ */
+
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {

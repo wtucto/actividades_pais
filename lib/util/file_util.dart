@@ -5,47 +5,52 @@ import 'package:path_provider/path_provider.dart';
 
 class FileUtil {
   File? jsonFile;
-  bool fileExists = false;
   Directory? dir;
+
+  Future<String> get _localPath async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    //final directory = await getExternalStorageDirectory();
+    Directory target = Directory(directory.path);
+    bool folderExist = false;
+    if (target.existsSync()) {
+      folderExist = true;
+    } else {
+      try {
+        target.createSync();
+        folderExist = true;
+      } catch (exception) {
+        print('${target.path} -- failed to create -- ${exception.toString()}');
+      }
+    }
+    return folderExist ? target.path : directory.path;
+  }
+
+  Future<bool> isFileExist(
+    String storage,
+  ) async {
+    String sPath = await _localPath;
+    jsonFile = File("$sPath/$storage.json");
+    bool fileExists = jsonFile!.existsSync();
+
+    return fileExists;
+  }
 
   /*
     Crear un nuevo archivo
     @Map data : Registros para almacenar
     @Directory dir: Ubicación del archivo
-    @String fileName: Nombre del archivo
+    @String storage: Nombre de la tienda
    */
-  void createFile(
-    Map<String, String> data,
-    Directory dir,
-    String fileName,
-  ) {
-    File file = File("${dir.path}/$fileName");
-    file.createSync();
-    fileExists = true;
-    file.writeAsStringSync(json.encode(data));
-  }
-
-  /*
-    Añadir nuevos registros al archivo
-    @String storage : Nombre de la tienda
-    @String key : Clave
-    @String value: Valor
-   */
-  void writeToDataFile(
+  Future<bool> createFile(
+    dynamic data,
     String storage,
-    String key,
-    String value,
   ) async {
-    String fileName = "$storage.json";
-    Map<String, String> content = {key: value};
-    bool fileExists = await getDocuments(fileName);
-    if (fileExists) {
-      Map<String, String> oContent = json.decode(jsonFile!.readAsStringSync());
-      oContent.addAll(content);
-      jsonFile!.writeAsStringSync(json.encode(oContent));
-    } else {
-      createFile(content, dir!, fileName);
-    }
+    String sPath = await _localPath;
+    File file = File("$sPath/$storage.json");
+    String aContent = jsonEncode(data);
+    file.createSync();
+    file.writeAsStringSync(aContent);
+    return true;
   }
 
   /*
@@ -53,55 +58,37 @@ class FileUtil {
     @String storage : Nombre de la tienda
     @T: Callback para el retorno de la data y parseo 
    */
-  Future<T?> getDataFile<T>(
+  Future<T?> readDataFile<T>(
     String storage,
     T Function(dynamic data)? parser,
   ) async {
-    String fileName = "$storage.json";
-    bool fileExists = await getDocuments(fileName);
+    bool fileExists = await isFileExist(storage);
     if (fileExists) {
-      String fileEncode = jsonFile!.readAsStringSync();
-      return parser!(fileEncode);
+      String sContent = jsonFile!.readAsStringSync();
+      return parser!(jsonDecode(sContent));
     } else {
-      createFile(json.decode("[]"), dir!, fileName);
+      await createFile(List.empty(), storage);
     }
 
     return parser!(null);
   }
 
   /*
-    Cargar y Obtener todos los registros del archivo LocalStorage
+    Añadir nuevos registros al archivo
     @String storage : Nombre de la tienda
     @dynamic data: registros para almacenar en el LocalStorage
-    @T: Callback para el retorno de la data y parseo 
    */
-  Future<T> loadDataFile<T>(
+  Future<bool> writeToAllDataFile<T>(
     String storage,
     dynamic data,
-    T Function(dynamic data)? parser,
   ) async {
-    String fileName = "$storage.json";
-    bool fileExists = await getDocuments(fileName);
+    bool fileExists = await isFileExist(storage);
+    String aContent = jsonEncode(data);
     if (fileExists) {
-      Map<String, String> jsonFileContent = json.decode(data);
-      jsonFile!.writeAsStringSync(json.encode(jsonFileContent));
+      jsonFile!.writeAsStringSync(aContent);
     } else {
-      createFile(json.decode(data), dir!, fileName);
+      await createFile(data, storage);
     }
-    return parser!(data);
-  }
-
-  Future<bool> getDocuments(
-    String storage,
-  ) async {
-    String fileName = "$storage.json";
-    fileExists = false;
-    await getApplicationDocumentsDirectory().then((Directory directory) {
-      dir = directory;
-      jsonFile = File("${dir!.path}/$fileName");
-      fileExists = jsonFile!.existsSync();
-    });
-
-    return fileExists;
+    return true;
   }
 }
