@@ -1,11 +1,12 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/src/pages/Home/home.dart';
-import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/listView/ListaProyectos.dart';
 import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/search/project_search.dart';
+import 'package:actividades_pais/src/pages/seguimientoMonitoreo/detalleProyecto.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 MainController mainController = MainController();
@@ -26,7 +27,6 @@ class _DashboardState extends State<Dashboard> {
 
   List<TramaProyectoModel> aProyecto = [];
   ScrollController scrollController = ScrollController();
-  final _txtSearch = TextEditingController();
 
   @override
   void initState() {
@@ -35,13 +35,10 @@ class _DashboardState extends State<Dashboard> {
   }
 
   List<ChartData> chartData = [
-    //1 - Verde       80D8A4
-    //2 - Amarillo    FEE191
-    //3 - Rojo        E84258
-    ChartData('MUY ALTO', 0, const Color(0xFF2196F3)),
-    ChartData('ALTO', 0, const Color(0xFF80D8A4)),
-    ChartData('MEDIO', 0, const Color(0xFFFEE191)),
-    ChartData('BAJO', 0, const Color(0xFFE84258)),
+    ChartData('MUY ALTO', 0, colorI),
+    ChartData('ALTO', 0, colorS),
+    ChartData('MEDIO', 0, color_13),
+    ChartData('BAJO', 0, colorP),
   ];
 
   Future<void> buildData() async {
@@ -76,13 +73,10 @@ class _DashboardState extends State<Dashboard> {
     setState(() {
       aProyecto = aProyectoAll;
       chartData = [
-        //1 - Verde       80D8A4
-        //2 - Amarillo    FEE191
-        //3 - Rojo        E84258
-        ChartData('MUY ALTO', aProyecto1.length, const Color(0xFF2196F3)),
-        ChartData('ALTO', aProyecto2.length, const Color(0xFF80D8A4)),
-        ChartData('MEDIO', aProyecto3.length, const Color(0xFFFEE191)),
-        ChartData('BAJO', aProyecto4.length, const Color(0xFFE84258)),
+        ChartData('MUY ALTO', aProyecto1.length, colorI),
+        ChartData('ALTO', aProyecto2.length, colorS),
+        ChartData('MEDIO', aProyecto3.length, color_13),
+        ChartData('BAJO', aProyecto4.length, colorP),
       ];
     });
   }
@@ -90,12 +84,12 @@ class _DashboardState extends State<Dashboard> {
   Color getColorAvancefisico(dynamic oProyecto) {
     try {
       return ((double.parse(oProyecto.avanceFisico.toString()) * 100) == 100
-          ? Colors.blue
+          ? colorI
           : (double.parse(oProyecto.avanceFisico.toString()) * 100) >= 50
-              ? Colors.green
+              ? colorS
               : (double.parse(oProyecto.avanceFisico.toString()) * 100) <= 30
-                  ? Colors.red
-                  : Colors.yellow);
+                  ? colorP
+                  : color_13);
     } catch (oError) {
       return Colors.black;
     }
@@ -149,7 +143,10 @@ class _DashboardState extends State<Dashboard> {
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: color_01,
+          ),
           onPressed: () {
             Navigator.pushReplacement(
                 context,
@@ -184,7 +181,7 @@ class _DashboardState extends State<Dashboard> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               color: colorGB,
-              border: Border.all(color: Colors.blue),
+              border: Border.all(color: colorI),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: TextField(
@@ -216,139 +213,271 @@ class _DashboardState extends State<Dashboard> {
         child: Column(
           children: [
             Expanded(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: 1,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            /**
-                             * PIE CHART
-                             */
-                            Card(
-                              color: colorGB,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              elevation: 3,
-                              child: SfCircularChart(
-                                title: ChartTitle(
-                                  text: 'ESTADOS DE TAMBOS',
-                                  textStyle: const TextStyle(
-                                    color: color_07,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                  alignment: ChartAlignment.center,
-                                ),
-                                legend: Legend(
-                                  isVisible: true,
-                                  position: LegendPosition.right,
-                                  orientation: LegendItemOrientation.vertical,
-                                  overflowMode: LegendItemOverflowMode.wrap,
-                                  textStyle: const TextStyle(
-                                    color: color_07,
-                                  ),
-                                ),
-                                onLegendTapped: (LegendTapArgs args) {
-                                  //print(args.pointIndex);
-                                },
-                                series: [
-                                  PieSeries<ChartData, String>(
-                                    dataSource: chartData,
-                                    pointColorMapper: (ChartData data, _) =>
-                                        data.color,
-                                    xValueMapper: (ChartData data, _) => data.x,
-                                    yValueMapper: (ChartData data, _) => data.y,
-                                    dataLabelSettings: const DataLabelSettings(
-                                      isVisible: true,
-                                      labelAlignment:
-                                          ChartDataLabelAlignment.top,
-                                      margin: EdgeInsets.all(1),
-                                    ),
-                                    name: 'Data',
-                                    //explode: true,
-                                    //explodeIndex: 1,
-                                    radius: '80%',
-                                    onPointTap:
-                                        (ChartPointDetails details) async {
-                                      BusyIndicator.show(context);
-                                      await Future<dynamic>.delayed(
-                                          const Duration(milliseconds: 1000));
-                                      int iIndex = details.pointIndex! + 1;
-                                      switch (iIndex) {
-                                        case 1: /* MUL ALTO*/
-                                          aProyecto = aProyecto1;
-                                          break;
-                                        case 2: /* ALTO*/
-                                          aProyecto = aProyecto2;
-                                          break;
-                                        case 3: /* BAJO*/
-                                          aProyecto = aProyecto3;
-                                          break;
-                                        case 4: /* MEDIO */
-                                          aProyecto = aProyecto4;
-                                          break;
-                                        default:
-                                      }
-                                      setState(() {});
-                                      BusyIndicator.hide(context);
-                                    },
-                                  ),
-                                ],
-                              ),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: 1,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /**
+                       * PIE CHART
+                       */
+                      Card(
+                        color: colorGB,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 3,
+                        child: SfCircularChart(
+                          title: ChartTitle(
+                            text: 'ESTADOS DE TAMBOS',
+                            textStyle: const TextStyle(
+                              color: color_07,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
                             ),
+                            alignment: ChartAlignment.center,
+                          ),
+                          legend: Legend(
+                            isVisible: true,
+                            position: LegendPosition.right,
+                            orientation: LegendItemOrientation.vertical,
+                            overflowMode: LegendItemOverflowMode.wrap,
+                            textStyle: const TextStyle(
+                              color: color_07,
+                            ),
+                          ),
+                          onLegendTapped: (LegendTapArgs args) {
+                            //print(args.pointIndex);
+                          },
+                          series: [
+                            PieSeries<ChartData, String>(
+                              dataSource: chartData,
+                              pointColorMapper: (ChartData data, _) =>
+                                  data.color,
+                              xValueMapper: (ChartData data, _) => data.x,
+                              yValueMapper: (ChartData data, _) => data.y,
+                              dataLabelSettings: const DataLabelSettings(
+                                isVisible: true,
+                                labelAlignment: ChartDataLabelAlignment.top,
+                                margin: EdgeInsets.all(1),
+                              ),
+                              name: 'Data',
+                              //explode: true,
+                              //explodeIndex: 1,
+                              radius: '80%',
+                              onPointTap: (ChartPointDetails details) async {
+                                BusyIndicator.show(context);
+                                await Future<dynamic>.delayed(
+                                    const Duration(milliseconds: 1000));
+                                int iIndex = details.pointIndex! + 1;
+                                switch (iIndex) {
+                                  case 1: /* MUL ALTO*/
+                                    aProyecto = aProyecto1;
+                                    break;
+                                  case 2: /* ALTO*/
+                                    aProyecto = aProyecto2;
+                                    break;
+                                  case 3: /* BAJO*/
+                                    aProyecto = aProyecto3;
+                                    break;
+                                  case 4: /* MEDIO */
+                                    aProyecto = aProyecto4;
+                                    break;
+                                  default:
+                                }
+                                setState(() {});
+                                BusyIndicator.hide(context);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
 
-                            /**
-                             * DATA
-                             */
-                            const SizedBox(height: 15),
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              child: const Center(
-                                child: Text(
-                                  "PROYECTOS TAMBOS",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: color_07,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w800,
-                                    fontFamily: 'Roboto-Bold',
-                                  ),
+                      /**
+                       * DATA
+                       */
+                      const SizedBox(height: 10),
+                      const Center(
+                        child: Text(
+                          "PROYECTOS TAMBOS",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: color_07,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            fontFamily: 'Roboto-Bold',
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      aProyecto.isNotEmpty
+                          ? SizedBox(
+                              height: 400,
+                              child: GridView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 1.3,
+                                  crossAxisSpacing: 5,
+                                  mainAxisSpacing: 5,
                                 ),
-                              ),
-                            ),
-                            aProyecto.isNotEmpty
-                                ? ListView.builder(
-                                    itemCount: aProyecto.length,
-                                    physics: const ClampingScrollPhysics(),
-                                    shrinkWrap: true,
-                                    padding: const EdgeInsets.all(10),
-                                    itemBuilder: (context, index) {
-                                      return ListaProyectos(
-                                        context: context,
-                                        oProyecto: aProyecto[index],
+                                padding: const EdgeInsets.only(
+                                  left: 5,
+                                  right: 5,
+                                  bottom: 58,
+                                ),
+                                itemCount: aProyecto.length,
+                                itemBuilder: (context, index) {
+                                  TramaProyectoModel oProyecto =
+                                      aProyecto[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => DetalleProyecto(
+                                            datoProyecto: oProyecto,
+                                          ),
+                                        ),
                                       );
                                     },
-                                  )
-                                : Container(
-                                    padding: const EdgeInsets.only(top: 40),
-                                    child: const Center(
-                                      child: CircularProgressIndicator(
-                                        color: color_07,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      margin: const EdgeInsets.only(bottom: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: colorGB,
+                                        border: Border.all(
+                                          width: 1,
+                                          color:
+                                              getColorAvancefisico(oProyecto),
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: color_04.withOpacity(0.9),
+                                            spreadRadius: 0,
+                                            blurRadius: 2,
+                                            offset: const Offset(0, 1),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Row(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 20),
+                                                      child:
+                                                          CircularPercentIndicator(
+                                                        radius: 30.0,
+                                                        lineWidth: 10.0,
+                                                        percent:
+                                                            getAvancefisico(
+                                                                oProyecto),
+                                                        center: Text(
+                                                          getAvancefisicoText(
+                                                              oProyecto),
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 11,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        progressColor:
+                                                            getColorAvancefisico(
+                                                                oProyecto),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    Flexible(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          const Text(
+                                                            'TAMBO',
+                                                            style: TextStyle(
+                                                              color: color_01,
+                                                              fontSize: 11,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            oProyecto.tambo!,
+                                                            style:
+                                                                const TextStyle(
+                                                              color: color_01,
+                                                              fontSize: 11,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  oProyecto.estado!,
+                                                  style: const TextStyle(
+                                                    color: color_01,
+                                                    fontSize: 11,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Text(
+                                                oProyecto.cui!,
+                                                style: const TextStyle(
+                                                  color: color_01,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        ],
                                       ),
                                     ),
-                                  ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                ],
+                                  );
+                                },
+                              ),
+                            )
+                          : Container(
+                              padding: const EdgeInsets.only(top: 40),
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  color: color_07,
+                                ),
+                              ),
+                            ),
+                    ],
+                  );
+                },
               ),
             ),
           ],
