@@ -11,6 +11,7 @@ import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/R
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Search/project_search.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_detail_form_page.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/throw-exception.dart';
@@ -132,11 +133,25 @@ class _ProjectListPageState extends State<ProjectListPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
+        backgroundColor: color_10o15,
+        shadowColor: color_10o15,
+        title: Center(
+          child: Text(
+            'ProjectListTitle'.tr,
+            style: const TextStyle(
+              color: color_01,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+              fontSize: 18.0,
+            ),
+          ),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back,
-              color: Color.fromARGB(255, 255, 255, 255)),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: color_01,
+          ),
           onPressed: () => {
             Navigator.pushAndRemoveUntil(
                 context,
@@ -146,33 +161,29 @@ class _ProjectListPageState extends State<ProjectListPage>
                 (route) => false),
           },
         ),
-        title: Center(
-          child: Text(
-            'ProjectListTitle'.tr,
-            style: const TextStyle(
-              color: Color(0xfffefefe),
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-              fontSize: 18.0,
-            ),
-          ),
-        ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: ProjectSearchDelegate(),
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              iconSize: 30,
+              onPressed: () async {
+                showSearch(
+                  context: context,
+                  delegate: ProjectSearchDelegate(),
+                );
+              },
+              icon: const Icon(
+                Icons.search,
+                color: color_01,
+              ),
+            ),
           ),
         ],
       ),
       body: Container(
         child: RefreshIndicator(
           onRefresh: () async {
-            await Future.delayed(Duration(seconds: 2));
+            await Future.delayed(const Duration(seconds: 2));
             setState(() {
               aProyecto = [];
               offset = 0;
@@ -318,7 +329,7 @@ class _ProjectListPageState extends State<ProjectListPage>
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.CENTER,
                   timeInSecForIosWeb: 2,
-                  backgroundColor: Color.fromARGB(255, 133, 243, 168),
+                  backgroundColor: const Color.fromARGB(255, 133, 243, 168),
                   textColor: Colors.black,
                   fontSize: 16.0,
                 );
@@ -333,7 +344,7 @@ class _ProjectListPageState extends State<ProjectListPage>
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.CENTER,
                   timeInSecForIosWeb: 2,
-                  backgroundColor: Color.fromARGB(255, 252, 95, 74),
+                  backgroundColor: const Color.fromARGB(255, 252, 95, 74),
                   textColor: Colors.black,
                   fontSize: 16.0,
                 );
@@ -368,7 +379,7 @@ class _ProjectListPageState extends State<ProjectListPage>
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 2,
-                      backgroundColor: Color.fromARGB(255, 133, 243, 168),
+                      backgroundColor: const Color.fromARGB(255, 133, 243, 168),
                       textColor: Colors.black,
                       fontSize: 16.0,
                     );
@@ -383,7 +394,7 @@ class _ProjectListPageState extends State<ProjectListPage>
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 2,
-                      backgroundColor: Color.fromARGB(255, 252, 95, 74),
+                      backgroundColor: const Color.fromARGB(255, 252, 95, 74),
                       textColor: Colors.black,
                       fontSize: 16.0,
                     );

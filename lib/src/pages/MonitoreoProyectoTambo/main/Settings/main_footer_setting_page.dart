@@ -112,6 +112,7 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
                     ),
                   ),
                 ),
+                /*
                 ListTile(
                   title: Text('Settings'.tr),
                   subtitle: Text('UserConfig'.tr),
@@ -126,6 +127,7 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
                   onTap: () => Navigator.of(context)
                       .push(MaterialPageRoute(builder: (_) => SettingsPage())),
                 ),
+                */
                 const Divider(),
                 ListTile(
                   title: const Text('Manual de Usuario'),

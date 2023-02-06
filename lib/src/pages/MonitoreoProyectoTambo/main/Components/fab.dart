@@ -17,9 +17,9 @@ class FabMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      shape: StadiumBorder(),
-      padding: EdgeInsets.only(top: 8, bottom: 8, left: 24, right: 16),
-      color: Color.fromARGB(255, 216, 216, 248),
+      shape: const StadiumBorder(),
+      padding: const EdgeInsets.only(top: 8, bottom: 8, left: 24, right: 16),
+      color: const Color.fromARGB(255, 216, 216, 248),
       splashColor: Colors.grey.withOpacity(0.1),
       highlightColor: Colors.grey.withOpacity(0.1),
       elevation: 0,
@@ -30,8 +30,8 @@ class FabMenuItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(item.title),
-          SizedBox(width: 8),
-          Icon(item.icon, color: color_08o80),
+          const SizedBox(width: 8),
+          Icon(item.icon, color: color_06),
         ],
       ),
     );
@@ -82,20 +82,20 @@ class ExpandedAnimationFab extends AnimatedWidget {
           ignoring: _animation.value == 0,
           child: ListView.separated(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            separatorBuilder: (_, __) => SizedBox(height: 9),
-            padding: EdgeInsets.symmetric(vertical: 12),
+            physics: const NeverScrollableScrollPhysics(),
+            separatorBuilder: (_, __) => const SizedBox(height: 9),
+            padding: const EdgeInsets.symmetric(vertical: 12),
             itemCount: items.length,
             itemBuilder: buildItem,
           ),
         ),
         FloatingActionButton(
-          backgroundColor: color_08o80,
+          backgroundColor: color_06,
+          onPressed: onPress,
           child: AnimatedIcon(
             icon: AnimatedIcons.menu_close,
             progress: _animation,
           ),
-          onPressed: onPress,
         ),
       ],
     );

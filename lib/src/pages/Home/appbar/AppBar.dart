@@ -1,5 +1,8 @@
+import 'package:actividades_pais/src/pages/Login/Login.dart';
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:actividades_pais/util/alert_question.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: use_key_in_widget_constructors
 class AppBarPais extends StatefulWidget {
@@ -15,6 +18,11 @@ class AppBarPais extends StatefulWidget {
 }
 
 class _AppBarPaisState extends State<AppBarPais> {
+  SharedPreferences? _prefs;
+  Future<void> loadPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
+
   Widget text() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -82,6 +90,43 @@ class _AppBarPaisState extends State<AppBarPais> {
                         ),
                       ]
                     ],
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.power_settings_new,
+                      color: colorP,
+                    ),
+                    onPressed: () async {
+                      final alert = AlertQuestion(
+                        title: "Alerta!",
+                        message: "¿Esta seguro que desea cerrar la sesion?",
+                        onNegativePressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        onPostivePressed: () async {
+                          await loadPreferences();
+                          if (_prefs != null) {
+                            _prefs!.setString("clave", "");
+                            _prefs!.setString("nombres", "");
+                            _prefs!.setString("codigo", "");
+                            _prefs!.setString("rol", "");
+                          }
+
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (_) => LoginPage()),
+                            (route) => false,
+                          );
+                        },
+                      );
+
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alert;
+                        },
+                      );
+                    },
                   ),
                 ],
               )
