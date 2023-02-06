@@ -99,7 +99,7 @@ class _AppBarPaisState extends State<AppBarPais> {
                     onPressed: () async {
                       final alert = AlertQuestion(
                         title: "Alerta!",
-                        message: "¿Esta seguro que desea cerrar la sesion?",
+                        message: "¿Está seguro que desea cerrar la sesión?",
                         onNegativePressed: () {
                           Navigator.of(context).pop();
                         },
