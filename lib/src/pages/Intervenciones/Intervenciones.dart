@@ -38,34 +38,40 @@ class _IntervencionesState extends State<Intervenciones> {
   bool cargardialog = false;
   var todoParticiw = 0;
   var cargarBarra = 0;
+  var isInternet = false;
 
   @override
   void initState() {
+    CalcularParticipantes();
+    internet();
+
     cargarDatosIntervenciones();
     super.initState();
     refreshList();
     CalcularParticipantes();
   }
 
-
   Future<Null> refreshList() async {
     await Future.delayed(Duration(seconds: 0));
     cargarIntervenciones();
-    setState(() {
+    setState(() {});
+  }
 
-    });
-   /* var abc = await DatabasePr.db.getAllTasksConfigInicio();
-    if (abc.isNotEmpty) {
-      await DatabasePr.db.listarInterciones();
-    }*/
+  internet() async {
+    var chc = await ProviderLogin().checkInternetConnection();
+    setState(() {});
+    return chc;
   }
 
   @override
   Widget build(BuildContext context) {
+    print(todoParticiw);
+
     if (todoParticiw == 0) {
       setState(() {
         _isloading = true;
       });
+
       return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -76,39 +82,22 @@ class _IntervencionesState extends State<Intervenciones> {
                     )),
             title: Text("Intervenciones"),
           ),
-          body: esperadecara("Cargando informacion de usuarios de la region, un momento por favor.")
-          /*   Center(//    return esperadecara("Cargando informacion de usuarios de la region, un momento por favor.");
-            child: Container(
-              margin: EdgeInsets.all(20),
-              width: 500,
-              color: Colors.transparent,
-              child: Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children:   [
-
-                  CircularProgressIndicator(),
-                  SizedBox(height: 10),
-                  Text(
-                      "Cargando informacion de usuarios de la region, un momento por favor.",
-                      style: TextStyle(color: Colors.black))
-                ],
-              )),
-            ),
-          )*/
-       );
+          body: esperadecara(
+              "Cargando informacion de usuarios de la region, un momento por favor."));
     }
     return WillPopScope(
       onWillPop: systemBackButtonPressed,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor:AppConfig.primaryColor,
+          backgroundColor: AppConfig.primaryColor,
           leading: Util().iconbuton(() => Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => HomePagePais()),
               )),
-          title: Text("Intervenciones", style: TextStyle(color: AppConfig.letrasColor),),
+          title: Text(
+            "Intervenciones",
+            style: TextStyle(color: AppConfig.letrasColor),
+          ),
           actions: [accionesBotones()],
         ),
         body: FutureBuilder<List<TramaIntervencion>>(
@@ -124,10 +113,11 @@ class _IntervencionesState extends State<Intervenciones> {
                 final listaPersonalAux = snapshot.data;
 
                 if (listaPersonalAux!.length == 0) {
-                return esperadecara( 'Espere un momento... \nEl aplicativo esta recuperando las '
-                    'intervenciones de su tambo...');
+                  return esperadecara(
+                      'Espere un momento... \nEl aplicativo esta recuperando las '
+                      'intervenciones de su tambo...');
                 } else {
-                 return lista(listaPersonalAux);
+                  return lista(listaPersonalAux);
                 }
               }
             }
@@ -140,46 +130,45 @@ class _IntervencionesState extends State<Intervenciones> {
     );
   }
 
- Widget esperadecara(texto){
+  Widget esperadecara(texto) {
     return Center(
       child: _isloading
           ? Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            "assets/loading_icon.gif",
-            height: 125.0,
-            width: 200.0,
-            //color: Colors.transparent,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(
-                width: 24,
-              ),
-              Container(
-                margin:
-                EdgeInsets.only(right: 10, left: 10),
-                height: 100,
-                width: 250,
-                child: Text(
-                  texto,
-                  style: TextStyle(fontSize: 17),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/loading_icon.gif",
+                  height: 125.0,
+                  width: 200.0,
+                  //color: Colors.transparent,
                 ),
-              )
-            ],
-          ),
-        ],
-      )
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      width: 24,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(right: 10, left: 10),
+                      height: 100,
+                      width: 250,
+                      child: Text(
+                        texto,
+                        style: TextStyle(fontSize: 17),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            )
           : Text(
-        'No hay intervenciones',
-        style: TextStyle(fontSize: 19),
-      ),
+              'No hay intervenciones',
+              style: TextStyle(fontSize: 19),
+            ),
       //Text("No hay informacion"),
     );
-
   }
+
   eliminarArchivoParticipantes() async {
     var ar = [];
     showAlertDialogBarra(context, titulo: 'Participantes', presse: () async {
@@ -188,7 +177,7 @@ class _IntervencionesState extends State<Intervenciones> {
       setState(() {});
       // Navigator.pop(context);
       ar = await ProviderDatos()
-          .getInsertParticipantesIntervencionesMovil(widget.unidadTerritorial);
+          .getInsertParticipantesIntervencionesMovilMundo(widget.unidadTerritorial);
       setState(() {
         cargardialog = false;
       });
@@ -197,7 +186,7 @@ class _IntervencionesState extends State<Intervenciones> {
       Navigator.pop(context);
     },
         texto:
-        '¿Estas seguro de eliminar los datos existentes para sincronizar nuevos participantes',
+            '¿Estas seguro de eliminar los datos existentes para sincronizar nuevos participantes',
         a: cargardialog);
     setState(() {});
     if (ar.length > 1) {
@@ -208,44 +197,56 @@ class _IntervencionesState extends State<Intervenciones> {
   cargarDatosIntervenciones() async {
     var chc = await ProviderLogin().checkInternetConnection();
     if (chc == true) {
-      print(chc);
+      setState(() {
+        _isloading = true;
+      });
       await DatabasePr.db.eliminarProvincias();
       var data = await DatabasePr.db.getAllTasksConfigInicio();
-      print(data[0].unidTerritoriales);
 
       if (data[0].unidTerritoriales != null) {
         await ProviderDatos().getInsertParticipantesIntervencionesMovil(
             data[0].unidTerritoriales);
         await ProviderDatos().getInsertFuncionariosIntervencionesMovil();
-        CalcularParticipantes();
-        cargarIntervenciones();
+        await CalcularParticipantes();
+        await cargarIntervenciones();
+        setState(() {
+          _isloading = false;
+        });
         await ProviderDatos().guardarProvincia(data[0].snip);
-
-        print("numero3");
-        setState(() {});
       }
+    } else {
+      setState(() {
+        _isloading = false;
+      });
     }
   }
 
   cargarIntervenciones() async {
-    setState(() {
-      _isloading = true;
-    });
-    await eliminarintervenciones();
-    var data = await DatabasePr.db.getAllTasksConfigInicio();
+    var chc = await ProviderLogin().checkInternetConnection();
 
-    for (var i = 0; i < data.length; i++) {
-      var a = await provider.getListaTramaIntervencion(data[i].snip);
-      if (a.length == 0) {
-        _isloading = false;
-        setState(() {});
-      }
-      if (a.length > 0) {
-        await DatabasePr.db.listarInterciones();
+    if (chc == true) {
+      setState(() {
+        _isloading = true;
+      });
+      await eliminarintervenciones();
+      var data = await DatabasePr.db.getAllTasksConfigInicio();
 
-        setState(() {});
-        _isloading = false;
+      for (var i = 0; i < data.length; i++) {
+        var a = await provider.getListaTramaIntervencion(data[i].snip);
+        if (a.length == 0) {
+          _isloading = false;
+          setState(() {});
+        }
+        if (a.length > 0) {
+          await DatabasePr.db.listarInterciones();
+          _isloading = false;
+          setState(() {});
+        }
       }
+    } else {
+      setState(() {
+        _isloading = false;
+      });
     }
   }
 
@@ -270,11 +271,11 @@ class _IntervencionesState extends State<Intervenciones> {
       children: [
         loadPart
             ? Image.asset(
-          "assets/loaderios.gif",
-          height: 40.0,
-          width: 50.0,
-          //color: Colors.transparent,
-        )
+                "assets/loaderios.gif",
+                height: 40.0,
+                width: 50.0,
+                //color: Colors.transparent,
+              )
             : new Container(),
         if (todoParticiw <= 0) ...[
           InkWell(
@@ -288,22 +289,22 @@ class _IntervencionesState extends State<Intervenciones> {
               var ar = [];
               showAlertDialogBarra(context, titulo: 'Participantes',
                   presse: () async {
-                    loadPart = true;
-                    Navigator.pop(context);
-                    setState(() {
-                      cargardialog = true;
-                    });
+                loadPart = true;
+                Navigator.pop(context);
+                setState(() {
+                  cargardialog = true;
+                });
 
-                    ar = await ProviderDatos()
-                        .getInsertParticipantesIntervencionesMovil(
+                ar = await ProviderDatos()
+                    .getInsertParticipantesIntervencionesMovil(
                         widget.unidadTerritorial);
-                    Navigator.pop(context);
-                    loadPart = false;
-                  }, pressno: () {
-                    Navigator.pop(context);
-                  },
+                Navigator.pop(context);
+                loadPart = false;
+              }, pressno: () {
+                Navigator.pop(context);
+              },
                   texto:
-                  '¿Estas seguro de eliminar los datos existentes para sincronizar nuevos participantes',
+                      '¿Estas seguro de eliminar los datos existentes para sincronizar nuevos participantes',
                   a: cargardialog);
               setState(() {});
               if (ar.length > 1) {
@@ -362,7 +363,7 @@ class _IntervencionesState extends State<Intervenciones> {
     );
   }
 
-  lista(listaPersonalAux){
+  lista(listaPersonalAux) {
     return Container(
       child: RefreshIndicator(
           child: ListView.builder(
@@ -371,23 +372,18 @@ class _IntervencionesState extends State<Intervenciones> {
                 key: UniqueKey(),
                 child: listas.cardIntervenciones(
                   listaPersonalAux[i],
-                      () async {
+                  () async {
                     final respt = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              EjecucionProgramacionPage(
-                                  idProgramacion: int.parse(
-                                      listaPersonalAux[i]
-                                          .codigoIntervencion!),
-                                  descripcionEvento:
-                                  listaPersonalAux[i]
-                                      .descripcionEvento!,
-                                  //   snip: widget.snip,
-                                  programa: listaPersonalAux[i]
-                                      .programa!,
-                                  tramaIntervencion:
-                                  listaPersonalAux[i])),
+                          builder: (context) => EjecucionProgramacionPage(
+                              idProgramacion: int.parse(
+                                  listaPersonalAux[i].codigoIntervencion!),
+                              descripcionEvento:
+                                  listaPersonalAux[i].descripcionEvento!,
+                              //   snip: widget.snip,
+                              programa: listaPersonalAux[i].programa!,
+                              tramaIntervencion: listaPersonalAux[i])),
                     );
                     if (respt == 'ok') {
                       print("aqioioo");
@@ -411,6 +407,7 @@ class _IntervencionesState extends State<Intervenciones> {
           onRefresh: refreshList),
     );
   }
+
   showAlertDialogBarra(BuildContext context,
       {titulo, presse, pressno, texto, bool a = false}) {
     Widget okButton = TextButton(child: Text("SI"), onPressed: presse);

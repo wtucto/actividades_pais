@@ -101,8 +101,8 @@ class _TicketsEquiposState extends State<TicketsEquipos> {
                             itemCount: listaPersonalAux.length,
                             itemBuilder: (context, i) => Dismissible(
                                 key: UniqueKey(),
-                                background: buildSwipeActionLeft(),
-                                secondaryBackground: buildSwipeActionRigth(),
+                                background: buildSwipeActionLeft(listaPersonalAux[i]),
+                                secondaryBackground: buildSwipeActionRigth(listaPersonalAux[i]),
                                 onDismissed: (direction) async {
                                   switch (direction) {
                                     case DismissDirection.endToStart:
@@ -336,7 +336,7 @@ class _TicketsEquiposState extends State<TicketsEquipos> {
         );
       });
 
-  Widget buildSwipeActionRigth() => Container(
+  Widget buildSwipeActionRigth(ListaEquiposInformaticosTicket informaticosTicket) => Container(
       alignment: Alignment.centerRight,
       padding: const EdgeInsets.symmetric(horizontal: 10),
       color: Colors.transparent,
@@ -352,42 +352,45 @@ class _TicketsEquiposState extends State<TicketsEquipos> {
         ],
       ));
 
-  Widget buildSwipeActionLeft() => Container(
+  Widget buildSwipeActionLeft(ListaEquiposInformaticosTicket informaticosTicket) => Container(
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       color: Colors.transparent,
       child: Row(
         children: [
-          Text(
-            "Editar",
-            style: TextStyle(color: Colors.green[600]),
-          ),
-          Icon(
-            Icons.edit,
-            color: Colors.green[600],
-            size: 32,
-          )
+          if(informaticosTicket.estado == "EN COLA")...[
+            Icon(
+              Icons.cached_sharp,
+              color: Colors.green[600],
+              size: 32,
+            ),
+            Text(
+              "Reasignar!",
+              style: TextStyle(color: Colors.green[600], fontSize: 10),
+            ),
+
+          ] else ...[
+            Icon(
+              Icons.build,
+              color: Colors.green[600],
+              size: 32,
+            ),
+            Text(
+              "MATE/REPUESTO",
+              style: TextStyle(color: Colors.green[600], fontSize: 10),
+            ),
+
+
+          ],
+
         ],
       ));
+
 
   Future<Null> resetlista() async {
    seleccionarPersonal = "Seleccionar Personal";
     seleccionarEstado = "Seleccionar Estado";
      pageIndex = 1;
-
-  /*   filtroParqueInformatico.codigoPatrimonial = '';
-    filtroParqueInformatico.denominacion = '';
-    filtroParqueInformatico.idMarca = '';
-    filtroParqueInformatico.idModelo = '';
-    filtroParqueInformatico.idUbicacion = '';
-    filtroParqueInformatico.responsableactual = '';
-    filtroParqueInformatico.pageSize = 10;
-    filtroParqueInformatico.pageIndex = pageIndex;
-    await Future.delayed(const Duration(seconds: 1));
-    setState(() {
-      ProviderSeguimientoParqueInformatico()
-          .listaParqueInformatico(filtroParqueInformatico);
-    });*/
   }
 
   Future<Null> traerPaguinado(pageSize, pageIndex) async {

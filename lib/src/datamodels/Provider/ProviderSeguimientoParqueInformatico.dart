@@ -453,7 +453,6 @@ class ProviderSeguimientoParqueInformatico {
         Uri.parse(AppConfig.backendsismonitor +
             '/seguimientoequipo/listaTickect/$tipo'),
         headers: headers);
-
     if (response.statusCode == 200) {
       var jsonResponse;
       jsonResponse = json.decode(response.body.toString());

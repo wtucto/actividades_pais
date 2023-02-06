@@ -69,7 +69,7 @@ class ProviderLogin {
             "username": username,
             "password": password,
           }));
-
+       print(response.body);
       if (response.statusCode == 200) {
         final parsedJson = jsonDecode(response.body);
         final log = new LoginClass.fromJson(parsedJson);

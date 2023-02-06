@@ -651,7 +651,37 @@ class ProviderDatos {
   }
 
   Future<List<ParticipantesIntervenciones>>
-      getInsertParticipantesIntervencionesMovil(UNIDAD_TERRITORIAL) async {
+  getInsertParticipantesIntervencionesMovil(UNIDAD_TERRITORIAL) async {
+    late File jsonFile;
+    late Directory dir;
+    String fileName = "myJSONFile.json";
+    bool fileExists = false;
+    // late Map<String, String> fileContent;
+    getApplicationDocumentsDirectory().then((Directory directory) {
+      dir = directory;
+      jsonFile = new File(dir.path + "/" + fileName);
+      fileExists = jsonFile.existsSync();
+    });
+
+    ///print("dsadsad");
+    ///await DatabaseParticipantes.db.DeleteAllParticitantesInterv();
+    http.Response response = await http.get(
+      Uri.parse(AppConfig.urlBackndServicioSeguro +
+          '/api-pnpais/app/listarParticipantesIntervencionesMovil/$UNIDAD_TERRITORIAL'),
+    );
+
+    if (fileExists) {
+      print("File exists");
+    } else {
+      print("File does not exist!");
+      await createFile(json.decode(response.body), dir, fileName);
+    }
+    return List.empty();
+  }
+
+
+  Future<List<ParticipantesIntervenciones>>
+  getInsertParticipantesIntervencionesMovilMundo(UNIDAD_TERRITORIAL) async {
     late File jsonFile;
     late Directory dir;
     String fileName = "myJSONFile.json";
@@ -685,7 +715,6 @@ class ProviderDatos {
 
     return List.empty();
   }
-
   Future<List<Paises>> listaPaises() async {
     http.Response response = await http.get(
       Uri.parse(
@@ -1058,10 +1087,10 @@ class ProviderDatos {
 
     if (fileExists) {
       print("File exists");
-      await deleteFile(fileName);
+  /*    await deleteFile(fileName);
       print("existe");
       await Future.delayed(Duration(seconds: 10));
-      await createFile(json.decode(response.body), dir, fileName);
+      await createFile(json.decode(response.body), dir, fileName);*/
     } else {
       print("File does not exist!");
       await createFile(json.decode(response.body), dir, fileName);
