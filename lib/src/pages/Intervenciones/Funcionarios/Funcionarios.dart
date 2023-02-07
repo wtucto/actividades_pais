@@ -282,13 +282,14 @@ class _FuncionariosPageState extends State<FuncionariosPage>
 
                             var usuario = await provider
                                 .getUsuarioDni(controllerNumeroDoc.text);
-                            print("::: ${usuario}");
 
                             // ignore: unnecessary_null_comparison
-                            if (usuario == null) {
-
+                            if (usuario!.nombres == "") {
+                              showAlertDialog(context);
                               enableController = true;
-
+                              closeTraerDni= false;
+                              setState(() {
+                              });
                             } else {
                               controllerNombre.text = usuario.nombres;
                               controllerApellidoPaterno.text =
@@ -301,15 +302,6 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                               setState(() {});
                             }
                           }
-                      ///  } else {
-                        /*  showAlertDialog(context);
-                          closeTraerDni = false;
-                          setState(() {
-                            enableController = true;
-                          });
-                          enableController = true;
-                          flgReniec = 'SR';*/
-                       // }
                       },
                     ),
                   ),

@@ -175,9 +175,12 @@ class _IntervencionesState extends State<Intervenciones> {
       loadPart = true;
       Navigator.pop(context);
       setState(() {});
-      // Navigator.pop(context);
-      ar = await ProviderDatos()
-          .getInsertParticipantesIntervencionesMovilMundo(widget.unidadTerritorial);
+      var chc = await ProviderLogin().checkInternetConnection();
+      if (chc == true) {
+        ar = await ProviderDatos()
+            .getInsertParticipantesIntervencionesMovilMundo(
+                widget.unidadTerritorial);
+      }
       setState(() {
         cargardialog = false;
       });
@@ -294,10 +297,13 @@ class _IntervencionesState extends State<Intervenciones> {
                 setState(() {
                   cargardialog = true;
                 });
+                var chc = await ProviderLogin().checkInternetConnection();
+                if (chc == true) {
+                  ar = await ProviderDatos()
+                      .getInsertParticipantesIntervencionesMovilMundo(
+                          widget.unidadTerritorial);
+                }
 
-                ar = await ProviderDatos()
-                    .getInsertParticipantesIntervencionesMovil(
-                        widget.unidadTerritorial);
                 Navigator.pop(context);
                 loadPart = false;
               }, pressno: () {

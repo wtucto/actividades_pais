@@ -316,18 +316,17 @@ class ProviderDatos {
   }
 
   Future<Funcionarios?> getUsuarioDni(dni) async {
-
     // await TraerToken().mostrarDatos();
     var cnt = await _checkInternetConnection();
     print(cnt);
     if (cnt == false) {
-       var buscarFuncionarios =  await ProviderServicios().getBuscarFuncionarios(dni);
+      var buscarFuncionarios =
+          await ProviderServicios().getBuscarFuncionarios(dni);
 
-      if(buscarFuncionarios!=null){
+      if (buscarFuncionarios != null) {
         return buscarFuncionarios;
-       } else {
+      } else {
         return null;
-
       }
 /*      if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
@@ -346,6 +345,7 @@ class ProviderDatos {
         Uri.parse(
             AppConfig.backendsismonitor + '/programaciongit/validar-dni/$dni'),
       );
+      print(responseReniec.body);
       if (responseReniec.statusCode == 200) {
         final jsonResponse = json.decode(responseReniec.body);
         final listadostraba = new Funcionarios.fromJsonReniec(jsonResponse);
@@ -362,7 +362,7 @@ class ProviderDatos {
             return null;
           } else {
             final listadostraba =
-            new Funcionarios.fromJson(jsonResponse["response"][0]);
+                new Funcionarios.fromJson(jsonResponse["response"][0]);
             return listadostraba;
           }
         } else if (response.statusCode == 400) {
@@ -370,7 +370,6 @@ class ProviderDatos {
         }
       }
     }
-
 
     return null;
   }
@@ -617,6 +616,7 @@ class ProviderDatos {
     print(file.path);
     print("creado");
   }
+
 /*
   Future<String> get _localPath async {
 
@@ -633,7 +633,6 @@ class ProviderDatos {
   }*/
 
   Future<int> deleteFile(nane) async {
-
     final directory = await getApplicationDocumentsDirectory();
 
     final path = await directory.path;
@@ -651,7 +650,7 @@ class ProviderDatos {
   }
 
   Future<List<ParticipantesIntervenciones>>
-  getInsertParticipantesIntervencionesMovil(UNIDAD_TERRITORIAL) async {
+      getInsertParticipantesIntervencionesMovil(UNIDAD_TERRITORIAL) async {
     late File jsonFile;
     late Directory dir;
     String fileName = "myJSONFile.json";
@@ -663,25 +662,27 @@ class ProviderDatos {
       fileExists = jsonFile.existsSync();
     });
 
-    ///print("dsadsad");
-    ///await DatabaseParticipantes.db.DeleteAllParticitantesInterv();
     http.Response response = await http.get(
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listarParticipantesIntervencionesMovil/$UNIDAD_TERRITORIAL'),
     );
 
-    if (fileExists) {
-      print("File exists");
-    } else {
-      print("File does not exist!");
-      await createFile(json.decode(response.body), dir, fileName);
+    if(response.statusCode==200){
+      if (fileExists) {
+        print("File exists");
+      } else {
+        print("File does not exist!");
+        await createFile(json.decode(response.body), dir, fileName);
+      }
+    }else {
+      return List.empty();
     }
+
     return List.empty();
   }
-
 
   Future<List<ParticipantesIntervenciones>>
-  getInsertParticipantesIntervencionesMovilMundo(UNIDAD_TERRITORIAL) async {
+      getInsertParticipantesIntervencionesMovilMundo(UNIDAD_TERRITORIAL) async {
     late File jsonFile;
     late Directory dir;
     String fileName = "myJSONFile.json";
@@ -695,26 +696,32 @@ class ProviderDatos {
 
     ///print("dsadsad");
     ///await DatabaseParticipantes.db.DeleteAllParticitantesInterv();
+    print(Uri.parse(AppConfig.urlBackndServicioSeguro +
+        '/api-pnpais/app/listarParticipantesIntervencionesMovil/$UNIDAD_TERRITORIAL'));
     http.Response response = await http.get(
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listarParticipantesIntervencionesMovil/$UNIDAD_TERRITORIAL'),
     );
-
-    if (fileExists) {
-      print("File exists");
-      await deleteFile(fileName);
-      print("existe");
-      await Future.delayed(Duration(seconds: 10));
-      await createFile(json.decode(response.body), dir, fileName);
-      //  Map<String, String> jsonFileContent = json.decode(response.body);
-      // jsonFile.writeAsStringSync(json.encode(jsonFileContent));
+    if (response.statusCode == 200) {
+      if (fileExists) {
+        print("File exists");
+        await deleteFile(fileName);
+        print("existe");
+        await Future.delayed(Duration(seconds: 10));
+        await createFile(json.decode(response.body), dir, fileName);
+        //  Map<String, String> jsonFileContent = json.decode(response.body);
+        // jsonFile.writeAsStringSync(json.encode(jsonFileContent));
+      } else {
+        print("File does not exist!");
+        await createFile(json.decode(response.body), dir, fileName);
+      }
     } else {
-      print("File does not exist!");
-      await createFile(json.decode(response.body), dir, fileName);
+      return List.empty();
     }
 
     return List.empty();
   }
+
   Future<List<Paises>> listaPaises() async {
     http.Response response = await http.get(
       Uri.parse(
@@ -1067,14 +1074,12 @@ class ProviderDatos {
     return List.empty();
   }
 
-
-  Future
-  getInsertFuncionariosIntervencionesMovil() async {
+  Future getInsertFuncionariosIntervencionesMovil() async {
     late File jsonFile;
     late Directory dir;
     String fileName = "jsonFuncionarios.json";
     bool fileExists = false;
-     getApplicationDocumentsDirectory().then((Directory directory) {
+    getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
       fileExists = jsonFile.existsSync();
@@ -1087,7 +1092,7 @@ class ProviderDatos {
 
     if (fileExists) {
       print("File exists");
-  /*    await deleteFile(fileName);
+      /*    await deleteFile(fileName);
       print("existe");
       await Future.delayed(Duration(seconds: 10));
       await createFile(json.decode(response.body), dir, fileName);*/
@@ -1097,5 +1102,4 @@ class ProviderDatos {
     }
     return List.empty();
   }
-
 }
