@@ -260,23 +260,23 @@ CIP_119811
 
 
 "codigo": "CAP_010254",
-      "nombres": "Zulema Pecchi Barrientos",
-      "rol": "CRP",
-      "dni": "01325838",
-      "username": "01325838",
-      "password": "CAP_010254"
+"nombres": "Zulema Pecchi Barrientos",
+"rol": "CRP",
+"dni": "01325838",
+"username": "01325838",
+"password": "CAP_010254"
 
 
 "codigo": "CIP_119910",
-      "nombres": "Gloria Nelly Rimarachin Carbajal",
-      "rol": "RESIDENTE",
-      "dni": "32909715",
-      "username": "32909715",
-      "password": "CIP_119910"
+"nombres": "Gloria Nelly Rimarachin Carbajal",
+"rol": "RESIDENTE",
+"dni": "32909715",
+"username": "32909715",
+"password": "CIP_119910"
 
 "codigo": "CIP_193094",
-      "nombres": "Wilber Quispe Vargas",
-      "rol": "CRP",
-      "dni": "45860931",
-      "username": "45860931",
-      "password": "CIP_193094"
+"nombres": "Wilber Quispe Vargas",s
+"rol": "CRP",
+"dni": "45860931",
+"username": "45860931",
+"password": "CIP_193094"

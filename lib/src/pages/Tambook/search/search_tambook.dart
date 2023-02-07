@@ -94,7 +94,8 @@ class SearchTambookDelegate extends SearchDelegate<String> {
         ),
       );
 
-  Widget buildSuggestionsSuccess(List<BuscarTamboDto> dataList) => ListView.builder(
+  Widget buildSuggestionsSuccess(List<BuscarTamboDto> dataList) =>
+      ListView.builder(
         itemCount: dataList.length,
         itemBuilder: (context, index) {
           return GestureDetector(

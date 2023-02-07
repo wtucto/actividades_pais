@@ -1,3 +1,4 @@
+import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,20 @@ class _DashboardTambookState extends State<DashboardTambook> {
               fontSize: 18.0,
             ),
           ),
+        ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: color_01,
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => HomePagePais(),
+              ),
+            );
+          },
         ),
         actions: [
           IconButton(

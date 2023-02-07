@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
@@ -11,8 +10,10 @@ import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Component
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
 import 'package:actividades_pais/src/pages/Tambook/dashboard_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/check_connection.dart';
+import 'package:actividades_pais/util/image_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -27,6 +28,10 @@ class DetalleTambook extends StatefulWidget {
 
 class _DetalleTambookState extends State<DetalleTambook>
     with TickerProviderStateMixin<DetalleTambook> {
+  late TabController _tabController;
+
+  int _selectedTab = 0;
+
   ScrollController scrollCtr = ScrollController();
   ScrollController scrollCtr2 = ScrollController();
   Animation<double>? _animation;
@@ -46,6 +51,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   void dispose() {
     scrollCtr.dispose();
     scrollCtr2.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -67,8 +73,17 @@ class _DetalleTambookState extends State<DetalleTambook>
         CurvedAnimation(curve: Curves.easeInOut, parent: _controller!);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
 
-    super.initState();
+    _tabController = TabController(vsync: this, length: 3);
 
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        setState(() {
+          _selectedTab = _tabController.index;
+        });
+      }
+    });
+
+    super.initState();
     /**
      * OBTENER DETALLE GENERAL DE TMBO
      */
@@ -115,12 +130,12 @@ class _DetalleTambookState extends State<DetalleTambook>
       for (var oAct in aActividad) {
         if (oAct.tipo == 1) {
           if (aInterAmbDir.length < maxData) aInterAmbDir.add(oAct);
-        }
-        if (oAct.tipo == 2) {
+        } else if (oAct.tipo == 2) {
           if (aInterSopEnt.length < maxData) aInterSopEnt.add(oAct);
-        }
-        if (oAct.tipo == 4) {
+        } else if (oAct.tipo == 4) {
           if (aCoordinacio.length < maxData) aCoordinacio.add(oAct);
+        } else {
+          if (aInterAmbDir.length < maxData) aInterAmbDir.add(oAct);
         }
       }
 
@@ -187,8 +202,8 @@ class _DetalleTambookState extends State<DetalleTambook>
         centerTitle: true,
         background: SizedBox(
           height: 200.0,
-          child: Ink.image(
-            image: NetworkImage(oTambo.tamboPathImage ?? ''),
+          child: ImageUtil.ImageUrl(
+            oTambo.tamboPathImage ?? '',
             fit: BoxFit.fitHeight,
           ),
         ),
@@ -291,51 +306,50 @@ class _DetalleTambookState extends State<DetalleTambook>
                   physics: const BouncingScrollPhysics(),
                   children: [
                     //TabScreen("GESTOR"),
-                    Container(
-                      child: ListView(
-                        children: [
-                          /*
-                            * NUESTRO GESTOR
-                            */
-                          cardNuestroGestor(),
-                          const SizedBox(height: 10),
+                    ListView(
+                      children: [
+                        const SizedBox(height: 10),
+                        /*
+                          * NUESTRO GESTOR
+                          */
+                        cardNuestroGestor(),
+                        const SizedBox(height: 10),
 
-                          /*
-                            * DATOS GENERALES
-                            */
-                          cardDatosGenerales(),
-                          const SizedBox(height: 10),
-                          /*
-                            * NUESTRO JEFE DE UNIDAD TERRITORIAL
-                            */
-                          cardNuestroJefeUnidad(),
-                          const SizedBox(height: 10),
+                        /*
+                          * DATOS GENERALES
+                          */
+                        cardDatosGenerales(),
+                        const SizedBox(height: 10),
+                        /*
+                          * NUESTRO JEFE DE UNIDAD TERRITORIAL
+                          */
+                        cardNuestroJefeUnidad(),
+                        const SizedBox(height: 10),
 
-                          /*
-                            * DATOS DE UBICACIÓN
-                            */
-                          cardDatosUbicacion(),
-                          const SizedBox(height: 10),
+                        /*
+                          * DATOS DE UBICACIÓN
+                          */
+                        cardDatosUbicacion(),
+                        const SizedBox(height: 10),
 
-                          /*
-                            * DATOS DEMOGRÁFICOS
-                            */
-                          cardDatosDemograficos(),
-                          const SizedBox(height: 10),
+                        /*
+                          * DATOS DEMOGRÁFICOS
+                          */
+                        cardDatosDemograficos(),
+                        const SizedBox(height: 10),
 
-                          /*
-                            * DATOS DE LA OBRA
-                            */
-                          cardDatosObra(),
-                          const SizedBox(height: 10),
+                        /*
+                          * DATOS DE LA OBRA
+                          */
+                        cardDatosObra(),
+                        const SizedBox(height: 10),
 
-                          /*
-                            * CENTROS POBLADOS
-                            */
-                          cardDatosCentroPoblado(),
-                          const SizedBox(height: 50),
-                        ],
-                      ),
+                        /*
+                          * CENTROS POBLADOS
+                          */
+                        cardDatosCentroPoblado(),
+                        const SizedBox(height: 50),
+                      ],
                     ),
 
                     //const TabScreen("SERVICIOS INTERNET"),
@@ -347,14 +361,186 @@ class _DetalleTambookState extends State<DetalleTambook>
                     ),
 
                     //TabScreen("INTERVENCIONES"),
-                    ListView(
+/*
+                    Row(
                       children: [
-                        cardDatosIntervencion(),
-                        const SizedBox(height: 10),
-                        //Intecard1(),
+                        RotatedBox(
+                          quarterTurns: 1,
+                          child: Container(
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TabBar(
+                                  labelPadding: const EdgeInsets.only(
+                                      left: 20, right: 20),
+                                  controller: _tabController,
+                                  labelColor: Colors.black,
+                                  unselectedLabelColor: Colors.grey,
+                                  isScrollable: true,
+                                  indicatorSize: TabBarIndicatorSize.label,
+                                  tabs: [
+                                    const Tab(
+                                        text: "Intervención de Ámbito Directo"),
+                                    const Tab(
+                                        text:
+                                            "Intervención de Soporte a Entidades"),
+                                    const Tab(text: "Coordinaciones"),
+                                  ]),
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: Container(
+                            padding: const EdgeInsets.only(left: 20),
+                            height: 300,
+                            width: double.maxFinite,
+                            child: TabBarView(
+                              controller: _tabController,
+                              children: [
+                                ListView.builder(
+                                  itemCount: 3,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        margin: const EdgeInsets.only(
+                                            right: 15, top: 10),
+                                        width: 200,
+                                        height: 300,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                ListView.builder(itemBuilder: (context, index) {
+                                  return ListTile(
+                                    leading: const Icon(Icons.account_circle),
+                                    title:
+                                        Text("Line " + (index + 1).toString()),
+                                    selectedTileColor: Colors.green[400],
+                                    onTap: () {
+                                      setState(() {});
+                                    },
+                                  );
+                                }),
+                                ListView(
+                                  children: [
+                                    cardDatosIntervencion(),
+                                    const SizedBox(height: 10),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
                       ],
                     ),
-                    const TabScreen("EQUIPAMIENTO TECNOLÓGICO DEL TAMBO"),
+                    */
+                    DefaultTabController(
+                      length: 3,
+                      child: Column(
+                        children: <Widget>[
+                          Material(
+                            color: Colors.grey.shade300,
+                            child: TabBar(
+                              //isScrollable: true,
+                              unselectedLabelColor: Colors.blue,
+                              labelColor: Colors.blue,
+                              indicatorColor: Colors.white,
+                              controller: _tabController,
+                              labelPadding: const EdgeInsets.all(0.0),
+                              tabs: [
+                                _getTab(
+                                  0,
+                                  const Center(
+                                    child: Text(
+                                      "Intervención de Ámbito Directo",
+                                      style: TextStyle(
+                                        color: colorS,
+                                        fontWeight: FontWeight.w700,
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: 12.0,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                                _getTab(
+                                  1,
+                                  const Center(
+                                    child: Text(
+                                      "Intervención de Soporte a Entidades",
+                                      style: TextStyle(
+                                        color: colorI,
+                                        fontWeight: FontWeight.w700,
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: 12.0,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                                _getTab(
+                                  2,
+                                  const Center(
+                                    child: Text(
+                                      "Coordinaciones",
+                                      style: TextStyle(
+                                        color: colorP,
+                                        fontWeight: FontWeight.w700,
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: 12.0,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: TabBarView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              controller: _tabController,
+                              children: [
+                                ListView(
+                                  children: [
+                                    cardDatosIntervencionCod1(),
+                                    const SizedBox(height: 40),
+                                  ],
+                                ),
+                                ListView(
+                                  children: [
+                                    cardDatosIntervencionCod2(),
+                                    const SizedBox(height: 40),
+                                  ],
+                                ),
+                                ListView(
+                                  children: [
+                                    cardDatosIntervencionCod4(),
+                                    const SizedBox(height: 40),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    //const TabScreen("EQUIPAMIENTO TECNOLÓGICO DEL TAMBO"),
+
+                    ListView(
+                      children: [
+                        cardEquipoTecnologico(),
+                        const SizedBox(height: 40),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -401,379 +587,464 @@ class _DetalleTambookState extends State<DetalleTambook>
     );
   }
 
+  _getTab(index, child) {
+    return Tab(
+      child: SizedBox.expand(
+        child: Container(
+          child: child,
+          decoration: BoxDecoration(
+              color:
+                  (_selectedTab == index ? Colors.white : Colors.grey.shade300),
+              borderRadius: _generateBorderRadius(index)),
+        ),
+      ),
+    );
+  }
+
+  _generateBorderRadius(index) {
+    if ((index + 1) == _selectedTab)
+      return const BorderRadius.only(bottomRight: Radius.circular(10.0));
+    else if ((index - 1) == _selectedTab)
+      return const BorderRadius.only(bottomLeft: Radius.circular(10.0));
+    else
+      return BorderRadius.zero;
+  }
+
 /*
  * -----------------------------------------------
  *            GESTOR
  * -----------------------------------------------
  */
-  Card cardNuestroGestor() {
+  Padding cardNuestroGestor() {
     var heading = 'NUESTRO GESTOR';
     var subheading = oTambo.gestorNombre ?? '';
-    var cardImage = NetworkImage(oTambo.gestorPathImage ?? '');
-    return Card(
-      elevation: 4.0,
-      child: Column(
-        children: [
-          ExpansionTile(
-            initiallyExpanded: true,
-            title: ListTile(
-              title: Text(
-                heading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: ListTile(
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-              subtitle: Text(
-                subheading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-            children: <Widget>[
-              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-              SizedBox(
-                height: 200.0,
-                child: Ink.image(
-                  image: cardImage,
-                  fit: BoxFit.fitHeight,
-                ),
-              ),
-              Container(
-                // padding: EdgeInsets.all(5.0),
-                alignment: Alignment.centerLeft,
-                child: Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        title: const Text('CARRERA'),
-                        subtitle: Text(oTambo.gestorProfession ?? ''),
-                      ),
-                      ListTile(
-                        title: const Text('GRADO'),
-                        subtitle: Text(oTambo.gestorGradoAcademico ?? ''),
-                      ),
-                      ListTile(
-                        title: const Text('SEXO'),
-                        subtitle: Text(oTambo.gestorSexo ?? ''),
-                      ),
-                      ListTile(
-                        title: const Text('ESTADO CIVIL'),
-                        subtitle: Text(oTambo.gestorEstadoCivil ?? ''),
-                      ),
-                      ListTile(
-                        title: const Text('FECHA DE NACIMIENTO'),
-                        subtitle: Text(oTambo.gestorFechaNacimiento ?? ''),
-                      ),
-                      ListTile(
-                        title: const Text('EMAIL'),
-                        subtitle: Text(oTambo.gestorCorreo ?? ''),
-                      ),
-                    ],
+                subtitle: Text(
+                  subheading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
-            ],
-          ),
-        ],
+              children: <Widget>[
+                const Divider(color: colorI),
+                SizedBox(
+                  height: 150.0,
+                  child: ImageUtil.ImageUrl(
+                    oTambo.gestorPathImage ?? '',
+                    width: 150,
+                  ),
+                ),
+                Container(
+                  // padding: EdgeInsets.all(5.0),
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: const Text('CARRERA'),
+                          subtitle: Text(oTambo.gestorProfession ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('GRADO'),
+                          subtitle: Text(oTambo.gestorGradoAcademico ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('SEXO'),
+                          subtitle: Text(oTambo.gestorSexo ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('ESTADO CIVIL'),
+                          subtitle: Text(oTambo.gestorEstadoCivil ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('FECHA DE NACIMIENTO'),
+                          subtitle: Text(oTambo.gestorFechaNacimiento ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('EMAIL'),
+                          subtitle: Text(oTambo.gestorCorreo ?? ''),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Card cardDatosGenerales() {
+  Padding cardDatosGenerales() {
     var heading = 'DATOS GENERALES';
-    return Card(
-      elevation: 4.0,
-      child: Column(
-        children: [
-          ExpansionTile(
-            title: ListTile(
-              title: Text(
-                heading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            children: <Widget>[
-              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        title: const Text('ATENCIONES'),
-                        subtitle: Text(oTambo.atencion ?? ''),
-                      ),
-                      ListTile(
-                        title: const Text('INTERVENCIONES'),
-                        subtitle: Text(oTambo.intervencion ?? ''),
-                      ),
-                      ListTile(
-                        title: const Text('BENEFICIARIOS'),
-                        subtitle: Text(oTambo.beneficiario ?? ''),
-                      ),
-                    ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              title: ListTile(
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
-            ],
-          ),
-        ],
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: const Text('ATENCIONES'),
+                          subtitle: Text(oTambo.atencion ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('INTERVENCIONES'),
+                          subtitle: Text(oTambo.intervencion ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('BENEFICIARIOS'),
+                          subtitle: Text(oTambo.beneficiario ?? ''),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Card cardNuestroJefeUnidad() {
+  Padding cardNuestroJefeUnidad() {
     var heading = 'NUESTRO JEFE DE UNIDAD TERRITORIAL';
     var subheading =
         "${oTambo.jefeNombre ?? ''} ${oTambo.jefeApellidoPaterno ?? ''} ${oTambo.jefeApellidoMaterno ?? ''}";
-    return Card(
-      elevation: 4.0,
-      child: Column(
-        children: [
-          ExpansionTile(
-            title: ListTile(
-              title: Text(
-                heading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              title: ListTile(
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-              subtitle: Text(
-                subheading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-            children: <Widget>[
-              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        title: const Text('TÉLEFONO'),
-                        subtitle: Text(oTambo.jefeTelefono ?? ''),
-                      ),
-                      ListTile(
-                        title: const Text('EMAIL'),
-                        subtitle: Text(oTambo.jefeCorreo ?? ''),
-                      ),
-                    ],
+                subtitle: Text(
+                  subheading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Card cardDatosUbicacion() {
-    var heading = 'DATOS DE UBICACIÓN';
-    return Card(
-      elevation: 4.0,
-      child: Column(
-        children: [
-          ExpansionTile(
-            title: ListTile(
-              title: Text(
-                heading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            children: <Widget>[
-              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        title: const Text('DEPARTAMENTO'),
-                        subtitle: Text(oTambo.nombreDepartamento ?? ''),
-                      ),
-                      ListTile(
-                        title: const Text('PROVINCIA'),
-                        subtitle: Text(oTambo.nombreProvincia ?? ''),
-                      ),
-                      ListTile(
-                        title: const Text('DISTRITO'),
-                        subtitle: Text(oTambo.nombreDistrito ?? ''),
-                      ),
-                      ListTile(
-                        title: const Text('CENTRO POBLADO'),
-                        subtitle: Text(oTambo.nombreCcpp ?? ''),
-                      ),
-                      ListTile(
-                        title: const Text('COORDENADAS'),
-                        subtitle: Text(
-                            '${oTambo.xCcpp ?? ''} , ${oTambo.yCcpp ?? ''}'),
-                      ),
-                      ListTile(
-                        title: const Text('ALTITUD'),
-                        subtitle: Text(oTambo.altitudCcpp ?? ''),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Card cardDatosDemograficos() {
-    var heading = 'DATOS DEMOGRÁFICOS';
-    return Card(
-      elevation: 4.0,
-      child: Column(
-        children: [
-          ExpansionTile(
-            title: ListTile(
-              title: Text(
-                heading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            children: <Widget>[
-              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        title: const Text('N° DE HOGARES'),
-                        subtitle: Text(oTambo.hogaresAnteriores ?? ''),
-                      ),
-                      ListTile(
-                        title: const Text('N° DE VIVIENDAS'),
-                        subtitle: Text(oTambo.viviendasAnterior ?? ''),
-                      ),
-                      ListTile(
-                        title: const Text('POBLACIÓN'),
-                        subtitle: Text(oTambo.poblacionAnterior ?? ''),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Card cardDatosObra() {
-    var heading = 'DATOS DE LA OBRA';
-    return Card(
-      elevation: 4.0,
-      child: Column(
-        children: [
-          ExpansionTile(
-            title: ListTile(
-              title: Text(
-                heading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            children: <Widget>[
-              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        title: const Text('N° SNIP'),
-                        subtitle: Text(oTambo.nSnip == null
-                            ? ''
-                            : oTambo.nSnip.toString()),
-                      ),
-                      ListTile(
-                        title: const Text('MONTO CONTRATADO'),
-                        subtitle: Text(oTambo.montoAdjudicado ?? ''),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Card cardDatosCentroPoblado() {
-    var heading = 'CENTROS POBLADOS';
-    return Card(
-      elevation: 4.0,
-      child: Column(
-        children: [
-          ExpansionTile(
-            title: ListTile(
-              title: Text(
-                '$heading ( ${oTambo.aCentroPoblado!.length} )',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            children: <Widget>[
-              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (var oCentro in oTambo.aCentroPoblado!)
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
                         ListTile(
-                          iconColor: const Color.fromARGB(255, 0, 0, 0),
-                          title: Text(oCentro.nombreCcpp!),
-                          subtitle: Text(
-                              '( ALTITUD: ${oCentro.altitudCcpp} - REGION: ${oCentro.regionCatural} )'),
+                          title: const Text('TÉLEFONO'),
+                          subtitle: Text(oTambo.jefeTelefono ?? ''),
                         ),
-                    ],
+                        ListTile(
+                          title: const Text('EMAIL'),
+                          subtitle: Text(oTambo.jefeCorreo ?? ''),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardDatosUbicacion() {
+    var heading = 'DATOS DE UBICACIÓN';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              title: ListTile(
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
-            ],
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: const Text('DEPARTAMENTO'),
+                          subtitle: Text(oTambo.nombreDepartamento ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('PROVINCIA'),
+                          subtitle: Text(oTambo.nombreProvincia ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('DISTRITO'),
+                          subtitle: Text(oTambo.nombreDistrito ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('CENTRO POBLADO'),
+                          subtitle: Text(oTambo.nombreCcpp ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('COORDENADAS'),
+                          subtitle: Text(
+                              '${oTambo.xCcpp ?? ''} , ${oTambo.yCcpp ?? ''}'),
+                        ),
+                        ListTile(
+                          title: const Text('ALTITUD'),
+                          subtitle: Text(oTambo.altitudCcpp ?? ''),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardDatosDemograficos() {
+    var heading = 'DATOS DEMOGRÁFICOS';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
           ),
-        ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              title: ListTile(
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: const Text('N° DE HOGARES'),
+                          subtitle: Text(oTambo.hogaresAnteriores ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('N° DE VIVIENDAS'),
+                          subtitle: Text(oTambo.viviendasAnterior ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('POBLACIÓN'),
+                          subtitle: Text(oTambo.poblacionAnterior ?? ''),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardDatosObra() {
+    var heading = 'DATOS DE LA OBRA';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              title: ListTile(
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: const Text('N° SNIP'),
+                          subtitle: Text(oTambo.nSnip == null
+                              ? ''
+                              : oTambo.nSnip.toString()),
+                        ),
+                        ListTile(
+                          title: const Text('MONTO CONTRATADO'),
+                          subtitle: Text(oTambo.montoAdjudicado ?? ''),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardDatosCentroPoblado() {
+    var heading = 'CENTROS POBLADOS';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              title: ListTile(
+                title: Text(
+                  '$heading ( ${oTambo.aCentroPoblado!.length} )',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (var oCentro in oTambo.aCentroPoblado!)
+                          ListTile(
+                            iconColor: const Color.fromARGB(255, 0, 0, 0),
+                            title: Text(oCentro.nombreCcpp!),
+                            subtitle: Text(
+                                '( ALTITUD: ${oCentro.altitudCcpp} - REGION: ${oCentro.regionCatural} )'),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -783,64 +1054,73 @@ class _DetalleTambookState extends State<DetalleTambook>
  *            SERVICIOS INTERNET
  * -----------------------------------------------
  */
-  Card cardDatosSrvInternet() {
+  Padding cardDatosSrvInternet() {
     var heading = 'SERVICIOS INTERNET';
     TamboServicioInternetDto oSrvInter =
         oTambo.oServicioInternet ?? TamboServicioInternetDto.empty();
-    return Card(
-      elevation: 4.0,
-      child: Column(
-        children: [
-          ExpansionTile(
-            initiallyExpanded: true,
-            title: ListTile(
-              title: Text(
-                heading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            children: <Widget>[
-              const Divider(color: Color.fromRGBO(61, 61, 61, 1)),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      /*ListTile(
-                    title: const Text('CENTRO POBLADO'),
-                    subtitle: Text(oSrvInter.nombreCcpp!),
-                  ),*/
-                      ListTile(
-                        title: const Text('INTERNET'),
-                        subtitle: Text(oSrvInter.internet!),
-                      ),
-                      ListTile(
-                        title: const Text('FECHA INSTALACIÓN'),
-                        subtitle: Text(oSrvInter.fecInstalacion!),
-                      ),
-                      ListTile(
-                        title: const Text('ESTADO INTERNET'),
-                        subtitle: Text(oSrvInter.estadoInternet!),
-                      ),
-                      ListTile(
-                        title: const Text('VELOCIDAD BAJADA'),
-                        subtitle: Text(oSrvInter.veloBaja!),
-                      ),
-                      ListTile(
-                        title: const Text('VELOCIDAD SUBIDA'),
-                        subtitle: Text(oSrvInter.veloSube!),
-                      ),
-                    ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: ListTile(
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
-            ],
-          ),
-        ],
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        /*ListTile(
+                    title: const Text('CENTRO POBLADO'),
+                    subtitle: Text(oSrvInter.nombreCcpp!),
+                  ),*/
+                        ListTile(
+                          title: const Text('INTERNET'),
+                          subtitle: Text(oSrvInter.internet!),
+                        ),
+                        ListTile(
+                          title: const Text('FECHA INSTALACIÓN'),
+                          subtitle: Text(oSrvInter.fecInstalacion!),
+                        ),
+                        ListTile(
+                          title: const Text('ESTADO INTERNET'),
+                          subtitle: Text(oSrvInter.estadoInternet!),
+                        ),
+                        ListTile(
+                          title: const Text('VELOCIDAD BAJADA'),
+                          subtitle: Text(oSrvInter.veloBaja!),
+                        ),
+                        ListTile(
+                          title: const Text('VELOCIDAD SUBIDA'),
+                          subtitle: Text(oSrvInter.veloSube!),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -850,97 +1130,269 @@ class _DetalleTambookState extends State<DetalleTambook>
  *            INTERVENCIONES
  * -----------------------------------------------
  */
-  Card cardDatosIntervencion() {
-    var heading = 'INTERVENCIONES';
-    TamboServicioInternetDto oSrvInter =
-        oTambo.oServicioInternet ?? TamboServicioInternetDto.empty();
-    return Card(
-      elevation: 4.0,
-      child: Column(
-        children: [
-          if (aInterAmbDir.isEmpty && statusLoadActividad == 0)
-            ListTile(
-              leading: const Icon(Icons.arrow_drop_down_circle),
-              title: const Text("CARGANDO..."),
-              subtitle: Text(
-                "Esperando los registros. Esto puede tomar tiempo",
-                style: TextStyle(
-                    color:
-                        const Color.fromARGB(255, 53, 8, 200).withOpacity(0.6)),
+  Padding cardDatosIntervencionCod1() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            if (aInterAmbDir.isEmpty && statusLoadActividad == 0)
+              ListTile(
+                title: const Text("CARGANDO..."),
+                subtitle: Text(
+                  "Esperando los registros. Esto puede tomar tiempo",
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 53, 8, 200)
+                          .withOpacity(0.6)),
+                ),
               ),
-            ),
-          if (aInterAmbDir.isEmpty && statusLoadActividad == 1)
-            ListTile(
-              leading: const Icon(Icons.arrow_drop_down_circle),
-              title: const Text("SIN DATOS"),
-              subtitle: Text(
-                "No se encontraron registros para mostrar.",
-                style: TextStyle(
-                    color:
-                        const Color.fromARGB(255, 53, 8, 200).withOpacity(0.6)),
+            if (aInterAmbDir.isEmpty && statusLoadActividad == 1)
+              ListTile(
+                title: const Text("SIN DATOS"),
+                subtitle: Text(
+                  "No se encontraron registros para mostrar.",
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 53, 8, 200)
+                          .withOpacity(0.6)),
+                ),
               ),
-            ),
-          if (aInterAmbDir.isEmpty && statusLoadActividad == 2)
-            ListTile(
-              leading: const Icon(Icons.arrow_drop_down_circle),
-              title: const Text("¡Ups! Algo salió mal"),
-              subtitle: Text(
-                "No se pudo recuperar los registros para mostrar.",
-                style: TextStyle(
-                    color: const Color.fromARGB(255, 211, 13, 13)
-                        .withOpacity(0.6)),
+            if (aInterAmbDir.isEmpty && statusLoadActividad == 2)
+              ListTile(
+                title: const Text("¡Ups! Algo salió mal"),
+                subtitle: Text(
+                  "No se pudo recuperar los registros para mostrar.",
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 211, 13, 13)
+                          .withOpacity(0.6)),
+                ),
               ),
-            ),
-          for (var oActividad in aInterAmbDir)
-            Card(
-              margin: const EdgeInsets.all(5),
-              elevation: 1,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.arrow_drop_down_circle),
-                    title: Text(oActividad.programa!),
-                    subtitle: Text(
-                      oActividad.fecha!,
-                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
+            for (var oActividad in aInterAmbDir)
+              Card(
+                margin: const EdgeInsets.all(5),
+                elevation: 1,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Text(oActividad.fecha ?? ''),
+                      title: Text(oActividad.programa ?? ''),
+                      subtitle: Text(
+                        oActividad.fecha ?? '',
+                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Text(
-                      oActividad.descripcion!,
-                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                    Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Text(
+                        oActividad.descripcion ?? '',
+                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                      ),
                     ),
-                  ),
-                  if (oActividad.actividadPathImage != null &&
-                      oActividad.actividadPathImage != '')
-                    Image.network(
-                      oActividad.actividadPathImage!,
-                      height: 100.0,
-                      width: 100.0,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          alignment: Alignment.center,
-                          height: 100.0,
-                          width: 100.0,
-                          child: Image.asset('assets/Monitor/logo.png'),
-                        );
-                      },
-                    ),
-
-                  /*ElevatedButton(
+                    if (oActividad.actividadPathImage != null &&
+                        oActividad.actividadPathImage != '')
+                      ImageUtil.ImageUrl(
+                        oActividad.actividadPathImage!,
+                        width: 50,
+                        height: 50,
+                        imgDefault: 'assets/iconusuario.png',
+                      ),
+                    /*ElevatedButton(
                     child: const Text('Descargar Ficha'),
                     onPressed: () {},
                   ),*/
-                ],
+                  ],
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardDatosIntervencionCod2() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            if (aInterSopEnt.isEmpty && statusLoadActividad == 0)
+              ListTile(
+                title: const Text("CARGANDO..."),
+                subtitle: Text(
+                  "Esperando los registros. Esto puede tomar tiempo",
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 53, 8, 200)
+                          .withOpacity(0.6)),
+                ),
+              ),
+            if (aInterSopEnt.isEmpty && statusLoadActividad == 1)
+              ListTile(
+                title: const Text("SIN DATOS"),
+                subtitle: Text(
+                  "No se encontraron registros para mostrar.",
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 53, 8, 200)
+                          .withOpacity(0.6)),
+                ),
+              ),
+            if (aInterSopEnt.isEmpty && statusLoadActividad == 2)
+              ListTile(
+                title: const Text("¡Ups! Algo salió mal"),
+                subtitle: Text(
+                  "No se pudo recuperar los registros para mostrar.",
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 211, 13, 13)
+                          .withOpacity(0.6)),
+                ),
+              ),
+            for (var oActividad in aInterSopEnt)
+              Card(
+                margin: const EdgeInsets.all(5),
+                elevation: 1,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Text(oActividad.fecha ?? ''),
+                      title: Text(oActividad.programa ?? ''),
+                      subtitle: Text(
+                        oActividad.fecha ?? '',
+                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Text(
+                        oActividad.descripcion ?? '',
+                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                      ),
+                    ),
+                    if (oActividad.actividadPathImage != null &&
+                        oActividad.actividadPathImage != '')
+                      ImageUtil.ImageUrl(
+                        oActividad.actividadPathImage!,
+                        width: 50,
+                        height: 50,
+                        imgDefault: 'assets/iconusuario.png',
+                      ),
+                    /*ElevatedButton(
+                    child: const Text('Descargar Ficha'),
+                    onPressed: () {},
+                  ),*/
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardDatosIntervencionCod4() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            if (aCoordinacio.isEmpty && statusLoadActividad == 0)
+              ListTile(
+                title: const Text("CARGANDO..."),
+                subtitle: Text(
+                  "Esperando los registros. Esto puede tomar tiempo",
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 53, 8, 200)
+                          .withOpacity(0.6)),
+                ),
+              ),
+            if (aCoordinacio.isEmpty && statusLoadActividad == 1)
+              ListTile(
+                title: const Text("SIN DATOS"),
+                subtitle: Text(
+                  "No se encontraron registros para mostrar.",
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 53, 8, 200)
+                          .withOpacity(0.6)),
+                ),
+              ),
+            if (aCoordinacio.isEmpty && statusLoadActividad == 2)
+              ListTile(
+                title: const Text("¡Ups! Algo salió mal"),
+                subtitle: Text(
+                  "No se pudo recuperar los registros para mostrar.",
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 211, 13, 13)
+                          .withOpacity(0.6)),
+                ),
+              ),
+            for (var oActividad in aCoordinacio)
+              Card(
+                margin: const EdgeInsets.all(5),
+                elevation: 1,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Text(oActividad.fecha ?? ''),
+                      title: Text(oActividad.programa ?? ''),
+                      subtitle: Text(
+                        oActividad.fecha ?? '',
+                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Text(
+                        oActividad.descripcion ?? '',
+                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                      ),
+                    ),
+                    if (oActividad.actividadPathImage != null &&
+                        oActividad.actividadPathImage != '')
+                      ImageUtil.ImageUrl(
+                        oActividad.actividadPathImage!,
+                        width: 50,
+                        height: 50,
+                        imgDefault: 'assets/iconusuario.png',
+                      ),
+                    /*ElevatedButton(
+                    child: const Text('Descargar Ficha'),
+                    onPressed: () {},
+                  ),*/
+                  ],
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -950,7 +1402,232 @@ class _DetalleTambookState extends State<DetalleTambook>
  *            EQUIPAMIENTO TECNOLÓGICO
  * -----------------------------------------------
  */
-
+  Padding cardEquipoTecnologico() {
+    final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+      ),
+    );
+    var heading = 'EQUIPAMIENTO TECNOLÓGICO';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 1.0,
+                      ),
+                      child: Text(
+                        '''   ''',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2!
+                            .copyWith(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                  ButtonBar(
+                    alignment: MainAxisAlignment.spaceAround,
+                    buttonHeight: 52.0,
+                    buttonMinWidth: 90.0,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {},
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            style: flatButtonStyle,
+                            onPressed: () {},
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      width: 2,
+                                      color: color_01,
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    color: color_01,
+                                    Icons.desktop_mac_outlined,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 2.0),
+                                ),
+                                const Text(
+                                  'PC (10)',
+                                  style: TextStyle(
+                                    color: color_01,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            style: flatButtonStyle,
+                            onPressed: () {},
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      width: 2,
+                                      color: color_01,
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    color: color_01,
+                                    Icons.laptop,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 2.0),
+                                ),
+                                const Text(
+                                  'LAPTOP (10)',
+                                  style: TextStyle(
+                                    color: color_01,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  ButtonBar(
+                    alignment: MainAxisAlignment.spaceAround,
+                    buttonHeight: 52.0,
+                    buttonMinWidth: 90.0,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {},
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            style: flatButtonStyle,
+                            onPressed: () {},
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      width: 2,
+                                      color: color_01,
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    color: color_01,
+                                    Icons.photo_camera_front,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 2.0),
+                                ),
+                                const Text(
+                                  'PROYECTOR (30)',
+                                  style: TextStyle(
+                                    color: color_01,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            style: flatButtonStyle,
+                            onPressed: () {},
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      width: 2,
+                                      color: color_01,
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    color: color_01,
+                                    Icons.wifi,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 2.0),
+                                ),
+                                const Text(
+                                  'ANTENA WIFI (30)',
+                                  style: TextStyle(
+                                    color: color_01,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {

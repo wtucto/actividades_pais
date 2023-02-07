@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageUtil {
@@ -26,4 +27,107 @@ class ImageUtil {
     file.writeAsBytesSync(decodedBytes);
     return file;
   }
+
+  static Image ImageUrl(
+    String sUrl, {
+    String? imgDefault,
+    double? height,
+    double? width,
+    BoxFit? fit,
+    AlignmentGeometry? alignment,
+  }) =>
+      Image.network(
+        sUrl,
+        height: height ?? 100.0,
+        width: width ?? 100.0,
+        fit: fit ?? BoxFit.cover,
+        alignment: alignment ?? Alignment.center,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            alignment: alignment ?? Alignment.center,
+            height: height ?? 100.0,
+            width: width ?? 100.0,
+            child: Image.asset(imgDefault ?? 'assets/Monitor/logo.png'),
+          );
+        },
+      );
+
+  static Image ImageBase64(
+    String sB64, {
+    String? imgDefault,
+    double? height,
+    double? width,
+    BoxFit? fit,
+    AlignmentGeometry? alignment,
+  }) =>
+      Image.memory(
+        base64Decode(sB64),
+        height: height ?? 100.0,
+        width: width ?? 100.0,
+        fit: fit ?? BoxFit.cover,
+        alignment: alignment ?? Alignment.center,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            alignment: alignment ?? Alignment.center,
+            height: height ?? 100.0,
+            width: width ?? 100.0,
+            child: Image.asset(imgDefault ?? 'assets/Monitor/logo.png'),
+          );
+        },
+      );
+
+  static FadeInImage ImageAssetNetwork(
+    String sUrl, {
+    String? imgDefault,
+    double? height,
+    double? width,
+    BoxFit? fit,
+    AlignmentGeometry? alignment,
+  }) =>
+      FadeInImage.assetNetwork(
+        image: sUrl,
+        placeholder: 'assets/loaderios.gif',
+        height: height ?? 100.0,
+        width: width ?? 100.0,
+        fit: fit ?? BoxFit.cover,
+        alignment: alignment ?? Alignment.center,
+        imageErrorBuilder:
+            (BuildContext context, Object exception, StackTrace? stackTrace) {
+          return Container(
+            alignment: alignment ?? Alignment.center,
+            height: height ?? 100.0,
+            width: width ?? 100.0,
+            child: Image.asset(imgDefault ?? 'assets/logo circular.png'),
+          );
+        },
+      );
+
+/*
+  static FadeInImage ImageMemoryNetwork(
+    String sImg, {
+    String? imgDefault,
+    double? height,
+    double? width,
+    BoxFit? fit,
+    AlignmentGeometry? alignment,
+  }) =>
+      FadeInImage.memoryNetwork(
+        image: sImg,
+        placeholder: kTransparentImage,
+        height: height ?? 100.0,
+        width: width ?? 100.0,
+        fit: fit ?? BoxFit.cover,
+        alignment: alignment ?? Alignment.center,
+        imageErrorBuilder:
+            (BuildContext context, Object exception, StackTrace? stackTrace) {
+          return Container(
+            alignment: alignment ?? Alignment.center,
+            height: height ?? 100.0,
+            width: width ?? 100.0,
+            child: Image.asset(imgDefault ?? 'assets/Monitor/logo.png'),
+          );
+        },
+      );
+
+      */
 }
