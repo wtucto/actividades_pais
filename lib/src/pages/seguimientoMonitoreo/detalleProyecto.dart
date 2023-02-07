@@ -583,12 +583,12 @@ class _DetalleProyectoState extends State<DetalleProyecto>
 
   /*
   * -----------------------------------------------
-  *            ESTADO DEL PROVECTO
+  *            ESTADO DEL PROYECTO
   * -----------------------------------------------
   */
 
   Padding cardEstadoProyecto() {
-    var heading = 'ESTADO DEL PROVECTO';
+    var heading = 'ESTADO DEL PROYECTO';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
@@ -904,7 +904,7 @@ class _DetalleProyectoState extends State<DetalleProyecto>
   */
 
   Padding cardSubEstadoProyecto() {
-    var heading = 'ESTADO DEL PROVECTO';
+    var heading = 'SUB ESTADO DEL PROYECTO';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
@@ -939,7 +939,7 @@ class _DetalleProyectoState extends State<DetalleProyecto>
   * -----------------------------------------------
   */
   Padding cardSaneamientoProyecto() {
-    var heading = 'ESTADO DEL PROVECTO';
+    var heading = 'SANEAMIENTO ESTADO DEL PROYECTO';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
