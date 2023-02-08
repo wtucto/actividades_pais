@@ -54,9 +54,11 @@ class _AppBarPaisState extends State<AppBarPais> {
                     children: [
                       if (widget.datoUt != "") ...[
                         SizedBox(
-                          height: 15.0,
+                          width: 200,
                           child: Text(
-                            "UT : ${widget.datoUt}",
+                            "UT : ${widget.datoUt} sdsdd",
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
                             style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -65,9 +67,11 @@ class _AppBarPaisState extends State<AppBarPais> {
                           ),
                         ),
                         SizedBox(
-                          height: 15.0,
+                          width: 200,
                           child: Text(
-                            "PLATAFORMA : ${widget.plataforma}",
+                            "PLATAFORMA : ${widget.plataforma} sdsdsd",
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
                             style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -78,9 +82,11 @@ class _AppBarPaisState extends State<AppBarPais> {
                       ],
                       if (widget.nombre != "") ...[
                         SizedBox(
-                          height: 15.0,
+                          width: 200,
                           child: Text(
                             "USUARIO : ${widget.nombre}",
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
                             style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,

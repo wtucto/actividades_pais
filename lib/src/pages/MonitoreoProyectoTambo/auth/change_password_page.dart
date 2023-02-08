@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 MainController mainController = MainController();
 SharedPreferences? _prefs;
@@ -147,16 +148,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     Color colorInput = const Color.fromARGB(255, 239, 237, 237);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-        backgroundColor: Colors.transparent,
-        title: Text(
-          'Credential'.tr,
-          style: const TextStyle(color: color_01),
-        ),
-        elevation: 0,
+      appBar: WidgetCustoms.appBar(
+        'Credential'.tr,
+        context: context,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: SafeArea(

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 class PdfPage extends StatefulWidget {
   const PdfPage({Key? key}) : super(key: key);
@@ -38,8 +39,9 @@ class _PdfPageState extends State<PdfPage> {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flutter PDF'),
+      appBar: WidgetCustoms.appBar(
+        'Flutter PDF',
+        context: context,
       ),
       body: PdfPreview(
         maxPageWidth: 708,

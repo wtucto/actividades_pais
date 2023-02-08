@@ -1,5 +1,4 @@
 import 'package:actividades_pais/src/pages/Login/Login.dart';
-import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/custom_background.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +6,7 @@ import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/auth/change_password_page.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 class SettingsPage extends StatelessWidget {
   SharedPreferences? _prefs;
@@ -20,17 +20,9 @@ class SettingsPage extends StatelessWidget {
     return CustomPaint(
       painter: MainBackground(),
       child: Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.black,
-          ),
-          brightness: Brightness.light,
-          backgroundColor: Colors.transparent,
-          title: Text(
-            'Settings'.tr,
-            style: TextStyle(color: color_01),
-          ),
-          elevation: 0,
+        appBar: WidgetCustoms.appBar(
+          'Settings'.tr,
+          context: context,
         ),
         body: SafeArea(
           bottom: true,

@@ -11,7 +11,6 @@ import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/R
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Search/project_search.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_detail_form_page.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
-import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/throw-exception.dart';
@@ -20,6 +19,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 SharedPreferences? _prefs;
 MainController mainController = MainController();
@@ -133,121 +133,92 @@ class _ProjectListPageState extends State<ProjectListPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: color_10o15,
-        shadowColor: color_10o15,
-        title: Center(
-          child: Text(
-            'ProjectListTitle'.tr,
-            style: const TextStyle(
-              color: color_01,
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-              fontSize: 18.0,
-            ),
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: color_01,
-          ),
-          onPressed: () => {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => HomePagePais(),
-                ),
-                (route) => false),
-          },
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              iconSize: 30,
-              onPressed: () async {
-                showSearch(
-                  context: context,
-                  delegate: ProjectSearchDelegate(),
-                );
-              },
-              icon: const Icon(
-                Icons.search,
-                color: color_01,
+      appBar: WidgetCustoms.appBar(
+        'ProjectListTitle'.tr,
+        context: context,
+        icon: Icons.arrow_back,
+        onPressed: () => {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => HomePagePais(),
               ),
-            ),
-          ),
-        ],
+              (route) => false),
+        },
+        iconAct: Icons.search,
+        onPressedAct: () async {
+          showSearch(
+            context: context,
+            delegate: ProjectSearchDelegate(),
+          );
+        },
       ),
-      body: Container(
-        child: RefreshIndicator(
-          onRefresh: () async {
-            await Future.delayed(const Duration(seconds: 2));
-            setState(() {
-              aProyecto = [];
-              offset = 0;
-              isEndPagination = false;
-              readJson(offset);
-            });
-          },
-          child: aProyecto.isNotEmpty
-              ? Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        padding: const EdgeInsets.all(10),
-                        controller: scrollController,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemCount: aProyecto.length,
-                        itemBuilder: (context, index) {
-                          return ListViewProjet(
-                            context: context,
-                            oProyecto: aProyecto[index],
-                          );
-                        },
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await Future.delayed(const Duration(seconds: 2));
+          setState(() {
+            aProyecto = [];
+            offset = 0;
+            isEndPagination = false;
+            readJson(offset);
+          });
+        },
+        child: aProyecto.isNotEmpty
+            ? Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(10),
+                      controller: scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: aProyecto.length,
+                      itemBuilder: (context, index) {
+                        return ListViewProjet(
+                          context: context,
+                          oProyecto: aProyecto[index],
+                        );
+                      },
+                    ),
+                  ),
+                  if (loading == true)
+                    const Padding(
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 40,
+                      ),
+                      child: Center(
+                        child: CircularProgressIndicator(),
                       ),
                     ),
-                    if (loading == true)
-                      const Padding(
-                        padding: EdgeInsets.only(
-                          top: 10,
-                          bottom: 40,
-                        ),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                  if (isEndPagination == true)
+                    Container(
+                      padding: const EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
                       ),
-                    if (isEndPagination == true)
-                      Container(
-                        padding: const EdgeInsets.only(
-                          top: 10,
-                          bottom: 10,
-                        ),
-                        color: Colors.blue,
-                        child: const Center(
-                          child: Text('Has obtenido todo el contenido.'),
-                        ),
+                      color: Colors.blue,
+                      child: const Center(
+                        child: Text('Has obtenido todo el contenido.'),
                       ),
+                    ),
+                ],
+              )
+            : Container(
+                padding: const EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width,
+                decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 245, 246, 248)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      'No existe nigún proyecto asignado',
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
                   ],
-                )
-              : Container(
-                  padding: const EdgeInsets.all(20),
-                  width: MediaQuery.of(context).size.width,
-                  decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 245, 246, 248)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        'No existe nigún proyecto asignado',
-                        style: TextStyle(color: Colors.black, fontSize: 16),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
                 ),
-        ),
+              ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: ExpandedAnimationFab(

@@ -1,6 +1,7 @@
 import 'package:actividades_pais/src/pages/Tambook/atenciones_list_view.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:flutter/material.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 class DashboardTambook extends StatefulWidget {
   const DashboardTambook({super.key});
@@ -19,29 +20,16 @@ class _DashboardTambookState extends State<DashboardTambook> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'TAMBOOK',
-            style: TextStyle(
-              color: Color(0xfffefefe),
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-              fontSize: 18.0,
-            ),
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: SearchTambookDelegate(),
-              );
-            },
-          )
-        ],
+      appBar: WidgetCustoms.appBar(
+        'TAMBOOK',
+        context: context,
+        iconAct: Icons.search,
+        onPressedAct: () {
+          showSearch(
+            context: context,
+            delegate: SearchTambookDelegate(),
+          );
+        },
       ),
       body: CustomScrollView(
         slivers: [

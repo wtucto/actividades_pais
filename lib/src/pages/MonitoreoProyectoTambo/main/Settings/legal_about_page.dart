@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:actividades_pais/util/Constants.dart';
 import 'package:get/get.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 class LegalAboutPage extends StatefulWidget {
   @override
@@ -13,17 +13,9 @@ class _LegalAboutPageState extends State<LegalAboutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.black,
-        ),
-        brightness: Brightness.light,
-        backgroundColor: Colors.transparent,
-        title: Text(
-          'Settings'.tr,
-          style: TextStyle(color: color_01),
-        ),
-        elevation: 0,
+      appBar: WidgetCustoms.appBar(
+        'Settings'.tr,
+        context: context,
       ),
       body: SafeArea(
         bottom: true,

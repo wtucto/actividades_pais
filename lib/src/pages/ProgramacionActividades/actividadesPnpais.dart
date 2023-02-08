@@ -1,13 +1,13 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
-import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 class ActividadesPnpais extends StatefulWidget {
   const ActividadesPnpais({super.key});
@@ -65,31 +65,11 @@ class _ActividadesPnpaisState extends State<ActividadesPnpais> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        title: const Center(
-          child: Text(
-            "ACTIVIDADES PNPAIS",
-            style: TextStyle(
-              color: Color(0xfffefefe),
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-              fontSize: 18.0,
-            ),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              iconSize: 30,
-              onPressed: () {},
-              icon: const Icon(
-                Icons.menu_open,
-                color: Color.fromARGB(255, 255, 255, 255),
-              ),
-            ),
-          )
-        ],
+      appBar: WidgetCustoms.appBar(
+        "ACTIVIDADES PNPAIS",
+        context: context,
+        iconAct: Icons.menu_open,
+        onPressedAct: () {},
       ),
       body: Form(
         key: _formKey,

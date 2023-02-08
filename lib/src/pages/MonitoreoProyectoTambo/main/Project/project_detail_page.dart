@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 
 import 'package:get/get.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 const options = ['BAJO', 'MEDIO', 'ALTO'];
 
@@ -115,30 +116,11 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            'ProjectDetailTitle'.tr,
-            style: const TextStyle(
-              color: Color(0xfffefefe),
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-              fontSize: 18.0,
-            ),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-                iconSize: 30,
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.monitor,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                )),
-          )
-        ],
+      appBar: WidgetCustoms.appBar(
+        'ProjectDetailTitle'.tr,
+        context: context,
+        iconAct: Icons.monitor,
+        onPressedAct: () {},
       ),
       body: Form(
         key: _formKey,

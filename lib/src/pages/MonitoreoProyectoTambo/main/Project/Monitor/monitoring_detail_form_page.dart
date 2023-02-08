@@ -9,6 +9,7 @@ import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/S
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/src/image_controller.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/src/image_multiple.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/main_footer_all_option.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/check_geolocator.dart';
@@ -61,7 +62,9 @@ class _MonitoringDetailNewEditPageState
   bool _enabledF = true;
   int idM = 0;
   String titleMonitor = "";
-  String fechaMonitoreo = DateFormat("yyyy-MM-dd").format(DateTime.now());
+  String fechaMonitoreo = DateFormat("yyyy-MM-dd").format(
+    DateTime.now(),
+  );
   String? _ciu = "";
   String? _snip = "";
   String? _tambo = "";
@@ -76,7 +79,7 @@ class _MonitoringDetailNewEditPageState
   String? _valueRiesgo; // Riesgo Identificado
   String? _valueNivelRiesgo; //Nivel Riesgo Identificado XXX
 
-  final MainController mainController = MainController();
+  final MainController mainCtr = MainController();
   ImageController controller = ImageController();
   final String _imgPartidaEjecutada = 'imgPartidaEjecutada';
   List<bool> expandedPE = [false, false];
@@ -84,6 +87,8 @@ class _MonitoringDetailNewEditPageState
   List<bool> expandedPI = [false, false];
   final String _imgRiesgoIdentificado = 'imgRiesgoIdentificado';
   List<bool> expandedRI = [false, false];
+
+  TramaMonitoreoModel oMonitor = TramaMonitoreoModel.empty();
 
   String sShowMessage = '';
   void showSnackbar({required bool success, required String text}) {
@@ -107,11 +112,11 @@ class _MonitoringDetailNewEditPageState
           loadData(context);
         }
         if (widget.statusM == "UPDATE") {
-          getDataMonitor(widget.datoMonitor!);
+          buildFormData(widget.datoMonitor!);
         }
         if (widget.statusM == "LECTURA") {
           _enabledF = false;
-          getDataMonitor(widget.datoMonitor!);
+          buildFormData(widget.datoMonitor!);
         }
       }
       setState(() {});
@@ -122,10 +127,8 @@ class _MonitoringDetailNewEditPageState
     try {
       await CheckGeolocator().check();
     } catch (oError) {
-      var sTitle = 'Error';
       var sMessage = oError.toString();
       if (oError is ThrowCustom) {
-        sTitle = oError.typeText!;
         sMessage =
             '${oError.msg!}, vaya a Configuración de su dispositivo > Privacidad para otorgar permisos a la aplicación.';
       }
@@ -144,26 +147,26 @@ class _MonitoringDetailNewEditPageState
        */
 
       try {
-        widget.cbASOLU = await mainController.getListComboItemByType(
-            ComboItemModel.cbASOLU, 0, 0);
+        widget.cbASOLU =
+            await mainCtr.getListComboItemByType(ComboItemModel.cbASOLU, 0, 0);
 
-        widget.cbEAVAN = await mainController.getListComboItemByType(
-            ComboItemModel.cbEAVAN, 0, 0);
+        widget.cbEAVAN =
+            await mainCtr.getListComboItemByType(ComboItemModel.cbEAVAN, 0, 0);
 
-        widget.cbEMONI = await mainController.getListComboItemByType(
-            ComboItemModel.cbEMONI, 0, 0);
+        widget.cbEMONI =
+            await mainCtr.getListComboItemByType(ComboItemModel.cbEMONI, 0, 0);
 
-        widget.cbNRIES = await mainController.getListComboItemByType(
-            ComboItemModel.cbNRIES, 0, 0);
+        widget.cbNRIES =
+            await mainCtr.getListComboItemByType(ComboItemModel.cbNRIES, 0, 0);
 
-        widget.cbPEJEC = await mainController.getListComboItemByType(
-            ComboItemModel.cbPEJEC, 0, 0);
+        widget.cbPEJEC =
+            await mainCtr.getListComboItemByType(ComboItemModel.cbPEJEC, 0, 0);
 
-        widget.cbPIDEO = await mainController.getListComboItemByType(
-            ComboItemModel.cbPIDEO, 0, 0);
+        widget.cbPIDEO =
+            await mainCtr.getListComboItemByType(ComboItemModel.cbPIDEO, 0, 0);
 
-        widget.cbRIDEN = await mainController.getListComboItemByType(
-            ComboItemModel.cbRIDEN, 0, 0);
+        widget.cbRIDEN =
+            await mainCtr.getListComboItemByType(ComboItemModel.cbRIDEN, 0, 0);
       } catch (oError) {
         print(oError);
       }
@@ -176,39 +179,55 @@ class _MonitoringDetailNewEditPageState
 
       String sPlaceholder = TramaMonitoreoModel.sOptDropdownDefault;
       widget.cbASOLU.insert(
-          0,
-          ComboItemModel(
-              codigo1: "0",
-              descripcion: "$sPlaceholder para: ALTERNATIVA SOLUCION"));
+        0,
+        ComboItemModel(
+          codigo1: "0",
+          descripcion: "$sPlaceholder para: ALTERNATIVA SOLUCION",
+        ),
+      );
       widget.cbEAVAN.insert(
-          0,
-          ComboItemModel(
-              codigo1: "0", descripcion: "$sPlaceholder para: ESTADO AVANCE"));
+        0,
+        ComboItemModel(
+          codigo1: "0",
+          descripcion: "$sPlaceholder para: ESTADO AVANCE",
+        ),
+      );
       widget.cbEMONI.insert(
-          0,
-          ComboItemModel(
-              codigo1: "0",
-              descripcion: "$sPlaceholder para: ESTADO MONITOREO"));
+        0,
+        ComboItemModel(
+          codigo1: "0",
+          descripcion: "$sPlaceholder para: ESTADO MONITOREO",
+        ),
+      );
       widget.cbNRIES.insert(
-          0,
-          ComboItemModel(
-              codigo1: "0", descripcion: "$sPlaceholder  para: NIVEL RIESGO"));
+        0,
+        ComboItemModel(
+          codigo1: "0",
+          descripcion: "$sPlaceholder  para: NIVEL RIESGO",
+        ),
+      );
 
       widget.cbPEJEC.insert(
-          0,
-          ComboItemModel(
-              codigo1: "0",
-              descripcion: "$sPlaceholder  para: PARTIDA EJECUTADA"));
+        0,
+        ComboItemModel(
+          codigo1: "0",
+          descripcion: "$sPlaceholder  para: PARTIDA EJECUTADA",
+        ),
+      );
       widget.cbPIDEO.insert(
-          0,
-          ComboItemModel(
-              codigo1: "0",
-              descripcion: "$sPlaceholder  para: PROBLEMA IDENTIFICADO OBRA"));
+        0,
+        ComboItemModel(
+          codigo1: "0",
+          descripcion: "$sPlaceholder  para: PROBLEMA IDENTIFICADO OBRA",
+        ),
+      );
       widget.cbRIDEN.insert(
-          0,
-          ComboItemModel(
-              codigo1: "0",
-              descripcion: "$sPlaceholder  para: RIESGO IDENTIFICADO"));
+        0,
+        ComboItemModel(
+          codigo1: "0",
+          descripcion: "$sPlaceholder  para: RIESGO IDENTIFICADO",
+        ),
+      );
 
       /**
        * Seleccionar el valor por defecto de los combos
@@ -238,8 +257,7 @@ class _MonitoringDetailNewEditPageState
   Future<void> loadData(BuildContext context) async {
     try {
       if (widget.datoProyecto != null) {
-        oMonitoreo =
-            await mainController.buildNewMonitor(widget.datoProyecto!.cui!);
+        oMonitoreo = await mainCtr.buildNewMonitor(widget.datoProyecto!.cui!);
       }
     } catch (oError) {}
     try {
@@ -277,109 +295,101 @@ class _MonitoringDetailNewEditPageState
     return (value == 0) ? 0 : value;
   }
 
-  getDataMonitor(TramaMonitoreoModel m) {
+  String _toString(dynamic value, {String? def}) {
+    return value != null ? value.toString() : def ?? '';
+  }
+
+  buildFormData(TramaMonitoreoModel o) {
+    oMonitor = o;
     controller.itemsImagesAll = {};
-    setState(() {
-      titleMonitor = m.tambo!;
-      idM = m.id!;
-      _snip = m.snip;
-      _cuiCtr.text = m.cui!;
-      _idMonitor.text = m.idMonitoreo!;
 
-      _tambo = m.tambo;
-      _dateMonitor.text = m.fechaMonitoreo!;
-      _advanceFEA.text = getPorcent(m.avanceFisicoAcumulado!);
-      _advanceFEP.text = getPorcent(m.avanceFisicoPartida!);
-      _obsMonitor.text = m.observaciones!;
-      _dateObra.text = m.fechaTerminoEstimado!;
-      _longitud.text = m.longitud!;
-      _latitud.text = m.latitud!;
+    titleMonitor = o.tambo!;
+    idM = o.id!;
+    _snip = o.snip;
+    _cuiCtr.text = o.cui!;
+    _idMonitor.text = o.idMonitoreo!;
 
-      _statusMonitor =
-          (m.idEstadoMonitoreo.toString() == "" ? "0" : m.idEstadoMonitoreo)
-              .toString();
-      _statusAdvance = m.idEstadoAvance.toString() == "0"
-          ? "0"
-          : m.idEstadoAvance.toString();
-      _valuePartidaEje = m.idAvanceFisicoPartida.toString() == "0"
-          ? "0"
-          : m.idAvanceFisicoPartida.toString();
+    _tambo = o.tambo;
+    _dateMonitor.text = o.fechaMonitoreo!;
+    _advanceFEA.text = getPorcent(o.avanceFisicoAcumulado!);
+    _advanceFEP.text = getPorcent(o.avanceFisicoPartida!);
+    _obsMonitor.text = o.observaciones!;
+    _dateObra.text = o.fechaTerminoEstimado!;
+    _longitud.text = o.longitud!;
+    _latitud.text = o.latitud!;
 
-      _valueProblemaIO = m.idProblemaIdentificado.toString() == "0"
-          ? "0"
-          : m.idProblemaIdentificado.toString();
+    _statusMonitor = _toString(o.idEstadoMonitoreo, def: '0');
+    _statusAdvance = _toString(o.idEstadoAvance, def: '0');
+    _valuePartidaEje = _toString(o.idAvanceFisicoPartida, def: '0');
+    _valueProblemaIO = _toString(o.idProblemaIdentificado, def: '0');
+    _valueAlternSolucion = _toString(o.idAlternativaSolucion, def: '0');
+    _valueRiesgo = _toString(o.idRiesgoIdentificado, def: '0');
 
-      _valueAlternSolucion = m.idAlternativaSolucion.toString() == ""
-          ? "0"
-          : m.idAlternativaSolucion.toString();
-      _valueRiesgo = m.idRiesgoIdentificado.toString() == ""
-          ? "0"
-          : m.idRiesgoIdentificado.toString();
+    _valueNivelRiesgo =
+        o.nivelRiesgo == "" ? widget.cbNRIES[0].descripcion : o.nivelRiesgo;
 
-      _valueNivelRiesgo =
-          m.nivelRiesgo == "" ? widget.cbNRIES[0].descripcion : m.nivelRiesgo;
+    List<String?> listaImage = [];
+    listaImage.addAll([
+      o.imgActividad,
+      o.imgActividad1,
+      o.imgActividad2,
+      o.imgActividad3,
+      o.imgActividad4
+    ]);
 
-      List<String?> listaImage = [];
-      listaImage.addAll([
-        m.imgActividad,
-        m.imgActividad1,
-        m.imgActividad2,
-        m.imgActividad3,
-        m.imgActividad4
-      ]);
-
-      for (var item in listaImage) {
-        if (!item.toString().contains("opt/uploads")) {
-          if (item != null && item != "") {
-            controller.itemsImagesAll.addAll(
-              {
-                _imgPartidaEjecutada: item.split(","),
-              },
-            );
-          }
+    for (var item in listaImage) {
+      if (!item.toString().contains("opt/uploads")) {
+        if (item != null && item != "") {
+          controller.itemsImagesAll.addAll(
+            {
+              _imgPartidaEjecutada: item.split(","),
+            },
+          );
         }
       }
+    }
 
-      listaImage = [];
-      listaImage.addAll([
-        m.imgProblema,
-        m.imgProblema1,
-        m.imgProblema2,
-        m.imgProblema3,
-        m.imgProblema4
-      ]);
-      for (var item in listaImage) {
-        if (!item.toString().contains("opt/uploads")) {
-          if (item != null && item != "") {
-            controller.itemsImagesAll.addAll(
-              {
-                _imgProblemaIdentificado: item.split(","),
-              },
-            );
-          }
+    listaImage = [];
+    listaImage.addAll([
+      o.imgProblema,
+      o.imgProblema1,
+      o.imgProblema2,
+      o.imgProblema3,
+      o.imgProblema4
+    ]);
+    for (var item in listaImage) {
+      if (!item.toString().contains("opt/uploads")) {
+        if (item != null && item != "") {
+          controller.itemsImagesAll.addAll(
+            {
+              _imgProblemaIdentificado: item.split(","),
+            },
+          );
         }
       }
+    }
 
-      listaImage = [];
-      listaImage.addAll([
-        m.imgRiesgo,
-        m.imgRiesgo1,
-        m.imgRiesgo2,
-        m.imgRiesgo3,
-        m.imgRiesgo4,
-      ]);
-      for (var item in listaImage) {
-        if (!item.toString().contains("opt/uploads")) {
-          if (item != null && item != "") {
-            controller.itemsImagesAll.addAll(
-              {
-                _imgRiesgoIdentificado: item.split(","),
-              },
-            );
-          }
+    listaImage = [];
+    listaImage.addAll([
+      o.imgRiesgo,
+      o.imgRiesgo1,
+      o.imgRiesgo2,
+      o.imgRiesgo3,
+      o.imgRiesgo4,
+    ]);
+    for (var item in listaImage) {
+      if (!item.toString().contains("opt/uploads")) {
+        if (item != null && item != "") {
+          controller.itemsImagesAll.addAll(
+            {
+              _imgRiesgoIdentificado: item.split(","),
+            },
+          );
         }
       }
-    });
+    }
+
+    setState(() {});
   }
 
   @override
@@ -387,60 +397,38 @@ class _MonitoringDetailNewEditPageState
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back,
-              color: Color.fromARGB(255, 255, 255, 255)),
-          onPressed: () => {
-            if (widget.statusM == "SEARCH")
-              {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          MainFooterAllOptionPage(),
-                    ))
-              }
-            else
-              {
-                Navigator.pop(context, () {
-                  setState(() {});
-                }),
-              }
-          },
-        ),
-        title: Center(
-          child: Text(
-            titleMonitor == "" ? "MONITOR" : titleMonitor,
-            style: const TextStyle(
-              color: Color(0xfffefefe),
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-              fontSize: 18.0,
-            ),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              iconSize: 30,
-              onPressed: () {
-                if (titleMonitor == "") {
-                  showSearch(
-                    context: context,
-                    delegate: ProjetSearchOtroDelegate(),
-                  );
-                }
-              },
-              icon: Icon(
-                titleMonitor == "" ? Icons.search : Icons.monitor,
-                color: const Color.fromARGB(255, 255, 255, 255),
-              ),
-            ),
-          )
-        ],
+      appBar: WidgetCustoms.appBar(
+        titleMonitor == "" ? "MONITOR" : titleMonitor,
+        context: context,
+        icon: Icons.arrow_back,
+        onPressed: () => {
+          if (widget.statusM == "SEARCH")
+            {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => MainFooterAllOptionPage(),
+                ),
+              )
+            }
+          else
+            {
+              Navigator.pop(context, () {
+                setState(() {});
+              }),
+            }
+        },
+        iconAct: titleMonitor == "" ? Icons.search : Icons.monitor,
+        onPressedAct: () {
+          if (titleMonitor == "") {
+            showSearch(
+              context: context,
+              delegate: ProjetSearchOtroDelegate(),
+            );
+          }
+        },
       ),
+
       /**
        * Formulario
        */
@@ -731,7 +719,7 @@ class _MonitoringDetailNewEditPageState
                             TramaProyectoModel.empty();
                         oProyect.numSnip = _snip;
                         TramaMonitoreoModel oLastMonitor =
-                            await mainController.getMonitoreoLastTypePartida(
+                            await mainCtr.getMonitoreoLastTypePartida(
                           oProyect,
                           _valuePartidaEje!,
                         );
@@ -1149,10 +1137,13 @@ class _MonitoringDetailNewEditPageState
               readOnly: true,
               onTap: () async {
                 DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2101));
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(
+                    2101,
+                  ),
+                );
 
                 if (pickedDate != null) {
                   String formattedDate =
@@ -1254,53 +1245,56 @@ class _MonitoringDetailNewEditPageState
                                   BusyIndicator.show(context);
                                   try {
                                     TramaMonitoreoModel dataSave =
-                                        await mainController
-                                            .saveMonitoreo(TramaMonitoreoModel(
-                                      id: idM,
-                                      isEdit: 1,
-                                      createdTime: DateTime.now(),
-                                      snip: _snip,
-                                      cui: _cuiCtr.text,
-                                      latitud: _latitud.text,
-                                      longitud: _longitud.text,
-                                      tambo: _tambo,
-                                      fechaTerminoEstimado: _dateObra.text,
-                                      avanceFisicoAcumulado: (double.parse(
-                                              _advanceFEA.text == ""
-                                                  ? "0"
-                                                  : _advanceFEA.text) /
-                                          100),
-                                      avanceFisicoPartida: (double.parse(
-                                              _advanceFEP.text == ""
-                                                  ? "0"
-                                                  : _advanceFEP.text) /
-                                          100),
-                                      fechaMonitoreo: _dateMonitor.text,
-                                      idMonitoreo: _idMonitor.text,
-                                      imgActividad: imgPE,
-                                      imgProblema: imgPI,
-                                      imgRiesgo: imgRI,
-                                      observaciones: _obsMonitor.text,
-                                      idEstadoAvance: getValueSelected(
-                                          int.parse(_statusAdvance!)),
-                                      idEstadoMonitoreo: getValueSelected(
-                                          int.parse(_statusMonitor!)),
-                                      idAvanceFisicoPartida: getValueSelected(
-                                          int.parse(_valuePartidaEje!)),
-                                      idAlternativaSolucion: getValueSelected(
-                                          int.parse(_valueAlternSolucion!)),
-                                      idProblemaIdentificado: getValueSelected(
-                                          int.parse(_valueProblemaIO!)),
-                                      idRiesgoIdentificado: getValueSelected(
-                                          int.parse(_valueRiesgo!)),
-                                      nivelRiesgo: _valueNivelRiesgo!
-                                              .toUpperCase()
-                                              .contains("SELECCIONE UNA OPCIÓN")
-                                          ? ""
-                                          : _valueNivelRiesgo!,
-                                      rol: oUser.rol,
-                                      usuario: oUser.codigo,
-                                    ));
+                                        await mainCtr.saveMonitoreo(
+                                      TramaMonitoreoModel(
+                                        id: idM,
+                                        isEdit: 1,
+                                        createdTime: DateTime.now(),
+                                        snip: _snip,
+                                        cui: _cuiCtr.text,
+                                        latitud: _latitud.text,
+                                        longitud: _longitud.text,
+                                        tambo: _tambo,
+                                        fechaTerminoEstimado: _dateObra.text,
+                                        avanceFisicoAcumulado: (double.parse(
+                                                _advanceFEA.text == ""
+                                                    ? "0"
+                                                    : _advanceFEA.text) /
+                                            100),
+                                        avanceFisicoPartida: (double.parse(
+                                                _advanceFEP.text == ""
+                                                    ? "0"
+                                                    : _advanceFEP.text) /
+                                            100),
+                                        fechaMonitoreo: _dateMonitor.text,
+                                        idMonitoreo: _idMonitor.text,
+                                        imgActividad: imgPE,
+                                        imgProblema: imgPI,
+                                        imgRiesgo: imgRI,
+                                        observaciones: _obsMonitor.text,
+                                        idEstadoAvance: getValueSelected(
+                                            int.parse(_statusAdvance!)),
+                                        idEstadoMonitoreo: getValueSelected(
+                                            int.parse(_statusMonitor!)),
+                                        idAvanceFisicoPartida: getValueSelected(
+                                            int.parse(_valuePartidaEje!)),
+                                        idAlternativaSolucion: getValueSelected(
+                                            int.parse(_valueAlternSolucion!)),
+                                        idProblemaIdentificado:
+                                            getValueSelected(
+                                                int.parse(_valueProblemaIO!)),
+                                        idRiesgoIdentificado: getValueSelected(
+                                            int.parse(_valueRiesgo!)),
+                                        nivelRiesgo: _valueNivelRiesgo!
+                                                .toUpperCase()
+                                                .contains(
+                                                    "SELECCIONE UNA OPCIÓN")
+                                            ? ""
+                                            : _valueNivelRiesgo!,
+                                        rol: oUser.rol,
+                                        usuario: oUser.codigo,
+                                      ),
+                                    );
 
                                     BusyIndicator.hide(context);
                                     if (idM == 0) {
@@ -1315,7 +1309,7 @@ class _MonitoringDetailNewEditPageState
                                             'Datos Actualizados Correctamente',
                                       );
                                     }
-                                    getDataMonitor(dataSave);
+                                    buildFormData(dataSave);
                                   } catch (oError) {
                                     var sTitle = 'Error';
                                     var sMessage = oError.toString();
@@ -1428,62 +1422,8 @@ class _MonitoringDetailNewEditPageState
                                       BusyIndicator.show(context);
                                       try {
                                         List<TramaMonitoreoModel> dataSend =
-                                            await mainController.sendMonitoreo([
-                                          TramaMonitoreoModel(
-                                            id: idM,
-                                            isEdit: 1,
-                                            createdTime: DateTime.now(),
-                                            snip: _snip,
-                                            cui: _cuiCtr.text,
-                                            latitud: _latitud.text,
-                                            longitud: _longitud.text,
-                                            tambo: _tambo,
-                                            fechaTerminoEstimado:
-                                                _dateObra.text,
-                                            avanceFisicoAcumulado:
-                                                (double.parse(
-                                                        _advanceFEA.text == ""
-                                                            ? "0"
-                                                            : _advanceFEA
-                                                                .text) /
-                                                    100),
-                                            avanceFisicoPartida: (double.parse(
-                                                    _advanceFEP.text == ""
-                                                        ? "0"
-                                                        : _advanceFEP.text) /
-                                                100),
-                                            fechaMonitoreo: _dateMonitor.text,
-                                            idMonitoreo: _idMonitor.text,
-                                            imgActividad: imgPE,
-                                            imgProblema: imgPI,
-                                            imgRiesgo: imgRI,
-                                            observaciones: _obsMonitor.text,
-                                            idEstadoAvance: getValueSelected(
-                                                int.parse(_statusAdvance!)),
-                                            idEstadoMonitoreo: getValueSelected(
-                                                int.parse(_statusMonitor!)),
-                                            idAvanceFisicoPartida:
-                                                getValueSelected(int.parse(
-                                                    _valuePartidaEje!)),
-                                            idAlternativaSolucion:
-                                                getValueSelected(int.parse(
-                                                    _valueAlternSolucion!)),
-                                            idProblemaIdentificado:
-                                                getValueSelected(int.parse(
-                                                    _valueProblemaIO!)),
-                                            idRiesgoIdentificado:
-                                                getValueSelected(
-                                                    int.parse(_valueRiesgo!)),
-                                            nivelRiesgo: _valueNivelRiesgo!
-                                                    .toUpperCase()
-                                                    .contains(
-                                                        "SELECCIONE UNA OPCIÓN")
-                                                ? ""
-                                                : _valueNivelRiesgo!,
-                                            rol: oUser.rol,
-                                            usuario: oUser.codigo,
-                                          )
-                                        ]);
+                                            await mainCtr
+                                                .sendMonitoreo([oMonitor]);
                                         BusyIndicator.hide(context);
 
                                         if (dataSend.isEmpty) {
@@ -1496,7 +1436,7 @@ class _MonitoringDetailNewEditPageState
                                           /**
                                            * Mostrar el registro que esta generando error
                                            */
-                                          getDataMonitor(dataSend[0]);
+                                          buildFormData(dataSend[0]);
 
                                           AnimatedSnackBar.rectangle(
                                             'Error',

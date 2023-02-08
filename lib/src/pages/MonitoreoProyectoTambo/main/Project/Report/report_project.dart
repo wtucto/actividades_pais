@@ -2,6 +2,8 @@ import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/R
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/report_dto.dart';
 import 'package:flutter/material.dart';
 
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
+
 class ReportProjectPage extends StatelessWidget {
   final ReportDto dataPdf;
   const ReportProjectPage({
@@ -12,8 +14,9 @@ class ReportProjectPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(dataPdf.name),
+      appBar: WidgetCustoms.appBar(
+        dataPdf.name,
+        context: context,
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.horizontal,

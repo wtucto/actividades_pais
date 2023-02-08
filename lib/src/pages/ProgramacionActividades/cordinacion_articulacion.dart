@@ -2,6 +2,7 @@ import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -112,31 +113,10 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        title: const Center(
-          child: Text(
-            "COOR Y ARTICULACIÓN",
-            style: TextStyle(
-              color: Color(0xfffefefe),
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-              fontSize: 18.0,
-            ),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              iconSize: 30,
-              onPressed: () {},
-              icon: const Icon(
-                Icons.supervised_user_circle_sharp,
-                color: Color.fromARGB(255, 255, 255, 255),
-              ),
-            ),
-          )
-        ],
+      appBar: WidgetCustoms.appBar(
+        "COOR Y ARTICULACIÓN",
+        context: context,
+        iconAct: Icons.supervised_user_circle_sharp,
       ),
       body: Form(
         key: _formKey,

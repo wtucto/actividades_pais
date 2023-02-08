@@ -8,7 +8,7 @@ import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/ListView/list_view_monitores.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Search/monitor_search.dart';
-import 'package:actividades_pais/util/Constants.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
@@ -167,63 +167,9 @@ class _MonitorListState extends State<MonitorList> {
       titleMonitor = 'MonitoringListTitle'.tr;
     }
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: color_10o15,
-          shadowColor: color_10o15,
-          title: Center(
-            child: Text(
-              titleMonitor,
-              style: const TextStyle(
-                color: color_01,
-                fontWeight: FontWeight.w600,
-                fontStyle: FontStyle.normal,
-                fontSize: 18.0,
-              ),
-            ),
-          ),
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-              color: color_01,
-            ),
-            onPressed: () => {
-              if (widget.estadoM == 'ALL')
-                {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => HomePagePais(),
-                    ),
-                    (route) => false,
-                  ),
-                }
-              else
-                {
-                  Navigator.pop(context),
-                }
-            },
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: IconButton(
-                iconSize: 30,
-                onPressed: () async {
-                  showSearch(
-                    context: context,
-                    delegate: MonitorSearchDelegate(
-                      searchMonitor: aMonResp,
-                      statusM: widget.estadoM,
-                    ),
-                  );
-                },
-                icon: const Icon(
-                  Icons.search,
-                  color: color_01,
-                ),
-              ),
-            ),
-          ],
+        appBar: WidgetCustoms.appBar(
+          titleMonitor,
+          context: context,
         ),
         body: RefreshIndicator(
           onRefresh: () async {

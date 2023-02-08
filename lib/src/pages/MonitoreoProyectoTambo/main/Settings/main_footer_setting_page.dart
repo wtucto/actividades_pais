@@ -8,11 +8,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/settings_page.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 SharedPreferences? _prefs;
 
@@ -206,28 +206,21 @@ class PDFViewerFromUrl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('MANUAL DE USUARIO'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.download,
-              color: Colors.white,
-              semanticLabel: 'Bookmark',
-            ),
-            onPressed: () async {
-              BusyIndicator.show(context);
-              Uint8List dataPdf = await downloadPDF();
-              BusyIndicator.hide(context);
+      appBar: WidgetCustoms.appBar(
+        'MANUAL DE USUARIO',
+        context: context,
+        iconAct: Icons.download,
+        onPressedAct: () async {
+          BusyIndicator.show(context);
+          Uint8List dataPdf = await downloadPDF();
+          BusyIndicator.hide(context);
 
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => PdfPreviewPage2(dataPdf: dataPdf),
-                ),
-              );
-            },
-          ),
-        ],
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => PdfPreviewPage2(dataPdf: dataPdf),
+            ),
+          );
+        },
       ),
       body: const PDF(
         enableSwipe: true,
@@ -250,8 +243,9 @@ class PDFViewerCachedFromUrl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Manual de Usuario'),
+      appBar: WidgetCustoms.appBar(
+        'Manual de Usuario',
+        context: context,
       ),
       body: const PDF(
         enableSwipe: true,

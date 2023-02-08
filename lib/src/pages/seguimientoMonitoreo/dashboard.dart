@@ -1,7 +1,7 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/src/pages/Home/home.dart';
-import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/search/project_search.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 import 'package:actividades_pais/src/pages/seguimientoMonitoreo/detalleProyecto.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
@@ -128,84 +128,23 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: color_10o15,
-        shadowColor: color_10o15,
-        title: const Center(
-          child: Text(
-            "DASHBOARD PROYECTOS",
-            style: TextStyle(
-              color: color_01,
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-              fontSize: 18.0,
-            ),
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: color_01,
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => HomePagePais(),
-                ));
-          },
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              iconSize: 30,
-              onPressed: () async {
-                BusyIndicator.show(context);
-                await buildData();
-                BusyIndicator.hide(context);
-              },
-              icon: const Icon(
-                Icons.restart_alt_outlined,
-                color: color_01,
-              ),
-            ),
-          ),
-        ],
-        /*
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight),
-          child: Container(
-            height: 48,
-            margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: colorGB,
-              border: Border.all(color: colorI),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: TextField(
-              controller: _txtSearch,
-              decoration: InputDecoration(
-                icon: const Icon(Icons.search),
-                suffixIcon: _txtSearch.text.isNotEmpty
-                    ? GestureDetector(
-                        child: const Icon(Icons.close),
-                        onTap: () {
-                          _txtSearch.clear();
-                          searhProyectos("");
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
-                      )
-                    : null,
-                hintText: 'Buscar Tambo',
-                border: InputBorder.none,
-              ),
-              onChanged: searhProyectos,
-            ),
-          ),
-        ),
-        */
+      appBar: WidgetCustoms.appBar(
+        "DASHBOARD PROYECTOS",
+        context: context,
+        icon: Icons.arrow_back,
+        onPressed: () {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => HomePagePais(),
+              ));
+        },
+        iconAct: Icons.restart_alt_outlined,
+        onPressedAct: () async {
+          BusyIndicator.show(context);
+          await buildData();
+          BusyIndicator.hide(context);
+        },
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -320,7 +259,7 @@ class _DashboardState extends State<Dashboard> {
                                 gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
-                                  childAspectRatio: 1.3,
+                                  childAspectRatio: 1.2,
                                   crossAxisSpacing: 5,
                                   mainAxisSpacing: 5,
                                 ),
@@ -344,22 +283,17 @@ class _DashboardState extends State<Dashboard> {
                                       );
                                     },
                                     child: Container(
-                                      padding: const EdgeInsets.all(8),
+                                      padding: const EdgeInsets.all(4),
                                       margin: const EdgeInsets.only(bottom: 10),
                                       decoration: BoxDecoration(
+                                        color: Colors.white,
                                         borderRadius: BorderRadius.circular(20),
-                                        color: colorGB,
-                                        border: Border.all(
-                                          width: 1,
-                                          color:
-                                              getColorAvancefisico(oProyecto),
-                                        ),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: color_04.withOpacity(0.9),
-                                            spreadRadius: 0,
-                                            blurRadius: 2,
-                                            offset: const Offset(0, 1),
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 1,
+                                            blurRadius: 1,
+                                            offset: Offset(0, 1),
                                           ),
                                         ],
                                       ),
@@ -388,7 +322,7 @@ class _DashboardState extends State<Dashboard> {
                                                               oProyecto),
                                                           style:
                                                               const TextStyle(
-                                                            fontSize: 11,
+                                                            fontSize: 10,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                           ),
@@ -405,6 +339,17 @@ class _DashboardState extends State<Dashboard> {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
+                                                          Text(
+                                                            oProyecto.cui!,
+                                                            style:
+                                                                const TextStyle(
+                                                              color: color_01,
+                                                              fontSize: 13,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                            ),
+                                                          ),
                                                           const Text(
                                                             'TAMBO',
                                                             style: TextStyle(
@@ -420,7 +365,7 @@ class _DashboardState extends State<Dashboard> {
                                                             style:
                                                                 const TextStyle(
                                                               color: color_01,
-                                                              fontSize: 11,
+                                                              fontSize: 10,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500,
@@ -437,27 +382,18 @@ class _DashboardState extends State<Dashboard> {
                                           const SizedBox(height: 10),
                                           Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
+                                                MainAxisAlignment.start,
                                             children: [
                                               Flexible(
                                                 child: Text(
                                                   oProyecto.estado!,
                                                   style: const TextStyle(
                                                     color: color_01,
-                                                    fontSize: 11,
+                                                    fontSize: 10,
                                                     fontWeight: FontWeight.w500,
                                                   ),
                                                 ),
                                               ),
-                                              const SizedBox(width: 10),
-                                              Text(
-                                                oProyecto.cui!,
-                                                style: const TextStyle(
-                                                  color: color_01,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              )
                                             ],
                                           )
                                         ],

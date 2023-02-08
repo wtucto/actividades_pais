@@ -2,6 +2,7 @@ import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/resource/Internationalization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 class ChangeLanguagePage extends StatefulWidget {
   @override
@@ -17,17 +18,9 @@ class _ChangeCountryPageState extends State<ChangeLanguagePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        brightness: Brightness.light,
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
-        ),
-        backgroundColor: Colors.transparent,
-        title: Text(
-          'Settings'.tr,
-          style: TextStyle(color: color_01),
-        ),
-        elevation: 0,
+      appBar: WidgetCustoms.appBar(
+        'Settings'.tr,
+        context: context,
       ),
       body: SafeArea(
         bottom: true,

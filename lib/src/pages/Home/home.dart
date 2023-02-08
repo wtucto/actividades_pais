@@ -258,7 +258,7 @@ class _HomePagePais extends State<HomePagePais> {
         aHomeOptions.add(
           HomeOptions(
             code: 'OPT1007',
-            name: 'SEGUIMINETO Y MONITOREO',
+            name: 'SEGUIMIENTO Y MONITOREO',
             types: const ['Ver'],
             image: icon5,
             color: const Color(0xFF78b8cd),
@@ -272,7 +272,7 @@ class _HomePagePais extends State<HomePagePais> {
         aHomeOptions.add(
           HomeOptions(
             code: 'OPT1007',
-            name: 'SEGUIMINETO Y MONITOREO',
+            name: 'SEGUIMIENTO Y MONITOREO',
             types: const ['Ver'],
             image: icon1,
             color: const Color(0xFF78b8cd),
@@ -411,14 +411,17 @@ class _HomePagePais extends State<HomePagePais> {
                         children: [
                           const SizedBox(height: 15),
                           Container(
-                            padding: const EdgeInsets.all(12),
+                            padding: const EdgeInsets.only(
+                              top: 12,
+                              bottom: 8,
+                            ),
                             child: Hero(
                               tag: homeOption.image,
                               child: Image.asset(
                                 homeOption.image,
                                 fit: BoxFit.contain,
-                                width: 50,
-                                height: 50,
+                                width: 40,
+                                height: 40,
                                 alignment: Alignment.center,
                               ),
                             ),
@@ -432,7 +435,7 @@ class _HomePagePais extends State<HomePagePais> {
                                   color: Color.fromARGB(255, 0, 0, 0),
                                   fontWeight: FontWeight.w700,
                                   fontStyle: FontStyle.normal,
-                                  fontSize: 12.0,
+                                  fontSize: 11.0,
                                 ),
                                 textAlign: TextAlign.center,
                               ),

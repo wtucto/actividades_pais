@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
+
 class PdfPreviewPage extends StatelessWidget {
   final ReportDto dataPdf;
   const PdfPreviewPage({Key? key, required this.dataPdf}) : super(key: key);
@@ -20,8 +22,9 @@ class PdfPreviewPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('VISTA PREVIA DEL REPORTE'),
+      appBar: WidgetCustoms.appBar(
+        'VISTA PREVIA DEL REPORTE',
+        context: context,
       ),
       body: PdfPreview(
         maxPageWidth: 708,

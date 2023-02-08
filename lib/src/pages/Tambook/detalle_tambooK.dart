@@ -704,7 +704,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   Padding cardDatosGenerales() {
     var heading = 'DATOS GENERALES';
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -762,7 +762,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     var subheading =
         "${oTambo.jefeNombre ?? ''} ${oTambo.jefeApellidoPaterno ?? ''} ${oTambo.jefeApellidoMaterno ?? ''}";
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -822,7 +822,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   Padding cardDatosUbicacion() {
     var heading = 'DATOS DE UBICACIÓN';
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -891,7 +891,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   Padding cardDatosDemograficos() {
     var heading = 'DATOS DEMOGRÁFICOS';
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -947,7 +947,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   Padding cardDatosObra() {
     var heading = 'DATOS DE LA OBRA';
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -1001,7 +1001,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   Padding cardDatosCentroPoblado() {
     var heading = 'CENTROS POBLADOS';
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -1059,7 +1059,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     TamboServicioInternetDto oSrvInter =
         oTambo.oServicioInternet ?? TamboServicioInternetDto.empty();
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -1132,7 +1132,7 @@ class _DetalleTambookState extends State<DetalleTambook>
  */
   Padding cardDatosIntervencionCod1() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -1221,7 +1221,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   Padding cardDatosIntervencionCod2() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -1310,7 +1310,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   Padding cardDatosIntervencionCod4() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -1410,7 +1410,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     );
     var heading = 'EQUIPAMIENTO TECNOLÓGICO';
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -1620,7 +1620,184 @@ class _DetalleTambookState extends State<DetalleTambook>
                       ),
                     ],
                   ),
+                  ButtonBar(
+                    alignment: MainAxisAlignment.spaceAround,
+                    buttonHeight: 52.0,
+                    buttonMinWidth: 90.0,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {},
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            style: flatButtonStyle,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    buildSuccessDialog(context),
+                              );
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      width: 2,
+                                      color: color_01,
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    color: color_01,
+                                    Icons.print_outlined,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 2.0),
+                                ),
+                                const Text(
+                                  'IMPRESORAS (10)',
+                                  style: TextStyle(
+                                    color: color_01,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildSuccessDialog(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.white,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          dialogBox(),
+        ],
+      ),
+      actions: const <Widget>[
+        /*
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  colorS,
+                ),
+              ),
+              child: const Text("Aceptar"),
+            ),
+          ],
+        ),
+
+        */
+      ],
+    );
+  }
+
+  Widget dialogBox() {
+    return SizedBox(
+      width: double.infinity,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    5.00,
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: Text(
+                        "EQUIPAMIENTO TECNOLÓGICO",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: color_01,
+                          fontSize: 15,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "IMPRESORAS",
+                      maxLines: null,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: color_01,
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
+                        height: 1.43,
+                      ),
+                    ),
+                    Divider(),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: Text(
+                        "OPERATIVO: 5",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: color_01,
+                          fontSize: 13,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: Text(
+                        "INOPERATIVO: 5",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: color_01,
+                          fontSize: 13,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 14,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

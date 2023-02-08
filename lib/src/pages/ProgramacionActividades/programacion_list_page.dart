@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 SharedPreferences? _prefs;
 MainController mainController = MainController();
@@ -100,29 +101,16 @@ class _ProgramacionListPageState extends State<ProgramacionListPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            'ProgramacionListTitle'.tr,
-            style: const TextStyle(
-              color: Color(0xfffefefe),
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-              fontSize: 18.0,
-            ),
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: ProgramacionSearchDelegate(aProgramacion),
-              );
-            },
-          ),
-        ],
+      appBar: WidgetCustoms.appBar(
+        'ProgramacionListTitle'.tr,
+        context: context,
+        iconAct: Icons.search,
+        onPressedAct: () {
+          showSearch(
+            context: context,
+            delegate: ProgramacionSearchDelegate(aProgramacion),
+          );
+        },
       ),
       body: Container(
         child: RefreshIndicator(

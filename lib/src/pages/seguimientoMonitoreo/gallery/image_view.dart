@@ -2,6 +2,7 @@ import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart'
 import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/detalleProyecto.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 class ImageView extends StatefulWidget {
   ImageView({super.key, this.galleria, required this.datoProyecto});
@@ -19,21 +20,17 @@ class _ImageViewState extends State<ImageView> {
       widget.galleria!.image,
     ];
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text(widget.datoProyecto.tambo!),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      DetalleProyecto(datoProyecto: widget.datoProyecto),
-                ));
-          },
-        ),
+      appBar: WidgetCustoms.appBar(
+        widget.datoProyecto.tambo ?? '',
+        icon: Icons.arrow_back,
+        onPressed: () {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    DetalleProyecto(datoProyecto: widget.datoProyecto),
+              ));
+        },
       ),
       body: Container(
         color: Colors.white,

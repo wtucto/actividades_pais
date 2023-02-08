@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:photo_view/photo_view.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 class DetalleProyecto extends StatefulWidget {
   const DetalleProyecto({super.key, required this.datoProyecto});
@@ -256,47 +256,20 @@ class _DetalleProyectoState extends State<DetalleProyecto>
         (MediaQuery.of(context).size.width / 1.2) +
         24.0;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: color_10o15,
-        shadowColor: color_10o15,
-        title: Center(
-          child: Text(
-            widget.datoProyecto.tambo!,
-            style: const TextStyle(
-              color: color_01,
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-              fontSize: 18.0,
+      appBar: WidgetCustoms.appBar(
+        widget.datoProyecto.tambo ?? '',
+        context: context,
+        icon: Icons.arrow_back,
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => const Dashboard(),
             ),
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            color: color_01,
-            Icons.arrow_back,
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const Dashboard(),
-              ),
-            );
-          },
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              iconSize: 30,
-              onPressed: () {},
-              icon: const Icon(
-                Icons.format_align_left,
-                color: color_01,
-              ),
-            ),
-          )
-        ],
+          );
+        },
+        iconAct: Icons.format_align_left,
+        onPressedAct: () {},
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -564,8 +537,6 @@ class _DetalleProyectoState extends State<DetalleProyecto>
 
                                 const Divider(),
                                 cardEstadoProyecto(),
-                                cardSubEstadoProyecto(),
-                                cardSaneamientoProyecto(),
                               ],
                             );
                           }),
@@ -588,7 +559,7 @@ class _DetalleProyectoState extends State<DetalleProyecto>
   */
 
   Padding cardEstadoProyecto() {
-    var heading = 'ESTADO DEL PROYECTO';
+    var heading = 'DETALLE DEL PROYECTO';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
@@ -892,77 +863,6 @@ class _DetalleProyectoState extends State<DetalleProyecto>
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  /*
-  * -----------------------------------------------
-  *            SUB ESTADO DEL PROYEVTO
-  * -----------------------------------------------
-  */
-
-  Padding cardSubEstadoProyecto() {
-    var heading = 'SUB ESTADO DEL PROYECTO';
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color: colorI,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        child: ExpansionTile(
-          initiallyExpanded: false,
-          title: ListTile(
-            title: Text(
-              heading,
-              style: const TextStyle(
-                fontSize: 16,
-                color: color_01,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          children: <Widget>[],
-        ),
-      ),
-    );
-  }
-
-  /*
-  * -----------------------------------------------
-  *            SANEAMENTO DEL PROYECTO
-  * -----------------------------------------------
-  */
-  Padding cardSaneamientoProyecto() {
-    var heading = 'SANEAMIENTO ESTADO DEL PROYECTO';
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color: colorI,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        child: ExpansionTile(
-          initiallyExpanded: false,
-          title: ListTile(
-            title: Text(
-              heading,
-              style: const TextStyle(
-                fontSize: 16,
-                color: color_01,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          children: <Widget>[],
         ),
       ),
     );

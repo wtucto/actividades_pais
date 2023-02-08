@@ -1,7 +1,13 @@
+// ignore_for_file: unnecessary_new
+
 import 'package:actividades_pais/src/pages/Home/home.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
+import 'package:actividades_pais/src/pages/widgets/WebViewTest.dart';
 
 class DashboardTambook extends StatefulWidget {
   const DashboardTambook({super.key});
@@ -10,9 +16,21 @@ class DashboardTambook extends StatefulWidget {
   State<DashboardTambook> createState() => _DashboardTambookState();
 }
 
-class _DashboardTambookState extends State<DashboardTambook> {
+class _DashboardTambookState extends State<DashboardTambook>
+    with TickerProviderStateMixin<DashboardTambook> {
+  Animation<double>? _animation;
+  AnimationController? _controller;
+
   @override
   void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 260),
+    );
+    final curvedAnimation =
+        CurvedAnimation(curve: Curves.easeInOut, parent: _controller!);
+    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
+
     super.initState();
     setState(() {});
   }
@@ -20,48 +38,25 @@ class _DashboardTambookState extends State<DashboardTambook> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: color_10o15,
-        shadowColor: color_10o15,
-        title: const Center(
-          child: Text(
-            'TAMBOOK',
-            style: TextStyle(
-              color: color_01,
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-              fontSize: 18.0,
+      appBar: WidgetCustoms.appBar(
+        'TAMBOOK',
+        context: context,
+        icon: Icons.arrow_back,
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => HomePagePais(),
             ),
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: color_01,
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => HomePagePais(),
-              ),
-            );
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              color: color_01,
-              Icons.search,
-            ),
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: SearchTambookDelegate(),
-              );
-            },
-          )
-        ],
+          );
+        },
+        iconAct: Icons.search,
+        onPressedAct: () {
+          showSearch(
+            context: context,
+            delegate: SearchTambookDelegate(),
+          );
+        },
       ),
       body: CustomScrollView(
         slivers: [
@@ -69,6 +64,33 @@ class _DashboardTambookState extends State<DashboardTambook> {
             child: getBody(),
           ),
         ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: ExpandedAnimationFab(
+        items: [
+          FabItem(
+            "Ubicación",
+            Icons.map_outlined,
+            onPress: () async {
+              _controller!.reverse();
+              BusyIndicator.show(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => const WebViewExample(),
+                ),
+              );
+            },
+          ),
+        ],
+        animation: _animation!,
+        onPress: () {
+          if (_controller!.isCompleted) {
+            _controller!.reverse();
+          } else {
+            _controller!.forward();
+          }
+        },
       ),
     );
   }
@@ -78,12 +100,12 @@ class _DashboardTambookState extends State<DashboardTambook> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20),
           cardHeader(),
           const SizedBox(height: 20),
           cardTambos(),
           cardPersonal(),
           cardEquipamiento(),
+          cardEquipoTecnologico(),
           const SizedBox(height: 40),
         ],
       ),
@@ -93,12 +115,21 @@ class _DashboardTambookState extends State<DashboardTambook> {
   Widget cardHeader() {
     return Padding(
       padding: const EdgeInsets.only(
-        left: 18,
-        right: 16,
+        left: 0,
+        right: 0,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          SizedBox(
+            width: double.maxFinite,
+            height: 250.0,
+            child: Image.asset(
+              'assets/bgTamboDefault.jpeg',
+              fit: BoxFit.fill,
+            ),
+          ),
+          const Divider(color: color_02o27),
           const Text(
             'PLATAFORMAS FIJAS Y MOVIL',
             textAlign: TextAlign.center,
@@ -109,7 +140,7 @@ class _DashboardTambookState extends State<DashboardTambook> {
               color: color_01,
             ),
           ),
-          const Divider(color: color_02o27),
+          /*
           Column(
             children: const [
               Padding(
@@ -121,6 +152,7 @@ class _DashboardTambookState extends State<DashboardTambook> {
               ),
             ],
           ),
+          */
         ],
       ),
     );
@@ -305,7 +337,7 @@ class _DashboardTambookState extends State<DashboardTambook> {
                             ],
                           ),
                           const Text(
-                            '''|________|________|''',
+                            '''|_________|_________|''',
                             style: TextStyle(
                               fontSize: 18.0,
                               color: Color.fromRGBO(155, 155, 155, 1.0),
@@ -399,7 +431,7 @@ class _DashboardTambookState extends State<DashboardTambook> {
                                 Text(
                                   "REGION",
                                   style: TextStyle(
-                                    fontSize: 18.0,
+                                    fontSize: 14.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   textAlign: TextAlign.left,
@@ -455,7 +487,7 @@ class _DashboardTambookState extends State<DashboardTambook> {
                                 Text(
                                   "TAMBOS PIAS Y UPS",
                                   style: TextStyle(
-                                    fontSize: 18.0,
+                                    fontSize: 14.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   textAlign: TextAlign.left,
@@ -814,6 +846,417 @@ class _DashboardTambookState extends State<DashboardTambook> {
           ],
         ),
       ),
+    );
+  }
+
+  /*
+  * -----------------------------------------------
+  *            PARQUE INFORMATICO
+  * -----------------------------------------------
+  */
+  Padding cardEquipoTecnologico() {
+    final ButtonStyle flatButtonStyle = TextButton.styleFrom(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+      ),
+    );
+    var heading = 'PARQUE INFORMATICO';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 1.0,
+                      ),
+                      child: Text(
+                        '''   ''',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2!
+                            .copyWith(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                  ButtonBar(
+                    alignment: MainAxisAlignment.spaceAround,
+                    buttonHeight: 52.0,
+                    buttonMinWidth: 90.0,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {},
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            style: flatButtonStyle,
+                            onPressed: () {},
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      width: 2,
+                                      color: color_01,
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    color: color_01,
+                                    Icons.desktop_mac_outlined,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 2.0),
+                                ),
+                                const Text(
+                                  'PC (10)',
+                                  style: TextStyle(
+                                    color: color_01,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            style: flatButtonStyle,
+                            onPressed: () {},
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      width: 2,
+                                      color: color_01,
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    color: color_01,
+                                    Icons.laptop,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 2.0),
+                                ),
+                                const Text(
+                                  'LAPTOP (10)',
+                                  style: TextStyle(
+                                    color: color_01,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  ButtonBar(
+                    alignment: MainAxisAlignment.spaceAround,
+                    buttonHeight: 52.0,
+                    buttonMinWidth: 90.0,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {},
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            style: flatButtonStyle,
+                            onPressed: () {},
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      width: 2,
+                                      color: color_01,
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    color: color_01,
+                                    Icons.photo_camera_front,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 2.0),
+                                ),
+                                const Text(
+                                  'PROYECTOR (30)',
+                                  style: TextStyle(
+                                    color: color_01,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            style: flatButtonStyle,
+                            onPressed: () {},
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      width: 2,
+                                      color: color_01,
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    color: color_01,
+                                    Icons.wifi,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 2.0),
+                                ),
+                                const Text(
+                                  'ANTENA WIFI (30)',
+                                  style: TextStyle(
+                                    color: color_01,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  ButtonBar(
+                    alignment: MainAxisAlignment.spaceAround,
+                    buttonHeight: 52.0,
+                    buttonMinWidth: 90.0,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {},
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            style: flatButtonStyle,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    buildSuccessDialog(
+                                  context,
+                                  title: 'EQUIPAMIENTO TECNOLÓGICO',
+                                  subTitle: 'IMPRESORAS',
+                                  child: Column(
+                                    children: const [
+                                      Text(
+                                        "OPERATIVO: 5",
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          color: color_01,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        "INOPERATIVO: 5",
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          color: color_01,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      width: 2,
+                                      color: color_01,
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    color: color_01,
+                                    Icons.print_outlined,
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 2.0),
+                                ),
+                                const Text(
+                                  'IMPRESORAS (10)',
+                                  style: TextStyle(
+                                    color: color_01,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildSuccessDialog(
+    BuildContext context, {
+    String? title,
+    String? subTitle,
+    Widget? child,
+  }) {
+    return AlertDialog(
+      backgroundColor: Colors.white,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            width: double.infinity,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          5.00,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            child: Text(
+                              title ?? '',
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(
+                                color: color_01,
+                                fontSize: 15,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            subTitle ?? '',
+                            maxLines: null,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: color_01,
+                              fontSize: 14,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                              height: 1.43,
+                            ),
+                          ),
+                          const Divider(),
+                          SizedBox(
+                            child: child,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+      actions: const <Widget>[
+        /*
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  colorS,
+                ),
+              ),
+              child: const Text("Aceptar"),
+            ),
+          ],
+        ),
+
+        */
+      ],
     );
   }
 

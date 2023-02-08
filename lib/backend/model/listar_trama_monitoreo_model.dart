@@ -215,17 +215,17 @@ class TramaMonitoreoModel {
   static const sOptDropdownDefault = 'Seleccione una opción';
 
   static const sIdEstadoINC = 43;
-  static const sIdEstadoPEN = 44;
   static const sIdEstadoENV = 45;
+  static const sIdEstadoPEN = 44;
 
   static const sEstadoINC = 'INCOMPLETO';
   static const sEstadoPEN = 'POR ENVIAR';
   static const sEstadoENV = 'ENVIADO';
 
   static final List<String> aEstadoMonitoreo = [
-    'INCOMPLETO',
-    'POR ENVIAR',
-    'ENVIADO',
+    'APROBADO',
+    'RECHAZADO',
+    'PENDIENTE',
   ];
 
   static const sAltSol01 = 'Solicitar modificación de Exp. Técnico';
