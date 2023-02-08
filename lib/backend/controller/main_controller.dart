@@ -298,10 +298,10 @@ class MainController extends GetxController {
       );
     }
 
-    if (o.idEstadoMonitoreo == TramaMonitoreoModel.sIdEstadoENV) {
+    if (o.idEstadoMonitoreo == TramaMonitoreoModel.sIdEstadoAPR) {
       loading.value = false;
       return Future.error(
-        'Imposible modificar un Monitoreo con el estado: ${TramaMonitoreoModel.sEstadoENV}',
+        'Imposible modificar un Monitoreo con el estado: ${TramaMonitoreoModel.sEstadoAPR}',
       );
     }
 
@@ -361,8 +361,8 @@ class MainController extends GetxController {
     bool isComplete = await validateMonitor(o);
 
     if (isComplete) {
-      o.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoPEN;
-      o.estadoMonitoreo = TramaMonitoreoModel.sEstadoPEN;
+      o.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoXEN;
+      o.estadoMonitoreo = TramaMonitoreoModel.sEstadoXEN;
     } else {
       o.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoINC;
       o.estadoMonitoreo = TramaMonitoreoModel.sEstadoINC;
@@ -530,7 +530,7 @@ class MainController extends GetxController {
       /// POR ENVIAR
       bool isOk = true;
       a.forEach((o) {
-        if (o.idEstadoMonitoreo != TramaMonitoreoModel.sIdEstadoPEN) {
+        if (o.idEstadoMonitoreo != TramaMonitoreoModel.sIdEstadoXEN) {
           isOk = false;
         }
       });
@@ -544,7 +544,7 @@ class MainController extends GetxController {
       }
 
       throw Exception(
-        'Imposible enviar documentos al servidor debido a que tienen estados diferentes a : ${TramaMonitoreoModel.sEstadoPEN}',
+        'Imposible enviar documentos al servidor debido a que tienen estados diferentes a : ${TramaMonitoreoModel.sEstadoXEN}',
       );
     } catch (oError) {
       loading.value = false;
@@ -581,13 +581,13 @@ class MainController extends GetxController {
       throw ThrowCustom(
         type: 'W',
         msg:
-            'No se encontraron registros con estados: ${TramaMonitoreoModel.sEstadoPEN}',
+            'No se encontraron registros con estados: ${TramaMonitoreoModel.sEstadoXEN}',
       );
     }
 
     bool isOk = true;
     a.forEach((o) {
-      if (o.estadoMonitoreo != TramaMonitoreoModel.sEstadoPEN) {
+      if (o.estadoMonitoreo != TramaMonitoreoModel.sEstadoXEN) {
         isOk = false;
       }
     });
@@ -627,7 +627,7 @@ class MainController extends GetxController {
     throw ThrowCustom(
       type: 'E',
       msg:
-          'Imposible enviar documentos al servidor debido a que tienen estados diferentes a : ${TramaMonitoreoModel.sEstadoPEN}',
+          'Imposible enviar documentos al servidor debido a que tienen estados diferentes a : ${TramaMonitoreoModel.sEstadoXEN}',
     );
   }
 
@@ -771,8 +771,8 @@ class MainController extends GetxController {
     bool isComplete = await validateMonitor(o);
 
     if (isComplete) {
-      o.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoPEN;
-      o.estadoMonitoreo = TramaMonitoreoModel.sEstadoPEN;
+      o.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoXEN;
+      o.estadoMonitoreo = TramaMonitoreoModel.sEstadoXEN;
     } else {
       o.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoINC;
       o.estadoMonitoreo = TramaMonitoreoModel.sEstadoINC;

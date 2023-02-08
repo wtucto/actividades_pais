@@ -44,10 +44,10 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
       case TramaMonitoreoModel.sIdEstadoINC:
         c = const Color.fromARGB(255, 255, 115, 96);
         break;
-      case TramaMonitoreoModel.sIdEstadoPEN:
+      case TramaMonitoreoModel.sIdEstadoXEN:
         c = const Color.fromARGB(249, 255, 152, 0);
         break;
-      case TramaMonitoreoModel.sIdEstadoENV:
+      case TramaMonitoreoModel.sIdEstadoAPR:
         c = Colors.green;
         break;
     }
@@ -100,10 +100,10 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
       case TramaMonitoreoModel.sIdEstadoINC:
         isUpdae = false;
         break;
-      case TramaMonitoreoModel.sIdEstadoPEN:
+      case TramaMonitoreoModel.sIdEstadoXEN:
         isUpdae = true;
         break;
-      case TramaMonitoreoModel.sIdEstadoENV:
+      case TramaMonitoreoModel.sIdEstadoAPR:
         isUpdae = false;
         break;
       default:
@@ -117,10 +117,10 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
       case TramaMonitoreoModel.sIdEstadoINC:
         isUpdae = true;
         break;
-      case TramaMonitoreoModel.sIdEstadoPEN:
+      case TramaMonitoreoModel.sIdEstadoXEN:
         isUpdae = true;
         break;
-      case TramaMonitoreoModel.sIdEstadoENV:
+      case TramaMonitoreoModel.sIdEstadoAPR:
         isUpdae = false;
         break;
       default:

@@ -258,6 +258,9 @@ CIP_119811
 47532262
 47532262
 
+45860931
+45860931
+
 
 "codigo": "CAP_010254",
 "nombres": "Zulema Pecchi Barrientos",

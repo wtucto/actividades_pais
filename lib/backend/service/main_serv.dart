@@ -160,8 +160,10 @@ class MainService {
         /// (1)...
         String estadoMonitoreo = oMonit.estadoMonitoreo!;
         int idEstadoMonitoreo = oMonit.idEstadoMonitoreo!;
-        oMonit.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoENV;
-        oMonit.estadoMonitoreo = TramaMonitoreoModel.sEstadoENV;
+
+        // Estado inicial PENDIENTE
+        oMonit.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoPEN;
+        oMonit.estadoMonitoreo = TramaMonitoreoModel.sEstadoPEN;
 
         if (isOnlines) {
           try {
@@ -388,6 +390,26 @@ class MainService {
 
       aApi.addAll(aApi1);
       aApi.addAll(aApi2);
+
+      /**
+       * Estados Locales
+       * - INCOMPLETO
+       * - POR ENVIAR
+       */
+      ComboItemModel oTempEMONI = ComboItemModel.empty();
+      oTempEMONI.idTypeItem = 'ESTADO_MONITOREO';
+      oTempEMONI.codigo1 = TramaMonitoreoModel.sIdEstadoINC.toString();
+      oTempEMONI.codigo2 = TramaMonitoreoModel.sIdEstadoINC.toString();
+      oTempEMONI.descripcion = TramaMonitoreoModel.sEstadoINC;
+      aApi3.add(oTempEMONI);
+
+      ComboItemModel oTempEMONI2 = ComboItemModel.empty();
+      oTempEMONI2.idTypeItem = 'ESTADO_MONITOREO';
+      oTempEMONI2.codigo1 = TramaMonitoreoModel.sIdEstadoXEN.toString();
+      oTempEMONI2.codigo2 = TramaMonitoreoModel.sIdEstadoXEN.toString();
+      oTempEMONI2.descripcion = TramaMonitoreoModel.sEstadoXEN;
+      aApi3.add(oTempEMONI2);
+
       aApi.addAll(aApi3);
       aApi.addAll(aApi4);
       aApi.addAll(aApi5);
@@ -441,6 +463,13 @@ class MainService {
       List<TramaMonitoreoModel> aApi =
           await Get.find<MainRepo>().getAllMonitoreoApi();
 
+      aApi.retainWhere((o) {
+        /**
+         * Filtrar solo Monitoreos con el estado APROBADO
+         */
+        return o.idEstadoMonitoreo == TramaMonitoreoModel.sIdEstadoAPR;
+      });
+
       try {
         bool isOk = await FileUtil().writeToAllDataFile("MonitoreoApi", aApi);
         /*
@@ -485,7 +514,7 @@ class MainService {
           }
           if (oDataFind != null || oDataFind!.id == 0) {
             if (oDataFind.idEstadoMonitoreo !=
-                TramaMonitoreoModel.sIdEstadoENV) {
+                TramaMonitoreoModel.sIdEstadoAPR) {
               /*
                 Si el estado del monitoreo en la nube es diferente a la data local, 
                 se actualiza el registro local.

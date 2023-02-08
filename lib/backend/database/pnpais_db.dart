@@ -260,7 +260,7 @@ class DatabasePnPais {
   Future deleteMonitorByEstadoENV() async {
     final db = await instance.database;
     db.execute(
-        "DELETE FROM $tableNameTramaMonitoreos WHERE ${MonitorFields.estadoMonitoreo} = '${TramaMonitoreoModel.sEstadoENV}'");
+        "DELETE FROM $tableNameTramaMonitoreos WHERE ( ${MonitorFields.estadoMonitoreo} = '${TramaMonitoreoModel.sEstadoAPR}' OR ${MonitorFields.estadoMonitoreo} = '${TramaMonitoreoModel.sEstadoPEN}' )");
   }
 
   Future _upgradeDB(
@@ -576,7 +576,7 @@ class DatabasePnPais {
     final orderBy = '${MonitorFields.idMonitoreo} ASC';
 
     String sWhere = '${MonitorFields.idEstadoMonitoreo} = ?';
-    List<Object?> arg = [TramaMonitoreoModel.sIdEstadoPEN];
+    List<Object?> arg = [TramaMonitoreoModel.sIdEstadoXEN];
     if (o!.cui != "") {
       sWhere = '$sWhere AND ${MonitorFields.cui} = ?';
       arg.add(o.cui);

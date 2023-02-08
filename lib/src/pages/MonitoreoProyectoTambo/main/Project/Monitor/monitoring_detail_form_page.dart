@@ -259,31 +259,11 @@ class _MonitoringDetailNewEditPageState
       if (widget.datoProyecto != null) {
         oMonitoreo = await mainCtr.buildNewMonitor(widget.datoProyecto!.cui!);
       }
-    } catch (oError) {}
-    try {
-      setState(() {
-        _snip = widget.datoProyecto?.numSnip;
-        _ciu = widget.datoProyecto?.cui;
-        _cuiCtr.text = _ciu!;
-        _tambo = widget.datoProyecto?.tambo;
-        _cuiCtr.text = oMonitoreo.cui!;
-        _idMonitor.text = oMonitoreo.idMonitoreo!;
-        _dateMonitor.text = oMonitoreo.fechaMonitoreo!;
-        titleMonitor = oMonitoreo.tambo! == "" ? 'MONITOR' : oMonitoreo.tambo!;
-        _advanceFEA.text =
-            ((oMonitoreo.avanceFisicoAcumulado! * 100).toStringAsFixed(2))
-                .toString();
-        _dateObra.text = oMonitoreo.fechaTerminoEstimado!;
-        _longitud.text = oMonitoreo.longitud!;
-        _latitud.text = oMonitoreo.latitud!;
-        if (oMonitoreo.idEstadoMonitoreo.toString() == "") {
-          _statusMonitor = oMonitoreo.idEstadoMonitoreo.toString() == ""
-              ? "43"
-              : oMonitoreo.idEstadoMonitoreo.toString();
-        }
-      });
-    } catch (error) {
-      print(error);
+      await buildFormData(oMonitoreo);
+
+      setState(() {});
+    } catch (oError) {
+      print(oError);
     }
   }
 
@@ -303,9 +283,10 @@ class _MonitoringDetailNewEditPageState
     oMonitor = o;
     controller.itemsImagesAll = {};
 
-    titleMonitor = o.tambo!;
+    titleMonitor = o.tambo! == "" ? 'MONITOR' : o.tambo!;
     idM = o.id!;
     _snip = o.snip;
+    _ciu = o.cui;
     _cuiCtr.text = o.cui!;
     _idMonitor.text = o.idMonitoreo!;
 

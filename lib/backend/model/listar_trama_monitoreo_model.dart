@@ -214,18 +214,22 @@ estadoAvance               -> "PENDIENTE ASIGNACION"
 class TramaMonitoreoModel {
   static const sOptDropdownDefault = 'Seleccione una opción';
 
-  static const sIdEstadoINC = 43;
-  static const sIdEstadoENV = 45;
-  static const sIdEstadoPEN = 44;
+  static const sIdEstadoPEN = 45;
+  static const sEstadoPEN = 'PENDIENTE';
 
+  static const sIdEstadoAPR = 43;
+  static const sEstadoAPR = 'ENVIADO';
+
+  static const sIdEstadoINC = 10001;
   static const sEstadoINC = 'INCOMPLETO';
-  static const sEstadoPEN = 'POR ENVIAR';
-  static const sEstadoENV = 'ENVIADO';
+
+  static const sIdEstadoXEN = 10002;
+  static const sEstadoXEN = 'POR ENVIAR';
 
   static final List<String> aEstadoMonitoreo = [
-    'APROBADO',
-    'RECHAZADO',
-    'PENDIENTE',
+    '43 - APROBADO - ENVIADO',
+    '44 - RECHAZADO',
+    '45 - PENDIENTE',
   ];
 
   static const sAltSol01 = 'Solicitar modificación de Exp. Técnico';
