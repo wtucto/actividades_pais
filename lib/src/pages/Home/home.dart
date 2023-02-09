@@ -216,8 +216,8 @@ class _HomePagePais extends State<HomePagePais> {
           ),
         );
       } else {
-        _log.i(tipoPlataforma);
-        _log.i(modalidad);
+        //_log.i(tipoPlataforma);
+        //_log.i(modalidad);
         if (tipoPlataforma == 'PIAS' &&
             (modalidad == '1' || modalidad == '2' || modalidad == '3')) {
           String sImagePias = modalidad == '1'

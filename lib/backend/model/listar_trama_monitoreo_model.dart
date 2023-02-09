@@ -868,6 +868,7 @@ class TramaMonitoreoModel {
    */
   static Map<String, String> toJsonObjectApi4(TramaMonitoreoModel o) {
     return {
+      MonitorFields.idMonitoreo_: _getString(o.idMonitoreo),
       MonitorFields.idAvanceFisicoPartida: _getString(o.idAvanceFisicoPartida),
       MonitorFields.avanceFisicoAcumulado_:
           _getString(o.avanceFisicoAcumulado, type: 'D'),
