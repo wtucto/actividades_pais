@@ -253,13 +253,13 @@ class _DashboardState extends State<Dashboard> {
                       const SizedBox(height: 10),
                       aProyecto.isNotEmpty
                           ? SizedBox(
-                              height: 400,
+                              height: 450,
                               child: GridView.builder(
                                 physics: const BouncingScrollPhysics(),
                                 gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 1.2,
+                                  crossAxisCount: 1,
+                                  childAspectRatio: 3.4,
                                   crossAxisSpacing: 5,
                                   mainAxisSpacing: 5,
                                 ),
@@ -283,8 +283,8 @@ class _DashboardState extends State<Dashboard> {
                                       );
                                     },
                                     child: Container(
-                                      padding: const EdgeInsets.all(4),
-                                      margin: const EdgeInsets.only(bottom: 10),
+                                      padding: const EdgeInsets.all(10),
+                                      margin: const EdgeInsets.only(bottom: 5),
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(20),
@@ -309,7 +309,7 @@ class _DashboardState extends State<Dashboard> {
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.only(
-                                                              top: 20),
+                                                              top: 1),
                                                       child:
                                                           CircularPercentIndicator(
                                                         radius: 30.0,
@@ -350,22 +350,11 @@ class _DashboardState extends State<Dashboard> {
                                                                       .w700,
                                                             ),
                                                           ),
-                                                          const Text(
-                                                            'TAMBO',
+                                                          Text(
+                                                            'TAMBO ${oProyecto.tambo ?? ''}',
                                                             style: TextStyle(
                                                               color: color_01,
                                                               fontSize: 11,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            oProyecto.tambo!,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: color_01,
-                                                              fontSize: 10,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500,

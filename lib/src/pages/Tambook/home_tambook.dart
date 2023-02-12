@@ -3,36 +3,25 @@
 import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
-import 'package:actividades_pais/src/pages/Tambook/home_tambook.dart';
-import 'package:actividades_pais/src/pages/Tambook/mapa_tambook.dart';
-import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
+//import 'package:actividades_pais/src/pages/widgets/WebViewTest.dart';
 
-class DashboardTambook extends StatefulWidget {
-  const DashboardTambook({super.key});
+class HomeTambook extends StatefulWidget {
+  const HomeTambook({super.key});
 
   @override
-  State<DashboardTambook> createState() => _DashboardTambookState();
+  State<HomeTambook> createState() => _HomeTambookState();
 }
 
-class _DashboardTambookState extends State<DashboardTambook>
-    with TickerProviderStateMixin<DashboardTambook> {
+class _HomeTambookState extends State<HomeTambook>
+    with TickerProviderStateMixin<HomeTambook> {
   Animation<double>? _animation;
   AnimationController? _controller;
-
-  int pageIndex = 0;
-
-  final pages = [const HomeTambook(), const MapTambook(), const pageFeed()];
-
-  onTapped(int index) {
-    setState(() {
-      pageIndex = index;
-    });
-  }
 
   @override
   void initState() {
@@ -51,91 +40,11 @@ class _DashboardTambookState extends State<DashboardTambook>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WidgetCustoms.appBar(
-        'BUSCAR TAMBO',
-        context: context,
-        icon: Icons.arrow_back,
-        onPressed: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => HomePagePais(),
-            ),
-          );
-        },
-        iconAct: Icons.search,
-        onPressedAct: () {
-          showSearch(
-            context: context,
-            delegate: SearchTambookDelegate(),
-          );
-        },
-      ),
       backgroundColor: color_10o15,
-      body: pages[pageIndex],
-      /*CustomScrollView(
+      body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: getBody(),
-          ),
-        ],
-      ),*/
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.search),
-        backgroundColor: color_10o15,
-        foregroundColor: Colors.black,
-        onPressed: () {
-          showSearch(
-            context: context,
-            delegate: SearchTambookDelegate(),
-          );
-        },
-      ),
-
-      /*ExpandedAnimationFab(
-        ba
-        items: [
-          FabItem(
-            "Ubicación",
-            Icons.map_outlined,
-            onPress: () async {
-              /*_controller!.reverse();
-              BusyIndicator.show(context);
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => const WebViewExample(),
-                ),
-              );*/
-            },
-          ),
-        ],
-        animation: _animation!,
-        onPress: () {
-          if (_controller!.isCompleted) {
-            _controller!.reverse();
-          } else {
-            _controller!.forward();
-          }
-        },
-      ),*/
-
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: onTapped,
-        currentIndex: pageIndex,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map_outlined),
-            label: 'Mapa',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Intervenciones',
           ),
         ],
       ),
@@ -193,6 +102,19 @@ class _DashboardTambookState extends State<DashboardTambook>
               color: color_01,
             ),
           ),
+          /*
+          Column(
+            children: const [
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                child: Text(
+                  'NUESTRAS PLATAFORMAS CUENTAN CON PERSONAL CAPACITADO Y EQUIPAMIENTO MODERNO, QUE BRINDAN SERVICIOS EN MÁS DE 14 400 CENTROS POBLADOS, EN 22 REGIONES, BENEFICIANDO A MÁS DE 1 MILLÓN DE HABITANTES.',
+                  textAlign: TextAlign.justify,
+                ),
+              ),
+            ],
+          ),
+          */
         ],
       ),
     );
@@ -261,13 +183,13 @@ class _DashboardTambookState extends State<DashboardTambook>
                       onGetText: (double value) {
                         return Text(
                           '${value.toInt()}%',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 35),
                         );
                       },
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Container(
@@ -1808,69 +1730,6 @@ class _DashboardTambookState extends State<DashboardTambook>
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class pageHome extends StatelessWidget {
-  const pageHome({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xffC4DFCB),
-      child: Center(
-        child: Text(
-          "Page Number 1",
-          style: TextStyle(
-            color: Colors.green[900],
-            fontSize: 45,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class pageMap extends StatelessWidget {
-  const pageMap({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xffC4DFCB),
-      child: Center(
-        child: Text(
-          "Page Number 2",
-          style: TextStyle(
-            color: Colors.green[900],
-            fontSize: 45,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class pageFeed extends StatelessWidget {
-  const pageFeed({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xffC4DFCB),
-      child: Center(
-        child: Text(
-          "Page Number 3",
-          style: TextStyle(
-            color: Colors.green[900],
-            fontSize: 45,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
       ),
     );
   }

@@ -154,7 +154,7 @@ class _HomePagePais extends State<HomePagePais> {
     String icon3 = 'assets/icons/icon_fligth.png';
     String icon4 = 'assets/icons/icon_intervencion.png';
     String icon5 = 'assets/icons/monitoreo.png';
-    String icon6 = 'assets/icons/parque informático.png';
+    String icon6 = 'assets/icons/parque_informatico.png';
     String icon7 = 'assets/icons/actividades.png';
     String icon8 = 'assets/icons/libro-abierto.png';
 
