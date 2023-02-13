@@ -19,6 +19,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
+import 'package:kdgaugeview/kdgaugeview.dart';
 
 class DetalleTambook extends StatefulWidget {
   const DetalleTambook({super.key, this.listTambo});
@@ -507,7 +508,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             onPress: () async {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => MapTambook(),
+                  builder: (context) => const MapTambook(),
                 ),
               );
             },
@@ -1484,12 +1485,123 @@ class _DetalleTambookState extends State<DetalleTambook>
                     ),
                   ),
                 ),
+
+                const Divider(color: colorI),
+                //DOWNLOAD Mbps
+                const ListTile(
+                  title: Text(
+                    'DOWNLOAD Mbps',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  subtitle: Text("1000 Kbps = 1 Mbps"),
+                ),
+                Container(
+                  width: 200,
+                  height: 200,
+                  padding: const EdgeInsets.all(10),
+                  child: KdGaugeView(
+                    minSpeed: 0,
+                    maxSpeed: 100,
+                    minMaxTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                    ),
+                    speed: kbpsTOmbps(getNumber(oSrvInter.veloBaja ?? '0')),
+                    speedTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    animate: true,
+                    alertSpeedArray: [0, 60, 90],
+                    alertColorArray: [colorP, colorI, colorS],
+                    duration: const Duration(seconds: 6),
+                    unitOfMeasurement:
+                        "Mbps", //getText(oSrvInter.veloBaja ?? "Mbps"),
+                    unitOfMeasurementTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    gaugeWidth: 15,
+                    innerCirclePadding: 15,
+                  ),
+                ),
+                const ListTile(
+                  title: Text(
+                    'UPLOAD Mbps',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  subtitle: Text("1000 Kbps = 1 Mbps"),
+                ),
+                Container(
+                  width: 200,
+                  height: 200,
+                  padding: const EdgeInsets.all(10),
+                  child: KdGaugeView(
+                    minSpeed: 0,
+                    maxSpeed: 100,
+                    minMaxTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                    ),
+                    speed: kbpsTOmbps(getNumber(oSrvInter.veloSube ?? '0')),
+                    speedTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    animate: true,
+                    alertSpeedArray: [0, 60, 90],
+                    alertColorArray: [colorP, colorI, colorS],
+                    duration: const Duration(seconds: 6),
+                    unitOfMeasurement:
+                        "Mbps", //getText(oSrvInter.veloSube ?? "Mbps"),
+                    unitOfMeasurementTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    gaugeWidth: 15,
+                    innerCirclePadding: 15,
+                  ),
+                ),
               ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  double kbpsTOmbps(double kbps) {
+    //1000 Kbps = 1 Mbps
+    double mbps = 1000;
+    return kbps / mbps;
+  }
+
+  double getNumber(String value) {
+    try {
+      return double.parse(value.replaceAll(new RegExp(r'[^0-9]'), ''));
+    } catch (oError) {
+      return 0;
+    }
+  }
+
+  String getText(String value) {
+    try {
+      return value.replaceAll(new RegExp(r'[^A-Za-z]'), '');
+    } catch (oError) {
+      return '';
+    }
   }
 
   Padding cardIncidencia() {
