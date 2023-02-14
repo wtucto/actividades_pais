@@ -250,6 +250,8 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
     setState(() {
       _isloading = true;
     });
+
+
     if (cantidadImg > 0) {
       await EnvioArchivos();
     }
@@ -336,7 +338,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                           color: const Color(0xFF78b8cd),
                         ),
                         onTap: () {
-                         /* cargarListas();
+                          cargarListas();
                           if (cantidadImg > 0) {
                             Util().showAlertDialogokno('Imagenes', context,
                                 () async {
@@ -346,7 +348,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                             }, () {
                               Navigator.pop(context);
                             }, 'Estas seguro de sincronizar las Imagenes');
-                          }*/
+                          }
                         },
                       )
                     ],

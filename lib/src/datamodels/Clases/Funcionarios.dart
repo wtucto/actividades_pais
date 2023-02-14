@@ -46,7 +46,7 @@ class Funcionarios {
 
   //String cargo;
   int estado;
-
+  String estado_registro="";
   Funcionarios(
       {this.id = 0,
       this.flgReniec = '',
@@ -71,7 +71,7 @@ class Funcionarios {
       this.numDocExtranjero = '',
       this.txtIpmaq = '',
       this.ubigeoCcpp = '',
-      this.tipoDocumento = ''});
+      this.tipoDocumento = '', this.estado_registro =""});
 
   factory Funcionarios.fromJson(Map<String, dynamic> json) {
     return Funcionarios(

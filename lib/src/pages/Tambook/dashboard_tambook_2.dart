@@ -68,7 +68,7 @@ class _DashboardTambookState extends State<DashboardTambook>
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: ExpandedAnimationFab(
         items: [
-          FabItem(
+         /* FabItem(
             "Ubicación",
             Icons.map_outlined,
             onPress: () async {
@@ -81,7 +81,7 @@ class _DashboardTambookState extends State<DashboardTambook>
                 ),
               );
             },
-          ),
+          ),*/
         ],
         animation: _animation!,
         onPress: () {

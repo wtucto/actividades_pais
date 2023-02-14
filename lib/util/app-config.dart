@@ -11,11 +11,12 @@ class AppConfig {
    static String urlBackndServicioSeguro = 'https://backend.pais.gob.pe:8075';
 
   ///Desarrollo
- /*
-   static String urlBackndServicioSeguro = 'http://192.168.1.45:8075';
+/*
+  static String urlBackndServicioSeguro = 'http://192.168.1.45:8075';
   static String backendsismonitor =
    'http://192.168.1.45/backendsismonitor/public';
 */
+  static var letrasColorAppBar =Color(0xFFFFFFFF);
   static var letrasColor =Color(0xFF000000);
   static var primaryColor =Color(0xFF78b8cd);
 

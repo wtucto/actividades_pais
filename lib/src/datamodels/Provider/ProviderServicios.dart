@@ -234,12 +234,17 @@ class ProviderServicios {
     final listadoDepart =
         new ListaParticipantesSer.fromJsonList(jsonResponse["response"]);
     for (var i = 0; i < listadoDepart.items.length; i++) {
+            if(listadoDepart.items[i].dni==dni){
+              return listadoDepart.items[i];
+            }
+    }
+    /*    print(" vcvcv   ${listadoDepart.items[i]}");
       if (listadoDepart.items[i].dni == dni) {
+        print(" vcvcv   ${listadoDepart.items[i]}");
         return listadoDepart.items[i];
       } else {
         return new Participantes();
-      }
-    }
+      }*/
 
     return new Participantes();
   }
@@ -251,11 +256,31 @@ class ProviderServicios {
         new ListaFuncionarios.fromJsonList(jsonResponse["response"]);
 
     for (var i = 0; i < listadoDepart.items.length; i++) {
-      if (listadoDepart.items[i].dni == dni) {
-        return listadoDepart.items[i];
-      } else {
-        return new Funcionarios();
-      }
+         if(listadoDepart.items[i].dni == dni ){
+           listadoDepart.items[i].estado_registro ="ENCONTRADO_JSON";
+           return listadoDepart.items[i];
+         } else{
+           return listadoDepart.items[i];
+         }
+    }
+
+    return new Funcionarios();
+  }
+
+
+  Future<Funcionarios> getBuscarPersonasFallecidas(dni) async {
+    String jsonString = await servicios.loadDataArchivos("jsonPersonasFallecidas.json");
+    final jsonResponse = json.decode(jsonString);
+
+    final listadoDepart =
+    new ListaFuncionarios.fromJsonList(jsonResponse["response"]);
+
+    for (var i = 0; i < listadoDepart.items.length; i++) {
+
+     if(listadoDepart.items[i].dni==dni){
+       print(  "9+++++++ ${ listadoDepart.items[i]}");
+      return listadoDepart.items[i];
+     }
     }
 
     return new Funcionarios();

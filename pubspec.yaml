@@ -73,7 +73,10 @@ dependencies:
   carousel_slider: ^4.1.1
   file_picker:
   flutter_speed_dial:
-  webview_flutter: ^4.0.2
+  mac_address: ^1.0.0
+  webview_flutter: ^0.3.0
+  permission_handler: ^10.2.0
+
   latlong2: ^0.8.1
   flutter_map: ^3.1.0
   simple_circular_progress_bar: ^1.0.2
