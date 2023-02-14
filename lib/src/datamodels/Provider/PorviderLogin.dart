@@ -69,7 +69,7 @@ class ProviderLogin {
             "username": username,
             "password": password,
           }));
-       print(response.body);
+      print(response.body);
       if (response.statusCode == 200) {
         final parsedJson = jsonDecode(response.body);
         final log = new LoginClass.fromJson(parsedJson);
@@ -129,10 +129,8 @@ class ProviderLogin {
                     '0', data[i]["id_plataforma"] ?? 0, 0);
               }
               await DatabasePr.db.insertConfigInicio(configIni);
-
             }
             // return a;
-
           }
         }
         return a;

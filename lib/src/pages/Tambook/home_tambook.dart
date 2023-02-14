@@ -2,6 +2,7 @@
 
 import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
+import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
@@ -23,6 +24,20 @@ class _HomeTambookState extends State<HomeTambook>
   Animation<double>? _animation;
   AnimationController? _controller;
 
+  List<ChartData> chartData = [
+    ChartData('PRESTA SERVICIO', 0, colorI),
+    ChartData('NO PRESTA SERVICIO', 0, colorS),
+  ];
+
+  Future<void> buildData() async {
+    setState(() {
+      chartData = [
+        ChartData('PRESTA SERVICIO', 486, colorS),
+        ChartData('NO PRESTA SERVICIO', 5, colorP),
+      ];
+    });
+  }
+
   @override
   void initState() {
     _controller = AnimationController(
@@ -34,6 +49,7 @@ class _HomeTambookState extends State<HomeTambook>
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
 
     super.initState();
+    buildData();
     setState(() {});
   }
 
@@ -61,6 +77,7 @@ class _HomeTambookState extends State<HomeTambook>
           cardAtenciones(),
           cardIntervenciones(),
           cardBeneficiarios(),
+          cardEstadoTambo(),
           cardTambos(),
           cardPersonal(),
           cardEquipamiento(),
@@ -510,6 +527,96 @@ class _HomeTambookState extends State<HomeTambook>
     );
   }
 
+  Padding cardEstadoTambo() {
+    var heading = 'ESTADO DE LOS TAMBOS';
+    late ValueNotifier<double> valueNotifier3 = ValueNotifier(50);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Card(
+                    color: colorGB,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 3,
+                    child: SfCircularChart(
+                      legend: Legend(
+                        isVisible: true,
+                        position: LegendPosition.right,
+                        orientation: LegendItemOrientation.vertical,
+                        overflowMode: LegendItemOverflowMode.wrap,
+                        textStyle: const TextStyle(
+                          color: color_07,
+                        ),
+                      ),
+                      onLegendTapped: (LegendTapArgs args) {
+                        //print(args.pointIndex);
+                      },
+                      series: [
+                        PieSeries<ChartData, String>(
+                          dataSource: chartData,
+                          pointColorMapper: (ChartData data, _) => data.color,
+                          xValueMapper: (ChartData data, _) => data.x,
+                          yValueMapper: (ChartData data, _) => data.y,
+                          dataLabelSettings: const DataLabelSettings(
+                            isVisible: true,
+                            labelAlignment: ChartDataLabelAlignment.top,
+                            margin: EdgeInsets.all(1),
+                          ),
+                          name: 'Data',
+                          //explode: true,
+                          //explodeIndex: 1,
+                          radius: '80%',
+                          onPointTap: (ChartPointDetails details) async {},
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 /*
  * -----------------------------------------------
  *            TAMBOS
@@ -538,6 +645,7 @@ class _HomeTambookState extends State<HomeTambook>
         child: ExpansionTile(
           initiallyExpanded: true,
           title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
             title: Text(
               heading,
               style: const TextStyle(
@@ -757,6 +865,7 @@ class _HomeTambookState extends State<HomeTambook>
         child: ExpansionTile(
           initiallyExpanded: true,
           title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
             title: Text(
               heading,
               style: const TextStyle(
@@ -928,6 +1037,7 @@ class _HomeTambookState extends State<HomeTambook>
         child: ExpansionTile(
           initiallyExpanded: true,
           title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
             title: Text(
               heading,
               style: const TextStyle(
@@ -944,22 +1054,6 @@ class _HomeTambookState extends State<HomeTambook>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 1.0,
-                      ),
-                      child: Text(
-                        '''   ''',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(fontSize: 16),
-                      ),
-                    ),
-                  ),
                   ButtonBar(
                     alignment: MainAxisAlignment.spaceAround,
                     buttonHeight: 52.0,
@@ -1237,6 +1331,7 @@ class _HomeTambookState extends State<HomeTambook>
         child: ExpansionTile(
           initiallyExpanded: true,
           title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
             title: Text(
               heading,
               style: const TextStyle(
@@ -1253,22 +1348,6 @@ class _HomeTambookState extends State<HomeTambook>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 1.0,
-                      ),
-                      child: Text(
-                        '''   ''',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(fontSize: 16),
-                      ),
-                    ),
-                  ),
                   ButtonBar(
                     alignment: MainAxisAlignment.spaceAround,
                     buttonHeight: 52.0,
@@ -1457,7 +1536,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   child: Column(
                                     children: const [
                                       Text(
-                                        "OPERATIVO: 5",
+                                        "PRESTA SERVICIO: 5",
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
@@ -1468,7 +1547,7 @@ class _HomeTambookState extends State<HomeTambook>
                                       ),
                                       SizedBox(height: 10),
                                       Text(
-                                        "INOPERATIVO: 5",
+                                        "INPRESTA SERVICIO: 5",
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
                                         style: TextStyle(

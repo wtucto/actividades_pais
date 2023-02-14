@@ -61,6 +61,7 @@ class Participantes {
   int? tipoParticipante;
   int? idParticipante;
 
+  String? estado;
   Participantes(
       {this.id = 0,
       this.idProgramacion = 0,
@@ -93,7 +94,7 @@ class Participantes {
       this.txtIpmaq = '',
       this.tipo = '',
       this.tipoParticipante = 0,
-      this.idParticipante = 0});
+      this.idParticipante = 0,this.estado = ""});
 
   Participantes.fromJsonSERICIO(Map<String, dynamic> json) {
     id = json['id']??0;

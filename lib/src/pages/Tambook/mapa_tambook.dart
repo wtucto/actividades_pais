@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -15,6 +17,16 @@ class _MapTambookState extends State<MapTambook>
   Animation<double>? _animation;
   AnimationController? _controller;
 
+  List<Marker> allMarkers = [];
+
+  double currentZoom = 5.0;
+  MapController mapController = MapController();
+  bool darkMode = false;
+  bool loadingTime = false;
+  bool showCoords = false;
+  bool grid = false;
+  int panBuffer = 0;
+
   @override
   void initState() {
     _controller = AnimationController(
@@ -27,54 +39,371 @@ class _MapTambookState extends State<MapTambook>
 
     super.initState();
     setState(() {});
+
+    buildMarkers();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final List<LatLng> _mapPoints = [
+  void buildMarkers() {
+    final List<LatLng> mapPoints = [
       LatLng(-5.46956247418, -78.4377694873),
       LatLng(-10.2993301033, -77.1508496114),
       LatLng(-14.3910996075, -72.8284609821)
     ];
+    for (var point in mapPoints) {
+      allMarkers.add(
+        Marker(
+          width: 80.0,
+          height: 80.0,
+          point: point,
+          builder: (ctx) => GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => buildSuccessDialog(
+                  context,
+                  title: 'TAMBO SOLEDAD',
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
+                          text: const TextSpan(
+                            children: [
+                              WidgetSpan(
+                                child: Icon(Icons.brightness_medium_outlined,
+                                    size: 15),
+                              ),
+                              TextSpan(
+                                text: " CLIMA: ",
+                                style: TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              TextSpan(
+                                text: "CALIDO",
+                                style: TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      RichText(
+                        text: const TextSpan(
+                          children: [
+                            WidgetSpan(
+                              child: Icon(Icons.map_outlined, size: 15),
+                            ),
+                            TextSpan(
+                              text: " COMO LLEGAR: ",
+                              style: TextStyle(
+                                color: color_01,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            TextSpan(
+                              text:
+                                  "PASAR POR CHOSICA, MATUCANA, SAN MATEO, ...",
+                              style: TextStyle(
+                                color: color_01,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
 
+              /*ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
+                content: Text('TEXT'),
+              ));*/
+            },
+            child: const Icon(
+              Icons.location_on,
+              size: 30,
+              color: Colors.redAccent,
+            ),
+          ),
+        ),
+      );
+    }
+    setState(() {});
+  }
+
+  void _zoomMas() {
+    currentZoom = currentZoom + 1;
+    mapController.move(
+        LatLng(-8.840959270481326, -74.82263875411157), currentZoom);
+  }
+
+  void _zoomMenos() {
+    currentZoom = currentZoom - 1;
+    mapController.move(
+        LatLng(-8.840959270481326, -74.82263875411157), currentZoom);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_10o15,
       body: Stack(
         children: <Widget>[
           FlutterMap(
+            mapController: mapController,
             options: MapOptions(
               center: LatLng(-8.840959270481326, -74.82263875411157),
-              zoom: 5.0,
+              zoom: currentZoom,
             ),
-            layers: [
-              TileLayerOptions(
-                urlTemplate:
-                    'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                subdomains: ['a', 'b', 'c'],
-                //tileProvider: const CachedNetworkTileProvider(),
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+                tileBuilder: tileBuilder,
+                tilesContainerBuilder:
+                    darkMode ? darkModeTilesContainerBuilder : null,
+                panBuffer: panBuffer,
               ),
-              MarkerLayerOptions(
-                markers: [
-                  for (var point in _mapPoints) ...[
-                    Marker(
-                      width: 30.0,
-                      height: 30.0,
-                      point: point,
-                      builder: (ctx) => Container(
-                        child: Icon(
-                          Icons.location_on,
-                          size: 30,
-                          color: Colors.redAccent,
-                        ),
-                      ),
-                    ),
-                  ]
-                ],
+              MarkerLayer(
+                markers: allMarkers,
               ),
             ],
+          ),
+        ],
+      ),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          FloatingActionButton.extended(
+            heroTag: 'zoom',
+            label: const Text(
+              'zoom',
+              textAlign: TextAlign.center,
+            ),
+            icon: const Icon(Icons.add_circle_outline_outlined),
+            onPressed: () => _zoomMas(),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton.extended(
+            heroTag: 'zoom',
+            label: const Text(
+              'zoom',
+              textAlign: TextAlign.center,
+            ),
+            icon: const Icon(Icons.remove_circle_outline_rounded),
+            onPressed: () => _zoomMenos(),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton.extended(
+            heroTag: 'dark-light',
+            label: Text(
+              darkMode ? 'Normal' : 'Oscuro',
+              textAlign: TextAlign.center,
+            ),
+            icon: Icon(darkMode ? Icons.brightness_high : Icons.brightness_2),
+            onPressed: () => setState(() => darkMode = !darkMode),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton.extended(
+            backgroundColor: colorP,
+            heroTag: 'Salir',
+            label: const Text(
+              'Salir',
+              textAlign: TextAlign.center,
+            ),
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          const SizedBox(height: 80),
+          /*
+          const SizedBox(height: 8),
+          FloatingActionButton.extended(
+            heroTag: 'grid',
+            label: Text(
+              grid ? 'Hide grid' : 'Show grid',
+              textAlign: TextAlign.center,
+            ),
+            icon: Icon(grid ? Icons.grid_off : Icons.grid_on),
+            onPressed: () => setState(() => grid = !grid),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton.extended(
+            heroTag: 'coords',
+            label: Text(
+              showCoords ? 'Hide coords' : 'Show coords',
+              textAlign: TextAlign.center,
+            ),
+            icon: Icon(showCoords ? Icons.unarchive : Icons.bug_report),
+            onPressed: () => setState(() => showCoords = !showCoords),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton.extended(
+            heroTag: 'ms',
+            label: Text(
+              loadingTime ? 'Hide loading time' : 'Show loading time',
+              textAlign: TextAlign.center,
+            ),
+            icon: Icon(loadingTime ? Icons.timer_off : Icons.timer),
+            onPressed: () => setState(() => loadingTime = !loadingTime),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton.extended(
+            heroTag: 'dark-light',
+            label: Text(
+              darkMode ? 'Light mode' : 'Dark mode',
+              textAlign: TextAlign.center,
+            ),
+            icon: Icon(darkMode ? Icons.brightness_high : Icons.brightness_2),
+            onPressed: () => setState(() => darkMode = !darkMode),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton.extended(
+            heroTag: 'panBuffer',
+            label: Text(
+              panBuffer == 0 ? 'panBuffer off' : 'panBuffer on',
+              textAlign: TextAlign.center,
+            ),
+            icon: Icon(grid ? Icons.grid_off : Icons.grid_on),
+            onPressed: () => setState(() {
+              panBuffer = panBuffer == 0 ? 1 : 0;
+            }),
+          ),
+          */
+        ],
+      ),
+    );
+  }
+
+  Widget tileBuilder(BuildContext context, Widget tileWidget, Tile tile) {
+    final coords = tile.coords;
+
+    return Container(
+      decoration: BoxDecoration(
+        border: grid ? Border.all() : null,
+      ),
+      child: Stack(
+        fit: StackFit.passthrough,
+        children: [
+          tileWidget,
+          if (loadingTime || showCoords)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (showCoords)
+                  Text(
+                    '${coords.x.floor()} : ${coords.y.floor()} : ${coords.z.floor()}',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                if (loadingTime)
+                  Text(
+                    tile.loaded == null
+                        ? 'Loading'
+                        // sometimes result is negative which shouldn't happen, abs() corrects it
+                        : '${(tile.loaded!.millisecond - tile.loadStarted.millisecond).abs()} ms',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildSuccessDialog(
+    BuildContext context, {
+    String? title,
+    String? subTitle,
+    Widget? child,
+  }) {
+    return AlertDialog(
+      backgroundColor: Colors.white,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            width: double.infinity,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          5.00,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            child: Text(
+                              title ?? '',
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(
+                                color: color_01,
+                                fontSize: 15,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          const Divider(),
+                          SizedBox(
+                            child: child,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           )
         ],
       ),
+      actions: const <Widget>[
+        /*
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  colorS,
+                ),
+              ),
+              child: const Text("Aceptar"),
+            ),
+          ],
+        ),
+
+        */
+      ],
     );
   }
 }

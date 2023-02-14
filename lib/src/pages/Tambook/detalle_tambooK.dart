@@ -9,14 +9,18 @@ import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
 import 'package:actividades_pais/src/pages/Tambook/dashboard_tambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/mapa_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:actividades_pais/util/app-config.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/check_connection.dart';
 import 'package:actividades_pais/util/image_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
+import 'package:kdgaugeview/kdgaugeview.dart';
 
 class DetalleTambook extends StatefulWidget {
   const DetalleTambook({super.key, this.listTambo});
@@ -225,7 +229,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Stack(
           children: [
             DefaultTabController(
-              length: 4,
+              length: 6,
               child: NestedScrollView(
                 controller: scrollCtr,
                 headerSliverBuilder:
@@ -283,16 +287,24 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 text: "GESTOR",
                               ),
                               Tab(
+                                icon: Icon(Icons.merge_outlined),
+                                text: "METAS",
+                              ),
+                              Tab(
                                 icon: Icon(Icons.cloud),
                                 text: "SERVICIOS INTERNET",
                               ),
                               Tab(
-                                icon: Icon(Icons.policy_rounded),
-                                text: "INTERVENCIONES",
-                              ),
-                              Tab(
                                 icon: Icon(Icons.computer),
                                 text: "EQUIPAMIENTO TECNOLÓGICO",
+                              ),
+                              Tab(
+                                icon: Icon(Icons.pending_actions),
+                                text: "ACTIVIDADES PROGRAMADAS",
+                              ),
+                              Tab(
+                                icon: Icon(Icons.policy_rounded),
+                                text: "INTERVENCIONES",
                               ),
                             ],
                           ),
@@ -314,7 +326,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                           */
                         cardNuestroGestor(),
                         const SizedBox(height: 10),
-
                         /*
                           * DATOS GENERALES
                           */
@@ -347,8 +358,18 @@ class _DetalleTambookState extends State<DetalleTambook>
                         /*
                           * CENTROS POBLADOS
                           */
-                        cardDatosCentroPoblado(),
+                        cardAmbitoAccion(),
                         const SizedBox(height: 50),
+                      ],
+                    ),
+
+                    //const TabScreen("METAS"),
+                    ListView(
+                      children: [
+                        const SizedBox(height: 10),
+                        cardAtenciones(),
+                        cardIntervenciones(),
+                        cardBeneficiarios(),
                       ],
                     ),
 
@@ -357,90 +378,30 @@ class _DetalleTambookState extends State<DetalleTambook>
                       children: [
                         cardDatosSrvInternet(),
                         const SizedBox(height: 10),
+                        cardIncidencia(),
+                        const SizedBox(height: 40),
                       ],
                     ),
 
-                    //TabScreen("INTERVENCIONES"),
-/*
-                    Row(
+                    //const TabScreen("EQUIPAMIENTO TECNOLÓGICO DEL TAMBO"),
+
+                    ListView(
                       children: [
-                        RotatedBox(
-                          quarterTurns: 1,
-                          child: Container(
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: TabBar(
-                                  labelPadding: const EdgeInsets.only(
-                                      left: 20, right: 20),
-                                  controller: _tabController,
-                                  labelColor: Colors.black,
-                                  unselectedLabelColor: Colors.grey,
-                                  isScrollable: true,
-                                  indicatorSize: TabBarIndicatorSize.label,
-                                  tabs: [
-                                    const Tab(
-                                        text: "Intervención de Ámbito Directo"),
-                                    const Tab(
-                                        text:
-                                            "Intervención de Soporte a Entidades"),
-                                    const Tab(text: "Coordinaciones"),
-                                  ]),
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          child: Container(
-                            padding: const EdgeInsets.only(left: 20),
-                            height: 300,
-                            width: double.maxFinite,
-                            child: TabBarView(
-                              controller: _tabController,
-                              children: [
-                                ListView.builder(
-                                  itemCount: 3,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return GestureDetector(
-                                      onTap: () {},
-                                      child: Container(
-                                        margin: const EdgeInsets.only(
-                                            right: 15, top: 10),
-                                        width: 200,
-                                        height: 300,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                ListView.builder(itemBuilder: (context, index) {
-                                  return ListTile(
-                                    leading: const Icon(Icons.account_circle),
-                                    title:
-                                        Text("Line " + (index + 1).toString()),
-                                    selectedTileColor: Colors.green[400],
-                                    onTap: () {
-                                      setState(() {});
-                                    },
-                                  );
-                                }),
-                                ListView(
-                                  children: [
-                                    cardDatosIntervencion(),
-                                    const SizedBox(height: 10),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
+                        cardEquipoTecnologico(),
+                        const SizedBox(height: 40),
                       ],
                     ),
-                    */
+
+                    //const TabScreen("ACTIVIDADES PROGRAMADAS"),
+
+                    ListView(
+                      children: [
+                        cardActividadProgramada(),
+                        const SizedBox(height: 40),
+                      ],
+                    ),
+
+                    //const TabScreen("INTERVENCIONES"),
                     DefaultTabController(
                       length: 3,
                       child: Column(
@@ -532,15 +493,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ],
                       ),
                     ),
-
-                    //const TabScreen("EQUIPAMIENTO TECNOLÓGICO DEL TAMBO"),
-
-                    ListView(
-                      children: [
-                        cardEquipoTecnologico(),
-                        const SizedBox(height: 40),
-                      ],
-                    ),
                   ],
                 ),
               ),
@@ -551,6 +503,17 @@ class _DetalleTambookState extends State<DetalleTambook>
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: ExpandedAnimationFab(
         items: [
+          FabItem(
+            "Ubicación Tambo",
+            Icons.map_outlined,
+            onPress: () async {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const MapTambook(),
+                ),
+              );
+            },
+          ),
           FabItem(
             "Ficha técnica",
             Icons.picture_as_pdf_sharp,
@@ -633,6 +596,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             ExpansionTile(
               initiallyExpanded: true,
               title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -689,6 +653,14 @@ class _DetalleTambookState extends State<DetalleTambook>
                           title: const Text('EMAIL'),
                           subtitle: Text(oTambo.gestorCorreo ?? ''),
                         ),
+                        const ListTile(
+                          title: Text('TIPO CONTRATO'),
+                          subtitle: Text('ORDEN SERVICIO'),
+                        ),
+                        const ListTile(
+                          title: Text('COMBUSTIBLE'),
+                          subtitle: Text('10 GAL'),
+                        ),
                       ],
                     ),
                   ),
@@ -717,6 +689,7 @@ class _DetalleTambookState extends State<DetalleTambook>
           children: [
             ExpansionTile(
               title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -775,6 +748,7 @@ class _DetalleTambookState extends State<DetalleTambook>
           children: [
             ExpansionTile(
               title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -835,6 +809,7 @@ class _DetalleTambookState extends State<DetalleTambook>
           children: [
             ExpansionTile(
               title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -904,6 +879,7 @@ class _DetalleTambookState extends State<DetalleTambook>
           children: [
             ExpansionTile(
               title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -960,6 +936,7 @@ class _DetalleTambookState extends State<DetalleTambook>
           children: [
             ExpansionTile(
               title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -998,8 +975,8 @@ class _DetalleTambookState extends State<DetalleTambook>
     );
   }
 
-  Padding cardDatosCentroPoblado() {
-    var heading = 'CENTROS POBLADOS';
+  Padding cardAmbitoAccion() {
+    var heading = 'AMBITOS DE ACCIÓN';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -1014,6 +991,7 @@ class _DetalleTambookState extends State<DetalleTambook>
           children: [
             ExpansionTile(
               title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
                   '$heading ( ${oTambo.aCentroPoblado!.length} )',
                   style: const TextStyle(
@@ -1051,6 +1029,396 @@ class _DetalleTambookState extends State<DetalleTambook>
 
 /*
  * -----------------------------------------------
+ *            META
+ * -----------------------------------------------
+ */
+
+  Padding cardAtenciones() {
+    var heading = 'ATENCIONES 2023';
+
+    late ValueNotifier<double> valueNotifier = ValueNotifier(40);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: SimpleCircularProgressBar(
+                      size: 150,
+                      maxValue: 100,
+                      valueNotifier: valueNotifier,
+                      backColor: Colors.black.withOpacity(0.4),
+                      progressStrokeWidth: 20,
+                      backStrokeWidth: 20,
+                      mergeMode: true,
+                      onGetText: (double value) {
+                        return Text(
+                          '${value.toInt()}%',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 35),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.2),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Table(
+                          children: const [
+                            TableRow(children: [
+                              Text(
+                                "Meta :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "12,000",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Text(
+                                "Avance :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "1,560",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Text(
+                                "Brecha :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "10,440",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardIntervenciones() {
+    var heading = 'INTERVENCIONES 2023';
+
+    late ValueNotifier<double> valueNotifier = ValueNotifier(20);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: SimpleCircularProgressBar(
+                      size: 150,
+                      maxValue: 100,
+                      valueNotifier: valueNotifier,
+                      backColor: Colors.black.withOpacity(0.4),
+                      progressStrokeWidth: 20,
+                      backStrokeWidth: 20,
+                      mergeMode: true,
+                      progressColors: const [
+                        Colors.yellow,
+                        Colors.yellowAccent
+                      ],
+                      onGetText: (double value) {
+                        return Text(
+                          '${value.toInt()}%',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 35),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.2),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Table(
+                          children: const [
+                            TableRow(children: [
+                              Text(
+                                "Meta :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "12,000",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Text(
+                                "Avance :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "1,560",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Text(
+                                "Brecha :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "10,440",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardBeneficiarios() {
+    var heading = 'BENEFICIARIOS 2023';
+    late ValueNotifier<double> valueNotifier3 = ValueNotifier(50);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: SimpleCircularProgressBar(
+                      size: 150,
+                      maxValue: 100,
+                      valueNotifier: valueNotifier3,
+                      backColor: Colors.black.withOpacity(0.4),
+                      progressColors: const [Colors.green, Colors.greenAccent],
+                      progressStrokeWidth: 20,
+                      backStrokeWidth: 20,
+                      mergeMode: true,
+                      onGetText: (double value) {
+                        return Text(
+                          '${value.toInt()}%',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 35),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.2),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Table(
+                          children: const [
+                            TableRow(children: [
+                              Text(
+                                "Meta :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "10,000",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Text(
+                                "Avance :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "3,001",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Text(
+                                "Brecha :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "6,999",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
+ * -----------------------------------------------
  *            SERVICIOS INTERNET
  * -----------------------------------------------
  */
@@ -1073,6 +1441,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             ExpansionTile(
               initiallyExpanded: true,
               title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -1117,6 +1486,172 @@ class _DetalleTambookState extends State<DetalleTambook>
                     ),
                   ),
                 ),
+
+                const Divider(color: colorI),
+                //DOWNLOAD Mbps
+                const ListTile(
+                  title: Text(
+                    'DOWNLOAD Mbps',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  subtitle: Text("1000 Kbps = 1 Mbps"),
+                ),
+                Container(
+                  width: 200,
+                  height: 200,
+                  padding: const EdgeInsets.all(10),
+                  child: KdGaugeView(
+                    minSpeed: 0,
+                    maxSpeed: 100,
+                    minMaxTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                    ),
+                    speed: kbpsTOmbps(getNumber(oSrvInter.veloBaja ?? '0')),
+                    speedTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    animate: true,
+                    alertSpeedArray: [0, 60, 90],
+                    alertColorArray: [colorP, colorI, colorS],
+                    duration: const Duration(seconds: 6),
+                    unitOfMeasurement:
+                        "Mbps", //getText(oSrvInter.veloBaja ?? "Mbps"),
+                    unitOfMeasurementTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    gaugeWidth: 15,
+                    innerCirclePadding: 15,
+                  ),
+                ),
+                const ListTile(
+                  title: Text(
+                    'UPLOAD Mbps',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  subtitle: Text("1000 Kbps = 1 Mbps"),
+                ),
+                Container(
+                  width: 200,
+                  height: 200,
+                  padding: const EdgeInsets.all(10),
+                  child: KdGaugeView(
+                    minSpeed: 0,
+                    maxSpeed: 100,
+                    minMaxTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                    ),
+                    speed: kbpsTOmbps(getNumber(oSrvInter.veloSube ?? '0')),
+                    speedTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    animate: true,
+                    alertSpeedArray: [0, 60, 90],
+                    alertColorArray: [colorP, colorI, colorS],
+                    duration: const Duration(seconds: 6),
+                    unitOfMeasurement:
+                        "Mbps", //getText(oSrvInter.veloSube ?? "Mbps"),
+                    unitOfMeasurementTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    gaugeWidth: 15,
+                    innerCirclePadding: 15,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  double kbpsTOmbps(double kbps) {
+    //1000 Kbps = 1 Mbps
+    double mbps = 1000;
+    return kbps / mbps;
+  }
+
+  double getNumber(String value) {
+    try {
+      return double.parse(value.replaceAll(new RegExp(r'[^0-9]'), ''));
+    } catch (oError) {
+      return 0;
+    }
+  }
+
+  String getText(String value) {
+    try {
+      return value.replaceAll(new RegExp(r'[^A-Za-z]'), '');
+    } catch (oError) {
+      return '';
+    }
+  }
+
+  Padding cardIncidencia() {
+    var heading = 'INCIDENCIAS';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        ListTile(
+                          iconColor: Color.fromARGB(255, 0, 0, 0),
+                          title: Text('SIN INTERNET'),
+                          subtitle: Text('Caida de internet'),
+                        ),
+                        ListTile(
+                          iconColor: Color.fromARGB(255, 0, 0, 0),
+                          title: Text('INTERNET LENTO'),
+                          subtitle: Text('Mucho trafico de internet'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ],
@@ -1132,14 +1667,10 @@ class _DetalleTambookState extends State<DetalleTambook>
  */
   Padding cardDatosIntervencionCod1() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color: colorI,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
           children: [
@@ -1174,44 +1705,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 ),
               ),
             for (var oActividad in aInterAmbDir)
-              Card(
-                margin: const EdgeInsets.all(5),
-                elevation: 1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: Text(oActividad.fecha ?? ''),
-                      title: Text(oActividad.programa ?? ''),
-                      subtitle: Text(
-                        oActividad.fecha ?? '',
-                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Text(
-                        oActividad.descripcion ?? '',
-                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                      ),
-                    ),
-                    if (oActividad.actividadPathImage != null &&
-                        oActividad.actividadPathImage != '')
-                      ImageUtil.ImageUrl(
-                        oActividad.actividadPathImage!,
-                        width: 50,
-                        height: 50,
-                        imgDefault: 'assets/iconusuario.png',
-                      ),
-                    /*ElevatedButton(
-                    child: const Text('Descargar Ficha'),
-                    onPressed: () {},
-                  ),*/
-                  ],
-                ),
+              cardActividadestambo(
+                oActividad,
+                () async {},
               ),
           ],
         ),
@@ -1219,16 +1715,105 @@ class _DetalleTambookState extends State<DetalleTambook>
     );
   }
 
+  Card cardActividadestambo(
+    TamboActividadModel oActividad,
+    callback,
+  ) {
+    return Card(
+      color: AppConfig.primaryColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      margin: const EdgeInsets.all(20),
+      elevation: 7,
+      child: Column(
+        children: <Widget>[
+          const SizedBox(
+            height: 25,
+          ),
+          const Divider(
+            color: Colors.white,
+            height: 5,
+            thickness: 3,
+            indent: 0,
+            endIndent: 0,
+          ),
+          ListTile(
+            contentPadding: const EdgeInsets.fromLTRB(25, 5, 25, 15),
+            title: Row(
+              children: [
+                SizedBox(
+                  width: 70.0,
+                  height: 70.0,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white.withOpacity(0.1),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset(
+                        'assets/icons/icons8-male-user-100.png',
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  '${oActividad.idTambo} \n${oActividad.idProgramacion}',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            subtitle: Column(
+              children: [
+                const SizedBox(height: 10),
+                Text(
+                  textAlign: TextAlign.justify,
+                  '${oActividad.descripcion}',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ImageUtil.ImageUrl(
+                  oActividad.actividadPathImage!,
+                  width: 200,
+                  height: 200,
+                  imgDefault: 'assets/iconusuario.png',
+                ),
+                const SizedBox(height: 8),
+                /*InkWell(
+                  onTap: callback,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: const Icon(
+                          Icons.download,
+                          color: Colors.black,
+                        ),
+                      )
+                    ],
+                  ),
+                )*/
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   Padding cardDatosIntervencionCod2() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color: colorI,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
           children: [
@@ -1263,44 +1848,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 ),
               ),
             for (var oActividad in aInterSopEnt)
-              Card(
-                margin: const EdgeInsets.all(5),
-                elevation: 1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: Text(oActividad.fecha ?? ''),
-                      title: Text(oActividad.programa ?? ''),
-                      subtitle: Text(
-                        oActividad.fecha ?? '',
-                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Text(
-                        oActividad.descripcion ?? '',
-                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                      ),
-                    ),
-                    if (oActividad.actividadPathImage != null &&
-                        oActividad.actividadPathImage != '')
-                      ImageUtil.ImageUrl(
-                        oActividad.actividadPathImage!,
-                        width: 50,
-                        height: 50,
-                        imgDefault: 'assets/iconusuario.png',
-                      ),
-                    /*ElevatedButton(
-                    child: const Text('Descargar Ficha'),
-                    onPressed: () {},
-                  ),*/
-                  ],
-                ),
+              cardActividadestambo(
+                oActividad,
+                () async {},
               ),
           ],
         ),
@@ -1310,14 +1860,10 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   Padding cardDatosIntervencionCod4() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color: colorI,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
           children: [
@@ -1352,44 +1898,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 ),
               ),
             for (var oActividad in aCoordinacio)
-              Card(
-                margin: const EdgeInsets.all(5),
-                elevation: 1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: Text(oActividad.fecha ?? ''),
-                      title: Text(oActividad.programa ?? ''),
-                      subtitle: Text(
-                        oActividad.fecha ?? '',
-                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Text(
-                        oActividad.descripcion ?? '',
-                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                      ),
-                    ),
-                    if (oActividad.actividadPathImage != null &&
-                        oActividad.actividadPathImage != '')
-                      ImageUtil.ImageUrl(
-                        oActividad.actividadPathImage!,
-                        width: 50,
-                        height: 50,
-                        imgDefault: 'assets/iconusuario.png',
-                      ),
-                    /*ElevatedButton(
-                    child: const Text('Descargar Ficha'),
-                    onPressed: () {},
-                  ),*/
-                  ],
-                ),
+              cardActividadestambo(
+                oActividad,
+                () async {},
               ),
           ],
         ),
@@ -1422,6 +1933,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: ExpansionTile(
           initiallyExpanded: true,
           title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
             title: Text(
               heading,
               style: const TextStyle(
@@ -1438,22 +1950,6 @@ class _DetalleTambookState extends State<DetalleTambook>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 1.0,
-                      ),
-                      child: Text(
-                        '''   ''',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(fontSize: 16),
-                      ),
-                    ),
-                  ),
                   ButtonBar(
                     alignment: MainAxisAlignment.spaceAround,
                     buttonHeight: 52.0,
@@ -1799,6 +2295,72 @@ class _DetalleTambookState extends State<DetalleTambook>
                   ],
                 ),
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
+ * -----------------------------------------------
+ *            ACTIVIDADES PROGRAMADAS
+ * -----------------------------------------------
+ */
+  Padding cardActividadProgramada() {
+    var heading = 'ACTIVIDADES PROGRAMADAS';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        ListTile(
+                          iconColor: Color.fromARGB(255, 0, 0, 0),
+                          title: Text('Visita tambo 10.02.2023'),
+                          subtitle: Text('EJECUTADO'),
+                        ),
+                        ListTile(
+                          iconColor: Color.fromARGB(255, 0, 0, 0),
+                          title: Text('Visita tambo2 12.02.2023'),
+                          subtitle: Text('APROBADO'),
+                        ),
+                        ListTile(
+                          iconColor: Color.fromARGB(255, 0, 0, 0),
+                          title: Text('Visita tambo3 20.02.2023'),
+                          subtitle: Text('PENDIENTE'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

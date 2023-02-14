@@ -96,7 +96,10 @@ class _FuncionariosPageState extends State<FuncionariosPage>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF78b8cd),
-        title: Text("AGREGAR FUNCIONARIOS - ${widget.idProgramacion}", style: TextStyle(fontSize: 15),),
+        title: Text(
+          "AGREGAR FUNCIONARIOS - ${widget.idProgramacion}",
+          style: TextStyle(fontSize: 15),
+        ),
         leading: Util().iconbuton(() => Navigator.of(context).pop()),
       ),
       body: Container(
@@ -111,8 +114,8 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Checkbox(
-                        activeColor:const Color(0xFF78b8cd),
-                        focusColor:const Color(0xFF78b8cd),
+                        activeColor: const Color(0xFF78b8cd),
+                        focusColor: const Color(0xFF78b8cd),
                         onChanged: (value) {
                           setState(() {
                             _value = value!;
@@ -185,7 +188,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                       : new Container(),
                   !_value
                       ? TextField(
-                    maxLength: 8,
+                          maxLength: 8,
                           controller: controllerNumeroDoc,
                           decoration: InputDecoration(
                             labelText: 'Numero Documento',
@@ -222,68 +225,135 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                           ),
                         ),
                       ],*/
-                      child:Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-                        closeTraerDni
-                            ? Image.asset(
-                          "assets/loaderios.gif",
-                          height: 40.0,
-                          width: 50.0,
-                          //color: Colors.transparent,
-                        )
-                            : new Container(),
-                        Text(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          closeTraerDni
+                              ? Image.asset(
+                                  "assets/loaderios.gif",
+                                  height: 40.0,
+                                  width: 50.0,
+                                  //color: Colors.transparent,
+                                )
+                              : new Container(),
+                          Text(
                             'Validar ' + nombreBoton,
-                          style: TextStyle(
-                            color: Colors
-                                .white, // this is for your text colour
+                            style: TextStyle(
+                              color:
+                                  Colors.white, // this is for your text colour
+                            ),
                           ),
-                        ),
-                        /* Text(
+                          /* Text(
                         'Validar ' + nombreBoton,
                         style: TextStyle(color: Colors.white),
                       )*/
-                      ],),
+                        ],
+                      ),
                       onPressed: () async {
                         closeTraerDni = true;
                         setborrar();
-                        setState(() {
-                        });
-                       // if (_isOnline == true) {
-                          await DatabasePr.db.listarTipoDocumento();
-                          if (nombreBoton == 'Extrangero') {
-                            var usuarioex = await provider.pintarExtranjerosBD(
-                                controllerNumeroDocExtr.text);
-                            print("::: ${usuarioex}");
+                        setState(() {});
+                        // if (_isOnline == true) {
+                        await DatabasePr.db.listarTipoDocumento();
+                        if (nombreBoton == 'Extrangero') {
+                          var usuarioex = await provider.pintarExtranjerosBD(
+                              controllerNumeroDocExtr.text);
+                          print("::: ${usuarioex}");
 
-                            if (usuarioex == null) {
-                              enableController = true;
-                              showAlertDialog(context);
-                              closeTraerDni = false;
+                          if (usuarioex == null) {
 
-                            } else {
-                            //  showAlertDialog(context);
-                              visibilitytipotex = true;
-                              visibilityTag = false;
-                              controllerNombre.text = usuarioex.nombre;
-                              controllerApellidoPaterno.text =
-                                  usuarioex.apellidoPaterno;
-                              controllerApellidoMaterno.text =
-                                  usuarioex.apellidoMaterno;
-                              tipoDocumento = usuarioex.tipo_documento;
-                              idtipoDocumento = usuarioex.id_tipo_documento;
-                              controllerPais.text = usuarioex.pais;
-                              idPais = usuarioex.idPais;
-                              enableController = true;
-                              closeTraerDni = true;
-                              setState(() {});
-                            }
+                            showAlertDialog(context, "Datos no encontrados en nuestra base de datos, registrar los datos manualmente.");
+                            closeTraerDni = false;
+                            enableController = true;
+                           setState(() {
+
+                           });
+
                           } else {
-                            print("::: ${controllerNumeroDoc.text}");
+                            //  showAlertDialog(context);
+                            visibilitytipotex = true;
+                            visibilityTag = false;
+                            controllerNombre.text = usuarioex.nombre;
+                            controllerApellidoPaterno.text =
+                                usuarioex.apellidoPaterno;
+                            controllerApellidoMaterno.text =
+                                usuarioex.apellidoMaterno;
+                            tipoDocumento = usuarioex.tipo_documento;
+                            idtipoDocumento = usuarioex.id_tipo_documento;
+                            controllerPais.text = usuarioex.pais;
+                            idPais = usuarioex.idPais;
+                            enableController = true;
+                            closeTraerDni = true;
+                            setState(() {});
+                          }
+                        } else {
+                          print("::: ${controllerNumeroDoc.text}");
 
-                            var usuario = await provider
-                                .getUsuarioDni(controllerNumeroDoc.text);
+                          var usuario = await provider.getUsuarioDni(
+                              controllerNumeroDoc.text, widget.idProgramacion);
+                          print(usuario!.estado_registro);
 
-                            // ignore: unnecessary_null_comparison
+                          switch (usuario.estado_registro) {
+                            case "ENCONTRADO_SERVICIO_RENIEC":
+
+                              controllerNombre.text = usuario.nombres;
+                              controllerApellidoPaterno.text =
+                                  usuario.apellidoPaterno;
+                              controllerApellidoMaterno.text =
+                                  usuario.apellidoMaterno;
+                              controllerCelular.text = usuario.telefono;
+                              controllerCargo.text = usuario.cargo;
+
+                              enableController = false;
+                              closeTraerDni = false;
+                              setState(() {});
+                              break;
+                            case "ENCONTRADO_SERVICIO_PAIS":
+                              controllerNombre.text = usuario.nombres;
+                              controllerApellidoPaterno.text =
+                                  usuario.apellidoPaterno;
+                              controllerApellidoMaterno.text =
+                                  usuario.apellidoMaterno;
+                              controllerCelular.text = usuario.telefono;
+                              controllerCargo.text = usuario.cargo;
+
+                              enableController = false;
+                              closeTraerDni = false;
+                              setState(() {});
+                              break;
+                            case "NO_ENCONTRADO":
+                              showAlertDialog(context, "Datos no encontrados en nuestra base de datos, registrar los datos manualmente.");
+                              enableController = true;
+                              closeTraerDni = false;
+                              setState(() {});
+                              break;
+                              //
+                            case  "ENCONTRADO_JSON":
+                              controllerNombre.text = usuario.nombres;
+                              controllerApellidoPaterno.text =
+                                  usuario.apellidoPaterno;
+                              controllerApellidoMaterno.text =
+                                  usuario.apellidoMaterno;
+                              controllerCelular.text = usuario.telefono;
+                              controllerCargo.text = usuario.cargo;
+
+                              enableController = false;
+                              closeTraerDni = false;
+                              setState(() {});
+                             enableController = false;
+                             closeTraerDni = false;
+                             setState(() {});
+                             break;
+                            case "FALLECIDO":
+                              showAlertDialog(context, "!Funcionario Fallecido!, El funcionario a registrar tiene el estado de fallecido por lo que no puede ser registrado.",
+                              );
+                              enableController = false;
+                              closeTraerDni = false;
+                              setState(() {});
+                              break;
+                            default:
+                          }
+                          /*  // ignore: unnecessary_null_comparison
                             if (usuario!.nombres == "") {
                               showAlertDialog(context);
                               enableController = true;
@@ -300,8 +370,8 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                               controllerCargo.text = usuario.cargo;
                               closeTraerDni = false;
                               setState(() {});
-                            }
-                          }
+                            }*/
+                        }
                       },
                     ),
                   ),
@@ -508,13 +578,12 @@ class _FuncionariosPageState extends State<FuncionariosPage>
     // ignore: dead_code
   }
 
-  showAlertDialog(BuildContext context) {
+  showAlertDialog(BuildContext context, text) {
     Widget okButton = TextButton(
       child: Text("OK"),
       onPressed: () {
         setState(() {
-          enableController = true;
-        });
+         });
         Navigator.pop(context);
       },
     );
@@ -522,7 +591,8 @@ class _FuncionariosPageState extends State<FuncionariosPage>
     AlertDialog alert = AlertDialog(
       title: Text("PAIS"),
       content: Text(
-          "Datos no encontrados en nuestra base de datos, registrar los datos manualmente."),
+          text
+          ),
       actions: [
         okButton,
       ],
@@ -546,5 +616,6 @@ class _FuncionariosPageState extends State<FuncionariosPage>
     controllerApellidoMaterno.text = "";
     controllerNombre.text = "";
     controllerCelular.text = "";
+    controllerCargo.text = "";
   }
 }

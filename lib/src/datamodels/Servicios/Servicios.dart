@@ -123,6 +123,27 @@ class Servicios {
     }
 
   }
+  Future loadDataArchivos(nombreArchivo) async {
+    late File jsonFile;
+    late Directory dir;
+    String fileName = "jsonPersonasFallecidas.json";
+    bool fileExists = false;
+    var fileEncode;
+    await getApplicationDocumentsDirectory().then((Directory directory) {
+      dir = directory;
+      jsonFile = new File(dir.path + "/" + fileName);
+      fileExists = jsonFile.existsSync();
+      if (fileExists){
+        fileEncode = jsonFile.readAsStringSync();
+        return fileEncode;
+      }
+
+    });
+    if (fileExists){
+      return fileEncode;
+    }
+
+  }
   List data = []; //edited line
 
 }

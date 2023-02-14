@@ -64,9 +64,8 @@ class DatabaseProvincia {
 
   Future<List<CentroPoblado>> getCentroPoblado(ubigeo) async {
     initDB();
-    print( "SELECT * FROM centros_poblados  where SUBSTR(centro_poblado_ubigeo, 1, 6) ='$ubigeo'");
     final res = await _db!.rawQuery(
-        "SELECT * FROM centros_poblados  where SUBSTR(centro_poblado_ubigeo, 1, 6) ='$ubigeo'");
+        "SELECT * FROM centros_poblados  where SUBSTR(centro_poblado_ubigeo, 1, 6) ='$ubigeo'  ORDER BY centro_poblado_descripcion ASC");
     List<CentroPoblado> list = res.isNotEmpty
         ? res.map((e) => CentroPoblado.fromJson(e)).toList()
         : [];
@@ -79,8 +78,8 @@ class DatabaseProvincia {
   }
   Future<List<Distrito>> getDistrito(ubigeo) async {
     initDB();
-    final res = await _db!.rawQuery(
-        "SELECT * FROM distritos  where SUBSTR(distrito_ubigeo, 1, 4) ='$ubigeo'");
+     final res = await _db!.rawQuery(
+        "SELECT * FROM distritos  where SUBSTR(distrito_ubigeo, 1, 4) ='$ubigeo' ORDER BY distrito_descripcion ASC");
     List<Distrito> list = res.isNotEmpty
         ? res.map((e) => Distrito.fromJson(e)).toList()
         : [];
@@ -91,7 +90,7 @@ class DatabaseProvincia {
     print(_db!.insert("provincias", regitroCalificada.toMap()));
   }
   Future<List<Provincia>> getProvincias() async {
-    List<Map<String, dynamic>> result = await _db!.query("provincias");
+    List<Map<String, dynamic>> result = await _db!.query("provincias",orderBy: "provincia_descripcion ASC");
     return result.map((map) => Provincia.fromMap(map)).toList();
   }
 }

@@ -1,4 +1,6 @@
+import 'package:actividades_pais/src/datamodels/Clases/Tambos/TamboServicioIntervencionesGeneral.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaTicketEquipos.dart';
+import 'package:actividades_pais/util/app-config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Funcionarios.dart';
@@ -50,8 +52,7 @@ class Listas {
           ),
         ],
       ),
-      onTap: () {
-       },
+      onTap: () {},
     );
   }
 
@@ -91,8 +92,7 @@ class Listas {
           ),
         ],
       ),
-      onTap: () {
-       },
+      onTap: () {},
     );
   }
 
@@ -132,13 +132,12 @@ class Listas {
           ),
         ],
       ),
-      onTap: () {
-       },
+      onTap: () {},
     );
   }
 
   Card miCardLisPartExtrangeros(Participantes band) {
-     return Card(
+    return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: EdgeInsets.all(10),
       elevation: 10,
@@ -179,8 +178,7 @@ class Listas {
                 ),
               ],
             ),
-            onTap: () {
-             },
+            onTap: () {},
           )
         ],
       ),
@@ -253,7 +251,8 @@ class Listas {
               fit: BoxFit.contain,
             ),
             contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
-            title: Text('${band.primerNombre! + ' ' + band.segundoNombre!+' '+band.apellidoPaterno! +' '+band.apellidoMaterno!}',
+            title: Text(
+                '${band.primerNombre! + ' ' + band.segundoNombre! + ' ' + band.apellidoPaterno! + ' ' + band.apellidoMaterno!}',
                 style: TextStyle(fontSize: 13, color: Colors.black)),
             // formatter.format(picked),
 
@@ -320,7 +319,7 @@ class Listas {
               fit: BoxFit.contain,
             )
             /* Icon(
-              
+
               Icons.person,
               color: Colors.black,
             ) */
@@ -467,6 +466,7 @@ class Listas {
       ),
     );
   }
+
   Card cardSincronizarPias(ReportesPias band, callback) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -482,8 +482,8 @@ class Listas {
             contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.puntoAtencion} \n ${band.codigoUbigeo}',
                 style: TextStyle(fontSize: 13)),
-            subtitle: new Text('${band.plataforma}',
-                style: TextStyle(fontSize: 10)),
+            subtitle:
+                new Text('${band.plataforma}', style: TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -522,15 +522,20 @@ class Listas {
       child: Column(
         children: <Widget>[
           ListTile(
-            leading: (band.estado=='INACTIVO')?Icon(
-              Icons.computer,
-              color: Colors.red,
-            ):Icon(
-                Icons.computer,
-                color: Colors.green),
+            leading: (band.estado == 'INACTIVO')
+                ? Icon(
+                    Icons.computer,
+                    color: Colors.black,
+                    size: 40,
+                  )
+                : Icon(
+                    Icons.computer,
+                    color: Colors.black,
+                    size: 40,
+                  ),
             contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
-            title: Text('${band.codigoPatrimonial} \n${band.descripcionEquipoInformatico}',
-                style: TextStyle(fontSize: 13)),
+            title: Text('${band.descripcionEquipoInformatico}',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
             subtitle: new Text('${band.descripcionMarca}',
                 style: TextStyle(fontSize: 10)),
             trailing: Column(
@@ -562,8 +567,95 @@ class Listas {
       ),
     );
   }
+
+  //dynamic
+  Card cardHistrialTambosInter(
+      TamboServicioIntervencionesGeneral band, callback) {
+    return Card(
+      color: AppConfig.primaryColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      margin: EdgeInsets.all(20),
+      elevation: 7,
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 25,
+          ),
+          Divider(
+            color: Colors.white,
+            //color of divider
+            height: 5,
+            //height spacing of divider
+            thickness: 3,
+            //thickness of divier line
+            indent: 0,
+            //spacing at the start of divider
+            endIndent: 0, //spacing at the end of divider
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.fromLTRB(25, 5, 25, 15),
+            title: Row(
+              children: [
+                SizedBox(
+                  width: 70.0,
+                  height: 70.0,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white.withOpacity(0.1),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset(
+                        'assets/icons/icons8-male-user-100.png',
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text('${band.tambo} \n${band.idProgramacion}',
+                    style:
+                        TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+              ],
+            ),
+            subtitle: Column(
+              children: [
+                SizedBox(height: 10),
+                Text(
+                    textAlign: TextAlign.justify,
+                    '${band.descripcion}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                    )),
+                SizedBox(height: 10),
+                Image.network('${band.pathImagen}'),
+                SizedBox(height: 8),
+                InkWell(
+                  onTap:      callback,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+
+                      Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: Icon(Icons.download, color: Colors.black),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+
+          )
+        ],
+      ),
+    );
+  }
+
 //dynamic
-  Card cardParqueInformaticoTicket(ListaEquiposInformaticosTicket band, callback) {
+  Card cardParqueInformaticoTicket(
+      ListaEquiposInformaticosTicket band, callback) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: EdgeInsets.all(10),
@@ -578,8 +670,8 @@ class Listas {
             contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.idTicket} \n${band.usuarioAsignado}',
                 style: TextStyle(fontSize: 13)),
-            subtitle: new Text('${band.material}',
-                style: TextStyle(fontSize: 10)),
+            subtitle:
+                new Text('${band.material}', style: TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

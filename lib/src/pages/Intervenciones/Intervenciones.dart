@@ -39,15 +39,14 @@ class _IntervencionesState extends State<Intervenciones> {
   var todoParticiw = 0;
   var cargarBarra = 0;
   var isInternet = false;
-
+  var isTab= true;
   @override
   void initState() {
     CalcularParticipantes();
     internet();
-
     cargarDatosIntervenciones();
     super.initState();
-    refreshList();
+//    refreshList();
     CalcularParticipantes();
   }
 
@@ -210,6 +209,7 @@ class _IntervencionesState extends State<Intervenciones> {
         await ProviderDatos().getInsertParticipantesIntervencionesMovil(
             data[0].unidTerritoriales);
         await ProviderDatos().getInsertFuncionariosIntervencionesMovil();
+        await ProviderDatos().getInsertPersonasFallecidas();
         await CalcularParticipantes();
         await cargarIntervenciones();
         setState(() {
@@ -231,24 +231,27 @@ class _IntervencionesState extends State<Intervenciones> {
       setState(() {
         _isloading = true;
       });
-      await eliminarintervenciones();
+    //  await eliminarintervenciones();
       var data = await DatabasePr.db.getAllTasksConfigInicio();
 
       for (var i = 0; i < data.length; i++) {
         var a = await provider.getListaTramaIntervencion(data[i].snip);
         if (a.length == 0) {
           _isloading = false;
+          isTab = true;
           setState(() {});
         }
         if (a.length > 0) {
           await DatabasePr.db.listarInterciones();
           _isloading = false;
+          isTab = true;
           setState(() {});
         }
       }
     } else {
       setState(() {
         _isloading = false;
+        isTab = true;
       });
     }
   }
@@ -344,12 +347,18 @@ class _IntervencionesState extends State<Intervenciones> {
         SizedBox(
           width: 10,
         ),
-        InkWell(
-          child: Icon(Icons.cloud_download_sharp),
-          onTap: () async {
-            await cargarIntervenciones();
-          },
-        ),
+     isTab ?   InkWell(
+       child: Icon(Icons.cloud_download_sharp),
+       onTap: () async {
+         isTab = false;
+         setState(() {
+         });
+         await cargarIntervenciones();
+
+
+
+       },
+     ):new Container(),
         SizedBox(
           width: 20,
         ),

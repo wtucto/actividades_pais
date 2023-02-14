@@ -32,7 +32,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:mac_address/mac_address.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../Clases/Tambos/IntentosRegistrosFallecidos.dart';
 
 class ProviderDatos {
   AppConfig appConfig = AppConfig();
@@ -232,64 +235,69 @@ class ProviderDatos {
   }*/
 
   Future<List<TramaIntervencion>> getListaTramaIntervencion(snip) async {
-    await DatabasePr.db.eliminarTodoEntidadFuncionario();
-    await DatabasePr.db.eliminarTodoParticipanteEjecucion();
-    await DatabasePr.db.deleteIntervenciones();
-    print(snip);
-    http.Response response = await http.get(
-      Uri.parse(AppConfig.urlBackndServicioSeguro +
-          '/api-pnpais/app/listarTramaIntervencion/$snip'),
-    );
+    var eliminado = await DatabasePr.db.deleteIntervenciones();
+    print("eliminado : $eliminado");
+    if (eliminado >= 0) {
+      //  if(eliminado)
+      await DatabasePr.db.eliminarTodoEntidadFuncionario();
+      await DatabasePr.db.eliminarTodoParticipanteEjecucion();
+      print(snip);
+      http.Response response = await http.get(
+        Uri.parse(AppConfig.urlBackndServicioSeguro +
+            '/api-pnpais/app/listarTramaIntervencion/$snip'),
+      );
 
-    print(Uri.parse(AppConfig.urlBackndServicioSeguro +
-        '/api-pnpais/app/listarTramaIntervencion/$snip'));
-    if (response.statusCode == 200) {
-      await getlistarCcpp(snip);
+      print(Uri.parse(AppConfig.urlBackndServicioSeguro +
+          '/api-pnpais/app/listarTramaIntervencion/$snip'));
+      if (response.statusCode == 200) {
+        await getlistarCcpp(snip);
 
-      final jsonResponse = json.decode(response.body);
-      if (jsonResponse["response"] != null) {
-        final listadostraba =
-            new TramaIntervenciones.fromJsonList(jsonResponse["response"]);
-        for (var i = 0; i < listadostraba.items.length; i++) {
-          final rspt = TramaIntervencion(
-            atencion: listadostraba.items[i].atencion,
-            beneficiario: listadostraba.items[i].beneficiario,
-            categoria: listadostraba.items[i].categoria,
-            codigoInterno: listadostraba.items[i].codigoInterno,
-            codigoIntervencion: listadostraba.items[i].codigoIntervencion,
-            departamento: listadostraba.items[i].departamento,
-            distrito: listadostraba.items[i].distrito,
-            estado: listadostraba.items[i].estado,
-            fecha: listadostraba.items[i].fecha,
-            fechaRegistro: listadostraba.items[i].fechaRegistro,
-            descripcionEvento: listadostraba.items[i].descripcionEvento,
-            horaFin: listadostraba.items[i].horaFin,
-            horaInicio: listadostraba.items[i].horaInicio,
-            idDepartamento: listadostraba.items[i].idDepartamento,
-            identificacionIntervencion:
-                listadostraba.items[i].identificacionIntervencion,
-            lugarIntervencion: listadostraba.items[i].lugarIntervencion,
-            poblacion: listadostraba.items[i].poblacion,
-            programa: listadostraba.items[i].programa,
-            provincia: listadostraba.items[i].provincia,
-            sector: listadostraba.items[i].sector,
-            servicio: listadostraba.items[i].servicio,
-            snip: listadostraba.items[i].snip,
-            subCategoria: listadostraba.items[i].subCategoria,
-            tambo: listadostraba.items[i].tambo,
-            tipoActividad: listadostraba.items[i].tipoActividad,
-            tipoGobierno: listadostraba.items[i].tipoGobierno,
-            tipoIntervencion: listadostraba.items[i].tipoIntervencion,
-            idTipoIntervencion: listadostraba.items[i].idTipoIntervencion,
-          );
-          await DatabasePr.db.insertTramaIntervenciones(rspt);
-          await listarEntidadFuncionario(rspt.codigoIntervencion);
+        final jsonResponse = json.decode(response.body);
+        if (jsonResponse["response"] != null) {
+          final listadostraba =
+              new TramaIntervenciones.fromJsonList(jsonResponse["response"]);
+          for (var i = 0; i < listadostraba.items.length; i++) {
+            final rspt = TramaIntervencion(
+              atencion: listadostraba.items[i].atencion,
+              beneficiario: listadostraba.items[i].beneficiario,
+              categoria: listadostraba.items[i].categoria,
+              codigoInterno: listadostraba.items[i].codigoInterno,
+              codigoIntervencion: listadostraba.items[i].codigoIntervencion,
+              departamento: listadostraba.items[i].departamento,
+              distrito: listadostraba.items[i].distrito,
+              estado: listadostraba.items[i].estado,
+              fecha: listadostraba.items[i].fecha,
+              fechaRegistro: listadostraba.items[i].fechaRegistro,
+              descripcionEvento: listadostraba.items[i].descripcionEvento,
+              horaFin: listadostraba.items[i].horaFin,
+              horaInicio: listadostraba.items[i].horaInicio,
+              idDepartamento: listadostraba.items[i].idDepartamento,
+              identificacionIntervencion:
+                  listadostraba.items[i].identificacionIntervencion,
+              lugarIntervencion: listadostraba.items[i].lugarIntervencion,
+              poblacion: listadostraba.items[i].poblacion,
+              programa: listadostraba.items[i].programa,
+              provincia: listadostraba.items[i].provincia,
+              sector: listadostraba.items[i].sector,
+              servicio: listadostraba.items[i].servicio,
+              snip: listadostraba.items[i].snip,
+              subCategoria: listadostraba.items[i].subCategoria,
+              tambo: listadostraba.items[i].tambo,
+              tipoActividad: listadostraba.items[i].tipoActividad,
+              tipoGobierno: listadostraba.items[i].tipoGobierno,
+              tipoIntervencion: listadostraba.items[i].tipoIntervencion,
+              idTipoIntervencion: listadostraba.items[i].idTipoIntervencion,
+            );
+            await DatabasePr.db.insertTramaIntervenciones(rspt);
+            await listarEntidadFuncionario(rspt.codigoIntervencion);
+          }
         }
-      }
-      /*consulta por snip idRegion */
-      final listardb = DatabasePr.db.listarInterciones();
-      return listardb;
-    } else if (response.statusCode == 400) {}
+        /*consulta por snip idRegion */
+        final listardb = DatabasePr.db.listarInterciones();
+        return listardb;
+      } else if (response.statusCode == 400) {}
+      return List.empty();
+    }
     return List.empty();
   }
 
@@ -315,102 +323,162 @@ class ProviderDatos {
     return List.empty();
   }
 
-  Future<Funcionarios?> getUsuarioDni(dni) async {
-    // await TraerToken().mostrarDatos();
-    var cnt = await _checkInternetConnection();
-    print(cnt);
-    if (cnt == false) {
-      var buscarFuncionarios =
-          await ProviderServicios().getBuscarFuncionarios(dni);
+  Future<Funcionarios?> getUsuarioDni(dni, idProgramacion) async {
+    Funcionarios funcionarios = Funcionarios();
+    var resfallecidos =
+        await ProviderServicios().getBuscarPersonasFallecidas(dni);
 
-      if (buscarFuncionarios != null) {
-        return buscarFuncionarios;
-      } else {
-        return null;
-      }
-/*      if (response.statusCode == 200) {
-        final jsonResponse = json.decode(response.body);
+    if (resfallecidos.dni.isNotEmpty) {
+      var abc = await DatabasePr.db.getAllTasksConfigInicio();
+      var login = await DatabasePr.db.loginUser();
+      String macAddress = await GetMac.macAddress;
 
-        if (jsonResponse["total"] == 0) {
-          return null;
-        } else {
-          final listadostraba =
-          new Funcionarios.fromJson(jsonResponse["response"][0]);
-          return listadostraba;
-        }
-      } else if (response.statusCode == 400) {
-      }*/
+      var intentosRegistrosFallecidos = IntentosRegistrosFallecidos(
+          ipmaqReg: macAddress,
+          idUsuarioReg: login[0].id.toString(),
+          fechaReg: await DateTime.now().toString(),
+          dni: dni,
+          idProgramacion: idProgramacion,
+          idPlataforma: abc[0].idTambo);
+      await DatabasePr.db.insertarIntentoFallecido(intentosRegistrosFallecidos);
+
+      funcionarios.estado_registro = "FALLECIDO";
+      return funcionarios;
     } else {
-      http.Response responseReniec = await http.get(
-        Uri.parse(
-            AppConfig.backendsismonitor + '/programaciongit/validar-dni/$dni'),
-      );
-      print(responseReniec.body);
-      if (responseReniec.statusCode == 200) {
-        final jsonResponse = json.decode(responseReniec.body);
-        final listadostraba = new Funcionarios.fromJsonReniec(jsonResponse);
-        return listadostraba;
+      var cnt = await _checkInternetConnection();
+      print(cnt);
+      if (cnt == false) {
+        var buscarFuncionarios =
+            await ProviderServicios().getBuscarFuncionarios(dni);
+        print(json.encode(buscarFuncionarios));
+        if (buscarFuncionarios.estado_registro == "ENCONTRADO_JSON") {
+          buscarFuncionarios.estado_registro = "ENCONTRADO_JSON";
+          return buscarFuncionarios;
+        } else {
+          buscarFuncionarios.estado_registro = "NO_ENCONTRADO";
+          return buscarFuncionarios;
+        }
       } else {
         http.Response response = await http.get(
           Uri.parse(AppConfig.urlBackndServicioSeguro +
               '/api-pnpais/app/validarfuncionario/$dni'),
         );
+
         if (response.statusCode == 200) {
           final jsonResponse = json.decode(response.body);
 
           if (jsonResponse["total"] == 0) {
-            return null;
+            http.Response responseReniec = await http.get(
+              Uri.parse(AppConfig.backendsismonitor +
+                  '/programaciongit/validar-dni/$dni'),
+            );
+
+            if (responseReniec.statusCode == 200) {
+              final jsonResponse = json.decode(responseReniec.body);
+              final listadostraba =
+                  new Funcionarios.fromJsonReniec(jsonResponse);
+              listadostraba.estado_registro = "ENCONTRADO_SERVICIO_RENIEC";
+              return listadostraba;
+            } else if (response.statusCode == 400) {
+              funcionarios.estado_registro = "NO_ENCONTRADO";
+              return funcionarios;
+            }
           } else {
             final listadostraba =
                 new Funcionarios.fromJson(jsonResponse["response"][0]);
+            listadostraba.estado_registro = "ENCONTRADO_SERVICIO_PAIS";
             return listadostraba;
           }
-        } else if (response.statusCode == 400) {
-          return null;
+        } else {
+          http.Response responseReniec = await http.get(
+            Uri.parse(AppConfig.backendsismonitor +
+                '/programaciongit/validar-dni/$dni'),
+          );
+
+          if (responseReniec.statusCode == 200) {
+            final jsonResponse = json.decode(responseReniec.body);
+            final listadostraba = new Funcionarios.fromJsonReniec(jsonResponse);
+            listadostraba.estado_registro = "ENCONTRADO_SERVICIO_RENIEC";
+            return listadostraba;
+          } else if (response.statusCode == 400) {
+            funcionarios.estado_registro = "NO_ENCONTRADO";
+            return funcionarios;
+          }
         }
       }
-    }
 
-    return null;
+      return funcionarios;
+    }
   }
 
-  Future<Participantes?> getUsuarioParticipanteDni(dni) async {
-    var cnt = await _checkInternetConnection();
-    if (cnt == false) {
-      print("Sin red ");
-      var resdb =
-          //  await DatabaseParticipantes.db.getUsuarioParticipanteDniSQLites(dni);
-          await ProviderServicios().getBuscarParticipante(dni);
-      print(resdb.dni);
-      if (resdb.dni!.isNotEmpty) {
-        print("3....");
+  Future<Participantes?> getUsuarioParticipanteDni(dni, idProgramacion) async {
+    // await ProviderServicios().getBuscarPersonasFallecidas(dni);
+    Participantes participantes = Participantes();
+    var resfallecidos =
+        await ProviderServicios().getBuscarPersonasFallecidas(dni);
 
-        return resdb;
-      } else {
-        print("resdb.length:: ${resdb.dni}");
-        return null;
-      }
+    if (resfallecidos.dni.isNotEmpty) {
+      print(resfallecidos.dni);
+      print(idProgramacion);
+      var abc = await DatabasePr.db.getAllTasksConfigInicio();
+      var login = await DatabasePr.db.loginUser();
+      String macAddress = await GetMac.macAddress;
+      print(macAddress);
+      print(login[0].id.toString());
+      print(await DateTime.now().toString());
+      print(dni);
+      print(idProgramacion);
+      print(abc[0].idTambo);
+      var intentosRegistrosFallecidos = IntentosRegistrosFallecidos(
+          ipmaqReg: macAddress,
+          idUsuarioReg: login[0].id.toString(),
+          fechaReg: await DateTime.now().toString(),
+          dni: dni,
+          idProgramacion: idProgramacion,
+          idPlataforma: abc[0].idTambo);
+      await DatabasePr.db.insertarIntentoFallecido(intentosRegistrosFallecidos);
+
+      participantes.estado = "FALLECIDO";
+      return participantes;
     } else {
-      print("con red ");
-
-      var resdb = await ProviderServicios().getBuscarParticipante(dni);
-      if (resdb.dni!.isNotEmpty) {
-        print("3....");
-        return resdb;
-      } else {
-        http.Response responseReniec = await http.get(
-          Uri.parse(AppConfig.backendsismonitor +
-              '/programaciongit/validar-dni/$dni'),
-        );
-        if (responseReniec.statusCode == 200) {
-          print("4....");
-          final jsonResponse = json.decode(responseReniec.body);
-
-          final listadostraba = new Participantes.fromJsonReniec(jsonResponse);
-          print(listadostraba.apellidoPaterno);
-          return listadostraba;
+      var cnt = await _checkInternetConnection();
+      if (cnt == false) {
+        var resdb =
+            //  await DatabaseParticipantes.db.getUsuarioParticipanteDniSQLites(dni);
+            await ProviderServicios().getBuscarParticipante(dni);
+        print(resdb.dni);
+        if (resdb.dni!.isNotEmpty) {
+          //participantes.estado = "ENCONTRADO_JSON";
+          resdb.estado = "ENCONTRADO_JSON";
+          return resdb;
         } else {
-          return null;
+          print("resdb.length:: ${dni}");
+          participantes.estado = "NO_ENCONTRADO";
+          return participantes;
+        }
+      } else {
+        var resdb = await ProviderServicios().getBuscarParticipante(dni);
+        if (resdb.dni!.isNotEmpty) {
+          resdb.estado = "ENCONTRADO_JSON";
+          return resdb;
+        } else {
+          http.Response responseReniec = await http.get(
+            Uri.parse(AppConfig.backendsismonitor +
+                '/programaciongit/validar-dni/$dni'),
+          );
+          if (responseReniec.statusCode == 200) {
+            print("5....");
+            final jsonResponse = json.decode(responseReniec.body);
+
+            final listadostraba =
+                new Participantes.fromJsonReniec(jsonResponse);
+            listadostraba.estado = "ENCONTRADO_SERV_RENIEC";
+            print(listadostraba.apellidoPaterno);
+            return listadostraba;
+          } else {
+            participantes.estado = "NO_ENCONTRADO";
+            return participantes;
+          }
         }
       }
     }
@@ -667,14 +735,14 @@ class ProviderDatos {
           '/api-pnpais/app/listarParticipantesIntervencionesMovil/$UNIDAD_TERRITORIAL'),
     );
 
-    if(response.statusCode==200){
+    if (response.statusCode == 200) {
       if (fileExists) {
         print("File exists");
       } else {
         print("File does not exist!");
         await createFile(json.decode(response.body), dir, fileName);
       }
-    }else {
+    } else {
       return List.empty();
     }
 
@@ -1101,5 +1169,54 @@ class ProviderDatos {
       await createFile(json.decode(response.body), dir, fileName);
     }
     return List.empty();
+  }
+
+  Future getInsertPersonasFallecidas() async {
+    late File jsonFile;
+    late Directory dir;
+    String fileName = "jsonPersonasFallecidas.json";
+    bool fileExists = false;
+    getApplicationDocumentsDirectory().then((Directory directory) {
+      dir = directory;
+      jsonFile = new File(dir.path + "/" + fileName);
+      fileExists = jsonFile.existsSync();
+    });
+
+    http.Response response = await http.get(
+      Uri.parse(AppConfig.urlBackndServicioSeguro +
+          '/api-pnpais/app/listarPersonalFallecidos'),
+    );
+    if (response.statusCode == 200) {
+      if (fileExists) {
+        print("File exists");
+        /*    await deleteFile(fileName);
+      print("existe");
+      await Future.delayed(Duration(seconds: 10));
+      await createFile(json.decode(response.body), dir, fileName);*/
+      } else {
+        print("File does not exist!");
+        await createFile(json.decode(response.body), dir, fileName);
+      }
+    }
+
+    return List.empty();
+  }
+  Future subirIntentosFallecidos(IntentosRegistrosFallecidos intentosRegistrosFallecidos) async{
+
+    var logUser = await DatabasePr.db.loginUser();
+    var headers = {
+      'Authorization': 'Bearer ${logUser[0].token}',
+      'Content-Type': 'application/json'
+    };
+    http.Response response = await http.post(
+        Uri.parse(
+            AppConfig.backendsismonitor + '/programacionjut/guardarIntentosFallecidos'),
+        headers: headers,
+        body: json.encode(intentosRegistrosFallecidos));
+    if(response.statusCode==200){
+      print("OK");
+    }
+    //GuardarIntentosFallecidos
+
   }
 }
