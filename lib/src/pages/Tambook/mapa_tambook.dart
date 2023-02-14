@@ -208,7 +208,7 @@ class _MapTambookState extends State<MapTambook>
           FloatingActionButton.extended(
             heroTag: 'dark-light',
             label: Text(
-              darkMode ? 'Light mode' : 'Dark mode',
+              darkMode ? 'Normal' : 'Oscuro',
               textAlign: TextAlign.center,
             ),
             icon: Icon(darkMode ? Icons.brightness_high : Icons.brightness_2),

@@ -105,7 +105,7 @@ class Http {
       dynamic data;
       if (oError is DioError) {
         statusCode = -1;
-        message = oError.message;
+        message = oError.message!;
         if (oError.response != null) {
           statusCode = oError.response!.statusCode!;
           if (oError.response!.statusMessage! != "") {
@@ -168,7 +168,7 @@ class Http {
       dynamic data;
       if (e is DioError) {
         statusCode = -1;
-        message = e.message;
+        message = e.message!;
         if (e.response != null) {
           statusCode = e.response!.statusCode!;
           if (e.response!.statusMessage! != "") {
@@ -238,7 +238,7 @@ class Http {
       dynamic data;
       if (e is DioError) {
         statusCode = -1;
-        message = e.message;
+        message = e.message!;
         if (e.response != null) {
           statusCode = e.response!.statusCode!;
           if (e.response!.statusMessage! != "") {

@@ -12,6 +12,7 @@ import 'package:actividades_pais/src/pages/Tambook/dashboard_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/mapa_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:actividades_pais/util/app-config.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/check_connection.dart';
 import 'package:actividades_pais/util/image_util.dart';
@@ -1666,14 +1667,10 @@ class _DetalleTambookState extends State<DetalleTambook>
  */
   Padding cardDatosIntervencionCod1() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color: colorI,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
           children: [
@@ -1708,44 +1705,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 ),
               ),
             for (var oActividad in aInterAmbDir)
-              Card(
-                margin: const EdgeInsets.all(5),
-                elevation: 1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: Text(oActividad.fecha ?? ''),
-                      title: Text(oActividad.programa ?? ''),
-                      subtitle: Text(
-                        oActividad.fecha ?? '',
-                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Text(
-                        oActividad.descripcion ?? '',
-                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                      ),
-                    ),
-                    if (oActividad.actividadPathImage != null &&
-                        oActividad.actividadPathImage != '')
-                      ImageUtil.ImageUrl(
-                        oActividad.actividadPathImage!,
-                        width: 50,
-                        height: 50,
-                        imgDefault: 'assets/iconusuario.png',
-                      ),
-                    /*ElevatedButton(
-                    child: const Text('Descargar Ficha'),
-                    onPressed: () {},
-                  ),*/
-                  ],
-                ),
+              cardActividadestambo(
+                oActividad,
+                () async {},
               ),
           ],
         ),
@@ -1753,16 +1715,105 @@ class _DetalleTambookState extends State<DetalleTambook>
     );
   }
 
+  Card cardActividadestambo(
+    TamboActividadModel oActividad,
+    callback,
+  ) {
+    return Card(
+      color: AppConfig.primaryColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      margin: const EdgeInsets.all(20),
+      elevation: 7,
+      child: Column(
+        children: <Widget>[
+          const SizedBox(
+            height: 25,
+          ),
+          const Divider(
+            color: Colors.white,
+            height: 5,
+            thickness: 3,
+            indent: 0,
+            endIndent: 0,
+          ),
+          ListTile(
+            contentPadding: const EdgeInsets.fromLTRB(25, 5, 25, 15),
+            title: Row(
+              children: [
+                SizedBox(
+                  width: 70.0,
+                  height: 70.0,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white.withOpacity(0.1),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset(
+                        'assets/icons/icons8-male-user-100.png',
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  '${oActividad.idTambo} \n${oActividad.idProgramacion}',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            subtitle: Column(
+              children: [
+                const SizedBox(height: 10),
+                Text(
+                  textAlign: TextAlign.justify,
+                  '${oActividad.descripcion}',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ImageUtil.ImageUrl(
+                  oActividad.actividadPathImage!,
+                  width: 200,
+                  height: 200,
+                  imgDefault: 'assets/iconusuario.png',
+                ),
+                const SizedBox(height: 8),
+                /*InkWell(
+                  onTap: callback,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: const Icon(
+                          Icons.download,
+                          color: Colors.black,
+                        ),
+                      )
+                    ],
+                  ),
+                )*/
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   Padding cardDatosIntervencionCod2() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color: colorI,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
           children: [
@@ -1797,44 +1848,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 ),
               ),
             for (var oActividad in aInterSopEnt)
-              Card(
-                margin: const EdgeInsets.all(5),
-                elevation: 1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: Text(oActividad.fecha ?? ''),
-                      title: Text(oActividad.programa ?? ''),
-                      subtitle: Text(
-                        oActividad.fecha ?? '',
-                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Text(
-                        oActividad.descripcion ?? '',
-                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                      ),
-                    ),
-                    if (oActividad.actividadPathImage != null &&
-                        oActividad.actividadPathImage != '')
-                      ImageUtil.ImageUrl(
-                        oActividad.actividadPathImage!,
-                        width: 50,
-                        height: 50,
-                        imgDefault: 'assets/iconusuario.png',
-                      ),
-                    /*ElevatedButton(
-                    child: const Text('Descargar Ficha'),
-                    onPressed: () {},
-                  ),*/
-                  ],
-                ),
+              cardActividadestambo(
+                oActividad,
+                () async {},
               ),
           ],
         ),
@@ -1844,14 +1860,10 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   Padding cardDatosIntervencionCod4() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 2,
-            color: colorI,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
           children: [
@@ -1886,44 +1898,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 ),
               ),
             for (var oActividad in aCoordinacio)
-              Card(
-                margin: const EdgeInsets.all(5),
-                elevation: 1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0), //<-- SEE HERE
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: Text(oActividad.fecha ?? ''),
-                      title: Text(oActividad.programa ?? ''),
-                      subtitle: Text(
-                        oActividad.fecha ?? '',
-                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Text(
-                        oActividad.descripcion ?? '',
-                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                      ),
-                    ),
-                    if (oActividad.actividadPathImage != null &&
-                        oActividad.actividadPathImage != '')
-                      ImageUtil.ImageUrl(
-                        oActividad.actividadPathImage!,
-                        width: 50,
-                        height: 50,
-                        imgDefault: 'assets/iconusuario.png',
-                      ),
-                    /*ElevatedButton(
-                    child: const Text('Descargar Ficha'),
-                    onPressed: () {},
-                  ),*/
-                  ],
-                ),
+              cardActividadestambo(
+                oActividad,
+                () async {},
               ),
           ],
         ),
