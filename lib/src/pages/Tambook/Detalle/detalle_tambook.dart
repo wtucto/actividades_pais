@@ -52,11 +52,15 @@ class _DetalleTambookState extends State<DetalleTambook>
   late List<TamboActividadModel> aCoordinacio = [];
 
   int statusLoadActividad = 0;
+  bool loading = true;
+  bool isEndPagination = false;
+  int offset = 0;
+  int limit = 15;
 
   @override
   void dispose() {
     scrollCtr.dispose();
-    scrollCtr2.dispose();
+    scrollCtr2.removeListener(() async {});
     _tabController.dispose();
     super.dispose();
   }
@@ -65,9 +69,6 @@ class _DetalleTambookState extends State<DetalleTambook>
   void initState() {
     scrollCtr = ScrollController();
     scrollCtr.addListener(
-      () => setState(() {}),
-    );
-    scrollCtr2.addListener(
       () => setState(() {}),
     );
 
@@ -95,6 +96,27 @@ class _DetalleTambookState extends State<DetalleTambook>
      */
     tamboDatoGeneral();
     TamboIntervencionAtencionIncidencia();
+  }
+
+  void handleNext() {
+    scrollCtr2.addListener(() async {
+      if ((scrollCtr2.offset >= scrollCtr2.position.maxScrollExtent)) {
+        offset = offset + 1;
+        readJson(offset);
+      }
+    });
+  }
+
+  Future<void> readJson(paraOffset) async {
+    if (!isEndPagination) {
+      setState(() {
+        loading = true;
+      });
+
+      setState(() {
+        loading = false;
+      });
+    }
   }
 
   Uint8List convertBase64(String base64String) {
@@ -140,8 +162,6 @@ class _DetalleTambookState extends State<DetalleTambook>
           if (aInterSopEnt.length < maxData) aInterSopEnt.add(oAct);
         } else if (oAct.tipo == 4) {
           if (aCoordinacio.length < maxData) aCoordinacio.add(oAct);
-        } else {
-          if (aInterAmbDir.length < maxData) aInterAmbDir.add(oAct);
         }
       }
 
@@ -1947,7 +1967,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   ),
                 ),
                 const SizedBox(height: 10),
-                ImageUtil.ImageUrl(
+                ImageUtil.ImageAssetNetwork(
                   oActividad.actividadPathImage!,
                   width: 200,
                   height: 200,

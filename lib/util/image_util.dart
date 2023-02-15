@@ -1,11 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageUtil {
+  Future<String> networkImageToBase64(String sUrl) async {
+    http.Response response = await http.get(Uri.parse(sUrl));
+    Uint8List bytes = response.bodyBytes;
+    return base64Encode(bytes);
+  }
+
   /*
    * Encode Image to Base64
    */
