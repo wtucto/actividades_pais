@@ -1,5 +1,6 @@
 class TamboActFld {
   static String idTambo = 'idTambo';
+  static String nombreTambo = 'nombreTambo';
   static String idProgramacion = 'idProgramacion';
   static String estadoProgramacion = 'estadoProgramacion';
   static String estadoEjecucion = 'estadoEjecucion';
@@ -17,6 +18,7 @@ class TamboActFld {
 
 class TamboActividadModel {
   int? idTambo = 0;
+  String? nombreTambo = '';
   int? idProgramacion = 0;
   int? estadoProgramacion = 0;
   int? estadoEjecucion = 0;
@@ -35,6 +37,7 @@ class TamboActividadModel {
 
   TamboActividadModel({
     this.idTambo,
+    this.nombreTambo,
     this.idProgramacion,
     this.estadoProgramacion,
     this.estadoEjecucion,
@@ -53,6 +56,7 @@ class TamboActividadModel {
   factory TamboActividadModel.fromJson(Map<String, dynamic> json) {
     return TamboActividadModel(
       idTambo: json[TamboActFld.idTambo],
+      nombreTambo: json[TamboActFld.nombreTambo],
       idProgramacion: json[TamboActFld.idProgramacion],
       estadoProgramacion: json[TamboActFld.estadoProgramacion],
       estadoEjecucion: json[TamboActFld.estadoEjecucion],

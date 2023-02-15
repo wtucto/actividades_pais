@@ -1,16 +1,8 @@
-// ignore_for_file: unnecessary_new
-
-import 'package:actividades_pais/src/pages/Home/home.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
-import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:actividades_pais/util/Constants.dart';
-import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
-//import 'package:actividades_pais/src/pages/widgets/WebViewTest.dart';
 
 class HomeTambook extends StatefulWidget {
   const HomeTambook({super.key});
@@ -105,9 +97,7 @@ class _HomeTambookState extends State<HomeTambook>
               fit: BoxFit.fill,
             ),
           ),
-          SizedBox(
-            height: 23,
-          ),
+          const SizedBox(height: 23),
           //const Divider(color: color_02o27),
           const Text(
             'PLATAFORMAS FIJAS Y MOVIL',
@@ -331,13 +321,13 @@ class _HomeTambookState extends State<HomeTambook>
                       onGetText: (double value) {
                         return Text(
                           '${value.toInt()}%',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 35),
                         );
                       },
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Container(
@@ -457,13 +447,13 @@ class _HomeTambookState extends State<HomeTambook>
                       onGetText: (double value) {
                         return Text(
                           '${value.toInt()}%',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 35),
                         );
                       },
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Container(

@@ -8,8 +8,8 @@ import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
-import 'package:actividades_pais/src/pages/Tambook/dashboard_tambook.dart';
-import 'package:actividades_pais/src/pages/Tambook/mapa_tambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/Home/mapa_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/app-config.dart';
@@ -181,7 +181,7 @@ class _DetalleTambookState extends State<DetalleTambook>
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => const DashboardTambook(),
+              builder: (BuildContext context) => const TambookHome(),
             ),
           );
         },
@@ -1758,7 +1758,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   width: 10,
                 ),
                 Text(
-                  '${oActividad.idTambo} \n${oActividad.idProgramacion}',
+                  '${oActividad.nombreTambo} \n${oActividad.idProgramacion}',
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
