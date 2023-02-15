@@ -675,6 +675,106 @@ class _DashboardTambookState extends State<DashboardTambook>
     );
   }
 
+  Padding avanceMetas() {
+    var heading = '';
+    late ValueNotifier<double> valueNotifier3 = ValueNotifier(50);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Card(
+                    color: colorGB,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 3,
+                    child: SfCircularChart(
+                      title: ChartTitle(
+                        text: 'ESTADOS DE TAMBOS',
+                        textStyle: const TextStyle(
+                          color: color_07,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        alignment: ChartAlignment.center,
+                      ),
+                      legend: Legend(
+                        isVisible: true,
+                        position: LegendPosition.right,
+                        orientation: LegendItemOrientation.vertical,
+                        overflowMode: LegendItemOverflowMode.wrap,
+                        textStyle: const TextStyle(
+                          color: color_07,
+                        ),
+                      ),
+                      onLegendTapped: (LegendTapArgs args) {
+                        //print(args.pointIndex);
+                      },
+                      series: [
+                        PieSeries<ChartData, String>(
+                          dataSource: chartData,
+                          pointColorMapper: (ChartData data, _) => data.color,
+                          xValueMapper: (ChartData data, _) => data.x,
+                          yValueMapper: (ChartData data, _) => data.y,
+                          dataLabelSettings: const DataLabelSettings(
+                            isVisible: true,
+                            labelAlignment: ChartDataLabelAlignment.top,
+                            margin: EdgeInsets.all(1),
+                          ),
+                          name: 'Data',
+                          //explode: true,
+                          //explodeIndex: 1,
+                          radius: '80%',
+                          onPointTap: (ChartPointDetails details) async {},
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 /*
  * -----------------------------------------------
  *            TAMBOS
@@ -1954,13 +2054,8 @@ class pageFeed extends StatelessWidget {
         TamboServicioIntervencionesGeneral();
     aServ.tambo = 'NUEVO PARAISO';
     aServ.departamento = 'departamento';
-    aServ.descripcion = '''
-      Sesión de trabajo para estatuir la cantidad de raciones
-      diarias en función al padrón de beneficiarios que
-      presenta el comedor popular, realizado por miembros
-      del comité del comedor popular "Tres Hermanos",
-      dirigido a pobladores de la C.N. Nuevo Paraiso.
-    ''';
+    aServ.descripcion =
+        'Sesión de trabajo para estatuir la cantidad de raciones diarias en función al padrón de beneficiarios que presenta el comedor popular, realizado por miembros del comité del comedor popular "Tres Hermanos", dirigido a pobladores de la C.N. Nuevo Paraiso.';
 
     aServ.fecha = '2012/01/01';
     aServ.fechaImagen = '2012/01/01';
@@ -2046,7 +2141,7 @@ class pageFeed extends StatelessWidget {
                 Text(
                   '${band.tambo} \n${band.idProgramacion}',
                   style: const TextStyle(
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -2059,7 +2154,7 @@ class pageFeed extends StatelessWidget {
                   textAlign: TextAlign.justify,
                   '${band.descripcion}',
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                   ),
                 ),

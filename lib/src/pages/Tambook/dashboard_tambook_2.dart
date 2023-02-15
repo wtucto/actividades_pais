@@ -7,7 +7,6 @@ import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
-import 'package:actividades_pais/src/pages/widgets/WebViewTest.dart';
 
 class DashboardTambook extends StatefulWidget {
   const DashboardTambook({super.key});
@@ -68,7 +67,7 @@ class _DashboardTambookState extends State<DashboardTambook>
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: ExpandedAnimationFab(
         items: [
-         /* FabItem(
+          /* FabItem(
             "Ubicación",
             Icons.map_outlined,
             onPress: () async {

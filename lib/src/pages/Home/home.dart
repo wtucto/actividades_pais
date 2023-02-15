@@ -5,7 +5,6 @@ import 'package:actividades_pais/src/pages/ProgramacionActividades/cordinacion_a
 import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_suspervicion.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/SeguimientoParqueInformatico.dart';
 import 'package:actividades_pais/src/pages/Tambook/dashboard_tambook.dart';
-import 'package:actividades_pais/src/pages/Tambook/historialTambo/historialTambos.dart';
 import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
@@ -191,15 +190,7 @@ class _HomePagePais extends State<HomePagePais> {
             color: const Color(0xFF78b8cd),
           ),
         );
-        aHomeOptions.add(
-          HomeOptions(
-            code: 'OPT1010',
-            name: 'HISTORIAL TAMBOS'.tr,
-            types: const ['Ver'],
-            image: icon6,
-            color: const Color(0xFF78b8cd),
-          ),
-        );
+
         String sImagePias = modalidad == '1'
             ? icon2
             : modalidad == '2'
@@ -372,196 +363,195 @@ class _HomePagePais extends State<HomePagePais> {
     }
 
     List listPages = [
-      Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            height: hp65,
+      Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/paislogo.png"),
+            fit: BoxFit.contain,
           ),
-          Expanded(
-            child: GridView.builder(
-              physics: const BouncingScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 1.1,
-                crossAxisSpacing: 30,
-                mainAxisSpacing: 30,
-              ),
-              padding: const EdgeInsets.only(
-                left: 28,
-                right: 28,
-                bottom: 58,
-              ),
-              itemCount: aHomeOptions.length,
-              itemBuilder: (context, index) {
-                HomeOptions homeOption = aHomeOptions[index];
-                return InkWell(
-                  splashColor: Colors.white10,
-                  highlightColor: Colors.white10,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      image: const DecorationImage(
-                        image: AssetImage("assets/icons/botones 1-01.png"),
-                        fit: BoxFit.cover,
-                      ),
-                      color: homeOption.color,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: const Offset(0, 3),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              height: hp65,
+            ),
+            Expanded(
+              child: GridView.builder(
+                physics: const BouncingScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1.1,
+                  crossAxisSpacing: 30,
+                  mainAxisSpacing: 30,
+                ),
+                padding: const EdgeInsets.only(
+                  left: 28,
+                  right: 28,
+                  bottom: 58,
+                ),
+                itemCount: aHomeOptions.length,
+                itemBuilder: (context, index) {
+                  HomeOptions homeOption = aHomeOptions[index];
+                  return InkWell(
+                    splashColor: Colors.white10,
+                    highlightColor: Colors.white10,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: const DecorationImage(
+                          image: AssetImage("assets/icons/botones 1-01.png"),
+                          fit: BoxFit.cover,
                         ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 15),
-                          Container(
-                            padding: const EdgeInsets.only(
-                              top: 12,
-                              bottom: 8,
-                            ),
-                            child: Hero(
-                              tag: homeOption.image,
-                              child: Image.asset(
-                                homeOption.image,
-                                fit: BoxFit.contain,
-                                width: 40,
-                                height: 40,
-                                alignment: Alignment.center,
-                              ),
-                            ),
+                        color: homeOption.color,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3),
                           ),
-                          Container(
-                            padding: const EdgeInsets.all(1),
-                            child: Center(
-                              child: Text(
-                                homeOption.name,
-                                style: const TextStyle(
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                  fontWeight: FontWeight.w700,
-                                  fontStyle: FontStyle.normal,
-                                  fontSize: 11.0,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          )
                         ],
                       ),
-                    ),
-                  ),
-                  onTap: () async {
-                    var oHomeOptionSelect = aHomeOptions[index];
-
-                    if (cantidadDB < 1) {
-                      if (oHomeOptionSelect.code == 'OPT1000') {
-                        await Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => PantallaInicio(),
-                          ),
-                        );
-                      } else {
-                        Fluttertoast.showToast(
-                          msg: 'Registrarse en el App',
-                          gravity: ToastGravity.BOTTOM,
-                        );
-                      }
-                    } else {
-                      switch (oHomeOptionSelect.code) {
-                        case 'OPT1001':
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  Asistencia(long: long, lat: lat),
-                            ),
-                          );
-                          break;
-                        case 'OPT1003':
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  Intervenciones(unidadTerritorial),
-                            ),
-                          );
-                          break;
-                        case 'OPT1009':
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const SeguimientoParqueInformatico(),
-                            ),
-                          );
-                          break;
-
-                          case 'OPT1010':
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const HistorialTambos(),
-                            ),
-                          );
-                          break;
-                        case 'OPT1004':
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ListaReportesPias(
-                                unidadTeritorial: unidadTerritorial,
-                                plataforma: variable,
-                                idPlataforma: idPlataforma,
-                                long: long,
-                                lat: lat,
-                                campaniaCod: campaniaCod,
+                      child: Center(
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 15),
+                            Container(
+                              padding: const EdgeInsets.only(
+                                top: 12,
+                                bottom: 8,
+                              ),
+                              child: Hero(
+                                tag: homeOption.image,
+                                child: Image.asset(
+                                  homeOption.image,
+                                  fit: BoxFit.contain,
+                                  width: 40,
+                                  height: 40,
+                                  alignment: Alignment.center,
+                                ),
                               ),
                             ),
+                            Container(
+                              padding: const EdgeInsets.all(1),
+                              child: Center(
+                                child: Text(
+                                  homeOption.name,
+                                  style: const TextStyle(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    fontWeight: FontWeight.w700,
+                                    fontStyle: FontStyle.normal,
+                                    fontSize: 11.0,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    onTap: () async {
+                      var oHomeOptionSelect = aHomeOptions[index];
+
+                      if (cantidadDB < 1) {
+                        if (oHomeOptionSelect.code == 'OPT1000') {
+                          await Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => PantallaInicio(),
+                            ),
                           );
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: 'Registrarse en el App',
+                            gravity: ToastGravity.BOTTOM,
+                          );
+                        }
+                      } else {
+                        switch (oHomeOptionSelect.code) {
+                          case 'OPT1001':
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Asistencia(long: long, lat: lat),
+                              ),
+                            );
+                            break;
+                          case 'OPT1003':
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Intervenciones(unidadTerritorial),
+                              ),
+                            );
+                            break;
+                          case 'OPT1009':
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const SeguimientoParqueInformatico(),
+                              ),
+                            );
+                            break;
+
+                          case 'OPT1004':
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ListaReportesPias(
+                                  unidadTeritorial: unidadTerritorial,
+                                  plataforma: variable,
+                                  idPlataforma: idPlataforma,
+                                  long: long,
+                                  lat: lat,
+                                  campaniaCod: campaniaCod,
+                                ),
+                              ),
+                            );
+                            break;
+                          default:
+                        }
+                      }
+
+                      switch (oHomeOptionSelect.code) {
+                        case 'OPT1005':
+                          var rspt = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => MainFooterAllOptionPage(),
+                            ),
+                          );
+                          break;
+                        case 'OPT1007':
+                          var rspt = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const Dashboard(),
+                            ),
+                          );
+                          break;
+                        case 'OPT1008':
+                          var rspt = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const DashboardTambook(),
+                            ),
+                          );
+                          break;
+                        case 'OPT1006':
+                          _intervencionOptions(context);
                           break;
                         default:
                       }
-                    }
-
-                    switch (oHomeOptionSelect.code) {
-                      case 'OPT1005':
-                        var rspt = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => MainFooterAllOptionPage(),
-                          ),
-                        );
-                        break;
-                      case 'OPT1007':
-                        var rspt = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const Dashboard(),
-                          ),
-                        );
-                        break;
-                      case 'OPT1008':
-                        var rspt = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const DashboardTambook(),
-                          ),
-                        );
-                        break;
-                      case 'OPT1006':
-                        _intervencionOptions(context);
-                        break;
-                      default:
-                    }
-                  },
-                );
-              },
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ];
 
