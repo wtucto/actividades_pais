@@ -537,7 +537,7 @@ class _HomePagePais extends State<HomePagePais> {
                         case 'OPT1008':
                           var rspt = await Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => const DashboardTambook(),
+                              builder: (_) => const TambookHome(),
                             ),
                           );
                           break;
