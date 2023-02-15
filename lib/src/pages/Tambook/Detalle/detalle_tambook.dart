@@ -21,6 +21,8 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:kdgaugeview/kdgaugeview.dart';
+import 'package:lecle_bubble_timeline/lecle_bubble_timeline.dart';
+import 'package:lecle_bubble_timeline/models/timeline_item.dart';
 
 class DetalleTambook extends StatefulWidget {
   const DetalleTambook({super.key, this.listTambo});
@@ -206,9 +208,16 @@ class _DetalleTambookState extends State<DetalleTambook>
         centerTitle: true,
         background: SizedBox(
           height: 200.0,
-          child: ImageUtil.ImageUrl(
-            oTambo.tamboPathImage ?? '',
-            fit: BoxFit.fitHeight,
+          child: InteractiveViewer(
+            panEnabled: false, // Set it to false
+            boundaryMargin: EdgeInsets.all(100),
+            minScale: 0.5,
+            maxScale: 2,
+
+            child: ImageUtil.ImageUrl(
+              oTambo.tamboPathImage ?? '',
+              fit: BoxFit.fitHeight,
+            ),
           ),
         ),
       ),
@@ -225,6 +234,7 @@ class _DetalleTambookState extends State<DetalleTambook>
       ],
     );
     return Scaffold(
+      backgroundColor: color_10o15,
       body: SafeArea(
         child: Stack(
           children: [
@@ -325,6 +335,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                           * NUESTRO GESTOR
                           */
                         cardNuestroGestor(),
+                        const SizedBox(height: 10),
+                        cardHistorialGestores(),
                         const SizedBox(height: 10),
                         /*
                           * DATOS GENERALES
@@ -586,9 +598,18 @@ class _DetalleTambookState extends State<DetalleTambook>
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
@@ -657,10 +678,86 @@ class _DetalleTambookState extends State<DetalleTambook>
                           title: Text('TIPO CONTRATO'),
                           subtitle: Text('ORDEN SERVICIO'),
                         ),
-                        const ListTile(
-                          title: Text('COMBUSTIBLE'),
-                          subtitle: Text('10 GAL'),
-                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardHistorialGestores() {
+    var heading = 'HISTORIAL DE GESTORES';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        BubbleTimeline(
+                          bubbleSize: 70,
+                          // List of Timeline Bubble Items
+                          items: [
+                            TimelineItem(
+                              title: 'Irma Soledad',
+                              subtitle: '20/10/2021',
+                              icon: Icon(
+                                Icons.person,
+                                color: Colors.white,
+                              ),
+                              bubbleColor: Colors.grey,
+                            ),
+                            TimelineItem(
+                              title: 'Juan Luis',
+                              subtitle: '01/01/2019',
+                              icon: Icon(
+                                Icons.person,
+                                color: Colors.white,
+                              ),
+                              bubbleColor: Colors.grey,
+                            ),
+                          ],
+                          stripColor: Colors.teal,
+                          dividerCircleColor: Colors.white,
+                        )
                       ],
                     ),
                   ),
@@ -680,9 +777,18 @@ class _DetalleTambookState extends State<DetalleTambook>
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
@@ -739,9 +845,18 @@ class _DetalleTambookState extends State<DetalleTambook>
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
@@ -800,9 +915,18 @@ class _DetalleTambookState extends State<DetalleTambook>
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
@@ -870,9 +994,18 @@ class _DetalleTambookState extends State<DetalleTambook>
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
@@ -927,9 +1060,18 @@ class _DetalleTambookState extends State<DetalleTambook>
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
@@ -982,9 +1124,18 @@ class _DetalleTambookState extends State<DetalleTambook>
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
@@ -1431,9 +1582,18 @@ class _DetalleTambookState extends State<DetalleTambook>
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
@@ -1612,9 +1772,18 @@ class _DetalleTambookState extends State<DetalleTambook>
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
@@ -1925,9 +2094,18 @@ class _DetalleTambookState extends State<DetalleTambook>
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: ExpansionTile(
@@ -2314,9 +2492,18 @@ class _DetalleTambookState extends State<DetalleTambook>
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(

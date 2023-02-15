@@ -69,6 +69,7 @@ class _HomeTambookState extends State<HomeTambook>
           cardAtenciones(),
           cardIntervenciones(),
           cardBeneficiarios(),
+          avanceMetas(),
           cardEstadoTambo(),
           cardTambos(),
           cardPersonal(),
@@ -321,15 +322,13 @@ class _HomeTambookState extends State<HomeTambook>
                       onGetText: (double value) {
                         return Text(
                           '${value.toInt()}%',
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 35),
                         );
                       },
                     ),
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  const SizedBox(height: 15),
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.maxFinite,
@@ -447,15 +446,13 @@ class _HomeTambookState extends State<HomeTambook>
                       onGetText: (double value) {
                         return Text(
                           '${value.toInt()}%',
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 35),
                         );
                       },
                     ),
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  const SizedBox(height: 15),
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.maxFinite,
@@ -559,44 +556,132 @@ class _HomeTambookState extends State<HomeTambook>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Card(
-                    color: colorGB,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    elevation: 3,
-                    child: SfCircularChart(
-                      legend: Legend(
-                        isVisible: true,
-                        position: LegendPosition.right,
-                        orientation: LegendItemOrientation.vertical,
-                        overflowMode: LegendItemOverflowMode.wrap,
-                        textStyle: const TextStyle(
-                          color: color_07,
-                        ),
+                  SfCircularChart(
+                    margin: EdgeInsets.zero,
+                    title: ChartTitle(
+                        text: '491 TAMBOS',
+                        textStyle:
+                            const TextStyle(fontWeight: FontWeight.bold)),
+                    legend: Legend(
+                      isVisible: true,
+                      position: LegendPosition.bottom,
+                      orientation: LegendItemOrientation.horizontal,
+                      overflowMode: LegendItemOverflowMode.wrap,
+                      textStyle: const TextStyle(
+                        color: color_07,
                       ),
-                      onLegendTapped: (LegendTapArgs args) {
-                        //print(args.pointIndex);
-                      },
-                      series: [
-                        PieSeries<ChartData, String>(
-                          dataSource: chartData,
-                          pointColorMapper: (ChartData data, _) => data.color,
-                          xValueMapper: (ChartData data, _) => data.x,
-                          yValueMapper: (ChartData data, _) => data.y,
-                          dataLabelSettings: const DataLabelSettings(
-                            isVisible: true,
-                            labelAlignment: ChartDataLabelAlignment.top,
-                            margin: EdgeInsets.all(1),
-                          ),
-                          name: 'Data',
-                          //explode: true,
-                          //explodeIndex: 1,
-                          radius: '80%',
-                          onPointTap: (ChartPointDetails details) async {},
-                        ),
-                      ],
                     ),
+                    onLegendTapped: (LegendTapArgs args) {
+                      //print(args.pointIndex);
+                    },
+                    series: [
+                      PieSeries<ChartData, String>(
+                        dataSource: chartData,
+                        pointColorMapper: (ChartData data, _) => data.color,
+                        xValueMapper: (ChartData data, _) => data.x,
+                        yValueMapper: (ChartData data, _) => data.y,
+                        dataLabelSettings: const DataLabelSettings(
+                          isVisible: true,
+                          labelAlignment: ChartDataLabelAlignment.top,
+                          margin: EdgeInsets.all(1),
+                        ),
+                        name: 'Data',
+                        //explode: true,
+                        //explodeIndex: 1,
+                        radius: '80%',
+                        onPointTap: (ChartPointDetails details) async {},
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding avanceMetas() {
+    var heading = 'AVANCE DE METAS POR MES';
+
+    final List<AvancesData> chartData = [
+      AvancesData('ENE', 35, 10),
+      AvancesData('FEB', 28, 25),
+      AvancesData('MAR', 34, 20),
+      AvancesData('ABR', 32, 10),
+      AvancesData('MAY', 40, 30)
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SfCartesianChart(
+                    plotAreaBorderWidth: 0,
+                    legend: Legend(
+                        isVisible: true,
+                        position: LegendPosition.bottom,
+                        overflowMode: LegendItemOverflowMode.wrap),
+                    primaryXAxis: CategoryAxis(),
+                    series: <ChartSeries>[
+                      // Renders line chart
+                      LineSeries<AvancesData, String>(
+                          animationDuration: 2500,
+                          width: 2,
+                          name: 'Atenciones',
+                          markerSettings: const MarkerSettings(isVisible: true),
+                          dataSource: chartData,
+                          xValueMapper: (AvancesData avances, _) => avances.mes,
+                          yValueMapper: (AvancesData avances, _) =>
+                              avances.avanceAtenciones),
+
+                      LineSeries<AvancesData, String>(
+                          animationDuration: 2500,
+                          width: 2,
+                          name: 'Usuarios',
+                          markerSettings: const MarkerSettings(isVisible: true),
+                          dataSource: chartData,
+                          xValueMapper: (AvancesData avances, _) => avances.mes,
+                          yValueMapper: (AvancesData avances, _) =>
+                              avances.avanceUsuarios)
+                    ],
+                    tooltipBehavior: TooltipBehavior(enable: true),
                   ),
                 ],
               ),
@@ -728,7 +813,7 @@ class _HomeTambookState extends State<HomeTambook>
                               style: TextStyle(fontSize: 20.0),
                             ),
                             const Text(
-                              'DAP EN SERVICIO',
+                              'BAP EN SERVICIO',
                               style: TextStyle(fontSize: 10.0),
                             ),
                             const Text(""),
@@ -1830,4 +1915,11 @@ class _HomeTambookState extends State<HomeTambook>
       ),
     );
   }
+}
+
+class AvancesData {
+  AvancesData(this.mes, this.avanceAtenciones, this.avanceUsuarios);
+  final String mes;
+  final double avanceAtenciones;
+  final double avanceUsuarios;
 }
