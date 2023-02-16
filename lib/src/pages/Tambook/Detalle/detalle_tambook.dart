@@ -8,8 +8,8 @@ import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
-import 'package:actividades_pais/src/pages/Tambook/dashboard_tambook.dart';
-import 'package:actividades_pais/src/pages/Tambook/mapa_tambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/Home/mapa_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/app-config.dart';
@@ -52,11 +52,15 @@ class _DetalleTambookState extends State<DetalleTambook>
   late List<TamboActividadModel> aCoordinacio = [];
 
   int statusLoadActividad = 0;
+  bool loading = true;
+  bool isEndPagination = false;
+  int offset = 0;
+  int limit = 15;
 
   @override
   void dispose() {
     scrollCtr.dispose();
-    scrollCtr2.dispose();
+    scrollCtr2.removeListener(() async {});
     _tabController.dispose();
     super.dispose();
   }
@@ -65,9 +69,6 @@ class _DetalleTambookState extends State<DetalleTambook>
   void initState() {
     scrollCtr = ScrollController();
     scrollCtr.addListener(
-      () => setState(() {}),
-    );
-    scrollCtr2.addListener(
       () => setState(() {}),
     );
 
@@ -95,6 +96,27 @@ class _DetalleTambookState extends State<DetalleTambook>
      */
     tamboDatoGeneral();
     TamboIntervencionAtencionIncidencia();
+  }
+
+  void handleNext() {
+    scrollCtr2.addListener(() async {
+      if ((scrollCtr2.offset >= scrollCtr2.position.maxScrollExtent)) {
+        offset = offset + 1;
+        readJson(offset);
+      }
+    });
+  }
+
+  Future<void> readJson(paraOffset) async {
+    if (!isEndPagination) {
+      setState(() {
+        loading = true;
+      });
+
+      setState(() {
+        loading = false;
+      });
+    }
   }
 
   Uint8List convertBase64(String base64String) {
@@ -140,8 +162,6 @@ class _DetalleTambookState extends State<DetalleTambook>
           if (aInterSopEnt.length < maxData) aInterSopEnt.add(oAct);
         } else if (oAct.tipo == 4) {
           if (aCoordinacio.length < maxData) aCoordinacio.add(oAct);
-        } else {
-          if (aInterAmbDir.length < maxData) aInterAmbDir.add(oAct);
         }
       }
 
@@ -183,7 +203,7 @@ class _DetalleTambookState extends State<DetalleTambook>
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => const DashboardTambook(),
+              builder: (BuildContext context) => const TambookHome(),
             ),
           );
         },
@@ -1927,7 +1947,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   width: 10,
                 ),
                 Text(
-                  '${oActividad.idTambo} \n${oActividad.idProgramacion}',
+                  '${oActividad.nombreTambo} \n${oActividad.idProgramacion}',
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
@@ -1947,7 +1967,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   ),
                 ),
                 const SizedBox(height: 10),
-                ImageUtil.ImageUrl(
+                ImageUtil.ImageAssetNetwork(
                   oActividad.actividadPathImage!,
                   width: 200,
                   height: 200,

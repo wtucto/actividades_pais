@@ -1,24 +1,34 @@
-// ignore_for_file: unnecessary_new
-
-import 'package:actividades_pais/src/pages/Home/home.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
-import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
+import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/util/Constants.dart';
-import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
-class DashboardTambook extends StatefulWidget {
-  const DashboardTambook({super.key});
+class HomeTambook extends StatefulWidget {
+  const HomeTambook({super.key});
 
   @override
-  State<DashboardTambook> createState() => _DashboardTambookState();
+  State<HomeTambook> createState() => _HomeTambookState();
 }
 
-class _DashboardTambookState extends State<DashboardTambook>
-    with TickerProviderStateMixin<DashboardTambook> {
+class _HomeTambookState extends State<HomeTambook>
+    with TickerProviderStateMixin<HomeTambook> {
   Animation<double>? _animation;
   AnimationController? _controller;
+
+  List<ChartData> chartData = [
+    ChartData('PRESTA SERVICIO', 0, colorI),
+    ChartData('NO PRESTA SERVICIO', 0, colorS),
+  ];
+
+  Future<void> buildData() async {
+    setState(() {
+      chartData = [
+        ChartData('PRESTA SERVICIO', 486, colorS),
+        ChartData('NO PRESTA SERVICIO', 5, colorP),
+      ];
+    });
+  }
 
   @override
   void initState() {
@@ -31,65 +41,20 @@ class _DashboardTambookState extends State<DashboardTambook>
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
 
     super.initState();
+    buildData();
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WidgetCustoms.appBar(
-        'TAMBOOK',
-        context: context,
-        icon: Icons.arrow_back,
-        onPressed: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => HomePagePais(),
-            ),
-          );
-        },
-        iconAct: Icons.search,
-        onPressedAct: () {
-          showSearch(
-            context: context,
-            delegate: SearchTambookDelegate(),
-          );
-        },
-      ),
+      backgroundColor: color_10o15,
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: getBody(),
           ),
         ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: ExpandedAnimationFab(
-        items: [
-          /* FabItem(
-            "Ubicación",
-            Icons.map_outlined,
-            onPress: () async {
-              _controller!.reverse();
-              BusyIndicator.show(context);
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => const WebViewExample(),
-                ),
-              );
-            },
-          ),*/
-        ],
-        animation: _animation!,
-        onPress: () {
-          if (_controller!.isCompleted) {
-            _controller!.reverse();
-          } else {
-            _controller!.forward();
-          }
-        },
       ),
     );
   }
@@ -101,6 +66,11 @@ class _DashboardTambookState extends State<DashboardTambook>
         children: [
           cardHeader(),
           const SizedBox(height: 20),
+          cardAtenciones(),
+          cardIntervenciones(),
+          cardBeneficiarios(),
+          avanceMetas(),
+          cardEstadoTambo(),
           cardTambos(),
           cardPersonal(),
           cardEquipamiento(),
@@ -128,7 +98,8 @@ class _DashboardTambookState extends State<DashboardTambook>
               fit: BoxFit.fill,
             ),
           ),
-          const Divider(color: color_02o27),
+          const SizedBox(height: 23),
+          //const Divider(color: color_02o27),
           const Text(
             'PLATAFORMAS FIJAS Y MOVIL',
             textAlign: TextAlign.center,
@@ -158,25 +129,598 @@ class _DashboardTambookState extends State<DashboardTambook>
   }
 
 /*
- * -----------------------------------------------
- *            TAMBOS
- * -----------------------------------------------
- */
-  Padding cardTambos() {
-    var heading = '486 TAMBOS';
+*------------------------------------------------
+*             CHARTS
+*-------------------------------------------------
+*/
+
+  Padding cardAtenciones() {
+    var heading = 'ATENCIONES 2023';
+
+    late ValueNotifier<double> valueNotifier = ValueNotifier(40);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
           borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
         ),
         child: ExpansionTile(
           initiallyExpanded: true,
           title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: SimpleCircularProgressBar(
+                      size: 150,
+                      maxValue: 100,
+                      valueNotifier: valueNotifier,
+                      backColor: Colors.black.withOpacity(0.4),
+                      progressStrokeWidth: 20,
+                      backStrokeWidth: 20,
+                      mergeMode: true,
+                      onGetText: (double value) {
+                        return Text(
+                          '${value.toInt()}%',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 35),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.2),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Table(
+                          children: const [
+                            TableRow(children: [
+                              Text(
+                                "Meta :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "12,000",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Text(
+                                "Avance :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "1,560",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Text(
+                                "Brecha :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "10,440",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardIntervenciones() {
+    var heading = 'INTERVENCIONES 2023';
+
+    late ValueNotifier<double> valueNotifier = ValueNotifier(20);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: SimpleCircularProgressBar(
+                      size: 150,
+                      maxValue: 100,
+                      valueNotifier: valueNotifier,
+                      backColor: Colors.black.withOpacity(0.4),
+                      progressStrokeWidth: 20,
+                      backStrokeWidth: 20,
+                      mergeMode: true,
+                      progressColors: const [
+                        Colors.yellow,
+                        Colors.yellowAccent
+                      ],
+                      onGetText: (double value) {
+                        return Text(
+                          '${value.toInt()}%',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 35),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.2),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Table(
+                          children: const [
+                            TableRow(children: [
+                              Text(
+                                "Meta :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "12,000",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Text(
+                                "Avance :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "1,560",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Text(
+                                "Brecha :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "10,440",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardBeneficiarios() {
+    var heading = 'BENEFICIARIOS 2023';
+    late ValueNotifier<double> valueNotifier3 = ValueNotifier(50);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: SimpleCircularProgressBar(
+                      size: 150,
+                      maxValue: 100,
+                      valueNotifier: valueNotifier3,
+                      backColor: Colors.black.withOpacity(0.4),
+                      progressColors: const [Colors.green, Colors.greenAccent],
+                      progressStrokeWidth: 20,
+                      backStrokeWidth: 20,
+                      mergeMode: true,
+                      onGetText: (double value) {
+                        return Text(
+                          '${value.toInt()}%',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 35),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.2),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Table(
+                          children: const [
+                            TableRow(children: [
+                              Text(
+                                "Meta :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "10,000",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Text(
+                                "Avance :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "3,001",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Text(
+                                "Brecha :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                "6,999",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ]),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardEstadoTambo() {
+    var heading = 'ESTADO DE LOS TAMBOS';
+    late ValueNotifier<double> valueNotifier3 = ValueNotifier(50);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SfCircularChart(
+                    margin: EdgeInsets.zero,
+                    title: ChartTitle(
+                        text: '491 TAMBOS',
+                        textStyle:
+                            const TextStyle(fontWeight: FontWeight.bold)),
+                    legend: Legend(
+                      isVisible: true,
+                      position: LegendPosition.bottom,
+                      orientation: LegendItemOrientation.horizontal,
+                      overflowMode: LegendItemOverflowMode.wrap,
+                      textStyle: const TextStyle(
+                        color: color_07,
+                      ),
+                    ),
+                    onLegendTapped: (LegendTapArgs args) {
+                      //print(args.pointIndex);
+                    },
+                    series: [
+                      PieSeries<ChartData, String>(
+                        dataSource: chartData,
+                        pointColorMapper: (ChartData data, _) => data.color,
+                        xValueMapper: (ChartData data, _) => data.x,
+                        yValueMapper: (ChartData data, _) => data.y,
+                        dataLabelSettings: const DataLabelSettings(
+                          isVisible: true,
+                          labelAlignment: ChartDataLabelAlignment.top,
+                          margin: EdgeInsets.all(1),
+                        ),
+                        name: 'Data',
+                        //explode: true,
+                        //explodeIndex: 1,
+                        radius: '80%',
+                        onPointTap: (ChartPointDetails details) async {},
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding avanceMetas() {
+    var heading = 'AVANCE DE METAS POR MES';
+
+    final List<AvancesData> chartData = [
+      AvancesData('ENE', 35, 10),
+      AvancesData('FEB', 28, 25),
+      AvancesData('MAR', 34, 20),
+      AvancesData('ABR', 32, 10),
+      AvancesData('MAY', 40, 30)
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SfCartesianChart(
+                    plotAreaBorderWidth: 0,
+                    legend: Legend(
+                        isVisible: true,
+                        position: LegendPosition.bottom,
+                        overflowMode: LegendItemOverflowMode.wrap),
+                    primaryXAxis: CategoryAxis(),
+                    series: <ChartSeries>[
+                      // Renders line chart
+                      LineSeries<AvancesData, String>(
+                          animationDuration: 2500,
+                          width: 2,
+                          name: 'Atenciones',
+                          markerSettings: const MarkerSettings(isVisible: true),
+                          dataSource: chartData,
+                          xValueMapper: (AvancesData avances, _) => avances.mes,
+                          yValueMapper: (AvancesData avances, _) =>
+                              avances.avanceAtenciones),
+
+                      LineSeries<AvancesData, String>(
+                          animationDuration: 2500,
+                          width: 2,
+                          name: 'Usuarios',
+                          markerSettings: const MarkerSettings(isVisible: true),
+                          dataSource: chartData,
+                          xValueMapper: (AvancesData avances, _) => avances.mes,
+                          yValueMapper: (AvancesData avances, _) =>
+                              avances.avanceUsuarios)
+                    ],
+                    tooltipBehavior: TooltipBehavior(enable: true),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
+ * -----------------------------------------------
+ *            TAMBOS
+ * -----------------------------------------------
+ */
+  Padding cardTambos() {
+    var heading = '485 TAMBOS';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+              color: Colors.white,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 5), // changes position of shadow
+              ),
+            ],
+            color: Colors.white),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
             title: Text(
               heading,
               style: const TextStyle(
@@ -269,7 +813,7 @@ class _DashboardTambookState extends State<DashboardTambook>
                               style: TextStyle(fontSize: 20.0),
                             ),
                             const Text(
-                              'DAP EN SERVICIO',
+                              'BAP EN SERVICIO',
                               style: TextStyle(fontSize: 10.0),
                             ),
                             const Text(""),
@@ -387,14 +931,16 @@ class _DashboardTambookState extends State<DashboardTambook>
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: ExpansionTile(
           initiallyExpanded: true,
           title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
             title: Text(
               heading,
               style: const TextStyle(
@@ -557,14 +1103,16 @@ class _DashboardTambookState extends State<DashboardTambook>
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: ExpansionTile(
           initiallyExpanded: true,
           title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
             title: Text(
               heading,
               style: const TextStyle(
@@ -849,14 +1397,16 @@ class _DashboardTambookState extends State<DashboardTambook>
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            width: 2,
+            width: 1,
             color: colorI,
           ),
+          color: Colors.white,
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: ExpansionTile(
           initiallyExpanded: true,
           title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
             title: Text(
               heading,
               style: const TextStyle(
@@ -1061,7 +1611,7 @@ class _DashboardTambookState extends State<DashboardTambook>
                                   child: Column(
                                     children: const [
                                       Text(
-                                        "OPERATIVO: 5",
+                                        "PRESTA SERVICIO: 5",
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
@@ -1072,7 +1622,7 @@ class _DashboardTambookState extends State<DashboardTambook>
                                       ),
                                       SizedBox(height: 10),
                                       Text(
-                                        "INOPERATIVO: 5",
+                                        "INPRESTA SERVICIO: 5",
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
@@ -1365,4 +1915,11 @@ class _DashboardTambookState extends State<DashboardTambook>
       ),
     );
   }
+}
+
+class AvancesData {
+  AvancesData(this.mes, this.avanceAtenciones, this.avanceUsuarios);
+  final String mes;
+  final double avanceAtenciones;
+  final double avanceUsuarios;
 }

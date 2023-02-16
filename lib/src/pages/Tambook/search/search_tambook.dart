@@ -1,6 +1,6 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
-import 'package:actividades_pais/src/pages/Tambook/detalle_tambooK.dart';
+import 'package:actividades_pais/src/pages/Tambook/Detalle/detalle_tambook.dart';
 import 'package:flutter/material.dart';
 
 class SearchTambookDelegate extends SearchDelegate<String> {
